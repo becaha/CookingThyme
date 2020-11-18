@@ -8,18 +8,46 @@
 
 /* Begin PBXBuildFile section */
 		DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */; };
-		DB49B4AA2565E47300808CC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4A92565E47300808CC8 /* ContentView.swift */; };
 		DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AB2565E47400808CC8 /* Assets.xcassets */; };
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
+		DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B72565E49E00808CC8 /* UIControls.swift */; };
+		DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B82565E49E00808CC8 /* Fraction.swift */; };
+		DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B92565E49E00808CC8 /* CategoryView.swift */; };
+		DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BA2565E49F00808CC8 /* ScreenView.swift */; };
+		DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */; };
+		DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BC2565E49F00808CC8 /* Ingredient.swift */; };
+		DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BD2565E49F00808CC8 /* RecipeView.swift */; };
+		DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */; };
+		DB49B4D12565E49F00808CC8 /* GroceriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C02565E49F00808CC8 /* GroceriesView.swift */; };
+		DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */; };
+		DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C22565E49F00808CC8 /* RecipeCollectionVM.swift */; };
+		DB49B4D42565E49F00808CC8 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C32565E49F00808CC8 /* Recipe.swift */; };
+		DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C42565E49F00808CC8 /* Rational.swift */; };
+		DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C52565E49F00808CC8 /* RecipeVM.swift */; };
+		DB49B4D72565E49F00808CC8 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4C62565E49F00808CC8 /* TimerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DB49B4A42565E47300808CC8 /* CookingThyme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingThyme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingThymeApp.swift; sourceTree = "<group>"; };
-		DB49B4A92565E47300808CC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DB49B4AB2565E47400808CC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DB49B4B02565E47400808CC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DB49B4B72565E49E00808CC8 /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
+		DB49B4B82565E49E00808CC8 /* Fraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
+		DB49B4B92565E49E00808CC8 /* CategoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		DB49B4BA2565E49F00808CC8 /* ScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
+		DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitOfMeasurement.swift; sourceTree = "<group>"; };
+		DB49B4BC2565E49F00808CC8 /* Ingredient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
+		DB49B4BD2565E49F00808CC8 /* RecipeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditRecipeView.swift; sourceTree = "<group>"; };
+		DB49B4C02565E49F00808CC8 /* GroceriesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroceriesView.swift; sourceTree = "<group>"; };
+		DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeCollectionView.swift; sourceTree = "<group>"; };
+		DB49B4C22565E49F00808CC8 /* RecipeCollectionVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeCollectionVM.swift; sourceTree = "<group>"; };
+		DB49B4C32565E49F00808CC8 /* Recipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		DB49B4C42565E49F00808CC8 /* Rational.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rational.swift; sourceTree = "<group>"; };
+		DB49B4C52565E49F00808CC8 /* RecipeVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeVM.swift; sourceTree = "<group>"; };
+		DB49B4C62565E49F00808CC8 /* TimerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +80,9 @@
 		DB49B4A62565E47300808CC8 /* CookingThyme */ = {
 			isa = PBXGroup;
 			children = (
-				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
-				DB49B4A92565E47300808CC8 /* ContentView.swift */,
+				DB49B4DA2565E4E100808CC8 /* Model */,
+				DB49B4D92565E4DB00808CC8 /* ViewModel */,
+				DB49B4D82565E4D300808CC8 /* View */,
 				DB49B4AB2565E47400808CC8 /* Assets.xcassets */,
 				DB49B4B02565E47400808CC8 /* Info.plist */,
 				DB49B4AD2565E47400808CC8 /* Preview Content */,
@@ -67,6 +96,43 @@
 				DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		DB49B4D82565E4D300808CC8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
+				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
+				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
+				DB49B4C02565E49F00808CC8 /* GroceriesView.swift */,
+				DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */,
+				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
+				DB49B4C62565E49F00808CC8 /* TimerView.swift */,
+				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
+				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		DB49B4D92565E4DB00808CC8 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4C22565E49F00808CC8 /* RecipeCollectionVM.swift */,
+				DB49B4C52565E49F00808CC8 /* RecipeVM.swift */,
+			);
+			name = ViewModel;
+			sourceTree = "<group>";
+		};
+		DB49B4DA2565E4E100808CC8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4B82565E49E00808CC8 /* Fraction.swift */,
+				DB49B4BC2565E49F00808CC8 /* Ingredient.swift */,
+				DB49B4C42565E49F00808CC8 /* Rational.swift */,
+				DB49B4C32565E49F00808CC8 /* Recipe.swift */,
+				DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,8 +204,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB49B4AA2565E47300808CC8 /* ContentView.swift in Sources */,
+				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
+				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
+				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
+				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
+				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
+				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
+				DB49B4D12565E49F00808CC8 /* GroceriesView.swift in Sources */,
+				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
+				DB49B4D72565E49F00808CC8 /* TimerView.swift in Sources */,
+				DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
+				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
+				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
+				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
+				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
+				DB49B4D42565E49F00808CC8 /* Recipe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
