@@ -82,14 +82,16 @@ struct EditRecipeView: View {
                 Section(header: Text("Directions")) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<directions.count) { index in
-                            HStack(alignment: .top, spacing: 20) {                                Text("\(index + 1)")
+                        ForEach(0..<directions.count, id: \.self) { index in
+                            HStack(alignment: .top, spacing: 20) {
+                                Text("\(index + 1)")
                                     .frame(width: 20, height: 20, alignment: .center)
 
                                 Text("\(directions[index])")
                             }
                             .padding(.vertical)
                         }
+                        Text("\(directions[directions.count - 1])")
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(directions.count + 1)")
                                 .frame(width: 20, height: 20, alignment: .center)
@@ -99,7 +101,7 @@ struct EditRecipeView: View {
                             }, onCommit: {
                                 addDirection()
                             })
-                            
+
                             UIControls.AddButton(action: addDirection)
                         }
                         .padding(.vertical)
