@@ -7,10 +7,13 @@
 
 import SwiftUI
 
-// TODO: edit, each item in list must have his own binding to be edited, a dictionary of string by id?
-// for directions: by index?
+// TODO: edit, when ingredient item is clicked, all the ingredient bindings are pertaining to that item,
+// off click, it saved to local recipe
 struct EditRecipeView: View {
+    @Binding var isPresented: Bool
     @ObservedObject var recipeVM: RecipeVM = RecipeVM()
+    
+    @State private var fieldMissing = false
     
     @State private var isEditingDirection = false
     @State private var isEditingIngredient = false
@@ -28,14 +31,21 @@ struct EditRecipeView: View {
     var body: some View {
         VStack {
             ZStack {
-                TextField("Recipe Name", text: $name)
-                    .font(.title)
+                VStack(alignment: .leading) {
+                    TextField("Recipe Name", text: $name)
+                        .font(.title)
+                    
+                    if fieldMissing && name == "" {
+                        ErrorMessage("Must have a name")
+                            .padding(0)
+                    }
+                }
                 
                 HStack {
                     Spacer()
                     
                     Button(action: {
-    //                        recipe.save()
+                        saveRecipe()
                     })
                     {
                         Text("Save")
@@ -52,16 +62,30 @@ struct EditRecipeView: View {
                         
                         Spacer()
                         
-                        // TODO make serving size look like you need to choose it
-                        Picker(selection: $servings, label: Text("Serving Size: \(servings)")) {
-                            ForEach(1..<101, id: \.self) { num in
-                                    Text("\(num)").tag(num)
-                                }
+                        VStack {
+                            // TODO make serving size look like you need to choose it
+                            Picker(selection: $servings, label:
+                                    HStack {
+                                        Text("Serving Size: \(servings)")
+                                
+                                        Image(systemName: "chevron.down")
+                                    }
+                            )
+                            {
+                                ForEach(1..<101, id: \.self) { num in
+                                    Text("\(num.toString())").tag(num.toString())
+                                    }
+                            }
+                            .pickerStyle(MenuPickerStyle())
                         }
-                        .pickerStyle(MenuPickerStyle())
+                    },
+                    footer:
+                        Group {
+                            if fieldMissing && servings == "" {
+                                ErrorMessage("Must have at least one ingredient and a serving size")
+                            }
+                        }
                         
-//                        Image(systemName: "")
-                    }
                 ) {
                     List {
                         ForEach(ingredients) { ingredient in
@@ -79,7 +103,14 @@ struct EditRecipeView: View {
                     }
                 }
                 
-                Section(header: Text("Directions")) {
+                Section(header: Text("Directions"),
+                        footer:
+                            Group {
+                                if fieldMissing && directions.count == 0 {
+                                    ErrorMessage("Must have at least one direction")
+                                }
+                            }
+                ) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
                         ForEach(0..<directions.count, id: \.self) { index in
@@ -91,7 +122,6 @@ struct EditRecipeView: View {
                             }
                             .padding(.vertical)
                         }
-                        Text("\(directions[directions.count - 1])")
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(directions.count + 1)")
                                 .frame(width: 20, height: 20, alignment: .center)
@@ -112,12 +142,31 @@ struct EditRecipeView: View {
         }
     }
     
-    private func addDirection() -> Void {
+    @ViewBuilder
+    private func ErrorMessage(_ message: String) -> some View {
+        Text("\(message)")
+            .foregroundColor(.red)
+            .font(.footnote)
+    }
+    
+    private func saveRecipe() {
+        if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
+            recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
+            // have page shrink up into square and be brought to the recipe collection view showing the new recipe
+            // flying into place
+            isPresented = false
+        }
+        else {
+            fieldMissing = true
+        }
+    }
+    
+    private func addDirection() {
         directions.append(direction)
         direction = ""
     }
     
-    private func addIngredient() -> Void {
+    private func addIngredient() {
         let newIngredient = recipeVM.makeIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
         ingredients.append(newIngredient)
         ingredientName = ""
@@ -126,8 +175,9 @@ struct EditRecipeView: View {
     }
 }
 
-struct EditRecipeView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditRecipeView()
-    }
-}
+//struct EditRecipeView_Previews: PreviewProvider {
+//    @State var isPresented = true
+//    static var previews: some View {
+//        EditRecipeView(isPresented: $isPresented)
+//    }
+//}

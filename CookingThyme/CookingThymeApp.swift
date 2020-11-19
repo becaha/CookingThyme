@@ -11,7 +11,8 @@ import SwiftUI
 struct CookingThymeApp: App {
     var body: some Scene {
         WindowGroup {
-            EditRecipeView()
+//            EditRecipeView()
+            
 //            RecipeView(
 //                recipeVM: RecipeVM(recipe: Recipe(
 //                    name: "Water",
@@ -26,17 +27,17 @@ struct CookingThymeApp: App {
 //                    servings: 1)
 //            ))
             
-//            RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(
-//                recipes: [
-//                    Recipe(name: "Pasta", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Salad", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Bagels", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Baguettes", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Cinnamon Buns", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Rolls", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Pretzels", ingredients: [], directions: [], servings: 3),
-//                    Recipe(name: "Milk", ingredients: [], directions: [], servings: 3)
-//            ]))
+            RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(
+                recipes: [
+                    Recipe(name: "Pasta", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Salad", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Bagels", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Baguettes", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Cinnamon Buns", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Rolls", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Pretzels", ingredients: [], directions: [], servings: 3),
+                    Recipe(name: "Milk", ingredients: [], directions: [], servings: 3)
+            ]))
         }
     }
 }

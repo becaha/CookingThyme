@@ -40,6 +40,10 @@ class RecipeVM: ObservableObject {
     
     // MARK: - Intents
     
+    func createRecipe(name: String, ingredients: [Ingredient], directions: [String], servings: String) {
+        recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
+    }
+    
     func setServingSize(_ size: Int) {
         recipe.servings = size
     }
@@ -53,5 +57,19 @@ class RecipeVM: ObservableObject {
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
         let unit = UnitOfMeasurement.Cup
         return Ingredient(name: name, amount: doubleAmount, unit: unit)
+    }
+}
+
+extension String {
+    func toInt() -> Int {
+        let formatter = NumberFormatter()
+        return formatter.number(from: self)!.intValue
+    }
+}
+
+extension Int {
+    func toString() -> String {
+        let formatter = NumberFormatter()
+        return formatter.string(from: self as NSNumber)!
     }
 }

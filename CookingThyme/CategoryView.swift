@@ -11,9 +11,23 @@ struct CategoryView: View {
     var category: String
     var recipes: [Recipe]
     
+    @State private var isCreatingRecipe = false
+    
     var body: some View {
         NavigationView {
             List {
+                Section {
+                    HStack {
+                        Text("Create Recipe")
+                                                    
+                        Spacer()
+                        
+                        UIControls.AddButton(action: createRecipe)
+                    }
+                }.sheet(isPresented: $isCreatingRecipe) {
+                    EditRecipeView(isPresented: self.$isCreatingRecipe)
+                }
+            
                 ForEach(recipes) { recipe in
                     NavigationLink("\(recipe.name)", destination: RecipeView(recipeVM: RecipeVM(recipe: recipe)))
                 }
@@ -21,6 +35,10 @@ struct CategoryView: View {
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle("\(category)", displayMode: .large)
         }
+    }
+    
+    private func createRecipe() {
+        isCreatingRecipe = true
     }
 }
 
