@@ -154,6 +154,7 @@ struct EditRecipeView: View {
             recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
+            RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
             isPresented = false
         }
         else {
