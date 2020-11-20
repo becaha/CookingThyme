@@ -155,8 +155,6 @@ struct EditRecipeView: View {
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
             RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
-            let recipe1 = RecipeDB.shared.getRecipe(byId: 1)
-            let recipe2 = RecipeDB.shared.getRecipe(byId: 2)
             isPresented = false
         }
         else {

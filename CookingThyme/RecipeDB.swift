@@ -35,27 +35,7 @@ class RecipeDB {
         fatalError("Unable to connect to database")
     }
     
-    func getRecipe(byId id: Int) -> RecipeTable? {
-        do {
-            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
-                let row = try Row.fetchOne(db,
-                                           sql: """
-                                                select * from \(RecipeTable.Table.databaseTableName) \
-                                                where \(RecipeTable.Table.id) = ?
-                                                """,
-                                           arguments: [id])
-                if let returnedRow = row {
-                    return RecipeTable(row: returnedRow)
-                }
-                return nil
-            }
-            
-            return recipe
-            
-        } catch {
-            return nil
-        }
-    }
+    // MARK: - Create
     
     func createRecipe(name: String, servings: Int) -> RecipeTable? {
         do {
@@ -84,4 +64,72 @@ class RecipeDB {
             return nil
         }
     }
+    
+    //MARK: - Read
+    
+    func getRecipe(byId id: Int) -> RecipeTable? {
+        do {
+            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
+                let row = try Row.fetchOne(db,
+                                           sql: """
+                                                select * from \(RecipeTable.Table.databaseTableName) \
+                                                where \(RecipeTable.Table.id) = ?
+                                                """,
+                                           arguments: [id])
+                if let returnedRow = row {
+                    return RecipeTable(row: returnedRow)
+                }
+                return nil
+            }
+            
+            return recipe
+            
+        } catch {
+            return nil
+        }
+    }
+    
+//    func getRecipes(byCategory category: String, withCollectionId collectionId: Int) -> [RecipeTable] {
+//        do {
+//            let recipes = try dbQueue.inDatabase { (db: Database) -> [RecipeTable] in
+//                let row = try Row.fetchAAll(db,
+//                                           sql: """
+//                                                select * from \(RecipeTable.Table.databaseTableName) \
+//                                                where \(RecipeTable.Table.id) = ?
+//                                                """,
+//                                           arguments: [id])
+//                if let returnedRow = row {
+//                    return RecipeTable(row: returnedRow)
+//                }
+//                return []
+//            }
+//
+//            return recipes
+//
+//        } catch {
+//            return []
+//        }
+//    }
+    
+//    func getIngredients(forRecipeId id: Int) -> RecipeTable? {
+//        do {
+//            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
+//                let row = try Row.fetchOne(db,
+//                                           sql: """
+//                                                select * from \(RecipeTable.Table.databaseTableName) \
+//                                                where \(RecipeTable.Table.id) = ?
+//                                                """,
+//                                           arguments: [id])
+//                if let returnedRow = row {
+//                    return RecipeTable(row: returnedRow)
+//                }
+//                return nil
+//            }
+//            
+//            return recipe
+//            
+//        } catch {
+//            return nil
+//        }
+//    }
 }
