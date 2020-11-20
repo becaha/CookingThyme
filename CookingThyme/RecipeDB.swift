@@ -13,7 +13,7 @@ class RecipeDB {
     
     struct Constant {
         static let fileName = "recipe"
-        static let fileExtension = "db"
+        static let fileExtension = "sqlite"
     }
     
     // MARK: - Properties
@@ -35,30 +35,39 @@ class RecipeDB {
         fatalError("Unable to connect to database")
     }
     
-//    func getRecipe(byId id: Int) -> Recipe? {
-//        do {
-//            let recipe = try dbQueue.inDatabase { (db: Database) -> Recipe in
-//                let row = try Row.fetchOne(db,
-//                                           sql: """
-//                                                select * from \(Recipe.Table.databaseTableName) \
-//                                                where \(Recipe.Table.id) = ?
-//                                                """,
-//                                           arguments: [id])
-//                if let returnedRow = row {
-//                    return Recipe(row: returnedRow)
-//                }
-//            }
-//            return nil
-//        } catch {
-//            return nil
-//        }
-//    }
+    func getRecipe(byId id: Int) -> RecipeTable? {
+        do {
+            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
+                let row = try Row.fetchOne(db,
+                                           sql: """
+                                                select * from \(RecipeTable.Table.databaseTableName) \
+                                                where \(RecipeTable.Table.id) = ?
+                                                """,
+                                           arguments: [id])
+                if let returnedRow = row {
+                    return RecipeTable(row: returnedRow)
+                }
+                return nil
+            }
+            
+            return recipe
+            
+        } catch {
+            return nil
+        }
+    }
     
     func createRecipe(name: String, servings: Int) -> RecipeTable? {
         do {
-            try dbQueue.write{ (db: Database) -> RecipeTable in
-                try db.execute(
-                    sql: """
+            let writeResult = try dbQueue.write{ (db: Database) -> RecipeTable in
+                let sql =
+                    """
+                    INSERT INTO \(RecipeTable.Table.databaseTableName) (\(RecipeTable.Table.name), \(RecipeTable.Table.servings)) \
+                    VALUES (?, ?)
+                    """
+                let executeResult = try db.execute(
+                    sql:
+                    """
                     INSERT INTO \(RecipeTable.Table.databaseTableName) (\(RecipeTable.Table.name), \(RecipeTable.Table.servings)) \
                     VALUES (?, ?)
                     """,
@@ -68,7 +77,8 @@ class RecipeDB {
                 
                 return RecipeTable(id: Int(recipeId), name: name, servings: servings)
             }
-            return nil
+            
+            return RecipeTable(id: Int(writeResult.id), name: name, servings: servings)
         } catch {
             print("Error creating recipe")
             return nil
