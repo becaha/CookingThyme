@@ -24,6 +24,8 @@ struct RecipeTable {
     var id: Int
     var name: String
     var servings: Int
+    var ingredients: [Ingredient] = []
+    var directions: [Direction] = []
     
     init(id: Int, name: String, servings: Int) {
         self.id = id
@@ -35,6 +37,14 @@ struct RecipeTable {
         id = row[Table.id]
         name = row[Table.name]
         servings = row[Table.servings]
+    }
+    
+    mutating func addIngredient(row: Row) {
+        ingredients.append(Ingredient(row: row))
+    }
+    
+    mutating func addDirection(row: Row) {
+        directions.append(Direction(row: row))
     }
     
 }

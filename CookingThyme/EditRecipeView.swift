@@ -154,8 +154,15 @@ struct EditRecipeView: View {
             recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-            RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
-            isPresented = false
+            let recipe: RecipeTable? = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
+            // TEST CRUD
+            let testId: Int = 1
+            if let readRecipe = RecipeDB.shared.getRecipe(byId: testId) {
+                let ingredientsRecipe: RecipeTable? = RecipeDB.shared.getIngredients(forRecipe: readRecipe, withId: testId)
+                let directionsRecipe: RecipeTable? = RecipeDB.shared.getDirections(forRecipe: readRecipe, withId: testId)
+                let recipes: [RecipeTable] = RecipeDB.shared.getRecipes(byCategory: "All", withCollectionId: 1)
+                isPresented = false
+            }
         }
         else {
             fieldMissing = true
