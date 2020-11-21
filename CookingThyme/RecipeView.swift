@@ -22,8 +22,8 @@ struct RecipeView: View {
     var body: some View {
         VStack {
             ZStack {
-                Text("\(recipeVM.recipe.name)")
-                    .font(.title)
+                Text("\(recipeVM.name)")
+                    .font(.system(size: 34, weight: .bold))
                 
                 HStack {
                     inEditMode ? Button(action: {
@@ -57,18 +57,26 @@ struct RecipeView: View {
                         
                         Spacer()
                         
-                        Picker(selection: $recipeVM.recipe.servings, label: Text("Serving Size: \(recipeVM.recipe.servings)")) {
-                            ForEach(1..<101, id: \.self) { num in
-                                    Text("\(num)").tag(num)
+                        VStack {
+                            // should be changing servings but not in db
+                            Picker(selection: $recipeVM.servings, label:
+                                    HStack {
+                                        Text("Serving Size: \(recipeVM.servings)")
+                                
+                                        Image(systemName: "chevron.down")
+                                    }
+                            )
+                            {
+                                ForEach(1..<101, id: \.self) { num in
+                                    Text("\(num.toString())").tag(num.toString())
                                 }
+                            }
+                            .pickerStyle(MenuPickerStyle())
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        
-//                        Image(systemName: "")
                     }
                 ) {
                     List {
-                        ForEach(recipeVM.recipe.ingredients) { ingredient in
+                        ForEach(recipeVM.ingredients) { ingredient in
                             IngredientText(ingredient)
                         }
                     }
@@ -77,13 +85,14 @@ struct RecipeView: View {
                 Section(header: Text("Directions")) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<recipeVM.recipe.directions.count) { index in
+                        ForEach(0..<recipeVM.directions.count) { index in
                             Direction(withIndex: index)
                         }
                     }
                 }
             }
         }
+        .navigationBarTitle("", displayMode: .inline)
     }
     
 //    @ViewBuilder func direction(withIndex index: Int) -> some View {
@@ -100,7 +109,7 @@ struct RecipeView: View {
 //            .padding(.top, 5)
 //            .padding(.leading, 5)
 //
-//            Text("\(recipeVM.recipe.directions[index])")
+//            Text("\(recipeVM.directions[index])")
 //        }
 //        .foregroundColor(.black)
 //        .padding(.vertical)
@@ -112,7 +121,7 @@ struct RecipeView: View {
                 Text("\(index + 1)")
                     .frame(width: 20, height: 20, alignment: .center)
 
-                TextField("\(recipeVM.recipe.directions[index])", text: $newDirection)
+                TextField("\(recipeVM.directions[index].direction)", text: $newDirection)
             }
             .padding(.vertical)
         }
@@ -131,7 +140,7 @@ struct RecipeView: View {
                     Text("\(index + 1)")
                         .frame(width: 20, height: 20, alignment: .center)
 
-                    Text("\(recipeVM.recipe.directions[index])")
+                    Text("\(recipeVM.directions[index].direction)")
                 }
                 .padding(.vertical)
             }
@@ -200,6 +209,7 @@ extension Array where Element: Equatable {
 
 struct RecipeView_Previews: PreviewProvider {
     static var previews: some View {
+        NavigationView {
         RecipeView(
             recipeVM: RecipeVM(recipe: Recipe(
                 name: "Water",
@@ -210,8 +220,12 @@ struct RecipeView_Previews: PreviewProvider {
                     Ingredient(name: "water", amount: 1.8, unit: UnitOfMeasurement.Cup),
                     Ingredient(name: "water", amount: 1.95, unit: UnitOfMeasurement.Cup)
                 ],
-                directions: ["Fetch a pail of water from the wishing well in the land of the good queen Casandra", "Bring back the pail of water making sure as to not spill a single drop of it", "Boil the water thoroughly for an hour over medium-high heat", "Let the water cool until it is not steaming", "Put the water in the fridge to cool for 30 minutes", "Pour yourself a glass of nice cold water"],
+                directions: [
+                    Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),
+                    Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
+                    Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
                 servings: 1)
         ))
+        }
     }
 }

@@ -17,16 +17,16 @@ struct RecipeCategory {
         static let recipeCollectionId = "RecipeCollectionId"
         static let recipeId = "RecipeId"
     }
+//    
+//    var id: Int
+//    var name: String
+//    var recipeCollectionId: Int
+//    var recipeId: Int
     
-    var id: Int
-    var name: String
-    var recipeCollectionId: Int
-    var recipeId: Int
-    
-    init(row: Row) {
-        id = row[Table.id]
-        name = row[Table.name]
-        recipeCollectionId = row[Table.recipeCollectionId]
-        recipeId = row[Table.recipeId]
-    }
+//    init(row: Row) {
+//        id = row[Table.id]
+//        name = row[Table.name]
+//        recipeCollectionId = row[Table.recipeCollectionId]
+//        recipeId = row[Table.recipeId]
+//    }
 }

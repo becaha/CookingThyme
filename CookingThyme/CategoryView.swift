@@ -14,27 +14,25 @@ struct CategoryView: View {
     @State private var isCreatingRecipe = false
     
     var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    HStack {
-                        Text("Create Recipe")
-                                                    
-                        Spacer()
-                        
-                        UIControls.AddButton(action: createRecipe)
-                    }
-                }.sheet(isPresented: $isCreatingRecipe) {
-                    EditRecipeView(isPresented: self.$isCreatingRecipe)
+        List {
+            Section {
+                HStack {
+                    Text("Create Recipe")
+                                                
+                    Spacer()
+                    
+                    UIControls.AddButton(action: createRecipe)
                 }
-            
-                ForEach(recipes) { recipe in
-                    NavigationLink("\(recipe.name)", destination: RecipeView(recipeVM: RecipeVM(recipe: recipe)))
-                }
+            }.sheet(isPresented: $isCreatingRecipe) {
+                EditRecipeView(isPresented: self.$isCreatingRecipe)
             }
-            .listStyle(InsetGroupedListStyle())
-            .navigationBarTitle("\(category)", displayMode: .large)
+        
+            ForEach(recipes) { recipe in
+                NavigationLink("\(recipe.name)", destination: RecipeView(recipeVM: RecipeVM(recipe: recipe)))
+            }
         }
+        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("\(category)", displayMode: .large)
     }
     
     private func createRecipe() {
@@ -45,14 +43,14 @@ struct CategoryView: View {
 struct CategoryView_Previews: PreviewProvider {
     static var previews: some View {
         CategoryView(category: "All", recipes: [
-            Recipe(name: "Pasta", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Salad", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Bagels", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Baguettes", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Cinnamon Buns", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Rolls", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Pretzels", ingredients: [], directions: [], servings: 3),
-            Recipe(name: "Milk", ingredients: [], directions: [], servings: 3)
+            Recipe(id: 0, name: "Pasta", servings: 3),
+            Recipe(id: 1, name: "Salad", servings: 3),
+            Recipe(id: 2, name: "Bagels", servings: 3),
+            Recipe(id: 3, name: "Baguettes", servings: 3),
+            Recipe(id: 4, name: "Cinnamon Buns", servings: 3),
+            Recipe(id: 5, name: "Rolls", servings: 3),
+            Recipe(id: 6, name: "Pretzels", servings: 3),
+            Recipe(id: 7, name: "Milk", servings: 3)
         ])
     }
 }

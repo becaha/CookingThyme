@@ -74,7 +74,7 @@ struct EditRecipeView: View {
                             {
                                 ForEach(1..<101, id: \.self) { num in
                                     Text("\(num.toString())").tag(num.toString())
-                                    }
+                                }
                             }
                             .pickerStyle(MenuPickerStyle())
                         }
@@ -151,16 +151,16 @@ struct EditRecipeView: View {
     
     private func saveRecipe() {
         if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
-            recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
+//            recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-            let recipe: RecipeTable? = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
+//            let recipe: Recipe? = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
             // TEST CRUD
             let testId: Int = 1
             if let readRecipe = RecipeDB.shared.getRecipe(byId: testId) {
-                let ingredientsRecipe: RecipeTable? = RecipeDB.shared.getIngredients(forRecipe: readRecipe, withId: testId)
-                let directionsRecipe: RecipeTable? = RecipeDB.shared.getDirections(forRecipe: readRecipe, withId: testId)
-                let recipes: [RecipeTable] = RecipeDB.shared.getRecipes(byCategory: "All", withCollectionId: 1)
+                let ingredientsRecipe: Recipe? = RecipeDB.shared.addIngredients(toRecipe: readRecipe, withId: testId)
+                let directionsRecipe: Recipe? = RecipeDB.shared.addDirections(toRecipe: readRecipe, withId: testId)
+                let recipes: [Recipe] = RecipeDB.shared.getRecipes(byCategory: "All", withCollectionId: 1)
                 isPresented = false
             }
         }

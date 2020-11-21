@@ -14,6 +14,15 @@ class RecipeVM: ObservableObject {
     
     init(recipe: Recipe) {
         self.recipe = recipe
+        popullateRecipe()
+    }
+    
+    func popullateRecipe() {
+        if let recipeWithDirections = RecipeDB.shared.addDirections(toRecipe: recipe, withId: recipe.id) {
+            if let fullRecipe = RecipeDB.shared.addIngredients(toRecipe: recipeWithDirections, withId: recipe.id) {
+                recipe = fullRecipe
+            }
+        }
     }
     
     init() {
@@ -23,26 +32,27 @@ class RecipeVM: ObservableObject {
     // MARK: - Model Access
     
     var name: String {
-        recipe.name
+        recipe.name.lowercased().capitalized
     }
     
     var servings: Int {
-        recipe.servings
+        get { recipe.servings }
+        set { recipe.servings = newValue }
     }
     
     var ingredients: [Ingredient] {
         recipe.ingredients
     }
     
-    var directions: [String] {
+    var directions: [Direction] {
         recipe.directions
     }
     
     // MARK: - Intents
     
-    func createRecipe(name: String, ingredients: [Ingredient], directions: [String], servings: String) {
-        recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
-    }
+//    func createRecipe(name: String, ingredients: [Ingredient], directions: [String], servings: String) {
+//        recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
+//    }
     
     func setServingSize(_ size: Int) {
         recipe.servings = size

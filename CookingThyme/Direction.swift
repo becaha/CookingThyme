@@ -23,6 +23,13 @@ struct Direction {
     var recipeId: Int
     var direction: String
     
+    init(step: Int, recipeId: Int, direction: String) {
+        self.step = step
+        self.recipeId = recipeId
+        self.direction = direction
+        self.id = 0
+    }
+    
     init(row: Row) {
         id = row[Table.id]
         step = row[Table.step]

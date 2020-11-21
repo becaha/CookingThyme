@@ -25,16 +25,15 @@ struct RecipeCollectionView: View {
                         }, onCommit: {
                             addCategory()
                         })
-                                                    
+
                         Spacer()
-                        
+
                         UIControls.AddButton(action: addCategory)
                     }
                 }
                 ForEach(recipeCollectionVM.categories, id: \.self) { category in
                     NavigationLink("\(category)", destination:
-                        CategoryView(category: category, recipes: recipeCollectionVM.recipes(inCategory: category) ?? []
-                        )
+                        CategoryView(category: category, recipes: recipeCollectionVM.recipes(inCategory: category) ?? [])
                     )
                 }
             }
@@ -51,16 +50,6 @@ struct RecipeCollectionView: View {
 
 struct RecipeCollectionView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(
-            recipes: [
-                Recipe(name: "Pasta", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Salad", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Bagels", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Baguettes", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Cinnamon Buns", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Rolls", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Pretzels", ingredients: [], directions: [], servings: 3),
-                Recipe(name: "Milk", ingredients: [], directions: [], servings: 3)
-        ]))
+        RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(recipeCollectionId: 1))
     }
 }

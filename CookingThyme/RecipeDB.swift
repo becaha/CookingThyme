@@ -37,42 +37,53 @@ class RecipeDB {
     
     // MARK: - Create
     
-    func createRecipe(name: String, servings: Int) -> RecipeTable? {
+    func createRecipe(name: String, servings: Int) -> Recipe? {
         do {
-            let writeResult = try dbQueue.write{ (db: Database) -> RecipeTable in
+            let writeResult = try dbQueue.write{ (db: Database) -> Recipe in
                 let executeResult = try db.execute(
                     sql:
                     """
-                    INSERT INTO \(RecipeTable.Table.databaseTableName) (\(RecipeTable.Table.name), \(RecipeTable.Table.servings)) \
+                    INSERT INTO \(Recipe.Table.databaseTableName) (\(Recipe.Table.name), \(Recipe.Table.servings)) \
                     VALUES (?, ?)
                     """,
                     arguments: [name, servings])
                 
                 let recipeId = db.lastInsertedRowID
                 
-                return RecipeTable(id: Int(recipeId), name: name, servings: servings)
+                return Recipe(id: Int(recipeId), name: name, servings: servings)
             }
             
-            return RecipeTable(id: Int(writeResult.id), name: name, servings: servings)
+            return Recipe(id: Int(writeResult.id), name: name, servings: servings)
         } catch {
             print("Error creating recipe")
             return nil
         }
+        
+        // must also add recipe to recipe collection, recipe category all
     }
     
     //MARK: - Read
     
-    func getRecipe(byId id: Int) -> RecipeTable? {
+    func getFullRecipe(byId id: Int) -> Recipe? {
+        if let recipe = getRecipe(byId: id) {
+            if let recipeWithIngredients = addIngredients(toRecipe: recipe, withId: id) {
+                return addDirections(toRecipe: recipeWithIngredients, withId: id)
+            }
+        }
+        return nil
+    }
+    
+    func getRecipe(byId id: Int) -> Recipe? {
         do {
-            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
+            let recipe = try dbQueue.inDatabase { (db: Database) -> Recipe? in
                 let row = try Row.fetchOne(db,
                                            sql: """
-                                                select * from \(RecipeTable.Table.databaseTableName) \
-                                                where \(RecipeTable.Table.id) = ?
+                                                select * from \(Recipe.Table.databaseTableName) \
+                                                where \(Recipe.Table.id) = ?
                                                 """,
                                            arguments: [id])
                 if let returnedRow = row {
-                    return RecipeTable(row: returnedRow)
+                    return Recipe(row: returnedRow)
                 }
                 return nil
             }
@@ -84,36 +95,10 @@ class RecipeDB {
         }
     }
     
-    func getFullRecipe(byId id: Int) -> RecipeTable? {
-        do {
-            let recipe = try dbQueue.inDatabase { (db: Database) -> RecipeTable? in
-                let row = try Row.fetchOne(db,
-                                           sql: """
-                                                select \(RecipeTable.Table.name), \(RecipeTable.Table.servings), \(Ingredient.Table.name), \(Ingredient.Table.amount), \(Ingredient.Table.unit), \(Direction.Table.step), \(Direction.Table.direction) from \(RecipeTable.Table.databaseTableName) \
-                                                inner join \(Ingredient.Table.databaseTableName) on \
-                                                \(RecipeTable.Table.id) = \(Ingredient.Table.recipeId) \
-                                                inner join \(Direction.Table.databaseTableName) on \
-                                                \(RecipeTable.Table.id) = \(Direction.Table.recipeId) \
-                                                where \(RecipeTable.Table.id) = ?
-                                                """,
-                                           arguments: [id])
-                if let returnedRow = row {
-                    return RecipeTable(row: returnedRow)
-                }
-                return nil
-            }
-            
-            return recipe
-            
-        } catch {
-            return nil
-        }
-    }
-    
-    func getIngredients(forRecipe recipe: RecipeTable, withId recipeId: Int) -> RecipeTable? {
+    func addIngredients(toRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
         var updatedRecipe = recipe
         do {
-            let updatedRecipe = try dbQueue.read { db -> RecipeTable in
+            let updatedRecipe = try dbQueue.read { db -> Recipe in
                 let rows = try Row.fetchCursor(db,
                                                sql: """
                                                     select * from \(Ingredient.Table.databaseTableName) \
@@ -131,10 +116,10 @@ class RecipeDB {
         }
     }
     
-    func getDirections(forRecipe recipe: RecipeTable, withId recipeId: Int) -> RecipeTable? {
+    func addDirections(toRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
         var updatedRecipe = recipe
         do {
-            let updatedRecipe = try dbQueue.read { db -> RecipeTable in
+            let updatedRecipe = try dbQueue.read { db -> Recipe in
                 let rows = try Row.fetchCursor(db,
                                                sql: """
                                                     select * from \(Direction.Table.databaseTableName) \
@@ -152,27 +137,72 @@ class RecipeDB {
         }
     }
     
-    func getRecipes(byCategory category: String, withCollectionId collectionId: Int) -> [RecipeTable] {
-        var categoryRecipes = [RecipeTable]()
+    func getRecipes(byCategory category: String, withCollectionId collectionId: Int) -> [Recipe] {
+        var categoryRecipes = [Recipe]()
         do {
-            let categoryRecipes = try dbQueue.read { db -> [RecipeTable] in
+            let categoryRecipes = try dbQueue.read { db -> [Recipe] in
                 let rows = try Row.fetchCursor(db,
                                                sql: """
-                                                    SELECT * FROM \(RecipeTable.Table.databaseTableName) \
+                                                    SELECT \(Recipe.Table.databaseTableName).\(Recipe.Table.id), \(Recipe.Table.databaseTableName).\(Recipe.Table.name), \(Recipe.Table.databaseTableName).\(Recipe.Table.servings) FROM \(Recipe.Table.databaseTableName) \
                                                     INNER JOIN \(RecipeCategory.Table.databaseTableName) \
-                                                    ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeId) = \(RecipeTable.Table.databaseTableName).\(RecipeTable.Table.id)
+                                                    ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeId) = \(Recipe.Table.databaseTableName).\(Recipe.Table.id)
                                                     WHERE \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeCollectionId) = ? \
                                                     AND \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.name) = ?
                                                     """,
                                                arguments: [collectionId, category])
                 while let row = try rows.next() {
-                    categoryRecipes.append(RecipeTable(row: row))
+                    categoryRecipes.append(Recipe(row: row))
                 }
                 return categoryRecipes
             }
             return categoryRecipes
         } catch {
-            return categoryRecipes
+            return []
+        }
+    }
+    
+    func getAllRecipes(byCollectionId collectionId: Int) -> [Recipe] {
+        var allRecipes = [Recipe]()
+        do {
+            let allRecipes = try dbQueue.read { db -> [Recipe] in
+                let rows = try Row.fetchCursor(db,
+                                               sql: """
+                                                    SELECT distinct \(Recipe.Table.id), \(Recipe.Table.name), \(Recipe.Table.servings) FROM \(Recipe.Table.databaseTableName) \
+                                                    INNER JOIN \(RecipeCategory.Table.databaseTableName) \
+                                                    ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeId) = \(Recipe.Table.databaseTableName).\(Recipe.Table.id)
+                                                    WHERE \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeCollectionId) = ?
+                                                    """,
+                                               arguments: [collectionId])
+                while let row = try rows.next() {
+                    allRecipes.append(Recipe(row: row))
+                }
+                return allRecipes
+            }
+            return allRecipes
+        } catch {
+            return []
+        }
+    }
+    
+    func getCategories(byCollectionId collectionId: Int) -> [String] {
+        var categories = [String]()
+        do {
+            let categories = try dbQueue.read { db -> [String] in
+                let rows = try Row.fetchCursor(db,
+                                               sql: """
+                                                    select * from (
+                                                    select distinct \(RecipeCategory.Table.name) from \(RecipeCategory.Table.databaseTableName) \
+                                                    where \(RecipeCategory.Table.recipeCollectionId) = ?)
+                                                    """,
+                                               arguments: [collectionId])
+                while let row = try rows.next() {
+                    categories.append(row[RecipeCategory.Table.name])
+                }
+                return categories
+            }
+            return categories
+        } catch {
+            return []
         }
     }
 }
