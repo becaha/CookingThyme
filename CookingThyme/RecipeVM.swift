@@ -18,8 +18,8 @@ class RecipeVM: ObservableObject {
     }
     
     func popullateRecipe() {
-        if let recipeWithDirections = RecipeDB.shared.addDirections(toRecipe: recipe, withId: recipe.id) {
-            if let fullRecipe = RecipeDB.shared.addIngredients(toRecipe: recipeWithDirections, withId: recipe.id) {
+        if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
+            if let fullRecipe = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
                 recipe = fullRecipe
             }
         }
@@ -30,6 +30,10 @@ class RecipeVM: ObservableObject {
     }
     
     // MARK: - Model Access
+    
+    var id: Int {
+        Int(recipe.id)
+    }
     
     var name: String {
         recipe.name.lowercased().capitalized
@@ -50,9 +54,14 @@ class RecipeVM: ObservableObject {
     
     // MARK: - Intents
     
-//    func createRecipe(name: String, ingredients: [Ingredient], directions: [String], servings: String) {
-//        recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
-//    }
+    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
+        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt()) {
+            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
+            RecipeDB.shared.createDirections(directions: directions)
+            RecipeDB.shared.createIngredients(ingredients: ingredients)
+            self.recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
+        }
+    }
     
     func setServingSize(_ size: Int) {
         recipe.servings = size
@@ -66,7 +75,7 @@ class RecipeVM: ObservableObject {
         let doubleAmount = 1.0
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
         let unit = UnitOfMeasurement.Cup
-        return Ingredient(name: name, amount: doubleAmount, unit: unit)
+        return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
 }
 

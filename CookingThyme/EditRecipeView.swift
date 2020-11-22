@@ -89,7 +89,7 @@ struct EditRecipeView: View {
                 ) {
                     List {
                         ForEach(ingredients) { ingredient in
-                            Text("\(ingredient.getFractionAmount()) \(ingredient.unit.rawValue) \(ingredient.name)")
+                            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.rawValue) \(ingredient.name)")
                         }
                         HStack {
                             TextField("Amount ", text: $ingredientAmount)
@@ -151,18 +151,10 @@ struct EditRecipeView: View {
     
     private func saveRecipe() {
         if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
-//            recipeVM.createRecipe(name: name, ingredients: ingredients, directions: directions, servings: servings)
+            recipeVM.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-//            let recipe: Recipe? = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt())
-            // TEST CRUD
-            let testId: Int = 1
-            if let readRecipe = RecipeDB.shared.getRecipe(byId: testId) {
-                let ingredientsRecipe: Recipe? = RecipeDB.shared.addIngredients(toRecipe: readRecipe, withId: testId)
-                let directionsRecipe: Recipe? = RecipeDB.shared.addDirections(toRecipe: readRecipe, withId: testId)
-                let recipes: [Recipe] = RecipeDB.shared.getRecipes(byCategory: "All", withCollectionId: 1)
-                isPresented = false
-            }
+            isPresented = false
         }
         else {
             fieldMissing = true

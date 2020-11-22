@@ -154,13 +154,13 @@ struct RecipeView: View {
             HStack {
                 TextField("\(ingredient.getFractionAmount()) ", text: $newAmount)
                 
-                TextField("\(ingredient.unit.rawValue) ", text: $newUnit)
+                TextField("\(ingredient.unitName.rawValue) ", text: $newUnit)
 
                 TextField("\(ingredient.name)", text: $newName)
             }
         }
         else {
-            Text("\(ingredient.getFractionAmount()) \(ingredient.unit.rawValue) \(ingredient.name)")
+            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.rawValue) \(ingredient.name)")
         }
     }
     
@@ -214,11 +214,11 @@ struct RecipeView_Previews: PreviewProvider {
             recipeVM: RecipeVM(recipe: Recipe(
                 name: "Water",
                 ingredients: [
-                    Ingredient(name: "water", amount: 1.05, unit: UnitOfMeasurement.Cup),
-                    Ingredient(name: "water", amount: 2.1, unit: UnitOfMeasurement.Cup),
-                    Ingredient(name: "water", amount: 1.3, unit: UnitOfMeasurement.Cup),
-                    Ingredient(name: "water", amount: 1.8, unit: UnitOfMeasurement.Cup),
-                    Ingredient(name: "water", amount: 1.95, unit: UnitOfMeasurement.Cup)
+                    Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.Cup),
+                    Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.Cup),
+                    Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.Cup),
+                    Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.Cup),
+                    Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.Cup)
                 ],
                 directions: [
                     Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),

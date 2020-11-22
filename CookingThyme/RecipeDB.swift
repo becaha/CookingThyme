@@ -40,7 +40,7 @@ class RecipeDB {
     func createRecipe(name: String, servings: Int) -> Recipe? {
         do {
             let writeResult = try dbQueue.write{ (db: Database) -> Recipe in
-                let executeResult = try db.execute(
+                try db.execute(
                     sql:
                     """
                     INSERT INTO \(Recipe.Table.databaseTableName) (\(Recipe.Table.name), \(Recipe.Table.servings)) \
@@ -53,7 +53,7 @@ class RecipeDB {
                 return Recipe(id: Int(recipeId), name: name, servings: servings)
             }
             
-            return Recipe(id: Int(writeResult.id), name: name, servings: servings)
+            return Recipe(id: writeResult.id, name: name, servings: servings)
         } catch {
             print("Error creating recipe")
             return nil
@@ -62,12 +62,56 @@ class RecipeDB {
         // must also add recipe to recipe collection, recipe category all
     }
     
+    func createDirections(directions: [Direction]) {
+        do {
+            for direction in directions {
+                try dbQueue.write{ (db: Database) in
+                    try db.execute(
+                        sql:
+                        """
+                        INSERT INTO \(Direction.Table.databaseTableName) (\(Direction.Table.step), \(Direction.Table.direction), \(Direction.Table.recipeId)) \
+                        VALUES (?, ?, ?)
+                        """,
+                        arguments: [direction.step, direction.direction, direction.recipeId])
+                    return
+                }
+            }
+            
+            return
+        } catch {
+            print("Error creating directions")
+            return
+        }
+    }
+    
+    func createIngredients(ingredients: [Ingredient]) {
+        do {
+            for ingredient in ingredients {
+                try dbQueue.write{ (db: Database) in
+                    try db.execute(
+                        sql:
+                        """
+                        INSERT INTO \(Ingredient.Table.databaseTableName) (\(Ingredient.Table.name), \(Ingredient.Table.amount), \(Ingredient.Table.unitName), \(Ingredient.Table.recipeId)) \
+                        VALUES (?, ?, ?, ?)
+                        """,
+                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, ingredient.recipeId])
+                    return
+                }
+            }
+            
+            return
+        } catch {
+            print("Error creating ingredients")
+            return
+        }
+    }
+    
     //MARK: - Read
     
     func getFullRecipe(byId id: Int) -> Recipe? {
         if let recipe = getRecipe(byId: id) {
-            if let recipeWithIngredients = addIngredients(toRecipe: recipe, withId: id) {
-                return addDirections(toRecipe: recipeWithIngredients, withId: id)
+            if let recipeWithIngredients = getIngredients(forRecipe: recipe, withId: id) {
+                return getDirections(forRecipe: recipeWithIngredients, withId: id)
             }
         }
         return nil
@@ -95,7 +139,7 @@ class RecipeDB {
         }
     }
     
-    func addIngredients(toRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
+    func getIngredients(forRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
         var updatedRecipe = recipe
         do {
             let updatedRecipe = try dbQueue.read { db -> Recipe in
@@ -116,7 +160,7 @@ class RecipeDB {
         }
     }
     
-    func addDirections(toRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
+    func getDirections(forRecipe recipe: Recipe, withId recipeId: Int) -> Recipe? {
         var updatedRecipe = recipe
         do {
             let updatedRecipe = try dbQueue.read { db -> Recipe in

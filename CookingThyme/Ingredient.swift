@@ -16,21 +16,21 @@ struct Ingredient: Identifiable {
         static let id = "Id"
         static let name = "Name"
         static let amount = "Amount"
-        static let unit = "UnitName"
+        static let unitName = "UnitName"
         static let recipeId = "RecipeId"
     }
     
     var name: String
     var amount: Double
-    var unit: UnitOfMeasurement
+    var unitName: UnitOfMeasurement
     var id: Int
     var recipeId: Int
     
     // TODO get rid of
-    init(name: String, amount: Double, unit: UnitOfMeasurement) {
+    init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
-        self.unit = unit
+        self.unitName = unitName
         self.id = Int(Double(name.hashValue) * amount)
         self.recipeId = 0 // BAD
     }
@@ -41,8 +41,8 @@ struct Ingredient: Identifiable {
         amount = row[Table.amount]
         recipeId = row[Table.recipeId]
         
-        let unitString: String = row[Table.unit]
-        unit = UnitOfMeasurement.fromString(unitString: unitString)
+        let unitString: String = row[Table.unitName]
+        unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
     func getFractionAmount() -> String {

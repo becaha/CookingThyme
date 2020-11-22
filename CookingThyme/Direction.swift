@@ -36,4 +36,12 @@ struct Direction {
         recipeId = row[Table.recipeId]
         direction = row[Table.direction]
     }
+    
+    static func toDirections(directionStrings: [String], withRecipeId recipeId: Int) -> [Direction] {
+        var directions = [Direction]()
+        for index in 0..<directionStrings.count {
+            directions.append(Direction(step: index + 1, recipeId: recipeId, direction: directionStrings[index]))
+        }
+        return directions
+    }
 }

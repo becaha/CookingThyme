@@ -100,7 +100,7 @@ struct Recipe: Identifiable {
     mutating func changeIngredientAmounts(withRatio ratio: Double) {
         var newIngredients = [Ingredient]()
         for ingredient in ingredients {
-            newIngredients.append(Ingredient(name: ingredient.name, amount: ingredient.amount * ratio, unit: ingredient.unit))
+            newIngredients.append(Ingredient(name: ingredient.name, amount: ingredient.amount * ratio, unitName: ingredient.unitName))
         }
         ingredients = newIngredients
     }
