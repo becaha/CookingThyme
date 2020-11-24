@@ -14,11 +14,18 @@ class RecipeDB {
     struct Constant {
         static let fileName = "recipe"
         static let fileExtension = "sqlite"
+//        static let path = "/Users/rebeccanybo/Documents/recipe.sqlite"
+        
     }
     
     // MARK: - Properties
     
     var dbQueue: DatabaseQueue
+    
+    var documentDirPath: String
+    var dbPath: String
+    var fileManager: FileManager
+    var bundlePath: String
     
     //MARK: - Singleton
     
@@ -26,9 +33,28 @@ class RecipeDB {
     
     private init() {
         if let path = Bundle.main.path(forResource: Constant.fileName, ofType: Constant.fileExtension) {
-            if let queue = try? DatabaseQueue(path: path) {
-                dbQueue = queue
-                return
+            bundlePath = path
+            
+            if let documentDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
+                documentDirPath = documentDir
+                // TODO path modifying
+                dbPath = documentDir + "/" + Constant.fileName + "." + Constant.fileExtension
+                print(dbPath)
+                
+                fileManager = FileManager()
+                
+                do {
+                    if !fileManager.fileExists(atPath: dbPath) {
+                        try fileManager.copyItem(atPath: path, toPath: dbPath)
+                    }
+                } catch {
+                    print("Error copying database")
+                }
+                
+                if let queue = try? DatabaseQueue(path: dbPath) {
+                    dbQueue = queue
+                    return
+                }
             }
         }
         
@@ -37,9 +63,11 @@ class RecipeDB {
     
     // MARK: - Create
     
+    // must also add recipe to recipe collection, recipe category all
     func createRecipe(name: String, servings: Int) -> Recipe? {
         do {
             let writeResult = try dbQueue.write{ (db: Database) -> Recipe in
+
                 try db.execute(
                     sql:
                     """
@@ -47,9 +75,9 @@ class RecipeDB {
                     VALUES (?, ?)
                     """,
                     arguments: [name, servings])
-                
+
                 let recipeId = db.lastInsertedRowID
-                
+
                 return Recipe(id: Int(recipeId), name: name, servings: servings)
             }
             
@@ -58,8 +86,6 @@ class RecipeDB {
             print("Error creating recipe")
             return nil
         }
-        
-        // must also add recipe to recipe collection, recipe category all
     }
     
     func createDirections(directions: [Direction]) {
@@ -84,7 +110,7 @@ class RecipeDB {
         }
     }
     
-    func createIngredients(ingredients: [Ingredient]) {
+    func createIngredients(ingredients: [Ingredient], withRecipeId recipeId: Int) {
         do {
             for ingredient in ingredients {
                 try dbQueue.write{ (db: Database) in
@@ -94,15 +120,32 @@ class RecipeDB {
                         INSERT INTO \(Ingredient.Table.databaseTableName) (\(Ingredient.Table.name), \(Ingredient.Table.amount), \(Ingredient.Table.unitName), \(Ingredient.Table.recipeId)) \
                         VALUES (?, ?, ?, ?)
                         """,
-                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, ingredient.recipeId])
+                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId])
                     return
                 }
             }
-            
+
             return
         } catch {
             print("Error creating ingredients")
             return
+        }
+    }
+    
+    func createCategory(withName name: String, forCollectionId collectionId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    INSERT INTO \(RecipeCategory.Table.databaseTableName) (\(RecipeCategory.Table.name), \(RecipeCategory.Table.recipeCollectionId)) \
+                    VALUES (?, ?)
+                    """,
+                    arguments: [name, collectionId])
+            }
+        } catch {
+            print("Error creating recipe")
         }
     }
     

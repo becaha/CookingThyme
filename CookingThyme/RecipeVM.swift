@@ -58,7 +58,7 @@ class RecipeVM: ObservableObject {
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt()) {
             let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
             RecipeDB.shared.createDirections(directions: directions)
-            RecipeDB.shared.createIngredients(ingredients: ingredients)
+            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
             self.recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
         }
     }

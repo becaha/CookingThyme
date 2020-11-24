@@ -48,6 +48,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: Intents
     
     func addCategory(_ category: String) -> Void {
+        RecipeDB.shared.createCategory(withName: category, forCollectionId: recipeCollectionId)
 //        recipeCollection[category.lowercased().capitalized] = []
     }
     
