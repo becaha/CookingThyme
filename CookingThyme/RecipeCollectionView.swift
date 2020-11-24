@@ -32,8 +32,9 @@ struct RecipeCollectionView: View {
                     }
                 }
                 ForEach(recipeCollectionVM.categories, id: \.self) { category in
-                    NavigationLink("\(category)", destination:
-                        CategoryView(category: category, recipes: recipeCollectionVM.recipes(inCategory: category) ?? [])
+                    NavigationLink("\(category.name)", destination:
+                                    CategoryView()
+                                        .environmentObject(RecipeCategoryVM(category: category))
                     )
                 }
             }

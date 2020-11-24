@@ -19,6 +19,8 @@ struct RecipeView: View {
     @State private var newName: String = ""
     @State private var newDirection: String = ""
     
+    @State private var isCreatingRecipe = false
+    
     var body: some View {
         VStack {
             ZStack {
@@ -37,16 +39,16 @@ struct RecipeView: View {
                     Spacer()
                     
                     Button(action: {
-                        inEditMode.toggle()
-                        if !inEditMode {
-//                            recipe.save()
-                        }
+                        isCreatingRecipe = true
                     })
                     {
-                        Text(inEditMode ? "Save" : "Edit")
+                        Text("Edit")
                     }
                 }
                 .padding()
+                .sheet(isPresented: $isCreatingRecipe) {
+                    EditRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: recipeVM)
+                }
             }
                 
             Form {

@@ -17,6 +17,7 @@ struct Recipe: Identifiable {
         static let id = "Id"
         static let name = "Name"
         static let servings = "Servings"
+        static let recipeCategoryId = "RecipeCategoryId"
     }
     
     // MARK: - DB Properties
@@ -35,11 +36,13 @@ struct Recipe: Identifiable {
     }
     var ingredients: [Ingredient] = []
     var directions: [Direction] = []
+    var recipeCategoryId: Int
     
     init() {
         self.id = 0
         self.name = ""
         self.servings = 0
+        self.recipeCategoryId = 0
     }
     
     // TODO remove??
@@ -49,18 +52,21 @@ struct Recipe: Identifiable {
         self.directions = directions
         self.servings = servings
         self.id = 0
+        self.recipeCategoryId = 0
     }
     
-    init(id: Int, name: String, servings: Int) {
+    init(id: Int, name: String, servings: Int, recipeCategoryId: Int) {
         self.id = id
         self.name = name.lowercased().capitalized
         self.servings = servings
+        self.recipeCategoryId = recipeCategoryId
     }
     
     init(row: Row) {
         id = row[Table.id]
         name = String(row[Table.name]).lowercased().capitalized
         servings = row[Table.servings]
+        recipeCategoryId = row[Table.recipeCategoryId]
     }
     
     mutating func addIngredient(row: Row) {

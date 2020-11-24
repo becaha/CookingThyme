@@ -54,14 +54,14 @@ class RecipeVM: ObservableObject {
     
     // MARK: - Intents
     
-    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
-        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt()) {
-            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
-            RecipeDB.shared.createDirections(directions: directions)
-            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
-            self.recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
-        }
-    }
+//    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
+//        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt()) {
+//            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
+//            RecipeDB.shared.createDirections(directions: directions)
+//            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+//            self.recipe = Recipe(name: name, ingredients: ingredients, directions: directions, servings: servings.toInt())
+//        }
+//    }
     
     func setServingSize(_ size: Int) {
         recipe.servings = size

@@ -9,20 +9,20 @@ import Foundation
 
 class RecipeCollectionVM: ObservableObject {
     private var recipeCollectionId: Int
-    @Published var recipeCollection: [String: [Recipe]]
+    @Published var recipeCollection: [RecipeCategory: [Recipe]]
     
     // MARK: - Init
     
     init(recipeCollectionId: Int) {
         self.recipeCollectionId = recipeCollectionId
-        self.recipeCollection = [String: [Recipe]]()
+        self.recipeCollection = [RecipeCategory: [Recipe]]()
         popullateCategories()
     }
     
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: recipeCollectionId)
         for category in categories {
-            self.recipeCollection[category.lowercased().capitalized] = []
+            self.recipeCollection[category] = []
         }
     }
     
@@ -36,20 +36,28 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Access
     
-    var categories: [String] {
-        return [String](recipeCollection.keys).sorted()
+    var categoryNames: [String] {
+        var categoryNames = [String]()
+        for category in recipeCollection.keys {
+            categoryNames.append(category.name)
+        }
+        return categoryNames.sorted()
     }
     
-    func recipes(inCategory category: String) -> [Recipe]? {
-        let recipes = RecipeDB.shared.getRecipes(byCategory: category, withCollectionId: recipeCollectionId)
-        return recipes
+    var categories: [RecipeCategory] {
+        return [RecipeCategory](recipeCollection.keys)
     }
+    
+//    func recipes(inCategoryId categoryId: Int) -> [Recipe]? {
+//        let recipes = RecipeDB.shared.getRecipes(byCategoryId: categoryId)
+//        return recipes
+//    }
     
     // MARK: Intents
     
     func addCategory(_ category: String) -> Void {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: recipeCollectionId)
-//        recipeCollection[category.lowercased().capitalized] = []
+        popullateCategories()
     }
     
     func addRecipe(_ recipe: Recipe, toCategory category: String) {

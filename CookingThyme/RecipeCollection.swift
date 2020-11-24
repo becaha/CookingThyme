@@ -14,16 +14,13 @@ struct RecipeCollection {
         
         static let id = "Id"
         static let name = "Name"
-        static let recipeId = "RecipeId"
     }
     
     var id: Int
     var name: String
-    var recipeId: Int
     
     init(row: Row) {
         id = row[Table.id]
         name = row[Table.name]
-        recipeId = row[Table.recipeId]
     }
 }

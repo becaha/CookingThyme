@@ -31,6 +31,8 @@
 		DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4EE2568B8EB00808CC8 /* RecipeCategory.swift */; };
 		DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F02568B96100808CC8 /* RecipeCollection.swift */; };
 		DB49B4F3256CBC8F00808CC8 /* recipe.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */; };
+		DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */; };
+		DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +64,8 @@
 		DB49B4EE2568B8EB00808CC8 /* RecipeCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategory.swift; sourceTree = "<group>"; };
 		DB49B4F02568B96100808CC8 /* RecipeCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCollection.swift; sourceTree = "<group>"; };
 		DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = recipe.sqlite; sourceTree = "<group>"; };
+		DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryVM.swift; sourceTree = "<group>"; };
+		DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +148,7 @@
 				DB49B4C62565E49F00808CC8 /* TimerView.swift */,
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
+				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			children = (
 				DB49B4C22565E49F00808CC8 /* RecipeCollectionVM.swift */,
 				DB49B4C52565E49F00808CC8 /* RecipeVM.swift */,
+				DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -291,10 +297,12 @@
 				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
+				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
+				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
 				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
 				DB49B4D12565E49F00808CC8 /* GroceriesView.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,

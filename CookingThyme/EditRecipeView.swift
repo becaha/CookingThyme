@@ -10,8 +10,9 @@ import SwiftUI
 // TODO: edit, when ingredient item is clicked, all the ingredient bindings are pertaining to that item,
 // off click, it saved to local recipe
 struct EditRecipeView: View {
+    @EnvironmentObject var categoryVM: RecipeCategoryVM
     @Binding var isPresented: Bool
-    @ObservedObject var recipeVM: RecipeVM = RecipeVM()
+    @ObservedObject var recipeVM: RecipeVM
     
     @State private var fieldMissing = false
     
@@ -140,6 +141,18 @@ struct EditRecipeView: View {
                 }
             }
         }
+        .onAppear {
+            setRecipe()
+        }
+    }
+    
+    private func setRecipe() {
+        name = recipeVM.name
+        servings = recipeVM.servings.toString()
+        ingredients = recipeVM.ingredients
+        for direction in recipeVM.directions {
+            self.directions.append(direction.direction)
+        }
     }
     
     @ViewBuilder
@@ -151,7 +164,7 @@ struct EditRecipeView: View {
     
     private func saveRecipe() {
         if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
-            recipeVM.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+            categoryVM.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
             isPresented = false

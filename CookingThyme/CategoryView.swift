@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct CategoryView: View {
-    var category: String
-    var recipes: [Recipe]
+    @EnvironmentObject var category: RecipeCategoryVM
     
     @State private var isCreatingRecipe = false
     
@@ -24,15 +23,15 @@ struct CategoryView: View {
                     UIControls.AddButton(action: createRecipe)
                 }
             }.sheet(isPresented: $isCreatingRecipe) {
-                EditRecipeView(isPresented: self.$isCreatingRecipe)
+                CreateRecipeView(isPresented: self.$isCreatingRecipe)
             }
         
-            ForEach(recipes) { recipe in
+            ForEach(category.recipes) { recipe in
                 NavigationLink("\(recipe.name)", destination: RecipeView(recipeVM: RecipeVM(recipe: recipe)))
             }
         }
         .listStyle(InsetGroupedListStyle())
-        .navigationBarTitle("\(category)", displayMode: .large)
+        .navigationBarTitle("\(category.name)", displayMode: .large)
     }
     
     private func createRecipe() {
@@ -42,15 +41,7 @@ struct CategoryView: View {
 
 struct CategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryView(category: "All", recipes: [
-            Recipe(id: 0, name: "Pasta", servings: 3),
-            Recipe(id: 1, name: "Salad", servings: 3),
-            Recipe(id: 2, name: "Bagels", servings: 3),
-            Recipe(id: 3, name: "Baguettes", servings: 3),
-            Recipe(id: 4, name: "Cinnamon Buns", servings: 3),
-            Recipe(id: 5, name: "Rolls", servings: 3),
-            Recipe(id: 6, name: "Pretzels", servings: 3),
-            Recipe(id: 7, name: "Milk", servings: 3)
-        ])
+        CategoryView()
+            .environmentObject(RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1)))
     }
 }
