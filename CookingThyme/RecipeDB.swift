@@ -312,4 +312,88 @@ class RecipeDB {
             return []
         }
     }
+    
+    // MARK: - Update
+    
+    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) -> Recipe? {
+        do {
+            let recipe = try dbQueue.write{ (db: Database) -> Recipe in
+
+                try db.execute(
+                    sql:
+                    """
+                    UPDATE \(Recipe.Table.databaseTableName) \
+                    SET \(Recipe.Table.name) = ?, \
+                    \(Recipe.Table.servings) = ?, \
+                    \(Recipe.Table.recipeCategoryId) = ? \
+                    WHERE \(Recipe.Table.id) = ?
+                    """,
+                    arguments: [name, servings, recipeCategoryId, id])
+
+                let recipeId = db.lastInsertedRowID
+                
+                if recipeId != id {
+                    print("Error updating recipe")
+                }
+
+                return Recipe(id: id, name: name, servings: servings, recipeCategoryId: recipeCategoryId)
+            }
+            
+            return recipe
+        } catch {
+            print("Error updating recipe")
+            return nil
+        }
+    }
+    
+    func updateDirections(forRecipeId recipeId: Int, directions: [Direction]) {
+        do {
+            for direction in directions {
+                try dbQueue.write{ (db: Database) in
+                    try db.execute(
+                        sql:
+                        """
+                        UPDATE \(Direction.Table.databaseTableName) \
+                        SET \(Direction.Table.step) = ?, \
+                        \(Direction.Table.direction) = ?, \
+                        \(Direction.Table.recipeId) = ? \
+                        WHERE \(Direction.Table.id) = ?
+                        """,
+                        arguments: [direction.step, direction.direction, direction.recipeId, direction.id])
+                    return
+                }
+            }
+            
+            return
+        } catch {
+            print("Error updating directions")
+            return
+        }
+    }
+    
+    func updateIngredients(forRecipeId recipeId: Int, ingredients: [Ingredient]) {
+    do {
+        for ingredient in ingredients {
+            try dbQueue.write{ (db: Database) in
+                try db.execute(
+                    sql:
+                    """
+                    UPDATE \(Ingredient.Table.databaseTableName) \
+                    SET \(Ingredient.Table.name) = ?, \
+                    \(Ingredient.Table.amount) = ?, \
+                    \(Ingredient.Table.unitName) = ?, \
+                    \(Ingredient.Table.recipeId) = ? \
+                    WHERE \(Ingredient.Table.id) = ?
+                    """,
+                    arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId, ingredient.id])
+                return
+            }
+        }
+
+        return
+    } catch {
+        print("Error updating ingredients")
+        return
+    }
+}
 }

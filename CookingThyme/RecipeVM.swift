@@ -25,6 +25,13 @@ class RecipeVM: ObservableObject {
         }
     }
     
+    func refreshRecipe() {
+        if let recipe = RecipeDB.shared.getRecipe(byId: recipe.id) {
+            self.recipe = recipe
+            popullateRecipe()
+        }
+    }
+    
     init() {
         self.recipe = Recipe()
     }
@@ -54,6 +61,11 @@ class RecipeVM: ObservableObject {
     
     // MARK: - Intents
     
+    // TODO make more robust, servings is initialized to 0 but cannot be zero once created
+    func isCreatingRecipe() -> Bool {
+        return recipe.servings == 0
+    }
+    
 //    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
 //        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt()) {
 //            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
@@ -76,6 +88,15 @@ class RecipeVM: ObservableObject {
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
         let unit = UnitOfMeasurement.Cup
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
+    }
+    
+    func updateRecipe(withRecipeId recipeId: Int, toCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
+        if let recipe = RecipeDB.shared.updateRecipe(withId: recipeId, name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
+            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
+            RecipeDB.shared.updateDirections(forRecipeId: recipeId, directions: directions)
+            RecipeDB.shared.updateIngredients(forRecipeId: recipeId, ingredients: ingredients)
+        }
+        refreshRecipe()
     }
 }
 

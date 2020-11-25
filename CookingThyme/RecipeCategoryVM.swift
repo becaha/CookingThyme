@@ -19,6 +19,10 @@ class RecipeCategoryVM: ObservableObject {
     
     // MARK: - Model Access
     
+    var id: Int {
+        category.id
+    }
+    
     var name: String {
         category.name
     }

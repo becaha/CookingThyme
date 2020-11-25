@@ -10,7 +10,7 @@ import SwiftUI
 // TODO: edit, when ingredient item is clicked, all the ingredient bindings are pertaining to that item,
 // off click, it saved to local recipe
 struct EditRecipeView: View {
-    @EnvironmentObject var categoryVM: RecipeCategoryVM
+    @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isPresented: Bool
     @ObservedObject var recipeVM: RecipeVM
     
@@ -43,6 +43,14 @@ struct EditRecipeView: View {
                 }
                 
                 HStack {
+                    //TODO find a place to put cancel button
+//                    Button(action: {
+//                        isPresented = false
+//                    })
+//                    {
+//                        Text("Cancel")
+//                    }
+                    
                     Spacer()
                     
                     Button(action: {
@@ -164,7 +172,13 @@ struct EditRecipeView: View {
     
     private func saveRecipe() {
         if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
-            categoryVM.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+            if recipeVM.isCreatingRecipe() {
+                category.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+            }
+            else {
+                recipeVM.updateRecipe(withRecipeId: recipeVM.id, toCategoryId: category.id, name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+                category.popullateRecipes()
+            }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
             isPresented = false

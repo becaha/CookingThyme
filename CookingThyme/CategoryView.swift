@@ -27,7 +27,10 @@ struct CategoryView: View {
             }
         
             ForEach(category.recipes) { recipe in
-                NavigationLink("\(recipe.name)", destination: RecipeView(recipeVM: RecipeVM(recipe: recipe)))
+                NavigationLink("\(recipe.name)", destination:
+                    RecipeView(recipeVM: RecipeVM(recipe: recipe))
+                        .environmentObject(category)
+                )
             }
         }
         .listStyle(InsetGroupedListStyle())

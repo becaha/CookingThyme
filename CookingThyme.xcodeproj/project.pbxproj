@@ -33,6 +33,7 @@
 		DB49B4F3256CBC8F00808CC8 /* recipe.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */; };
 		DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */; };
 		DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */; };
+		DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = recipe.sqlite; sourceTree = "<group>"; };
 		DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryVM.swift; sourceTree = "<group>"; };
 		DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
+		DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRecipeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
 				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
+				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				DB49B4D72565E49F00808CC8 /* TimerView.swift in Sources */,
 				DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
+				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
