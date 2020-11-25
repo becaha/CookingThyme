@@ -127,13 +127,13 @@ struct ReadRecipeView: View {
             HStack {
                 TextField("\(ingredient.getFractionAmount()) ", text: $newAmount)
                 
-                TextField("\(ingredient.unitName.rawValue) ", text: $newUnit)
+                TextField("\(ingredient.unitName.getName()) ", text: $newUnit)
 
                 TextField("\(ingredient.name)", text: $newName)
             }
         }
         else {
-            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.rawValue) \(ingredient.name)")
+            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.getName()) \(ingredient.name)")
         }
     }
     

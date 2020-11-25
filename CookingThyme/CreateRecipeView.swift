@@ -10,7 +10,7 @@ import SwiftUI
 struct CreateRecipeView: View {
     @EnvironmentObject var categoryVM: RecipeCategoryVM
     @Binding var isPresented: Bool
-    @ObservedObject var recipeVM: RecipeVM = RecipeVM()
+    @ObservedObject var recipeVM: RecipeVM
     
     var body: some View {
         EditRecipeView(isPresented: $isPresented, recipeVM: recipeVM)

@@ -22,12 +22,14 @@ struct Direction {
     var step: Int
     var recipeId: Int
     var direction: String
+    var temp = false
     
     init(step: Int, recipeId: Int, direction: String) {
         self.step = step
         self.recipeId = recipeId
         self.direction = direction
         self.id = 0
+        self.temp = true
     }
     
     init(row: Row) {

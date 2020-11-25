@@ -25,12 +25,12 @@ struct CategoryView: View {
                     UIControls.AddButton(action: createRecipe)
                 }
             }.sheet(isPresented: $isCreatingRecipe) {
-                CreateRecipeView(isPresented: self.$isCreatingRecipe)
+                CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
             }
         
             ForEach(category.recipes) { recipe in
                 NavigationLink("\(recipe.name)", destination:
-                    RecipeView(recipeVM: RecipeVM(recipe: recipe))
+                                RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
                         .environmentObject(category)
                 )
             }

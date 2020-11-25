@@ -59,6 +59,8 @@ struct EditRecipeView: View {
                     {
                         Text("Save")
                     }
+                    
+//                    EditButton()
                 }
             }
             .padding()
@@ -98,7 +100,17 @@ struct EditRecipeView: View {
                 ) {
                     List {
                         ForEach(ingredients) { ingredient in
-                            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.rawValue) \(ingredient.name)")
+                            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.getName()) \(ingredient.name)")
+//                            TextField("Amount ", text: $ingredientAmount)
+//
+//                            TextField("Unit ", text: $ingredientUnit)
+//
+//                            TextField("Name", text: $ingredientName)
+                        }
+                        .onDelete { indexSet in
+                            indexSet.map{ $0 }.forEach { index in
+                                ingredients.remove(at: index)
+                            }
                         }
                         HStack {
                             TextField("Amount ", text: $ingredientAmount)
@@ -130,6 +142,11 @@ struct EditRecipeView: View {
                                 Text("\(directions[index])")
                             }
                             .padding(.vertical)
+                        }
+                        .onDelete { indexSet in
+                            indexSet.map{ $0 }.forEach { index in
+                                directions.remove(at: index)
+                            }
                         }
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(directions.count + 1)")
@@ -176,7 +193,7 @@ struct EditRecipeView: View {
                 category.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
             }
             else {
-                recipeVM.updateRecipe(withRecipeId: recipeVM.id, toCategoryId: category.id, name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+                recipeVM.updateRecipe(withId: recipeVM.id, name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
                 category.popullateRecipes()
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe

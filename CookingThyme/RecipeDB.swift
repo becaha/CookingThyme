@@ -112,19 +112,23 @@ class RecipeDB {
         }
     }
     
+    func createDirection(_ direction: Direction) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                INSERT INTO \(Direction.Table.databaseTableName) (\(Direction.Table.step), \(Direction.Table.direction), \(Direction.Table.recipeId)) \
+                VALUES (?, ?, ?)
+                """,
+                arguments: [direction.step, direction.direction, direction.recipeId])
+            return
+        }
+    }
+    
     func createDirections(directions: [Direction]) {
         do {
             for direction in directions {
-                try dbQueue.write{ (db: Database) in
-                    try db.execute(
-                        sql:
-                        """
-                        INSERT INTO \(Direction.Table.databaseTableName) (\(Direction.Table.step), \(Direction.Table.direction), \(Direction.Table.recipeId)) \
-                        VALUES (?, ?, ?)
-                        """,
-                        arguments: [direction.step, direction.direction, direction.recipeId])
-                    return
-                }
+                try createDirection(direction)
             }
             
             return
@@ -134,19 +138,23 @@ class RecipeDB {
         }
     }
     
+    func createIngredient(_ ingredient: Ingredient, withRecipeId recipeId: Int) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                INSERT INTO \(Ingredient.Table.databaseTableName) (\(Ingredient.Table.name), \(Ingredient.Table.amount), \(Ingredient.Table.unitName), \(Ingredient.Table.recipeId)) \
+                VALUES (?, ?, ?, ?)
+                """,
+                arguments: [ingredient.name, ingredient.amount, ingredient.unitName.getName(), recipeId])
+            return
+        }
+    }
+    
     func createIngredients(ingredients: [Ingredient], withRecipeId recipeId: Int) {
         do {
             for ingredient in ingredients {
-                try dbQueue.write{ (db: Database) in
-                    try db.execute(
-                        sql:
-                        """
-                        INSERT INTO \(Ingredient.Table.databaseTableName) (\(Ingredient.Table.name), \(Ingredient.Table.amount), \(Ingredient.Table.unitName), \(Ingredient.Table.recipeId)) \
-                        VALUES (?, ?, ?, ?)
-                        """,
-                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId])
-                    return
-                }
+                try createIngredient(ingredient, withRecipeId: recipeId)
             }
 
             return
@@ -346,21 +354,30 @@ class RecipeDB {
         }
     }
     
-    func updateDirections(forRecipeId recipeId: Int, directions: [Direction]) {
+    func updateDirection(_ direction: Direction) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                UPDATE \(Direction.Table.databaseTableName) \
+                SET \(Direction.Table.step) = ?, \
+                \(Direction.Table.direction) = ?, \
+                \(Direction.Table.recipeId) = ? \
+                WHERE \(Direction.Table.id) = ?
+                """,
+                arguments: [direction.step, direction.direction, direction.recipeId, direction.id])
+            return
+        }
+    }
+    
+    func updateDirections(withRecipeId recipeId: Int, directions: [Direction]) {
         do {
             for direction in directions {
-                try dbQueue.write{ (db: Database) in
-                    try db.execute(
-                        sql:
-                        """
-                        UPDATE \(Direction.Table.databaseTableName) \
-                        SET \(Direction.Table.step) = ?, \
-                        \(Direction.Table.direction) = ?, \
-                        \(Direction.Table.recipeId) = ? \
-                        WHERE \(Direction.Table.id) = ?
-                        """,
-                        arguments: [direction.step, direction.direction, direction.recipeId, direction.id])
-                    return
+                if direction.temp {
+                    try createDirection(direction)
+                }
+                else {
+                    try updateDirection(direction)
                 }
             }
             
@@ -371,22 +388,31 @@ class RecipeDB {
         }
     }
     
+    func updateIngredient(_ ingredient: Ingredient, withRecipeId recipeId: Int) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                UPDATE \(Ingredient.Table.databaseTableName) \
+                SET \(Ingredient.Table.name) = ?, \
+                \(Ingredient.Table.amount) = ?, \
+                \(Ingredient.Table.unitName) = ?, \
+                \(Ingredient.Table.recipeId) = ? \
+                WHERE \(Ingredient.Table.id) = ?
+                """,
+                arguments: [ingredient.name, ingredient.amount, ingredient.unitName.getName(), recipeId, ingredient.id])
+            return
+        }
+    }
+    
     func updateIngredients(forRecipeId recipeId: Int, ingredients: [Ingredient]) {
         do {
             for ingredient in ingredients {
-                try dbQueue.write{ (db: Database) in
-                    try db.execute(
-                        sql:
-                        """
-                        UPDATE \(Ingredient.Table.databaseTableName) \
-                        SET \(Ingredient.Table.name) = ?, \
-                        \(Ingredient.Table.amount) = ?, \
-                        \(Ingredient.Table.unitName) = ?, \
-                        \(Ingredient.Table.recipeId) = ? \
-                        WHERE \(Ingredient.Table.id) = ?
-                        """,
-                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId, ingredient.id])
-                    return
+                if ingredient.temp {
+                    try createIngredient(ingredient, withRecipeId: recipeId)
+                }
+                else {
+                    try updateIngredient(ingredient, withRecipeId: recipeId)
                 }
             }
 

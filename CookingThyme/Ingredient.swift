@@ -25,14 +25,22 @@ struct Ingredient: Identifiable {
     var unitName: UnitOfMeasurement
     var id: Int
     var recipeId: Int
+    var temp = false
     
     // TODO get rid of
     init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        self.id = Int(amount)
+        let id = Double(name.hashValue) + Double(unitName.getName().count)
+        if let uuid = Int(UUID().uuidString) {
+            self.id = uuid
+        }
+        else {
+            self.id = Int(id)
+        }
         self.recipeId = 0 // BAD
+        self.temp = true
     }
     
     init(row: Row) {
