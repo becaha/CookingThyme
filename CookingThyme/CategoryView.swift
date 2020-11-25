@@ -10,39 +10,52 @@ import SwiftUI
 struct CategoryView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     
-    @State private var editMode: EditMode = .inactive
+//    @State private var editMode: EditMode = .inactive
+    
+    @State private var isEditing = false
     
     @State private var isCreatingRecipe = false
     
     var body: some View {
         List {
-            Section {
-                HStack {
-                    Text("Create Recipe")
-                                                
-                    Spacer()
-                    
-                    UIControls.AddButton(action: createRecipe)
+            if isEditing {
+                Section {
+                    HStack {
+                        Text("Create Recipe")
+                                                    
+                        Spacer()
+                        
+                        UIControls.AddButton(action: createRecipe)
+                    }
+                }.sheet(isPresented: $isCreatingRecipe) {
+                    CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
                 }
-            }.sheet(isPresented: $isCreatingRecipe) {
-                CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
             }
         
-            ForEach(category.recipes) { recipe in
-                NavigationLink("\(recipe.name)", destination:
-                                RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
-                        .environmentObject(category)
-                )
-            }
-            .onDelete { indexSet in
-                indexSet.map{ category.recipes[$0] }.forEach { recipe in
-                    category.deleteRecipe(withId: recipe.id)
+            Section {
+                ForEach(category.recipes) { recipe in
+                    NavigationLink("\(recipe.name)", destination:
+                                    RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
+                            .environmentObject(category)
+                    )
+                }
+                .onDelete { indexSet in
+                    indexSet.map{ category.recipes[$0] }.forEach { recipe in
+                        category.deleteRecipe(withId: recipe.id)
+                    }
                 }
             }
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("\(category.name)", displayMode: .large)
-        .navigationBarItems(trailing: EditButton())
+        .navigationBarItems(trailing:
+            UIControls.EditButton(
+                action: {
+                    isEditing.toggle()
+                },
+                isEditing: isEditing)
+        )
+//        .environment(\.editMode, $editMode)
     }
     
     private func createRecipe() {

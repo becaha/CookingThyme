@@ -13,7 +13,7 @@ struct RecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @ObservedObject var recipeVM: RecipeVM
     
-    @State private var editMode: EditMode = .active
+//    @State private var editMode: EditMode = .active
         
     @State private var inEditMode = false
     
@@ -45,7 +45,7 @@ struct RecipeView: View {
             }
         }
         .navigationBarTitle("", displayMode: .inline)
-        .environment(\.editMode, $editMode)
+//        .environment(\.editMode, $editMode)
     }
 }
 

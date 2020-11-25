@@ -14,6 +14,8 @@ struct EditRecipeView: View {
     @Binding var isPresented: Bool
     @ObservedObject var recipeVM: RecipeVM
     
+//    @State private var editMode: EditMode = .active
+        
     @State private var fieldMissing = false
     
     @State private var isEditingDirection = false
@@ -57,16 +59,13 @@ struct EditRecipeView: View {
                         saveRecipe()
                     })
                     {
-                        Text("Save")
+                        Text("Done")
                     }
-                    
-//                    EditButton()
                 }
             }
             .padding()
-                
+                            
             Form {
-                
                 Section(header:
                     HStack {
                         Text("Ingredients")
@@ -91,9 +90,13 @@ struct EditRecipeView: View {
                         }
                     },
                     footer:
-                        Group {
-                            if fieldMissing && servings == "" {
-                                ErrorMessage("Must have at least one ingredient and a serving size")
+                        VStack {
+//                            UIControls.AddButton(action: addIngredient)
+                            
+                            Group {
+                                if fieldMissing && servings == "" && ingredients.count == 0 {
+                                    ErrorMessage("Must have at least one ingredient and a serving size")
+                                }
                             }
                         }
                         
@@ -117,18 +120,29 @@ struct EditRecipeView: View {
                             
                             TextField("Unit ", text: $ingredientUnit)
 
-                            TextField("Name", text: $ingredientName)
+                            TextField("Name", text: $ingredientName,
+                                onEditingChanged: { (isEditing) in
+                                    self.isEditingIngredient = isEditing
+                                },
+                                onCommit: {
+                                    addIngredient()
+                                })
                             
                             UIControls.AddButton(action: addIngredient)
+
                         }
                     }
                 }
                 
                 Section(header: Text("Directions"),
                         footer:
-                            Group {
-                                if fieldMissing && directions.count == 0 {
-                                    ErrorMessage("Must have at least one direction")
+                            VStack {
+//                                UIControls.AddButton(action: addDirection)
+                                
+                                Group {
+                                    if fieldMissing && directions.count == 0 {
+                                        ErrorMessage("Must have at least one direction")
+                                    }
                                 }
                             }
                 ) {
@@ -157,7 +171,7 @@ struct EditRecipeView: View {
                             }, onCommit: {
                                 addDirection()
                             })
-
+                            
                             UIControls.AddButton(action: addDirection)
                         }
                         .padding(.vertical)

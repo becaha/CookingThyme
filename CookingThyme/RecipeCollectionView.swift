@@ -12,7 +12,8 @@ import SwiftUI
 struct RecipeCollectionView: View {
     @ObservedObject var recipeCollectionVM: RecipeCollectionVM
     
-    @State private var editMode: EditMode = .inactive
+//    @State private var editMode: EditMode = .inactive
+    @State private var isEditing = false
     
     @State var newCategory: String = ""
     @State var isAddingCategory = false
@@ -23,17 +24,19 @@ struct RecipeCollectionView: View {
     var body: some View {
         NavigationView {
             List {
-                Section {
-                    HStack {
-                        TextField("Add New Category", text: $newCategory, onEditingChanged: { (isAddingCategory) in
-                            self.isAddingCategory = isAddingCategory
-                        }, onCommit: {
-                            addCategory()
-                        })
+                if isEditing {
+                    Section {
+                        HStack {
+                            TextField("Add New Category", text: $newCategory, onEditingChanged: { (isAddingCategory) in
+                                self.isAddingCategory = isAddingCategory
+                            }, onCommit: {
+                                addCategory()
+                            })
 
-                        Spacer()
+                            Spacer()
 
-                        UIControls.AddButton(action: addCategory)
+                            UIControls.AddButton(action: addCategory)
+                        }
                     }
                 }
                 ForEach(recipeCollectionVM.categories, id: \.self) { category in
@@ -42,7 +45,7 @@ struct RecipeCollectionView: View {
                             CategoryView()
                                 .environmentObject(RecipeCategoryVM(category: category))
                     ) {
-                        EditableText(category.name, isEditing: editMode.isEditing) { categoryName in
+                        EditableText(category.name, isEditing: isEditing) { categoryName in
                             recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
                         }
                     }
@@ -55,8 +58,14 @@ struct RecipeCollectionView: View {
             }
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle("Recipe Book", displayMode: .inline)
-            .navigationBarItems(trailing: EditButton())
-            .environment(\.editMode, $editMode)
+            .navigationBarItems(trailing:
+                UIControls.EditButton(
+                    action: {
+                        isEditing.toggle()
+                    },
+                    isEditing: isEditing)
+            )
+//            .environment(\.editMode, $editMode)
         }
     }
     

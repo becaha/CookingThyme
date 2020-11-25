@@ -35,6 +35,7 @@
 		DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */; };
 		DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */; };
 		DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FA256E015000808CC8 /* EditableText.swift */; };
+		DB49B4FD256F162200808CC8 /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FC256F162200808CC8 /* AddButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 		DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRecipeView.swift; sourceTree = "<group>"; };
 		DB49B4FA256E015000808CC8 /* EditableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableText.swift; sourceTree = "<group>"; };
+		DB49B4FC256F162200808CC8 /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4FA256E015000808CC8 /* EditableText.swift */,
+				DB49B4FC256F162200808CC8 /* AddButton.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
+				DB49B4FD256F162200808CC8 /* AddButton.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
