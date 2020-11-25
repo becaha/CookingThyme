@@ -32,6 +32,9 @@ struct CategoryView: View {
                         .environmentObject(category)
                 )
             }
+            .onDelete { indexSet in
+                // todo
+            }
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("\(category.name)", displayMode: .large)
