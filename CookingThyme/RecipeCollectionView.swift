@@ -42,14 +42,15 @@ struct RecipeCollectionView: View {
                             CategoryView()
                                 .environmentObject(RecipeCategoryVM(category: category))
                     ) {
-//                        Text("\(category.name)")
                         EditableText(category.name, isEditing: editMode.isEditing) { categoryName in
-                            updateCategory(forCategoryId: category.id, toName: categoryName)
+                            recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
                         }
                     }
                 }
                 .onDelete { indexSet in
-                    // todo
+                    indexSet.map{ recipeCollectionVM.categories[$0] }.forEach { category in
+                        recipeCollectionVM.deleteCategory(withId: category.id)
+                    }
                 }
             }
             .listStyle(InsetGroupedListStyle())
@@ -58,11 +59,6 @@ struct RecipeCollectionView: View {
             .environment(\.editMode, $editMode)
         }
     }
-    
-    func updateCategory(forCategoryId categoryId: Int, toName name: String) {
-        
-    }
-
     
     func addCategory() {
         recipeCollectionVM.addCategory(newCategory)

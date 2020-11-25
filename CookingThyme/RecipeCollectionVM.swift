@@ -9,20 +9,21 @@ import Foundation
 
 class RecipeCollectionVM: ObservableObject {
     private var recipeCollectionId: Int
-    @Published var recipeCollection: [RecipeCategory: [Recipe]]
+    @Published var categories: [RecipeCategory]
     
     // MARK: - Init
     
     init(recipeCollectionId: Int) {
         self.recipeCollectionId = recipeCollectionId
-        self.recipeCollection = [RecipeCategory: [Recipe]]()
+        self.categories = [RecipeCategory]()
         popullateCategories()
     }
     
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: recipeCollectionId)
+        self.categories = [RecipeCategory]()
         for category in categories {
-            self.recipeCollection[category] = []
+            self.categories.append(category)
         }
     }
     
@@ -38,14 +39,10 @@ class RecipeCollectionVM: ObservableObject {
     
     var categoryNames: [String] {
         var categoryNames = [String]()
-        for category in recipeCollection.keys {
+        for category in categories {
             categoryNames.append(category.name)
         }
         return categoryNames.sorted()
-    }
-    
-    var categories: [RecipeCategory] {
-        return [RecipeCategory](recipeCollection.keys)
     }
     
 //    func recipes(inCategoryId categoryId: Int) -> [Recipe]? {
@@ -66,6 +63,18 @@ class RecipeCollectionVM: ObservableObject {
 //            print("\(category) category doesn't exist. Recipe not added.")
 //            return
 //        }
+    }
+    
+    func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {
+        RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: recipeCollectionId)
+        popullateCategories()
+    }
+    
+    func deleteCategory(withId id: Int) {
+        RecipeDB.shared.deleteCategory(withId: id)
+        // TODO: we need to let the users know that this will happen
+        RecipeDB.shared.deleteRecipes(withCategoryId: id)
+        popullateCategories()
     }
 }
 

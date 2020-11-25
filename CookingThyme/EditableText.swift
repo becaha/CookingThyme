@@ -23,7 +23,7 @@ struct EditableText: View {
     var body: some View {
         ZStack(alignment: .leading) {
             TextField(text, text: $editableText, onEditingChanged: { began in
-                callOnChangedIfChanged()
+                callOnChanged()
             })
             .opacity(isEditing ? 1 : 0)
             .disabled(!isEditing)
@@ -36,14 +36,16 @@ struct EditableText: View {
                         // we want to report any changes that happened to the text
                         // while were editable
                         // (i.e. we never "abandon" changes)
-                        callOnChangedIfChanged()
+                        callOnChanged()
                     }
             }
         }
-        .onAppear { editableText = text }
+        .onAppear {
+            editableText = text
+        }
     }
 
-    func callOnChangedIfChanged() {
+    func callOnChanged() {
         if editableText != text {
             onChanged(editableText)
         }

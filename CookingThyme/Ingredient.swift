@@ -31,7 +31,7 @@ struct Ingredient: Identifiable {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        self.id = Int(Double(name.hashValue) * amount)
+        self.id = Int(amount)
         self.recipeId = 0 // BAD
     }
     

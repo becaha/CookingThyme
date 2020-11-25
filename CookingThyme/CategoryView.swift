@@ -10,6 +10,8 @@ import SwiftUI
 struct CategoryView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     
+    @State private var editMode: EditMode = .inactive
+    
     @State private var isCreatingRecipe = false
     
     var body: some View {
@@ -33,11 +35,14 @@ struct CategoryView: View {
                 )
             }
             .onDelete { indexSet in
-                // todo
+                indexSet.map{ category.recipes[$0] }.forEach { recipe in
+                    category.deleteRecipe(withId: recipe.id)
+                }
             }
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("\(category.name)", displayMode: .large)
+        .navigationBarItems(trailing: EditButton())
     }
     
     private func createRecipe() {

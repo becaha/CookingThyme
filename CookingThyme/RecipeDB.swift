@@ -372,28 +372,193 @@ class RecipeDB {
     }
     
     func updateIngredients(forRecipeId recipeId: Int, ingredients: [Ingredient]) {
-    do {
-        for ingredient in ingredients {
+        do {
+            for ingredient in ingredients {
+                try dbQueue.write{ (db: Database) in
+                    try db.execute(
+                        sql:
+                        """
+                        UPDATE \(Ingredient.Table.databaseTableName) \
+                        SET \(Ingredient.Table.name) = ?, \
+                        \(Ingredient.Table.amount) = ?, \
+                        \(Ingredient.Table.unitName) = ?, \
+                        \(Ingredient.Table.recipeId) = ? \
+                        WHERE \(Ingredient.Table.id) = ?
+                        """,
+                        arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId, ingredient.id])
+                    return
+                }
+            }
+
+            return
+        } catch {
+            print("Error updating ingredients")
+            return
+        }
+    }
+    
+    func updateCategory(withId id: Int, name: String, recipeCollectionId: Int) {
+        do {
             try dbQueue.write{ (db: Database) in
+
                 try db.execute(
                     sql:
                     """
-                    UPDATE \(Ingredient.Table.databaseTableName) \
-                    SET \(Ingredient.Table.name) = ?, \
-                    \(Ingredient.Table.amount) = ?, \
-                    \(Ingredient.Table.unitName) = ?, \
-                    \(Ingredient.Table.recipeId) = ? \
-                    WHERE \(Ingredient.Table.id) = ?
+                    UPDATE \(RecipeCategory.Table.databaseTableName) \
+                    SET \(RecipeCategory.Table.name) = ?, \
+                    \(RecipeCategory.Table.recipeCollectionId) = ? \
+                    WHERE \(RecipeCategory.Table.id) = ?
                     """,
-                    arguments: [ingredient.name, ingredient.amount, ingredient.unitName.rawValue, recipeId, ingredient.id])
+                    arguments: [name, recipeCollectionId, id])
+
+                let categoryId = db.lastInsertedRowID
+                
+                if categoryId != id {
+                    print("Error updating category")
+                }
+                
                 return
             }
+            
+            return
+        } catch {
+            print("Error updating category")
+            return
         }
-
-        return
-    } catch {
-        print("Error updating ingredients")
-        return
     }
-}
+    
+    func updateCollection(withId id: Int, name: String) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    UPDATE \(RecipeCollection.Table.databaseTableName) \
+                    SET \(RecipeCollection.Table.name) = ? \
+                    WHERE \(RecipeCollection.Table.id) = ?
+                    """,
+                    arguments: [name, id])
+
+                let categoryId = db.lastInsertedRowID
+                
+                if categoryId != id {
+                    print("Error updating collection")
+                }
+                return
+            }
+            return
+        } catch {
+            print("Error updating collection")
+            return
+        }
+    }
+    
+    // MARK: - Delete
+    
+    func deleteRecipe(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Recipe.Table.databaseTableName) \
+                    WHERE \(Recipe.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting recipe")
+            return
+        }
+    }
+    
+    func deleteDirections(withRecipeId recipeId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Direction.Table.databaseTableName) \
+                    WHERE \(Direction.Table.recipeId) = ?
+                    """,
+                    arguments: [recipeId])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting directions")
+            return
+        }
+    }
+    
+    func deleteIngredients(withRecipeId recipeId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Ingredient.Table.databaseTableName) \
+                    WHERE \(Ingredient.Table.recipeId) = ?
+                    """,
+                    arguments: [recipeId])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting ingredients")
+            return
+        }
+    }
+    
+    // do we want this to delete recipes in category?
+    func deleteCategory(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(RecipeCategory.Table.databaseTableName) \
+                    WHERE \(RecipeCategory.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting category")
+            return
+        }
+    }
+    
+    func deleteRecipes(withCategoryId categoryId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Recipe.Table.databaseTableName) \
+                    WHERE \(Recipe.Table.recipeCategoryId) = ?
+                    """,
+                    arguments: [categoryId])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting recipes in category")
+            return
+        }
+    }
 }

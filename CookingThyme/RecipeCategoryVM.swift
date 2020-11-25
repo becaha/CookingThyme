@@ -45,4 +45,11 @@ class RecipeCategoryVM: ObservableObject {
         }
         popullateRecipes()
     }
+    
+    func deleteRecipe(withId id: Int) {
+        RecipeDB.shared.deleteRecipe(withId: id)
+        RecipeDB.shared.deleteDirections(withRecipeId: id)
+        RecipeDB.shared.deleteIngredients(withRecipeId: id)
+        popullateRecipes()
+    }
 }
