@@ -35,17 +35,10 @@ struct CategoryView: View {
             Section {
                 ForEach(category.recipes) { recipe in
                     if isEditing {
-                        HStack {
-                            Button(action: {
+                        Text("\(recipe.name)")
+                            .deletable(isDeleting: isEditing, onDelete: {
                                 category.deleteRecipe(withId: recipe.id)
-                            }) {
-                                Image(systemName: "minus.circle.fill")
-                                    .frame(width: 20, height: 20, alignment: .center)
-                                    .foregroundColor(.red)
-                            }
-                            
-                            Text("\(recipe.name)")
-                        }
+                            })
                     }
                     else {
                         NavigationLink("\(recipe.name)", destination:

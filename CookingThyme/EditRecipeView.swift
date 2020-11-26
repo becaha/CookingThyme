@@ -9,6 +9,7 @@ import SwiftUI
 
 // TODO: edit, when ingredient item is clicked, all the ingredient bindings are pertaining to that item,
 // off click, it saved to local recipe
+// TODO: have cursor go to next item in list after one is entered
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isPresented: Bool
@@ -104,6 +105,9 @@ struct EditRecipeView: View {
                     List {
                         ForEach(ingredients) { ingredient in
                             Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.getName()) \(ingredient.name)")
+                                .deletable(isDeleting: true, onDelete: {
+                                    ingredients.remove(element: ingredient)
+                                })
 //                            TextField("Amount ", text: $ingredientAmount)
 //
 //                            TextField("Unit ", text: $ingredientUnit)
@@ -155,6 +159,9 @@ struct EditRecipeView: View {
 
                                 Text("\(directions[index])")
                             }
+                            .deletable(isDeleting: true, onDelete: {
+                                directions.remove(at: index)
+                            })
                             .padding(.vertical)
                         }
                         .onDelete { indexSet in
@@ -230,6 +237,23 @@ struct EditRecipeView: View {
         ingredientName = ""
         ingredientAmount = ""
         ingredientUnit = ""
+    }
+}
+
+extension Array where Element: Identifiable {
+    func indexOf(element: Element) -> Int? {
+        for index in 0..<self.count {
+            if self[index].id == element.id {
+                return index
+            }
+        }
+        return nil
+    }
+    
+    mutating func remove(element: Element) {
+        if let index = indexOf(element: element) {
+            self.remove(at: index)
+        }
     }
 }
 
