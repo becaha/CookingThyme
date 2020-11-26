@@ -40,13 +40,23 @@ struct RecipeCollectionView: View {
                     }
                 }
                 ForEach(recipeCollectionVM.categories, id: \.self) { category in
-                    NavigationLink(
-                        destination:
-                            CategoryView()
-                                .environmentObject(RecipeCategoryVM(category: category))
-                    ) {
-                        EditableText(category.name, isEditing: isEditing) { categoryName in
-                            recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
+                    if isEditing {
+                        EditableText(category.name, isEditing: isEditing,
+                             onChanged: { categoryName in
+                                 recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
+                             },
+                            onDelete: {
+                                recipeCollectionVM.deleteCategory(withId: category.id)
+                            }
+                        )
+                    }
+                    else {
+                        NavigationLink(
+                            destination:
+                                CategoryView()
+                                    .environmentObject(RecipeCategoryVM(category: category))
+                        ) {
+                            Text("\(category.name)")
                         }
                     }
                 }

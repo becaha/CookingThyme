@@ -34,10 +34,25 @@ struct CategoryView: View {
         
             Section {
                 ForEach(category.recipes) { recipe in
-                    NavigationLink("\(recipe.name)", destination:
-                                    RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
-                            .environmentObject(category)
-                    )
+                    if isEditing {
+                        HStack {
+                            Button(action: {
+                                category.deleteRecipe(withId: recipe.id)
+                            }) {
+                                Image(systemName: "minus.circle.fill")
+                                    .frame(width: 20, height: 20, alignment: .center)
+                                    .foregroundColor(.red)
+                            }
+                            
+                            Text("\(recipe.name)")
+                        }
+                    }
+                    else {
+                        NavigationLink("\(recipe.name)", destination:
+                                        RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
+                                .environmentObject(category)
+                        )
+                    }
                 }
                 .onDelete { indexSet in
                     indexSet.map{ category.recipes[$0] }.forEach { recipe in
