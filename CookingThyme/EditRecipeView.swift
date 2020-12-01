@@ -7,15 +7,16 @@
 
 import SwiftUI
 
-// TODO: edit, when ingredient item is clicked, all the ingredient bindings are pertaining to that item,
-// off click, it saved to local recipe
+// TODO: delete correct ingredient/direction
 // TODO: have cursor go to next item in list after one is entered
+// TODO: editing ingredient name and then clicking done will not save name, only an enter or click off in page will
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isPresented: Bool
     @ObservedObject var recipeVM: RecipeVM
     
 //    @State private var editMode: EditMode = .active
+    @State private var isEditing = true
         
     @State private var fieldMissing = false
     
@@ -103,16 +104,31 @@ struct EditRecipeView: View {
                         
                 ) {
                     List {
-                        ForEach(ingredients) { ingredient in
-                            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.getName()) \(ingredient.name)")
-                                .deletable(isDeleting: true, onDelete: {
-                                    ingredients.remove(element: ingredient)
-                                })
-//                            TextField("Amount ", text: $ingredientAmount)
-//
-//                            TextField("Unit ", text: $ingredientUnit)
-//
-//                            TextField("Name", text: $ingredientName)
+                        ForEach(0..<ingredients.count, id: \.self) { index in
+                            HStack {
+                                EditableText(ingredients[index].getFractionAmount(), isEditing: isEditing,
+                                     onChanged: { amount in
+                                        updateIngredient(atIndex: index, withAmount: amount)
+                                     }
+                                )
+                                
+                                EditableText(ingredients[index].unitName.getName(), isEditing: isEditing,
+                                     onChanged: { unit in
+                                        updateIngredient(atIndex: index, withUnit: unit)
+                                     },
+                                     autocapitalization: .none
+                                )
+                                
+                                EditableText(ingredients[index].name, isEditing: isEditing,
+                                     onChanged: { name in
+                                        updateIngredient(atIndex: index, withName: name)
+                                     },
+                                     autocapitalization: .none
+                                )
+                            }
+                            .deletable(isDeleting: true, onDelete: {
+                                ingredients.remove(at: index)
+                            })
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
@@ -123,6 +139,8 @@ struct EditRecipeView: View {
                             TextField("Amount ", text: $ingredientAmount)
                             
                             TextField("Unit ", text: $ingredientUnit)
+                                .autocapitalization(.none)
+
 
                             TextField("Name", text: $ingredientName,
                                 onEditingChanged: { (isEditing) in
@@ -131,6 +149,7 @@ struct EditRecipeView: View {
                                 onCommit: {
                                     addIngredient()
                                 })
+                                .autocapitalization(.none)
                             
                             UIControls.AddButton(action: addIngredient)
 
@@ -157,7 +176,11 @@ struct EditRecipeView: View {
                                 Text("\(index + 1)")
                                     .frame(width: 20, height: 20, alignment: .center)
 
-                                Text("\(directions[index])")
+                                EditableText(directions[index], isEditing: isEditing,
+                                     onChanged: { direction in
+                                        directions[index] = direction
+                                     }
+                                )
                             }
                             .deletable(isDeleting: true, onDelete: {
                                 directions.remove(at: index)
@@ -190,6 +213,19 @@ struct EditRecipeView: View {
         .onAppear {
             setRecipe()
         }
+    }
+    
+    private func updateIngredient(atIndex index: Int, withAmount amount: String) {
+        ingredients[index].amount = recipeVM.makeAmount(fromAmount: amount)
+    }
+    
+    private func updateIngredient(atIndex index: Int, withUnit unit: String) {
+        ingredients[index].unitName = recipeVM.makeUnit(fromUnit: unit)
+    }
+    
+    private func updateIngredient(atIndex index: Int, withName name: String) {
+        ingredients[index].name = name
+
     }
     
     private func setRecipe() {

@@ -73,14 +73,22 @@ class RecipeVM: ObservableObject {
         recipe.servings = size
     }
     
+    func makeAmount(fromAmount amountString: String) -> Double {
+        return 1.0
+    }
+    
+    func makeUnit(fromUnit unitString: String) -> UnitOfMeasurement {
+        return UnitOfMeasurement.fromString(unitString: unitString)
+    }
+    
     // TODO
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
         // check if amount is written as double or as fraction, have an ingredient that keeps amount as fraction
         // (given as fraction, stay as fraction, given as decimal, change to fraction)
         // should we force them to give as fraction, give them fractions in keyboard?
-        let doubleAmount = 1.0
+        let doubleAmount = makeAmount(fromAmount: amount)
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
-        let unit = UnitOfMeasurement.fromString(unitString: unit)
+        let unit = makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
