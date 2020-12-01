@@ -37,6 +37,8 @@
 		DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FA256E015000808CC8 /* EditableText.swift */; };
 		DB49B4FD256F162200808CC8 /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FC256F162200808CC8 /* AddButton.swift */; };
 		DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FE256F488200808CC8 /* Deletable.swift */; };
+		DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5032576A70C00808CC8 /* EditableDirection.swift */; };
+		DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5072576DC7700808CC8 /* EditableIngredient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +76,8 @@
 		DB49B4FA256E015000808CC8 /* EditableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableText.swift; sourceTree = "<group>"; };
 		DB49B4FC256F162200808CC8 /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
 		DB49B4FE256F488200808CC8 /* Deletable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deletable.swift; sourceTree = "<group>"; };
+		DB49B5032576A70C00808CC8 /* EditableDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDirection.swift; sourceTree = "<group>"; };
+		DB49B5072576DC7700808CC8 /* EditableIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableIngredient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,8 @@
 				DB49B4FA256E015000808CC8 /* EditableText.swift */,
 				DB49B4FC256F162200808CC8 /* AddButton.swift */,
 				DB49B4FE256F488200808CC8 /* Deletable.swift */,
+				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
+				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -317,10 +323,12 @@
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
+				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
 				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
 				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
 				DB49B4D12565E49F00808CC8 /* GroceriesView.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
+				DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */,
 				DB49B4D72565E49F00808CC8 /* TimerView.swift in Sources */,
 				DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,

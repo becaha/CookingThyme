@@ -10,12 +10,16 @@ import Foundation
 class RecipeVM: ObservableObject {
     var category: RecipeCategoryVM
     @Published var recipe: Recipe
+    @Published var tempDirections: [Direction]
+    @Published var tempIngredients: [TempIngredient]
     
     // MARK: - Init
     
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
         self.category = category
+        self.tempDirections = []
+        self.tempIngredients = []
         popullateRecipe()
     }
     
@@ -23,6 +27,8 @@ class RecipeVM: ObservableObject {
         if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
             if let fullRecipe = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
                 recipe = fullRecipe
+                self.tempDirections = recipe.directions
+                self.tempIngredients = TempIngredient.makeTemps(recipe.ingredients)
             }
         }
     }
@@ -37,6 +43,8 @@ class RecipeVM: ObservableObject {
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
         self.category = category
+        self.tempDirections = []
+        self.tempIngredients = []
     }
     
     // MARK: - Model Access
@@ -64,6 +72,25 @@ class RecipeVM: ObservableObject {
     
     // MARK: - Intents
     
+    // temporary
+    
+    func removeTempDirection(at index: Int) {
+        tempDirections.remove(at: index)
+    }
+    
+    func addTempDirection(_ direction: String) {
+        tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
+    }
+    
+    func removeTempIngredient(at index: Int) {
+        tempIngredients.remove(at: index)
+    }
+    
+    func addTempIngredient(name: String, amount: String, unit: String) {
+        tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
+    }
+
+    
     // TODO make more robust, servings is initialized to 0 but cannot be zero once created
     func isCreatingRecipe() -> Bool {
         return recipe.servings == 0
@@ -73,41 +100,24 @@ class RecipeVM: ObservableObject {
         recipe.servings = size
     }
     
-    func makeAmount(fromAmount amountString: String) -> Double {
-        return 1.0
-    }
-    
-    func makeUnit(fromUnit unitString: String) -> UnitOfMeasurement {
-        return UnitOfMeasurement.fromString(unitString: unitString)
-    }
-    
     // TODO
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
         // check if amount is written as double or as fraction, have an ingredient that keeps amount as fraction
         // (given as fraction, stay as fraction, given as decimal, change to fraction)
         // should we force them to give as fraction, give them fractions in keyboard?
-        let doubleAmount = makeAmount(fromAmount: amount)
+        let doubleAmount = Ingredient.makeAmount(fromString: amount)
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
-        let unit = makeUnit(fromUnit: unit)
+        let unit = Ingredient.makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
-    func updateRecipe(withId id: Int, name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], servings: String) {
         category.deleteRecipe(withId: id)
-        if let recipe = category.createRecipe(name: name, ingredients: ingredients, directionStrings: directionStrings, servings: servings) {
+        if let recipe = category.createRecipe(name: name, ingredients: Ingredient.toIngredients(tempIngredients), directionStrings: Direction.toStrings(directions: directions), servings: servings) {
             self.recipe = recipe
             refreshRecipe()
         }
     }
-    
-//    func updateRecipe(withRecipeId recipeId: Int, toCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) {
-//        if let recipe = RecipeDB.shared.updateRecipe(withId: recipeId, name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
-//            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
-//            RecipeDB.shared.updateDirections(withRecipeId: recipeId, directions: directions)
-//            RecipeDB.shared.updateIngredients(forRecipeId: recipeId, ingredients: ingredients)
-//        }
-//        refreshRecipe()
-//    }
 }
 
 extension String {

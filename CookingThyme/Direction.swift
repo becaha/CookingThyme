@@ -46,4 +46,12 @@ struct Direction {
         }
         return directions
     }
+    
+    static func toStrings(directions: [Direction]) -> [String] {
+        var directionStrings = [String]()
+        for direction in directions {
+            directionStrings.append(direction.direction)
+        }
+        return directionStrings
+    }
 }

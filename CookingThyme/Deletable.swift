@@ -14,9 +14,7 @@ struct Deletable: ViewModifier {
     func body(content: Content) -> some View {
         HStack {
             if isDeleting {
-                Button(action: {
-                    onDelete()
-                }) {
+                Button(action: onDelete) {
                     Image(systemName: "minus.circle.fill")
                         .frame(width: 20, height: 20, alignment: .center)
                         .foregroundColor(.red)

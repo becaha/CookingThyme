@@ -63,4 +63,48 @@ struct Ingredient: Identifiable {
         
         return "\(wholePart) \(rational.numerator)/\(rational.denominator)"
     }
+    
+    static func makeAmount(fromString amountString: String) -> Double {
+        return 1.0
+    }
+    
+    static func makeUnit(fromUnit unitString: String) -> UnitOfMeasurement {
+        return UnitOfMeasurement.fromString(unitString: unitString)
+    }
+    
+    static func toIngredients(_ temps: [TempIngredient]) -> [Ingredient] {
+        var ingredients = [Ingredient]()
+        for temp in temps {
+            let ingredient = Ingredient(name: temp.name, amount: makeAmount(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
+            ingredients.append(ingredient)
+        }
+        return ingredients
+    }
 }
+
+struct TempIngredient {
+    
+    var name: String
+    var amount: String
+    var unitName: String
+    var recipeId: Int
+    var id: Int?
+    
+    // TODO get rid of
+    init(name: String, amount: String, unitName: String, recipeId: Int, id: Int?) {
+        self.name = name
+        self.amount = amount
+        self.unitName = unitName
+        self.recipeId = recipeId
+        self.id = id
+    }
+    
+    static func makeTemps(_ ingredients: [Ingredient]) -> [TempIngredient] {
+        var temps = [TempIngredient]()
+        for ingredient in ingredients {
+            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getFractionAmount(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
+        }
+        return temps
+    }
+}
+

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: delete correct ingredient/direction
 // TODO: have cursor go to next item in list after one is entered
 // TODO: editing ingredient name and then clicking done will not save name, only an enter or click off in page will
 struct EditRecipeView: View {
@@ -25,7 +24,7 @@ struct EditRecipeView: View {
     
     @State private var ingredients = [Ingredient]()
     @State private var directions = [String]()
-
+    
     @State private var name: String = ""
     @State private var servings: String = ""
     @State private var ingredientAmount: String = ""
@@ -104,35 +103,18 @@ struct EditRecipeView: View {
                         
                 ) {
                     List {
-                        ForEach(0..<ingredients.count, id: \.self) { index in
+                        ForEach(0..<recipeVM.tempIngredients.count, id: \.self) { index in
                             HStack {
-                                EditableText(ingredients[index].getFractionAmount(), isEditing: isEditing,
-                                     onChanged: { amount in
-                                        updateIngredient(atIndex: index, withAmount: amount)
-                                     }
-                                )
-                                
-                                EditableText(ingredients[index].unitName.getName(), isEditing: isEditing,
-                                     onChanged: { unit in
-                                        updateIngredient(atIndex: index, withUnit: unit)
-                                     },
-                                     autocapitalization: .none
-                                )
-                                
-                                EditableText(ingredients[index].name, isEditing: isEditing,
-                                     onChanged: { name in
-                                        updateIngredient(atIndex: index, withName: name)
-                                     },
-                                     autocapitalization: .none
-                                )
+                                EditableIngredient(index: index)
+                                    .environmentObject(recipeVM)
                             }
                             .deletable(isDeleting: true, onDelete: {
-                                ingredients.remove(at: index)
+                                recipeVM.removeTempIngredient(at: index)
                             })
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
-                                ingredients.remove(at: index)
+                                recipeVM.removeTempIngredient(at: index)
                             }
                         }
                         HStack {
@@ -171,29 +153,25 @@ struct EditRecipeView: View {
                 ) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<directions.count, id: \.self) { index in
+                        ForEach(0..<recipeVM.tempDirections.count, id: \.self) { index in
                             HStack(alignment: .top, spacing: 20) {
                                 Text("\(index + 1)")
                                     .frame(width: 20, height: 20, alignment: .center)
-
-                                EditableText(directions[index], isEditing: isEditing,
-                                     onChanged: { direction in
-                                        directions[index] = direction
-                                     }
-                                )
+                                
+                                EditableDirection(index: index)
+                                    .environmentObject(recipeVM)
                             }
-                            .deletable(isDeleting: true, onDelete: {
-                                directions.remove(at: index)
+                            .deletable(isDeleting: true, onDelete: {                                                   recipeVM.removeTempDirection(at: index)
                             })
                             .padding(.vertical)
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
-                                directions.remove(at: index)
+                                recipeVM.removeTempDirection(at: index)
                             }
                         }
                         HStack(alignment: .top, spacing: 20) {
-                            Text("\(directions.count + 1)")
+                            Text("\(recipeVM.tempDirections.count + 1)")
                                 .frame(width: 20, height: 20, alignment: .center)
 
                             TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
@@ -213,19 +191,6 @@ struct EditRecipeView: View {
         .onAppear {
             setRecipe()
         }
-    }
-    
-    private func updateIngredient(atIndex index: Int, withAmount amount: String) {
-        ingredients[index].amount = recipeVM.makeAmount(fromAmount: amount)
-    }
-    
-    private func updateIngredient(atIndex index: Int, withUnit unit: String) {
-        ingredients[index].unitName = recipeVM.makeUnit(fromUnit: unit)
-    }
-    
-    private func updateIngredient(atIndex index: Int, withName name: String) {
-        ingredients[index].name = name
-
     }
     
     private func setRecipe() {
@@ -250,7 +215,7 @@ struct EditRecipeView: View {
                 category.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
             }
             else {
-                recipeVM.updateRecipe(withId: recipeVM.id, name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+                recipeVM.updateRecipe(withId: recipeVM.id, name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
                 category.popullateRecipes()
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
@@ -263,13 +228,12 @@ struct EditRecipeView: View {
     }
     
     private func addDirection() {
-        directions.append(direction)
+        recipeVM.addTempDirection(direction)
         direction = ""
     }
     
     private func addIngredient() {
-        let newIngredient = recipeVM.makeIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
-        ingredients.append(newIngredient)
+        recipeVM.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
         ingredientName = ""
         ingredientAmount = ""
         ingredientUnit = ""
