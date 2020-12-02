@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: change size of recipe name, ingredients if too many letters
 // TODO: have cursor go to next item in list after one is entered
 // TODO: editing ingredient name and then clicking done will not save name, only an enter or click off in page will
 struct EditRecipeView: View {
@@ -22,9 +23,6 @@ struct EditRecipeView: View {
     @State private var isEditingDirection = false
     @State private var isEditingIngredient = false
     
-    @State private var ingredients = [Ingredient]()
-    @State private var directions = [String]()
-    
     @State private var name: String = ""
     @State private var servings: String = ""
     @State private var ingredientAmount: String = ""
@@ -37,7 +35,7 @@ struct EditRecipeView: View {
             ZStack {
                 VStack(alignment: .leading) {
                     TextField("Recipe Name", text: $name)
-                        .font(.title)
+                        .font(.system(size: 34, weight: .bold))
                     
                     if fieldMissing && name == "" {
                         ErrorMessage("Must have a name")
@@ -95,7 +93,7 @@ struct EditRecipeView: View {
 //                            UIControls.AddButton(action: addIngredient)
                             
                             Group {
-                                if fieldMissing && servings == "" && ingredients.count == 0 {
+                                if fieldMissing && servings == "" && recipeVM.tempIngredients.count == 0 {
                                     ErrorMessage("Must have at least one ingredient and a serving size")
                                 }
                             }
@@ -145,7 +143,7 @@ struct EditRecipeView: View {
 //                                UIControls.AddButton(action: addDirection)
                                 
                                 Group {
-                                    if fieldMissing && directions.count == 0 {
+                                    if fieldMissing && recipeVM.tempDirections.count == 0 {
                                         ErrorMessage("Must have at least one direction")
                                     }
                                 }
@@ -196,10 +194,6 @@ struct EditRecipeView: View {
     private func setRecipe() {
         name = recipeVM.name
         servings = recipeVM.servings.toString()
-        ingredients = recipeVM.ingredients
-        for direction in recipeVM.directions {
-            self.directions.append(direction.direction)
-        }
     }
     
     @ViewBuilder
@@ -210,13 +204,12 @@ struct EditRecipeView: View {
     }
     
     private func saveRecipe() {
-        if name != "" && ingredients.count > 0 && directions.count > 0 && servings.toInt() > 0 {
+        if name != "" && recipeVM.tempIngredients.count > 0 && recipeVM.tempDirections.count > 0 && servings.toInt() > 0 {
             if recipeVM.isCreatingRecipe() {
-                category.createRecipe(name: name, ingredients: ingredients, directionStrings: directions, servings: servings)
+                category.createRecipe(name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
             }
             else {
                 recipeVM.updateRecipe(withId: recipeVM.id, name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
-                category.popullateRecipes()
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place

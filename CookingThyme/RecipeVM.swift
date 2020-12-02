@@ -28,7 +28,7 @@ class RecipeVM: ObservableObject {
             if let fullRecipe = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
                 recipe = fullRecipe
                 self.tempDirections = recipe.directions
-                self.tempIngredients = TempIngredient.makeTemps(recipe.ingredients)
+                self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
             }
         }
     }
@@ -105,7 +105,7 @@ class RecipeVM: ObservableObject {
         // check if amount is written as double or as fraction, have an ingredient that keeps amount as fraction
         // (given as fraction, stay as fraction, given as decimal, change to fraction)
         // should we force them to give as fraction, give them fractions in keyboard?
-        let doubleAmount = Ingredient.makeAmount(fromString: amount)
+        let doubleAmount = Fraction.toDouble(fromString: amount)
         // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
         let unit = Ingredient.makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
@@ -113,10 +113,11 @@ class RecipeVM: ObservableObject {
     
     func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], servings: String) {
         category.deleteRecipe(withId: id)
-        if let recipe = category.createRecipe(name: name, ingredients: Ingredient.toIngredients(tempIngredients), directionStrings: Direction.toStrings(directions: directions), servings: servings) {
+        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, servings: servings) {
             self.recipe = recipe
             refreshRecipe()
         }
+        category.popullateRecipes()
     }
 }
 

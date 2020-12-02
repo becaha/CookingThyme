@@ -55,6 +55,7 @@ struct RecipeCollectionView: View {
                             destination:
                                 CategoryView()
                                     .environmentObject(RecipeCategoryVM(category: category))
+                                    .environmentObject(recipeCollectionVM)
                         ) {
                             Text("\(category.name)")
                         }

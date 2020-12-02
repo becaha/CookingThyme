@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryView: View {
     @EnvironmentObject var category: RecipeCategoryVM
+    @EnvironmentObject var collection: RecipeCollectionVM
     
 //    @State private var editMode: EditMode = .inactive
     
@@ -17,45 +18,54 @@ struct CategoryView: View {
     @State private var isCreatingRecipe = false
     
     var body: some View {
-        List {
-            if isEditing {
+        VStack(spacing: 0) {
+            EditableText("\(category.name)", isEditing: isEditing, onChanged: { name in
+                collection.updateCategory(forCategoryId: category.id, toName: name)
+            })
+            .font(.system(size: 34, weight: .bold))
+            .padding()
+            
+            List {
+                if isEditing {
+                    Section {
+                        HStack {
+                            Text("Create Recipe")
+                                                        
+                            Spacer()
+                            
+                            UIControls.AddButton(action: createRecipe)
+                        }
+                    }.sheet(isPresented: $isCreatingRecipe) {
+                        CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
+                    }
+                }
+            
                 Section {
-                    HStack {
-                        Text("Create Recipe")
-                                                    
-                        Spacer()
-                        
-                        UIControls.AddButton(action: createRecipe)
+                    ForEach(category.recipes) { recipe in
+                        if isEditing {
+                            Text("\(recipe.name)")
+                                .deletable(isDeleting: isEditing, onDelete: {
+                                    category.deleteRecipe(withId: recipe.id)
+                                })
+                        }
+                        else {
+                            NavigationLink("\(recipe.name)", destination:
+                                            RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
+                                    .environmentObject(category)
+                            )
+                        }
                     }
-                }.sheet(isPresented: $isCreatingRecipe) {
-                    CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
-                }
-            }
-        
-            Section {
-                ForEach(category.recipes) { recipe in
-                    if isEditing {
-                        Text("\(recipe.name)")
-                            .deletable(isDeleting: isEditing, onDelete: {
-                                category.deleteRecipe(withId: recipe.id)
-                            })
-                    }
-                    else {
-                        NavigationLink("\(recipe.name)", destination:
-                                        RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
-                                .environmentObject(category)
-                        )
-                    }
-                }
-                .onDelete { indexSet in
-                    indexSet.map{ category.recipes[$0] }.forEach { recipe in
-                        category.deleteRecipe(withId: recipe.id)
+                    .onDelete { indexSet in
+                        indexSet.map{ category.recipes[$0] }.forEach { recipe in
+                            category.deleteRecipe(withId: recipe.id)
+                        }
                     }
                 }
             }
+    //        .environment(\.editMode, $editMode)
         }
         .listStyle(InsetGroupedListStyle())
-        .navigationBarTitle("\(category.name)", displayMode: .large)
+        .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
             UIControls.EditButton(
                 action: {
@@ -63,7 +73,6 @@ struct CategoryView: View {
                 },
                 isEditing: isEditing)
         )
-//        .environment(\.editMode, $editMode)
     }
     
     private func createRecipe() {

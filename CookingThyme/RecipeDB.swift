@@ -112,7 +112,7 @@ class RecipeDB {
         }
     }
     
-    func createDirection(_ direction: Direction) throws {
+    func createDirection(_ direction: Direction, withRecipeId recipeId: Int) throws {
         try dbQueue.write{ (db: Database) in
             try db.execute(
                 sql:
@@ -120,15 +120,15 @@ class RecipeDB {
                 INSERT INTO \(Direction.Table.databaseTableName) (\(Direction.Table.step), \(Direction.Table.direction), \(Direction.Table.recipeId)) \
                 VALUES (?, ?, ?)
                 """,
-                arguments: [direction.step, direction.direction, direction.recipeId])
+                arguments: [direction.step, direction.direction, recipeId])
             return
         }
     }
     
-    func createDirections(directions: [Direction]) {
+    func createDirections(directions: [Direction], withRecipeId recipeId: Int) {
         do {
             for direction in directions {
-                try createDirection(direction)
+                try createDirection(direction, withRecipeId: recipeId)
             }
             
             return
@@ -374,7 +374,7 @@ class RecipeDB {
         do {
             for direction in directions {
                 if direction.temp {
-                    try createDirection(direction)
+                    try createDirection(direction, withRecipeId: recipeId)
                 }
                 else {
                     try updateDirection(direction)

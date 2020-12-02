@@ -54,18 +54,7 @@ struct Ingredient: Identifiable {
     }
     
     func getFractionAmount() -> String {
-        let decimalPart = amount.truncatingRemainder(dividingBy: 1)
-        let wholePart = Int(amount - decimalPart)
-        if decimalPart == 0 {
-            return "\(wholePart)"
-        }
-        let rational = Rational.init(decimal: decimalPart)
-        
-        return "\(wholePart) \(rational.numerator)/\(rational.denominator)"
-    }
-    
-    static func makeAmount(fromString amountString: String) -> Double {
-        return 1.0
+        return Fraction.toString(fromDouble: amount)
     }
     
     static func makeUnit(fromUnit unitString: String) -> UnitOfMeasurement {
@@ -75,10 +64,18 @@ struct Ingredient: Identifiable {
     static func toIngredients(_ temps: [TempIngredient]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for temp in temps {
-            let ingredient = Ingredient(name: temp.name, amount: makeAmount(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
+            let ingredient = Ingredient(name: temp.name, amount: Fraction.toDouble(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
             ingredients.append(ingredient)
         }
         return ingredients
+    }
+    
+    static func toTempIngredients(_ ingredients: [Ingredient]) -> [TempIngredient] {
+        var temps = [TempIngredient]()
+        for ingredient in ingredients {
+            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getFractionAmount(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
+        }
+        return temps
     }
 }
 
@@ -90,21 +87,12 @@ struct TempIngredient {
     var recipeId: Int
     var id: Int?
     
-    // TODO get rid of
     init(name: String, amount: String, unitName: String, recipeId: Int, id: Int?) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
         self.recipeId = recipeId
         self.id = id
-    }
-    
-    static func makeTemps(_ ingredients: [Ingredient]) -> [TempIngredient] {
-        var temps = [TempIngredient]()
-        for ingredient in ingredients {
-            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getFractionAmount(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
-        }
-        return temps
     }
 }
 

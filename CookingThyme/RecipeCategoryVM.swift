@@ -37,17 +37,29 @@ class RecipeCategoryVM: ObservableObject {
         self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
     }
     
-    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) -> Recipe? {
+    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: category.id) {
             createdRecipe = recipe
-            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
-            RecipeDB.shared.createDirections(directions: directions)
-            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+            RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
+            RecipeDB.shared.createIngredients(ingredients: Ingredient.toIngredients(tempIngredients), withRecipeId: recipe.id)
         }
         popullateRecipes()
         return createdRecipe
     }
+    
+    
+//    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) -> Recipe? {
+//        var createdRecipe: Recipe?
+//        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: category.id) {
+//            createdRecipe = recipe
+//            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
+//            RecipeDB.shared.createDirections(directions: directions)
+//            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+//        }
+//        popullateRecipes()
+//        return createdRecipe
+//    }
     
     func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
