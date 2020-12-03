@@ -15,6 +15,8 @@ struct RecipeCollectionView: View {
 //    @State private var editMode: EditMode = .inactive
     @State private var isEditing = false
     
+    @State var newCategoryMissingField: Bool = false
+    
     @State var newCategory: String = ""
     @State var isAddingCategory = false
     
@@ -35,7 +37,7 @@ struct RecipeCollectionView: View {
 
                             Spacer()
 
-                            UIControls.AddButton(action: addCategory)
+                            UIControls.AddButton(action: addCategory, isPlain: false)
                         }
                     }
                 }
@@ -81,8 +83,14 @@ struct RecipeCollectionView: View {
     }
     
     func addCategory() {
-        recipeCollectionVM.addCategory(newCategory)
-        newCategory = ""
+        if newCategory != "" {
+            newCategoryMissingField = false
+            recipeCollectionVM.addCategory(newCategory)
+            newCategory = ""
+        }
+        else {
+            newCategoryMissingField = true
+        }
     }
 }
 

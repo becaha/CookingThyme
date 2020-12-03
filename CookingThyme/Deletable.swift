@@ -19,6 +19,7 @@ struct Deletable: ViewModifier {
                         .frame(width: 20, height: 20, alignment: .center)
                         .foregroundColor(.red)
                 }
+                .buttonStyle(PlainButtonStyle())
             }
             content
         }

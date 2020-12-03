@@ -9,7 +9,6 @@ import SwiftUI
 
 // TODO: change size of recipe name, ingredients if too many letters
 // TODO: have cursor go to next item in list after one is entered
-// TODO: stop the click that enters an ingredient or direction, stop clicking animation
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isPresented: Bool
@@ -17,9 +16,15 @@ struct EditRecipeView: View {
     
     @State private var isEditing = true
         
-    @State private var fieldMissing = false
+    private var fieldMissing: Bool {
+        return nameFieldMissing || newIngredientFieldMissing || newDirectionFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
+    }
+    @State private var nameFieldMissing = false
     @State private var newIngredientFieldMissing = false
     @State private var newDirectionFieldMissing = false
+    @State private var ingredientsFieldMissing = false
+    @State private var directionsFieldMissing = false
+    @State private var servingsFieldMissing = false
         
     @State private var isEditingDirection = false
     @State private var isEditingIngredient = false
@@ -35,14 +40,17 @@ struct EditRecipeView: View {
         VStack {
             ZStack {
                 VStack(alignment: .leading) {
-                    TextField("Recipe Name", text: $name)
+                    TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
+                        if name != "" {
+                            nameFieldMissing = false
+                        }
+                    })
                         .font(.system(size: 34, weight: .bold))
                     
-                    if fieldMissing && name == "" {
-                        ErrorMessage("Must have a name")
-                            .padding(0)
-                    }
+                    ErrorMessage("Must have a name", isError: $nameFieldMissing)
+                        .padding(0)
                 }
+                .padding(.bottom, 0)
                 
                 HStack {
                     //TODO find a place to put cancel button
@@ -90,14 +98,12 @@ struct EditRecipeView: View {
                         }
                     },
                     footer:
-                        VStack {
+                        VStack(alignment: .leading) {
 //                            UIControls.AddButton(action: addIngredient)
                             
-                            Group {
-                                if fieldMissing && servings == "" && recipeVM.tempIngredients.count == 0 {
-                                    ErrorMessage("Must have at least one ingredient and a serving size")
-                                }
-                            }
+                            ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
+                            
+                            ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
                         }
                         
                 ) {
@@ -135,22 +141,9 @@ struct EditRecipeView: View {
                                     .autocapitalization(.none)
                                 
                                 UIControls.AddButton(action: addIngredient)
-//                                    .onTapGesture(count: 1, perform: {
-//                                        addIngredient()
-//                                    })
                             }
-//                            .onTapGesture(count: 1, perform: {
-//                                dummyFunc()
-//                            })
-//                            .onLongPressGesture {
-//                                dummyFunc()
-//                            }
                             
-                            if newIngredientFieldMissing {
-                                Button(action: {newIngredientFieldMissing = false}) {
-                                    ErrorMessage("Must fill in all ingredient slots")
-                                }
-                            }
+                            ErrorMessage("Must fill in all ingredient slots", isError: $newIngredientFieldMissing)
                         }
                     }
                 }
@@ -161,9 +154,7 @@ struct EditRecipeView: View {
 //                                UIControls.AddButton(action: addDirection)
                                 
                                 Group {
-                                    if fieldMissing && recipeVM.tempDirections.count == 0 {
-                                        ErrorMessage("Must have at least one direction")
-                                    }
+                                    ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
                                 }
                             }
                 ) {
@@ -200,11 +191,7 @@ struct EditRecipeView: View {
                                 UIControls.AddButton(action: addDirection)
                             }
                             
-                            if newDirectionFieldMissing {
-                                Button(action: {newDirectionFieldMissing = false}) {
-                                    ErrorMessage("Must fill in a direction")
-                                }
-                            }
+                            ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
                         }
                         .padding(.vertical)
                     }
@@ -224,15 +211,20 @@ struct EditRecipeView: View {
         servings = recipeVM.servings.toString()
     }
     
-    @ViewBuilder
-    private func ErrorMessage(_ message: String) -> some View {
-        Text("\(message)")
-            .foregroundColor(.red)
-            .font(.footnote)
-    }
-    
     private func saveRecipe() {
-        if name != "" && recipeVM.tempIngredients.count > 0 && recipeVM.tempDirections.count > 0 && servings.toInt() > 0 {
+        if name == "" {
+            nameFieldMissing = true
+        }
+        if recipeVM.tempIngredients.count == 0 {
+            ingredientsFieldMissing = true
+        }
+        if recipeVM.tempDirections.count == 0 {
+            directionsFieldMissing = true
+        }
+        if servings.toInt() < 1 {
+            servingsFieldMissing = true
+        }
+        if !fieldMissing {
             if recipeVM.isCreatingRecipe() {
                 category.createRecipe(name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
             }
@@ -242,9 +234,6 @@ struct EditRecipeView: View {
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
             isPresented = false
-        }
-        else {
-            fieldMissing = true
         }
     }
     
@@ -256,6 +245,9 @@ struct EditRecipeView: View {
         }
         else {
             newDirectionFieldMissing = true
+        }
+        if recipeVM.tempDirections.count > 0 {
+            directionsFieldMissing = false
         }
     }
     
@@ -269,6 +261,9 @@ struct EditRecipeView: View {
         }
         else {
             newIngredientFieldMissing = true
+        }
+        if recipeVM.tempIngredients.count > 0 {
+            ingredientsFieldMissing = false
         }
     }
 }
