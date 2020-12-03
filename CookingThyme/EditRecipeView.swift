@@ -18,6 +18,8 @@ struct EditRecipeView: View {
     @State private var isEditing = true
         
     @State private var fieldMissing = false
+    @State private var newIngredientFieldMissing = false
+    @State private var newDirectionFieldMissing = false
         
     @State private var isEditingDirection = false
     @State private var isEditingIngredient = false
@@ -114,33 +116,41 @@ struct EditRecipeView: View {
                                 recipeVM.removeTempIngredient(at: index)
                             }
                         }
-                        HStack {
-                            TextField("Amount ", text: $ingredientAmount)
-                                .keyboardType(.numbersAndPunctuation)
+                        VStack(alignment: .leading) {
+                            HStack {
+                                TextField("Amount ", text: $ingredientAmount)
+                                    .keyboardType(.numbersAndPunctuation)
+                                    
+                                TextField("Unit ", text: $ingredientUnit)
+                                    .autocapitalization(.none)
+
+
+                                TextField("Name", text: $ingredientName,
+                                    onEditingChanged: { (isEditing) in
+                                        self.isEditingIngredient = isEditing
+                                    },
+                                    onCommit: {
+                                        addIngredient()
+                                    })
+                                    .autocapitalization(.none)
                                 
-                            TextField("Unit ", text: $ingredientUnit)
-                                .autocapitalization(.none)
-
-
-                            TextField("Name", text: $ingredientName,
-                                onEditingChanged: { (isEditing) in
-                                    self.isEditingIngredient = isEditing
-                                },
-                                onCommit: {
-                                    addIngredient()
-                                })
-                                .autocapitalization(.none)
+                                UIControls.AddButton(action: addIngredient)
+//                                    .onTapGesture(count: 1, perform: {
+//                                        addIngredient()
+//                                    })
+                            }
+//                            .onTapGesture(count: 1, perform: {
+//                                dummyFunc()
+//                            })
+//                            .onLongPressGesture {
+//                                dummyFunc()
+//                            }
                             
-                            UIControls.AddButton(action: addIngredient)
-                                .onTapGesture(count: 1, perform: {
-                                    addIngredient()
-                                })
-                        }
-                        .onTapGesture(count: 1, perform: {
-                            dummyFunc()
-                        })
-                        .onLongPressGesture {
-                            dummyFunc()
+                            if newIngredientFieldMissing {
+                                Button(action: {newIngredientFieldMissing = false}) {
+                                    ErrorMessage("Must fill in all ingredient slots")
+                                }
+                            }
                         }
                     }
                 }
@@ -176,17 +186,25 @@ struct EditRecipeView: View {
                                 recipeVM.removeTempDirection(at: index)
                             }
                         }
-                        HStack(alignment: .top, spacing: 20) {
-                            Text("\(recipeVM.tempDirections.count + 1)")
-                                .frame(width: 20, height: 20, alignment: .center)
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .top, spacing: 20) {
+                                Text("\(recipeVM.tempDirections.count + 1)")
+                                    .frame(width: 20, height: 20, alignment: .center)
 
-                            TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
-                                self.isEditingDirection = isEditing
-                            }, onCommit: {
-                                addDirection()
-                            })
+                                TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
+                                    self.isEditingDirection = isEditing
+                                }, onCommit: {
+                                    addDirection()
+                                })
+                                
+                                UIControls.AddButton(action: addDirection)
+                            }
                             
-                            UIControls.AddButton(action: addDirection)
+                            if newDirectionFieldMissing {
+                                Button(action: {newDirectionFieldMissing = false}) {
+                                    ErrorMessage("Must fill in a direction")
+                                }
+                            }
                         }
                         .padding(.vertical)
                     }
@@ -231,15 +249,27 @@ struct EditRecipeView: View {
     }
     
     private func addDirection() {
-        recipeVM.addTempDirection(direction)
-        direction = ""
+        if direction != "" {
+            newDirectionFieldMissing = false
+            recipeVM.addTempDirection(direction)
+            direction = ""
+        }
+        else {
+            newDirectionFieldMissing = true
+        }
     }
     
     private func addIngredient() {
-        recipeVM.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
-        ingredientName = ""
-        ingredientAmount = ""
-        ingredientUnit = ""
+        if ingredientName != "" && ingredientAmount != "" && ingredientUnit != "" {
+            newIngredientFieldMissing = false
+            recipeVM.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
+            ingredientName = ""
+            ingredientAmount = ""
+            ingredientUnit = ""
+        }
+        else {
+            newIngredientFieldMissing = true
+        }
     }
 }
 
