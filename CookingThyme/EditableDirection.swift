@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GRDB
 
 //TODO: have auto capitalization an option
 struct EditableDirection: View {
@@ -37,5 +38,24 @@ struct EditableDirection: View {
             return $recipeVM.tempDirections[index].direction
         }
         return $dummyBinding
+    }
+}
+
+struct EditableDirection_Previews: PreviewProvider {
+    static var previews: some View {
+        EditableDirection(index: 0)
+            .environmentObject(RecipeVM(recipe: Recipe(
+                                        name: "Water",
+                                        ingredients: [
+                                            Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.cup),
+                                            Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.cup),
+                                            Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.cup),
+                                            Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.cup),
+                                            Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
+                                        ],
+                                            directions: [Direction(step: 0, recipeId: 0, direction: "Fetch a pail of water")],
+                                        servings: 1),
+                                        category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 0))
+                                ))
     }
 }

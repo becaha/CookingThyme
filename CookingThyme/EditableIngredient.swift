@@ -23,6 +23,7 @@ struct EditableIngredient: View {
     var body: some View {
         HStack {
             TextField(getAmount(), text: getAmountBinding())
+                .keyboardType(.numbersAndPunctuation)
                 .autocapitalization(autocapitalization)
             
             TextField(getUnit(), text: getUnitBinding())

@@ -9,17 +9,16 @@ import SwiftUI
 
 // TODO: change size of recipe name, ingredients if too many letters
 // TODO: have cursor go to next item in list after one is entered
-// TODO: editing ingredient name and then clicking done will not save name, only an enter or click off in page will
+// TODO: stop the click that enters an ingredient or direction, stop clicking animation
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isPresented: Bool
     @ObservedObject var recipeVM: RecipeVM
     
-//    @State private var editMode: EditMode = .active
     @State private var isEditing = true
         
     @State private var fieldMissing = false
-    
+        
     @State private var isEditingDirection = false
     @State private var isEditingIngredient = false
     
@@ -117,7 +116,8 @@ struct EditRecipeView: View {
                         }
                         HStack {
                             TextField("Amount ", text: $ingredientAmount)
-                            
+                                .keyboardType(.numbersAndPunctuation)
+                                
                             TextField("Unit ", text: $ingredientUnit)
                                 .autocapitalization(.none)
 
@@ -132,7 +132,15 @@ struct EditRecipeView: View {
                                 .autocapitalization(.none)
                             
                             UIControls.AddButton(action: addIngredient)
-
+                                .onTapGesture(count: 1, perform: {
+                                    addIngredient()
+                                })
+                        }
+                        .onTapGesture(count: 1, perform: {
+                            dummyFunc()
+                        })
+                        .onLongPressGesture {
+                            dummyFunc()
                         }
                     }
                 }
@@ -190,6 +198,8 @@ struct EditRecipeView: View {
             setRecipe()
         }
     }
+    
+    private func dummyFunc() {}
     
     private func setRecipe() {
         name = recipeVM.name
@@ -251,8 +261,17 @@ extension Array where Element: Identifiable {
 }
 
 //struct EditRecipeView_Previews: PreviewProvider {
-//    @State var isPresented = true
+//    @State var num = 0
 //    static var previews: some View {
-//        EditRecipeView(isPresented: $isPresented)
+//        HStack {
+//            Text("hi")
+//            
+//            Spacer()
+//            
+//            UIControls.AddButton(action: {
+//                print("was called")
+//            })
+//                .padding(0)
+//        }
 //    }
 //}

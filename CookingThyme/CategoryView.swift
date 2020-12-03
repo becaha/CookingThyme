@@ -10,9 +10,7 @@ import SwiftUI
 struct CategoryView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @EnvironmentObject var collection: RecipeCollectionVM
-    
-//    @State private var editMode: EditMode = .inactive
-    
+        
     @State private var isEditing = false
     
     @State private var isCreatingRecipe = false
@@ -62,7 +60,6 @@ struct CategoryView: View {
                     }
                 }
             }
-    //        .environment(\.editMode, $editMode)
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("", displayMode: .inline)
