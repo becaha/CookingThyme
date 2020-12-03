@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ReadRecipeView: View {
+    @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
-    @Binding var isPresented: Bool
+    @Binding var isEditingRecipe: Bool
     @ObservedObject var recipeVM: RecipeVM
+    
+    @State private var actionSheetPresented = false
+    @State private var categoriesPresented = false
     
     @State private var directionIndicesCompleted = [Int]()
     @State private var inEditMode = false
@@ -23,6 +27,13 @@ struct ReadRecipeView: View {
     
     var body: some View {
         VStack {
+            HStack {
+                Text("\(recipeVM.name)")
+                    .font(.system(size: 30, weight: .bold))
+                    .multilineTextAlignment(.center)
+            }
+            .padding()
+            
             Form {
                 
                 Section(header:
@@ -66,27 +77,49 @@ struct ReadRecipeView: View {
                 }
             }
         }
+        .sheet(isPresented: $categoriesPresented, content: {
+            List{
+                ForEach(collection.categories, id: \.self) { category in
+                    Button(action: {
+                        recipeVM.copyRecipe(toCategoryId: category.id)
+                        categoriesPresented = false
+                    }) {
+                        Text("\(category.name)")
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+            .listStyle(InsetGroupedListStyle())
+        })
+        .actionSheet(isPresented: $actionSheetPresented, content: {
+            ActionSheet(title: Text(""), message: nil, buttons:
+                [
+                    .default(Text("Add to category"), action: {
+                        categoriesPresented = true
+                    }),
+                    .cancel()
+                ])
+        })
         .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(trailing:
+                HStack {
+                    Button(action: {
+                        actionSheetPresented = true
+                    })
+                    {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .padding(.trailing)
+                                    
+                    Button(action: {
+                        isEditingRecipe = true
+                    })
+                    {
+                        Text("Edit")
+                    }
+                }
+        )
     }
-//    @ViewBuilder func direction(withIndex index: Int) -> some View {
-//        Group {
-//            ZStack(alignment: .top) {
-//                Circle()
-//                    .stroke(lineWidth: 5)
-//                Circle()
-//                    .foregroundColor(directionIndicesCompleted.contains(index) ? .green : .white)
-//                Text("\(index + 1)")
-//                    .frame(width: 30, height: 30, alignment: .center)
-//            }
-//            .frame(width: 30, height: 30, alignment: .top)
-//            .padding(.top, 5)
-//            .padding(.leading, 5)
-//
-//            Text("\(recipeVM.directions[index])")
-//        }
-//        .foregroundColor(.black)
-//        .padding(.vertical)
-//    }
     
     @ViewBuilder func DirectionText(withIndex index: Int) -> some View {
         if inEditMode {

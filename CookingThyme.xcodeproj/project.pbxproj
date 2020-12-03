@@ -39,6 +39,7 @@
 		DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5032576A70C00808CC8 /* EditableDirection.swift */; };
 		DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5072576DC7700808CC8 /* EditableIngredient.swift */; };
 		DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51225794B7400808CC8 /* ErrorMessage.swift */; };
+		DB49B515257985E200808CC8 /* DynamicTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B514257985E200808CC8 /* DynamicTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		DB49B5032576A70C00808CC8 /* EditableDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDirection.swift; sourceTree = "<group>"; };
 		DB49B5072576DC7700808CC8 /* EditableIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableIngredient.swift; sourceTree = "<group>"; };
 		DB49B51225794B7400808CC8 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		DB49B514257985E200808CC8 /* DynamicTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
 				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
+				DB49B514257985E200808CC8 /* DynamicTextField.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
+				DB49B515257985E200808CC8 /* DynamicTextField.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,

@@ -119,6 +119,12 @@ class RecipeVM: ObservableObject {
         }
         category.popullateRecipes()
     }
+    
+    func copyRecipe(toCategoryId categoryId: Int) {
+        if let category = RecipeDB.shared.getCategory(withId: categoryId) {
+            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, servings: recipe.servings.toString())
+        }
+    }
 }
 
 extension String {

@@ -8,39 +8,21 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
     @ObservedObject var recipeVM: RecipeVM
-        
-    @State private var inEditMode = false
-    
-    @State private var isCreatingRecipe = false
+            
+    @State private var isEditingRecipe = false
     
     var body: some View {
         VStack {
-            if !isCreatingRecipe {
-                ZStack {
-                    Text("\(recipeVM.name)")
-                        .font(.system(size: 34, weight: .bold))
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            isCreatingRecipe = true
-                        })
-                        {
-                            Text("Edit")
-                        }
-                    }
-                    .padding()
-                }
-                ReadRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: recipeVM)
+            if !isEditingRecipe {
+                ReadRecipeView(isEditingRecipe: self.$isEditingRecipe, recipeVM: recipeVM)
             }
             else {
-                EditRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: recipeVM)
+                EditRecipeView(isEditingRecipe: self.$isEditingRecipe, recipeVM: recipeVM)
             }
         }
-        .navigationBarTitle("", displayMode: .inline)
     }
 }
 
@@ -63,7 +45,7 @@ struct RecipeView_Previews: PreviewProvider {
                         Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
                         Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
                     servings: 1),
-               category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1))
+                category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
         ))
         }
     }

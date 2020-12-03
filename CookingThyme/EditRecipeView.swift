@@ -7,15 +7,14 @@
 
 import SwiftUI
 
-// TODO: change size of recipe name, ingredients if too many letters
+// make multiline textfields
 // TODO: have cursor go to next item in list after one is entered
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
-    @Binding var isPresented: Bool
+    @Binding var isEditingRecipe: Bool
     @ObservedObject var recipeVM: RecipeVM
-    
-    @State private var isEditing = true
-        
+    var isCreatingRecipe: Bool = false
+            
     private var fieldMissing: Bool {
         return nameFieldMissing || newIngredientFieldMissing || newDirectionFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
     }
@@ -38,38 +37,39 @@ struct EditRecipeView: View {
     
     var body: some View {
         VStack {
-            ZStack {
+            if isCreatingRecipe {
+                HStack {
+                    Button(action: {
+                        isEditingRecipe = false
+                    }) {
+                        Text("Cancel")
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        saveRecipe()
+                    }) {
+                        Text("Done")
+                    }
+                }
+                .padding([.top, .leading, .trailing])
+            }
+            
+            HStack {
                 VStack(alignment: .leading) {
                     TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
                         if name != "" {
                             nameFieldMissing = false
                         }
                     })
-                        .font(.system(size: 34, weight: .bold))
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 30, weight: .bold))
                     
                     ErrorMessage("Must have a name", isError: $nameFieldMissing)
                         .padding(0)
                 }
                 .padding(.bottom, 0)
-                
-                HStack {
-                    //TODO find a place to put cancel button
-//                    Button(action: {
-//                        isPresented = false
-//                    })
-//                    {
-//                        Text("Cancel")
-//                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        saveRecipe()
-                    })
-                    {
-                        Text("Done")
-                    }
-                }
             }
             .padding()
                             
@@ -202,6 +202,24 @@ struct EditRecipeView: View {
         .onAppear {
             setRecipe()
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading:
+                Button(action: {
+                    isEditingRecipe = false
+                }) {
+                    Text("Cancel")
+                }
+                .padding(.leading, 0)
+            ,
+            trailing:
+                Button(action: {
+                    saveRecipe()
+                })
+                {
+                    Text("Done")
+                }
+        )
     }
     
     private func dummyFunc() {}
@@ -233,7 +251,7 @@ struct EditRecipeView: View {
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-            isPresented = false
+            isEditingRecipe = false
         }
     }
     

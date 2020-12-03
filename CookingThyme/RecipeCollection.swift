@@ -23,4 +23,9 @@ struct RecipeCollection {
         id = row[Table.id]
         name = row[Table.name]
     }
+    
+    init(id: Int, name: String) {
+        self.id = id
+        self.name = name
+    }
 }

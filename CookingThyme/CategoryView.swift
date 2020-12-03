@@ -18,8 +18,9 @@ struct CategoryView: View {
     var body: some View {
         VStack(spacing: 0) {
             EditableText("\(category.name)", isEditing: isEditing, onChanged: { name in
-                collection.updateCategory(forCategoryId: category.id, toName: name)
+                category.updateCategory(toName: name)
             })
+            .multilineTextAlignment(.center)
             .font(.system(size: 34, weight: .bold))
             .padding()
             
@@ -34,7 +35,7 @@ struct CategoryView: View {
                             UIControls.AddButton(action: createRecipe, isPlain: false)
                         }
                     }.sheet(isPresented: $isCreatingRecipe) {
-                        CreateRecipeView(isPresented: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
+                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
                     }
                 }
             
@@ -48,8 +49,10 @@ struct CategoryView: View {
                         }
                         else {
                             NavigationLink("\(recipe.name)", destination:
-                                            RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
-                                    .environmentObject(category)
+                                        RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
+                                            .environmentObject(category)
+                                            .environmentObject(collection)
+
                             )
                         }
                     }
@@ -80,6 +83,6 @@ struct CategoryView: View {
 struct CategoryView_Previews: PreviewProvider {
     static var previews: some View {
         CategoryView()
-            .environmentObject(RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1)))
+            .environmentObject(RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca"))))
     }
 }

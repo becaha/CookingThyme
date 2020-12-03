@@ -300,6 +300,46 @@ class RecipeDB {
 //        }
 //    }
     
+    func getCategory(withId id: Int) -> RecipeCategory? {
+        do {
+            let category = try dbQueue.read { db -> RecipeCategory? in
+                let row = try Row.fetchOne(db,
+                                               sql: """
+                                                    select * from \(RecipeCategory.Table.databaseTableName) \
+                                                    where \(RecipeCategory.Table.id) = ?
+                                                    """,
+                                               arguments: [id])
+                if let returnedRow = row {
+                    return RecipeCategory(row: returnedRow)
+                }
+                return nil
+            }
+            return category
+        } catch {
+            return nil
+        }
+    }
+    
+    func getCollection(withId id: Int) -> RecipeCollection? {
+        do {
+            let collection = try dbQueue.read { db -> RecipeCollection? in
+                let row = try Row.fetchOne(db,
+                                               sql: """
+                                                    select * from \(RecipeCollection.Table.databaseTableName) \
+                                                    where \(RecipeCollection.Table.id) = ?
+                                                    """,
+                                               arguments: [id])
+                if let returnedRow = row {
+                    return RecipeCollection(row: returnedRow)
+                }
+                return nil
+            }
+            return collection
+        } catch {
+            return nil
+        }
+    }
+    
     func getCategories(byCollectionId collectionId: Int) -> [RecipeCategory] {
         var categories = [RecipeCategory]()
         do {

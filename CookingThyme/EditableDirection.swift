@@ -55,7 +55,7 @@ struct EditableDirection_Previews: PreviewProvider {
                                         ],
                                             directions: [Direction(step: 0, recipeId: 0, direction: "Fetch a pail of water")],
                                         servings: 1),
-                                        category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 0))
+                                        category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 0), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
                                 ))
     }
 }

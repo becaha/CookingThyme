@@ -10,9 +10,8 @@ import SwiftUI
 // TODO: drag and drop recipes from one category to another
 
 struct RecipeCollectionView: View {
-    @ObservedObject var recipeCollectionVM: RecipeCollectionVM
+    @ObservedObject var collection: RecipeCollectionVM
     
-//    @State private var editMode: EditMode = .inactive
     @State private var isEditing = false
     
     @State var newCategoryMissingField: Bool = false
@@ -41,36 +40,40 @@ struct RecipeCollectionView: View {
                         }
                     }
                 }
-                ForEach(recipeCollectionVM.categories, id: \.self) { category in
+                ForEach(collection.categories, id: \.self) { category in
                     if isEditing {
-                        EditableText(category.name, isEditing: isEditing,
-                             onChanged: { categoryName in
-                                 recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
-                             },
-                            onDelete: {
-                                recipeCollectionVM.deleteCategory(withId: category.id)
-                            }
-                        )
+//                        EditableText(category.name, isEditing: isEditing,
+//                             onChanged: { categoryName in
+//                                 recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
+//                             },
+//                            onDelete: {
+//                                recipeCollectionVM.deleteCategory(withId: category.id)
+//                            }
+//                        )
+                        Text("\(category.name)")
+                            .deletable(isDeleting: true, onDelete: {
+                                collection.deleteCategory(withId: category.id)
+                            })
                     }
                     else {
                         NavigationLink(
                             destination:
                                 CategoryView()
-                                    .environmentObject(RecipeCategoryVM(category: category))
-                                    .environmentObject(recipeCollectionVM)
+                                    .environmentObject(RecipeCategoryVM(category: category, collection: collection))
+                                    .environmentObject(collection)
                         ) {
                             Text("\(category.name)")
                         }
                     }
                 }
                 .onDelete { indexSet in
-                    indexSet.map{ recipeCollectionVM.categories[$0] }.forEach { category in
-                        recipeCollectionVM.deleteCategory(withId: category.id)
+                    indexSet.map{ collection.categories[$0] }.forEach { category in
+                        collection.deleteCategory(withId: category.id)
                     }
                 }
             }
             .listStyle(InsetGroupedListStyle())
-            .navigationBarTitle("Recipe Book", displayMode: .inline)
+            .navigationBarTitle("\(collection.name)", displayMode: .inline)
             .navigationBarItems(trailing:
                 UIControls.EditButton(
                     action: {
@@ -78,14 +81,13 @@ struct RecipeCollectionView: View {
                     },
                     isEditing: isEditing)
             )
-//            .environment(\.editMode, $editMode)
         }
     }
     
     func addCategory() {
         if newCategory != "" {
             newCategoryMissingField = false
-            recipeCollectionVM.addCategory(newCategory)
+            collection.addCategory(newCategory)
             newCategory = ""
         }
         else {
@@ -96,6 +98,6 @@ struct RecipeCollectionView: View {
 
 struct RecipeCollectionView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(recipeCollectionId: 1))
+        RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
     }
 }

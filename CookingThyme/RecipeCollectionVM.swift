@@ -8,19 +8,26 @@
 import Foundation
 
 class RecipeCollectionVM: ObservableObject {
-    private var recipeCollectionId: Int
+    @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategory]
     
     // MARK: - Init
     
-    init(recipeCollectionId: Int) {
-        self.recipeCollectionId = recipeCollectionId
+    init(collection: RecipeCollection) {
+        self.collection = collection
         self.categories = [RecipeCategory]()
         popullateCategories()
     }
     
+    func refreshCollection() {
+        if let collection = RecipeDB.shared.getCollection(withId: collection.id) {
+            self.collection = collection
+            popullateCategories()
+        }
+    }
+    
     func popullateCategories() {
-        let categories = RecipeDB.shared.getCategories(byCollectionId: recipeCollectionId)
+        let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
         self.categories = [RecipeCategory]()
         for category in categories {
             self.categories.append(category)
@@ -36,6 +43,10 @@ class RecipeCollectionVM: ObservableObject {
 //    }
     
     // MARK: Access
+    
+    var name: String {
+        collection.name
+    }
     
     var categoryNames: [String] {
         var categoryNames = [String]()
@@ -53,7 +64,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: Intents
     
     func addCategory(_ category: String) -> Void {
-        RecipeDB.shared.createCategory(withName: category, forCollectionId: recipeCollectionId)
+        RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id)
         popullateCategories()
     }
     
@@ -66,7 +77,7 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {
-        RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: recipeCollectionId)
+        RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id)
         popullateCategories()
     }
     

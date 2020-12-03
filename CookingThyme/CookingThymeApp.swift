@@ -27,7 +27,7 @@ struct CookingThymeApp: App {
 //                    servings: 1)
 //            ))
             
-            RecipeCollectionView(recipeCollectionVM: RecipeCollectionVM(recipeCollectionId: 1))
+            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
         }
     }
 }

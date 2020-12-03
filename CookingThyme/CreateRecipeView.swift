@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CreateRecipeView: View {
     @EnvironmentObject var categoryVM: RecipeCategoryVM
-    @Binding var isPresented: Bool
+    @Binding var isCreatingRecipe: Bool
     @ObservedObject var recipeVM: RecipeVM
     
     var body: some View {
-        EditRecipeView(isPresented: $isPresented, recipeVM: recipeVM)
+        EditRecipeView(isEditingRecipe: $isCreatingRecipe, recipeVM: recipeVM, isCreatingRecipe: true)
     }
 }

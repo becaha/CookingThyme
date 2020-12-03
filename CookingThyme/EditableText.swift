@@ -60,11 +60,11 @@ struct EditableText: View {
     }
 
     var body: some View {
-        ZStack(alignment: .center) {
+        ZStack {
             TextField(text, text: $editableText, onEditingChanged: { began in
                 callOnChanged()
             })
-            .multilineTextAlignment(.center)
+//            .multilineTextAlignment(.center)
             .autocapitalization(autocapitalization)
             .opacity(isEditing ? 1 : 0)
             .disabled(!isEditing)
