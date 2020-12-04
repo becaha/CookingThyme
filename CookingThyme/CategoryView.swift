@@ -52,7 +52,6 @@ struct CategoryView: View {
                                         RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
                                             .environmentObject(category)
                                             .environmentObject(collection)
-
                             )
                         }
                     }

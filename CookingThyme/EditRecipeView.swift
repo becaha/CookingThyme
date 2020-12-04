@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// make multiline textfields
 // TODO: have cursor go to next item in list after one is entered
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
