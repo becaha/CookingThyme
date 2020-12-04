@@ -17,17 +17,26 @@ struct ImageView: View {
     var body: some View {
         
         VStack {
-            GeometryReader { geometry in
+            GeometryReader { screenGeometry in
                 HStack {
-                OptionalImage(uiImage: imageHandler.image)
-                    .scaleEffect(imageHandler.zoomScale)
-    //                .offset(panOffset)
-                }
-                .onReceive(imageHandler.$image.dropFirst()) { image in
-                    withAnimation {
-                        zoomToFit(image, in: geometry.size)
+                    GeometryReader { geometry in
+                        HStack {
+                            OptionalImage(uiImage: imageHandler.image)
+                                .scaleEffect(imageHandler.zoomScale)
+                        }
+                        .frame(width: geometry.size.width/2, height: geometry.size.height, alignment: .center)
+                        .clipped()
+                        .border(Color.black, width: 5.0)
+                        .position(x: geometry.size.width/2, y: geometry.size.height/2)
+                        .onReceive(imageHandler.$image.dropFirst()) { image in
+                            withAnimation {
+                                imageHandler.zoomToFit(image, in: CGSize(width: geometry.size.width/2, height: geometry.size.height))
+                            }
+                        }
                     }
                 }
+                .padding()
+                .frame(width: screenGeometry.size.width, height: screenGeometry.size.height/4)
             }
             
             Button(action: {
@@ -52,15 +61,6 @@ struct ImageView: View {
                       },
                       secondaryButton: .cancel())
             }
-        }
-    }
-    
-    private func zoomToFit(_ image: UIImage?, in size: CGSize) {
-        if let image = image, image.size.width > 0, image.size.height > 0 {
-            let horizontalZoom = size.width / image.size.width
-            let verticalZoom = size.height / image.size.height
-
-            imageHandler.zoomScale = min(horizontalZoom, verticalZoom)
         }
     }
 }

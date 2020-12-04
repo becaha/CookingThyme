@@ -33,6 +33,15 @@ class ImageHandler: ObservableObject {
                 .assign(to: \ImageHandler.image, on: self)
         }
     }
+    
+    func zoomToFit(_ image: UIImage?, in size: CGSize) {
+        if let image = image, image.size.width > 0, image.size.height > 0 {
+            let horizontalZoom = size.width / image.size.width
+            let verticalZoom = size.height / image.size.height
+
+            zoomScale = max(horizontalZoom, verticalZoom)
+        }
+    }
 }
 
 extension URL {
