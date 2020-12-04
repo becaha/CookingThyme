@@ -11,7 +11,7 @@ import SwiftUI
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
-    @ObservedObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipeVM: RecipeVM
     var isCreatingRecipe: Bool = false
             
     private var fieldMissing: Bool {
@@ -196,6 +196,11 @@ struct EditRecipeView: View {
                     }
                     .foregroundColor(.black)
                 }
+                Section(header: Text("Photos")) {
+                    ImageView()
+                        .frame(minHeight: 200)
+                }
+
             }
         }
         .onAppear {
@@ -243,10 +248,10 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipeVM.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
+                category.createRecipe(name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, images: recipeVM.tempImages, servings: servings)
             }
             else {
-                recipeVM.updateRecipe(withId: recipeVM.id, name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, servings: servings)
+                recipeVM.updateRecipe(withId: recipeVM.id, name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, images: recipeVM.tempImages, servings: servings)
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place

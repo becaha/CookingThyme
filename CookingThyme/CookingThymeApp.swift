@@ -27,10 +27,32 @@ struct CookingThymeApp: App {
 //                    servings: 1)
 //            ))
             
-//            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
+            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
             
-            ImageView(imageHandler: ImageHandler())
-
+//            Form {
+//                Section(header: Text("Photos")) {
+//                    ImageView()
+//                        .environmentObject(RecipeVM(
+//                            recipe: Recipe(
+//                                name: "Water",
+//                                ingredients: [
+//                                    Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.cup),
+//                                    Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.cup),
+//                                    Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.cup),
+//                                    Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.cup),
+//                                    Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
+//                                ],
+//                                directions: [
+//                                    Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),
+//                                    Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
+//                                    Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
+//                                images: [RecipeImage](),
+//                                servings: 1),
+//                            category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
+//                    ))
+//                }
+//            }
+            
         }
     }
 }

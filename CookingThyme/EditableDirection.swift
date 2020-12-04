@@ -54,6 +54,7 @@ struct EditableDirection_Previews: PreviewProvider {
                                             Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
                                         ],
                                             directions: [Direction(step: 0, recipeId: 0, direction: "Fetch a pail of water")],
+                                            images: [RecipeImage](),
                                         servings: 1),
                                         category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 0), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
                                 ))

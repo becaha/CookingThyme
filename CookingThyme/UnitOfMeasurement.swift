@@ -9,6 +9,7 @@ import Foundation
 
 // TODO: idk the measurement shorthands
 
+// TODO: check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
 enum UnitOfMeasurement: CaseIterable {
     case cup
     case pint

@@ -36,6 +36,7 @@ struct Recipe: Identifiable {
     }
     var ingredients: [Ingredient] = []
     var directions: [Direction] = []
+    var images: [RecipeImage] = []
     var recipeCategoryId: Int
     
     init() {
@@ -46,10 +47,11 @@ struct Recipe: Identifiable {
     }
     
     // TODO remove??
-    init(name: String, ingredients: [Ingredient], directions: [Direction], servings: Int) {
+    init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int) {
         self.name = name.lowercased().capitalized
         self.ingredients = ingredients
         self.directions = directions
+        self.images = images
         self.servings = servings
         self.id = 0
         self.recipeCategoryId = 0
@@ -75,6 +77,10 @@ struct Recipe: Identifiable {
     
     mutating func addDirection(row: Row) {
         directions.append(Direction(row: row))
+    }
+    
+    mutating func addImage(row: Row) {
+        images.append(RecipeImage(row: row))
     }
     
 //    var name: String

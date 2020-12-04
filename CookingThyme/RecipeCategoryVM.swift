@@ -46,20 +46,21 @@ class RecipeCategoryVM: ObservableObject {
         }
     }
     
-    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], servings: String) -> Recipe? {
+    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
             createdRecipe = recipe
             RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
             RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+            RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
         }
         return createdRecipe
     }
     
-    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], servings: String) -> Recipe? {
+    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         let ingredients = Ingredient.toIngredients(tempIngredients)
-        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, ingredients: ingredients, directions: directions, servings: servings) {
+        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings) {
             createdRecipe = recipe
             popullateRecipes()
         }

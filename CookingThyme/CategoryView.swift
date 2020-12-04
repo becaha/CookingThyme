@@ -35,7 +35,8 @@ struct CategoryView: View {
                             UIControls.AddButton(action: createRecipe, isPlain: false)
                         }
                     }.sheet(isPresented: $isCreatingRecipe) {
-                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe, recipeVM: RecipeVM(category: category))
+                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
+                            .environmentObject(RecipeVM(category: category))
                     }
                 }
             

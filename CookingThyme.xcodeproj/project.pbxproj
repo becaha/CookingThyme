@@ -42,6 +42,8 @@
 		DB49B5172579EA1500808CC8 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5162579EA1500808CC8 /* ImageView.swift */; };
 		DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5182579F1B300808CC8 /* ImageHandler.swift */; };
 		DB49B51B2579F80300808CC8 /* OptionalImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51A2579F80300808CC8 /* OptionalImage.swift */; };
+		DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51C257AA4C000808CC8 /* RecipeImage.swift */; };
+		DB49B51F257ABF5800808CC8 /* Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51E257ABF5800808CC8 /* Border.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		DB49B5162579EA1500808CC8 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		DB49B5182579F1B300808CC8 /* ImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHandler.swift; sourceTree = "<group>"; };
 		DB49B51A2579F80300808CC8 /* OptionalImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalImage.swift; sourceTree = "<group>"; };
+		DB49B51C257AA4C000808CC8 /* RecipeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeImage.swift; sourceTree = "<group>"; };
+		DB49B51E257ABF5800808CC8 /* Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Border.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,19 +161,17 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B520257ABF6C00808CC8 /* ViewModifiers */,
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
 				DB49B4C02565E49F00808CC8 /* GroceriesView.swift */,
 				DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */,
-				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
 				DB49B4C62565E49F00808CC8 /* TimerView.swift */,
-				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
 				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4FA256E015000808CC8 /* EditableText.swift */,
-				DB49B4FE256F488200808CC8 /* Deletable.swift */,
 				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
 				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
@@ -203,8 +205,20 @@
 				DB49B4E225672AE000808CC8 /* RecipeDB.swift */,
 				DB49B4EC2568B15B00808CC8 /* Direction.swift */,
 				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
+				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		DB49B520257ABF6C00808CC8 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
+				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
+				DB49B4FE256F488200808CC8 /* Deletable.swift */,
+				DB49B51E257ABF5800808CC8 /* Border.swift */,
+			);
+			name = ViewModifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,12 +336,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
+				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
+				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,

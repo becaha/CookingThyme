@@ -11,7 +11,7 @@ struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
-    @ObservedObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipeVM: RecipeVM
     
     @State private var actionSheetPresented = false
     @State private var categoriesPresented = false

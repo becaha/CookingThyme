@@ -10,16 +10,15 @@ import Foundation
 class RecipeVM: ObservableObject {
     var category: RecipeCategoryVM
     @Published var recipe: Recipe
-    @Published var tempDirections: [Direction]
-    @Published var tempIngredients: [TempIngredient]
+    @Published var tempDirections: [Direction] = []
+    @Published var tempIngredients: [TempIngredient] = []
+    @Published var tempImages: [RecipeImage] = []
     
     // MARK: - Init
     
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
         self.category = category
-        self.tempDirections = []
-        self.tempIngredients = []
         popullateRecipe()
     }
     
@@ -29,6 +28,7 @@ class RecipeVM: ObservableObject {
                 recipe = fullRecipe
                 self.tempDirections = recipe.directions
                 self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
+                self.tempImages = recipe.images
             }
         }
     }
@@ -43,8 +43,6 @@ class RecipeVM: ObservableObject {
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
         self.category = category
-        self.tempDirections = []
-        self.tempIngredients = []
     }
     
     // MARK: - Model Access
@@ -70,24 +68,36 @@ class RecipeVM: ObservableObject {
         recipe.directions
     }
     
+    var imagess: [RecipeImage] {
+        recipe.images
+    }
+    
     // MARK: - Intents
     
-    // temporary
+    // - Temporary for Editing
+    
+    func addTempDirection(_ direction: String) {
+        tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
+    }
     
     func removeTempDirection(at index: Int) {
         tempDirections.remove(at: index)
     }
     
-    func addTempDirection(_ direction: String) {
-        tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
+    func addTempIngredient(name: String, amount: String, unit: String) {
+        tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
     }
     
     func removeTempIngredient(at index: Int) {
         tempIngredients.remove(at: index)
     }
     
-    func addTempIngredient(name: String, amount: String, unit: String) {
-        tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
+    func addTempImage(url: String) {
+        tempImages.append(RecipeImage(url: url, recipeId: recipe.id))
+    }
+    
+    func removeTempImage(at index: Int) {
+        tempImages.remove(at: index)
     }
 
     
@@ -100,20 +110,15 @@ class RecipeVM: ObservableObject {
         recipe.servings = size
     }
     
-    // TODO
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
-        // check if amount is written as double or as fraction, have an ingredient that keeps amount as fraction
-        // (given as fraction, stay as fraction, given as decimal, change to fraction)
-        // should we force them to give as fraction, give them fractions in keyboard?
         let doubleAmount = Fraction.toDouble(fromString: amount)
-        // check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
         let unit = Ingredient.makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], servings: String) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
         category.deleteRecipe(withId: id)
-        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, servings: servings) {
+        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             self.recipe = recipe
             refreshRecipe()
         }
@@ -122,7 +127,7 @@ class RecipeVM: ObservableObject {
     
     func copyRecipe(toCategoryId categoryId: Int) {
         if let category = RecipeDB.shared.getCategory(withId: categoryId) {
-            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, servings: recipe.servings.toString())
+            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())
         }
     }
 }
