@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class RecipeVM: ObservableObject {
     var category: RecipeCategoryVM
@@ -13,23 +14,41 @@ class RecipeVM: ObservableObject {
     @Published var tempDirections: [Direction] = []
     @Published var tempIngredients: [TempIngredient] = []
     @Published var tempImages: [RecipeImage] = []
+    @Published var imageHandler = ImageHandler()
+    
+    private var imageHandlerCancellable: AnyCancellable?
     
     // MARK: - Init
     
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
         self.category = category
+        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
         popullateRecipe()
     }
     
     func popullateRecipe() {
         if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
-            if let fullRecipe = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
-                recipe = fullRecipe
-                self.tempDirections = recipe.directions
-                self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
-                self.tempImages = recipe.images
+            if let recipeWithIngredients = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
+                if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: recipe.id) {
+                    recipe = recipeWithImages
+                    self.tempDirections = recipe.directions
+                    self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
+                    self.tempImages = recipe.images
+                    popullateImage()
+                }
             }
+        }
+    }
+    
+    func popullateImage() {
+        if tempImages.count > 0 {
+            let image = tempImages[0]
+            imageHandler.setImage(url: URL(string: image.url))
         }
     }
     
@@ -92,8 +111,12 @@ class RecipeVM: ObservableObject {
         tempIngredients.remove(at: index)
     }
     
-    func addTempImage(url: String) {
-        tempImages.append(RecipeImage(url: url, recipeId: recipe.id))
+    func addTempImage(url: URL?) {
+        if let url = url {
+            tempImages[0] = RecipeImage(url: url.absoluteString, recipeId: recipe.id)
+//            tempImages.append(RecipeImage(url: url.absoluteString, recipeId: recipe.id))
+            imageHandler.addImage(url: url)
+        }
     }
     
     func removeTempImage(at index: Int) {

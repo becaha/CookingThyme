@@ -14,8 +14,6 @@ class RecipeDB {
     struct Constant {
         static let fileName = "recipe"
         static let fileExtension = "sqlite"
-//        static let path = "/Users/rebeccanybo/Documents/recipe.sqlite"
-        
     }
     
     // MARK: - Properties
@@ -47,6 +45,9 @@ class RecipeDB {
                     if !fileManager.fileExists(atPath: dbPath) {
                         try fileManager.copyItem(atPath: path, toPath: dbPath)
                     }
+                    // RESET DB
+//                    try fileManager.removeItem(atPath: dbPath)
+//                    try fileManager.copyItem(atPath: path, toPath: dbPath)
                 } catch {
                     print("Error copying database")
                 }
@@ -62,31 +63,6 @@ class RecipeDB {
     }
     
     // MARK: - Create
-    
-    // must also add recipe to recipe collection, recipe category all
-//    func createRecipe(name: String, servings: Int) -> Recipe? {
-//        do {
-//            let writeResult = try dbQueue.write{ (db: Database) -> Recipe in
-//
-//                try db.execute(
-//                    sql:
-//                    """
-//                    INSERT INTO \(Recipe.Table.databaseTableName) (\(Recipe.Table.name), \(Recipe.Table.servings)) \
-//                    VALUES (?, ?)
-//                    """,
-//                    arguments: [name, servings])
-//
-//                let recipeId = db.lastInsertedRowID
-//
-//                return Recipe(id: Int(recipeId), name: name, servings: servings)
-//            }
-//            
-//            return Recipe(id: writeResult.id, name: name, servings: servings)
-//        } catch {
-//            print("Error creating recipe")
-//            return nil
-//        }
-//    }
     
     func createRecipe(name: String, servings: Int, recipeCategoryId: Int) -> Recipe? {
         do {
@@ -167,14 +143,14 @@ class RecipeDB {
     func createImage(_ image: RecipeImage, withRecipeId recipeId: Int) throws {
         do {
             try dbQueue.write{ (db: Database) in
-
                 try db.execute(
                     sql:
                     """
-                    INSERT INTO \(RecipeImage.Table.databaseTableName) (\(RecipeImage.Table.url), \(RecipeImage.Table.recipeId)) \
+                    INSERT INTO \(RecipeImage.Table.databaseTableName) \
+                    (\(RecipeImage.Table.url), \(RecipeImage.Table.recipeId)) \
                     VALUES (?, ?)
                     """,
-                    arguments: [image.url, image.recipeId])
+                    arguments: [image.url, recipeId])
             }
             
             return
@@ -288,10 +264,10 @@ class RecipeDB {
         }
     }
     
-    func getImages(withRecipeId recipeId: Int) -> [RecipeImage] {
-        var images = [RecipeImage]()
+    func getImages(forRecipe recipe: Recipe, withRecipeId recipeId: Int) -> Recipe? {
+        var updatedRecipe = recipe
         do {
-            let images = try dbQueue.read { db -> [RecipeImage] in
+            let updatedRecipe = try dbQueue.read { db -> Recipe in
                 let rows = try Row.fetchCursor(db,
                                                sql: """
                                                     select * from \(RecipeImage.Table.databaseTableName) \
@@ -299,13 +275,13 @@ class RecipeDB {
                                                     """,
                                                arguments: [recipeId])
                 while let row = try rows.next() {
-                    images.append(RecipeImage(row: row))
+                    updatedRecipe.addImage(row: row)
                 }
-                return images
+                return updatedRecipe
             }
-            return images
+            return updatedRecipe
         } catch {
-            return []
+            return nil
         }
     }
     

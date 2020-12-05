@@ -13,6 +13,7 @@ struct OptionalImage: View {
     var body: some View {
         if let image = uiImage {
             Image(uiImage: image)
+                .border(Color.black, width: 3)
         }
     }
 }

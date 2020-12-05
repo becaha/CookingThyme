@@ -35,6 +35,11 @@ struct ReadRecipeView: View {
             .padding()
             
             Form {
+                if recipeVM.imageHandler.image != nil {
+                    Section(header: Text("Photos")) {
+                        ImageView(isEditing: false)
+                    }
+                }
                 
                 Section(header:
                     HStack {

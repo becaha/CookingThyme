@@ -27,7 +27,6 @@ struct CookingThymeApp: App {
 //                    servings: 1)
 //            ))
             
-            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
             
 //            Form {
 //                Section(header: Text("Photos")) {
@@ -53,6 +52,9 @@ struct CookingThymeApp: App {
 //                }
 //            }
             
+            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
+            
+//            AddImageView()
         }
     }
 }

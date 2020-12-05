@@ -15,6 +15,13 @@ class ImageHandler: ObservableObject {
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
     
+    // not editing
+    func setImage(url: URL?) {
+        imageURL = url?.imageURL
+        setImageData()
+    }
+    
+    // editing
     func addImage(url: URL?) {
         imageURL = url?.imageURL
         setImageData()
