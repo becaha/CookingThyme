@@ -29,11 +29,12 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
-    func setImage(_ image: RecipeImageProtocol) {
+    func setImage(_ image: RecipeImage) {
         if image.type == ImageType.url {
             setImage(url: URL(string: image.data))
         }
         else if image.type == ImageType.uiImage {
+            imageURL = nil
             let decodedImage = decodeImage(image.data)
             self.image = decodedImage
         }

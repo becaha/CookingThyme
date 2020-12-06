@@ -14,7 +14,7 @@ class RecipeVM: ObservableObject {
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
     @Published var tempIngredients: [TempIngredient] = []
-    @Published var tempImages: [RecipeImageProtocol] = []
+    @Published var tempImages: [RecipeImage] = []
     @Published var imageHandler = ImageHandler()
     
     private var imageHandlerCancellable: AnyCancellable?
@@ -114,14 +114,24 @@ class RecipeVM: ObservableObject {
     
     func addTempImage(url: URL?) {
         if let url = url {
-            tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
+            if tempImages.count > 0 {
+                tempImages[0] = RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id)
+            }
+            else {
+                tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
+            }
             imageHandler.addImage(url: url)
         }
     }
     
     func addTempImage(uiImage: UIImage) {
         if let imageData = imageHandler.encodeImage(uiImage) {
-            tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
+            if tempImages.count > 0 {
+                tempImages[0] = RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id)
+            }
+            else {
+                tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
+            }
             imageHandler.addImage(uiImage: uiImage)
         }
     }
@@ -146,7 +156,7 @@ class RecipeVM: ObservableObject {
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImageProtocol], servings: String) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
         category.deleteRecipe(withId: id)
         if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             self.recipe = recipe
@@ -174,25 +184,5 @@ extension Int {
     func toString() -> String {
         let formatter = NumberFormatter()
         return formatter.string(from: self as NSNumber)!
-    }
-}
-
-extension UIImage: RecipeImageProtocol {
-    var type: ImageType {
-        get {
-            return self.type
-        }
-        set {
-            self.type = newValue
-        }
-    }
-    
-    var data: String {
-        get {
-            return self.data
-        }
-        set {
-            self.data = newValue
-        }
     }
 }

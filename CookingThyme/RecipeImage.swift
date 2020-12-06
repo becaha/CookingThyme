@@ -8,7 +8,7 @@
 import Foundation
 import GRDB
 
-struct RecipeImage: RecipeImageProtocol {
+struct RecipeImage {
     struct Table {
         static let databaseTableName = "RecipeImage"
         
@@ -48,10 +48,4 @@ enum ImageType: String {
     case url = "url"
     case uiImage = "uiImage"
     case error = "error"
-}
-
-
-protocol RecipeImageProtocol {
-    var type: ImageType { get set }
-    var data: String { get set }
 }

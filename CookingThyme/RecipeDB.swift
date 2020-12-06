@@ -140,7 +140,7 @@ class RecipeDB {
         }
     }
     
-    func createImage(_ image: RecipeImageProtocol, withRecipeId recipeId: Int) throws {
+    func createImage(_ image: RecipeImage, withRecipeId recipeId: Int) throws {
         do {
             try dbQueue.write{ (db: Database) in
                 try db.execute(
@@ -160,7 +160,7 @@ class RecipeDB {
         }
     }
     
-    func createImages(images: [RecipeImageProtocol], withRecipeId recipeId: Int) {
+    func createImages(images: [RecipeImage], withRecipeId recipeId: Int) {
         do {
             for image in images {
                 try createImage(image, withRecipeId: recipeId)
