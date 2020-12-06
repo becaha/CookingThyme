@@ -15,6 +15,31 @@ class ImageHandler: ObservableObject {
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
     
+    func encodeImage(_ image: UIImage) -> String? {
+        if let imageData = image.pngData() {
+            return imageData.base64EncodedString(options: .lineLength64Characters)
+        }
+        return nil
+    }
+    
+    func decodeImage(_ imageString: String) -> UIImage? {
+        if let decodedData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
+            return UIImage(data: decodedData)
+        }
+        return nil
+    }
+    
+    func setImage(_ image: RecipeImageProtocol) {
+        if image.type == ImageType.url {
+            setImage(url: URL(string: image.data))
+        }
+        else if image.type == ImageType.uiImage {
+            let decodedImage = decodeImage(image.data)
+            self.image = decodedImage
+        }
+    }
+    
+    //TODO why two diff functions here doing the same thing
     // not editing
     func setImage(url: URL?) {
         imageURL = url?.imageURL
@@ -25,6 +50,10 @@ class ImageHandler: ObservableObject {
     func addImage(url: URL?) {
         imageURL = url?.imageURL
         setImageData()
+    }
+    
+    func addImage(uiImage: UIImage) {
+        self.image = uiImage
     }
     
     private func setImageData() {

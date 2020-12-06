@@ -7,13 +7,14 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class RecipeVM: ObservableObject {
     var category: RecipeCategoryVM
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
     @Published var tempIngredients: [TempIngredient] = []
-    @Published var tempImages: [RecipeImage] = []
+    @Published var tempImages: [RecipeImageProtocol] = []
     @Published var imageHandler = ImageHandler()
     
     private var imageHandlerCancellable: AnyCancellable?
@@ -48,7 +49,7 @@ class RecipeVM: ObservableObject {
     func popullateImage() {
         if tempImages.count > 0 {
             let image = tempImages[0]
-            imageHandler.setImage(url: URL(string: image.url))
+            imageHandler.setImage(image)
         }
     }
     
@@ -87,7 +88,7 @@ class RecipeVM: ObservableObject {
         recipe.directions
     }
     
-    var imagess: [RecipeImage] {
+    var images: [RecipeImage] {
         recipe.images
     }
     
@@ -113,9 +114,15 @@ class RecipeVM: ObservableObject {
     
     func addTempImage(url: URL?) {
         if let url = url {
-            tempImages[0] = RecipeImage(url: url.absoluteString, recipeId: recipe.id)
-//            tempImages.append(RecipeImage(url: url.absoluteString, recipeId: recipe.id))
+            tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
             imageHandler.addImage(url: url)
+        }
+    }
+    
+    func addTempImage(uiImage: UIImage) {
+        if let imageData = imageHandler.encodeImage(uiImage) {
+            tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
+            imageHandler.addImage(uiImage: uiImage)
         }
     }
     
@@ -139,13 +146,14 @@ class RecipeVM: ObservableObject {
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImageProtocol], servings: String) {
         category.deleteRecipe(withId: id)
         if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             self.recipe = recipe
             refreshRecipe()
         }
-        category.popullateRecipes()
+        // duplicated 
+//        category.popullateRecipes()
     }
     
     func copyRecipe(toCategoryId categoryId: Int) {
@@ -166,5 +174,25 @@ extension Int {
     func toString() -> String {
         let formatter = NumberFormatter()
         return formatter.string(from: self as NSNumber)!
+    }
+}
+
+extension UIImage: RecipeImageProtocol {
+    var type: ImageType {
+        get {
+            return self.type
+        }
+        set {
+            self.type = newValue
+        }
+    }
+    
+    var data: String {
+        get {
+            return self.data
+        }
+        set {
+            self.data = newValue
+        }
     }
 }

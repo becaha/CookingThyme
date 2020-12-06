@@ -15,13 +15,14 @@ struct ImageView: View {
     @State private var confirmBackgroundPaste = false
     @State private var explainBackgroundPaste = false
     @State private var editPhotoSheetPresented = false
-//    @State private var cameraRollSheetPresented = false
-//
-//    @State private var inputImage: UIImage?
-//    @State private var image: Image?
+    @State private var cameraRollSheetPresented = false
+
+    @State private var uiImage: UIImage?
+    @State private var image: Image?
     
     private var isLoading: Bool {
-        recipe.imageHandler.imageURL != nil && recipe.imageHandler.image == nil
+        let image = recipe.imageHandler.image
+        return recipe.imageHandler.imageURL != nil && recipe.imageHandler.image == nil
     }
     
     var body: some View {
@@ -92,15 +93,29 @@ struct ImageView: View {
             }
         }
         .frame(height: 150)
-//        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-//            ImagePicker(image: self.$inputImage)
-//        }
+        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
+            ImagePicker(image: self.$uiImage)
+        }
+        .alert(isPresented: $explainBackgroundPaste) {
+            Alert(title: Text("Paste Image"),
+                  message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
+                  dismissButton: .default(Text("Ok")))
+        }
+        .alert(isPresented: $confirmBackgroundPaste) {
+            Alert(title: Text("Paste Image"),
+                  message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
+                  primaryButton: .default(Text("Ok")) {
+                    recipe.addTempImage(url: UIPasteboard.general.url)
+                  },
+                  secondaryButton: .cancel())
+        }
     }
     
-//    func loadImage() {
-//        guard let inputImage = inputImage else { return }
-//        image = Image(uiImage: inputImage)
-//    }
+    func loadImage() {
+        guard let inputImage = uiImage else { return }
+        recipe.addTempImage(uiImage: inputImage)
+        image = Image(uiImage: inputImage)
+    }
     
     @ViewBuilder
     func EditPhotoButton() -> some View {
@@ -112,11 +127,15 @@ struct ImageView: View {
         .actionSheet(isPresented: $editPhotoSheetPresented, content: {
             ActionSheet(title: Text(""), message: nil, buttons:
                 [
-//                    .default(Text("Pick from camera roll"), action: {
-//                        cameraRollSheetPresented = true
-//                    }),
+                    .default(Text("Pick from camera roll"), action: {
+                        cameraRollSheetPresented = true
+                    }),
                     .default(Text("Paste"), action: {
-                        confirmBackgroundPaste = true
+                        if UIPasteboard.general.url != nil {
+                            confirmBackgroundPaste = true
+                        } else {
+                            explainBackgroundPaste = true
+                        }
                     }),
                     .cancel()
                 ])

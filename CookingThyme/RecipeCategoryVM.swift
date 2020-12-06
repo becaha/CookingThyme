@@ -46,7 +46,7 @@ class RecipeCategoryVM: ObservableObject {
         }
     }
     
-    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
+    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImageProtocol], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
             createdRecipe = recipe
@@ -57,7 +57,7 @@ class RecipeCategoryVM: ObservableObject {
         return createdRecipe
     }
     
-    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
+    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImageProtocol], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         let ingredients = Ingredient.toIngredients(tempIngredients)
         if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings) {
@@ -67,23 +67,11 @@ class RecipeCategoryVM: ObservableObject {
         return createdRecipe
     }
     
-    
-//    func createRecipe(name: String, ingredients: [Ingredient], directionStrings: [String], servings: String) -> Recipe? {
-//        var createdRecipe: Recipe?
-//        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: category.id) {
-//            createdRecipe = recipe
-//            let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: recipe.id)
-//            RecipeDB.shared.createDirections(directions: directions)
-//            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
-//        }
-//        popullateRecipes()
-//        return createdRecipe
-//    }
-    
     func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
+        RecipeDB.shared.deleteImages(withRecipeId: id)
         popullateRecipes()
     }
     
