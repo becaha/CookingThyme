@@ -35,11 +35,7 @@ struct ReadRecipeView: View {
             .padding()
             
             Form {
-                if recipeVM.imageHandler.image != nil {
-                    Section(header: Text("Photos")) {
-                        ImageView(isEditing: false)
-                    }
-                }
+                getImageView()
                 
                 Section(header:
                     HStack {
@@ -124,6 +120,14 @@ struct ReadRecipeView: View {
                     }
                 }
         )
+    }
+    
+    @ViewBuilder func getImageView() -> some View {
+        if recipeVM.imageHandler.image != nil {
+            Section(header: Text("Photos")) {
+                ImageView(isEditing: false)
+            }
+        }
     }
     
     @ViewBuilder func DirectionText(withIndex index: Int) -> some View {

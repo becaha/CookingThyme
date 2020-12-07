@@ -9,6 +9,10 @@ import SwiftUI
 
 struct OptionalImage: View {
     var uiImage: UIImage?
+    
+    init(uiImage: UIImage?) {
+        self.uiImage = uiImage
+    }
 
     var body: some View {
         if let image = uiImage {

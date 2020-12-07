@@ -12,16 +12,16 @@ struct ImageView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true
     
-    @State private var confirmBackgroundPaste = false
-    @State private var explainBackgroundPaste = false
+    @State private var presentPasteAlert = false
+    @State private var confirmPaste = false
+    @State private var explainPaste = false
+
     @State private var editPhotoSheetPresented = false
     @State private var cameraRollSheetPresented = false
 
-    @State private var uiImage: UIImage?
-    @State private var image: Image?
+    @State private var selectedImage: UIImage?
     
     private var isLoading: Bool {
-        let image = recipe.imageHandler.image
         return recipe.imageHandler.imageURL != nil && recipe.imageHandler.image == nil
     }
     
@@ -82,11 +82,6 @@ struct ImageView: View {
                         .clipped()
                         .border(Color.black, width: recipe.imageHandler.image != nil ? 3 : 0)
                         .position(x: geometry.size.width/2, y: geometry.size.height/2)
-                        .onReceive(recipe.imageHandler.$image.dropFirst()) { image in
-                            withAnimation {
-                                recipe.imageHandler.zoomToFit(image, in: CGSize(width: geometry.size.width/2, height: geometry.size.height))
-                            }
-                        }
                     }
                 }
                 .padding()
@@ -94,27 +89,26 @@ struct ImageView: View {
         }
         .frame(height: 150)
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-            ImagePicker(image: self.$uiImage)
+            ImagePicker(image: self.$selectedImage)
         }
-        .alert(isPresented: $explainBackgroundPaste) {
-            Alert(title: Text("Paste Image"),
+        .alert(isPresented: $presentPasteAlert) {
+            if confirmPaste {
+                return Alert(title: Text("Paste Image"),
+                      message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
+                      primaryButton: .default(Text("Ok")) {
+                        recipe.addTempImage(url: UIPasteboard.general.url)
+                      },
+                      secondaryButton: .cancel())
+            }
+            return Alert(title: Text("Paste Image"),
                   message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
                   dismissButton: .default(Text("Ok")))
-        }
-        .alert(isPresented: $confirmBackgroundPaste) {
-            Alert(title: Text("Paste Image"),
-                  message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
-                  primaryButton: .default(Text("Ok")) {
-                    recipe.addTempImage(url: UIPasteboard.general.url)
-                  },
-                  secondaryButton: .cancel())
         }
     }
     
     func loadImage() {
-        guard let inputImage = uiImage else { return }
+        guard let inputImage = selectedImage else { return }
         recipe.addTempImage(uiImage: inputImage)
-        image = Image(uiImage: inputImage)
     }
     
     @ViewBuilder
@@ -131,10 +125,11 @@ struct ImageView: View {
                         cameraRollSheetPresented = true
                     }),
                     .default(Text("Paste"), action: {
+                        presentPasteAlert = true
                         if UIPasteboard.general.url != nil {
-                            confirmBackgroundPaste = true
+                            confirmPaste = true
                         } else {
-                            explainBackgroundPaste = true
+                            explainPaste = true
                         }
                     }),
                     .cancel()
@@ -146,19 +141,19 @@ struct ImageView: View {
     func PasteButton() -> some View {
         Button(action: {
             if UIPasteboard.general.url != nil {
-                confirmBackgroundPaste = true
+                confirmPaste = true
             } else {
-                explainBackgroundPaste = true
+                explainPaste = true
             }
         }) {
             Image(systemName: "doc.on.clipboard").imageScale(.large)
         }
-        .alert(isPresented: $explainBackgroundPaste) {
+        .alert(isPresented: $explainPaste) {
             Alert(title: Text("Paste Image"),
                   message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
                   dismissButton: .default(Text("Ok")))
         }
-        .alert(isPresented: $confirmBackgroundPaste) {
+        .alert(isPresented: $confirmPaste) {
             Alert(title: Text("Paste Image"),
                   message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
                   primaryButton: .default(Text("Ok")) {
