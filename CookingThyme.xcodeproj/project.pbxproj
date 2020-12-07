@@ -44,6 +44,10 @@
 		DB49B51F257ABF5800808CC8 /* Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51E257ABF5800808CC8 /* Border.swift */; };
 		DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B521257AF94D00808CC8 /* ImagePicker.swift */; };
 		DB49B524257AFE2000808CC8 /* AddImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B523257AFE2000808CC8 /* AddImageView.swift */; };
+		DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B525257EEABA00808CC8 /* HomeView.swift */; };
+		DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */; };
+		DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B52B257EF64500808CC8 /* ShoppingListView.swift */; };
+		DB49B52E257EF7E600808CC8 /* ShoppingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B52D257EF7E600808CC8 /* ShoppingItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +92,10 @@
 		DB49B51E257ABF5800808CC8 /* Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Border.swift; sourceTree = "<group>"; };
 		DB49B521257AF94D00808CC8 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		DB49B523257AFE2000808CC8 /* AddImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageView.swift; sourceTree = "<group>"; };
+		DB49B525257EEABA00808CC8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarConfigurator.swift; sourceTree = "<group>"; };
+		DB49B52B257EF64500808CC8 /* ShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListView.swift; sourceTree = "<group>"; };
+		DB49B52D257EF7E600808CC8 /* ShoppingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +185,8 @@
 				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B523257AFE2000808CC8 /* AddImageView.swift */,
+				DB49B525257EEABA00808CC8 /* HomeView.swift */,
+				DB49B52B257EF64500808CC8 /* ShoppingListView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -206,6 +216,7 @@
 				DB49B4EC2568B15B00808CC8 /* Direction.swift */,
 				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
 				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
+				DB49B52D257EF7E600808CC8 /* ShoppingItem.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -217,6 +228,7 @@
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4FE256F488200808CC8 /* Deletable.swift */,
 				DB49B51E257ABF5800808CC8 /* Border.swift */,
+				DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */,
 			);
 			name = ViewModifiers;
 			sourceTree = "<group>";
@@ -340,15 +352,18 @@
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
+				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
 				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
+				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DB49B524257AFE2000808CC8 /* AddImageView.swift in Sources */,
+				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
 				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
@@ -366,6 +381,7 @@
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
+				DB49B52E257EF7E600808CC8 /* ShoppingItem.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB49B4D42565E49F00808CC8 /* Recipe.swift in Sources */,
 			);

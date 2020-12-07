@@ -10,7 +10,7 @@ import SwiftUI
 // TODO: drag and drop recipes from one category to another
 
 struct RecipeCollectionView: View {
-    @ObservedObject var collection: RecipeCollectionVM
+    @EnvironmentObject var collection: RecipeCollectionVM
     
     @State private var isEditing = false
     
@@ -98,6 +98,7 @@ struct RecipeCollectionView: View {
 
 struct RecipeCollectionView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
+        RecipeCollectionView()
+            .environmentObject(RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
     }
 }

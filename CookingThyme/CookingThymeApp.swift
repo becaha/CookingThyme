@@ -52,7 +52,9 @@ struct CookingThymeApp: App {
 //                }
 //            }
             
-            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
+//            RecipeCollectionView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
+            
+            HomeView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
             
 //            AddImageView()
         }
