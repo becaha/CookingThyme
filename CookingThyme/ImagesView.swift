@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct ImageView: View {
+struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true
     
@@ -21,6 +21,8 @@ struct ImageView: View {
 
     @State private var selectedImage: UIImage?
     
+    
+    //TODO
     private var isLoading: Bool {
         return recipe.imageHandler.imageURL != nil && recipe.imageHandler.image == nil
     }
@@ -39,31 +41,12 @@ struct ImageView: View {
                 }
             }
             else {
-                ZStack {
-                    if isEditing && recipe.imageHandler.image != nil {
-                        ZStack {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 40, height: 40)
-                                .opacity(0.8)
-                            
-                            Circle()
-                                .stroke(Color.black)
-                                .frame(width: 40, height: 40)
-                            
-                            EditPhotoButton()
-                        }
-                        .zIndex(1)
-                    }
+                HStack {
 
                     GeometryReader { geometry in
                         HStack {
-                            if recipe.imageHandler.image != nil {
-                                OptionalImage(uiImage: recipe.imageHandler.image)
-                                    .scaleEffect(recipe.imageHandler.zoomScale)
-                                    .onAppear {
-                                        recipe.imageHandler.zoomToFit(recipe.imageHandler.image, in: CGSize(width: geometry.size.width/2, height: geometry.size.height))
-                                    }
+                            if recipe.imageHandler.images.count > 0 {
+                                ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                             }
                             else if isEditing {
                                 VStack {
@@ -78,10 +61,23 @@ struct ImageView: View {
                                 .border(Color.black, width: 3.0, isDashed: true)
                             }
                         }
-                        .frame(width: geometry.size.width/2, height: geometry.size.height, alignment: .center)
-                        .clipped()
-                        .border(Color.black, width: recipe.imageHandler.image != nil ? 3 : 0)
-                        .position(x: geometry.size.width/2, y: geometry.size.height/2)
+                    }
+                    
+                    if isEditing && recipe.imageHandler.images.count > 0 {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 40, height: 40)
+                                .opacity(0.8)
+                            
+                            Circle()
+                                .stroke(Color.black)
+                                .frame(width: 40, height: 40)
+                            
+                            //TODO change to add button
+                            EditPhotoButton()
+                        }
+//                        .zIndex(1)
                     }
                 }
                 .padding()
@@ -93,8 +89,8 @@ struct ImageView: View {
         }
         .alert(isPresented: $presentPasteAlert) {
             if confirmPaste {
-                return Alert(title: Text("Paste Image"),
-                      message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
+                return Alert(title: Text("Add Image"),
+                      message: Text(""),
                       primaryButton: .default(Text("Ok")) {
                         recipe.addTempImage(url: UIPasteboard.general.url)
                       },
@@ -116,7 +112,7 @@ struct ImageView: View {
         Button(action: {
             editPhotoSheetPresented = true
         }) {
-            Image(systemName: "camera.circle").imageScale(.large)
+            Image(systemName: "camera").imageScale(.large)
         }
         .actionSheet(isPresented: $editPhotoSheetPresented, content: {
             ActionSheet(title: Text(""), message: nil, buttons:
@@ -168,7 +164,7 @@ struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
         Form {
             Section(header: Text("Photos")) {
-                ImageView(isEditing: true)
+                ImagesView(isEditing: true)
                     .environmentObject(RecipeVM(
                         recipe: Recipe(
                             name: "Water",

@@ -40,17 +40,14 @@ class RecipeVM: ObservableObject {
                     self.tempDirections = recipe.directions
                     self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
                     self.tempImages = recipe.images
-                    popullateImage()
+                    popullateImages()
                 }
             }
         }
     }
     
-    func popullateImage() {
-        if tempImages.count > 0 {
-            let image = tempImages[0]
-            imageHandler.setImage(image)
-        }
+    func popullateImages() {
+        imageHandler.setImages(tempImages)
     }
     
     func refreshRecipe() {
@@ -114,30 +111,21 @@ class RecipeVM: ObservableObject {
     
     func addTempImage(url: URL?) {
         if let url = url {
-            if tempImages.count > 0 {
-                tempImages[0] = RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id)
-            }
-            else {
-                tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
-            }
+            tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
             imageHandler.addImage(url: url)
         }
     }
     
     func addTempImage(uiImage: UIImage) {
         if let imageData = imageHandler.encodeImage(uiImage) {
-            if tempImages.count > 0 {
-                tempImages[0] = RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id)
-            }
-            else {
-                tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
-            }
+            tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
             imageHandler.addImage(uiImage: uiImage)
         }
     }
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
+        imageHandler.removeImage(at: index)
     }
 
     
@@ -162,8 +150,6 @@ class RecipeVM: ObservableObject {
             self.recipe = recipe
             refreshRecipe()
         }
-        // duplicated 
-//        category.popullateRecipes()
     }
     
     func copyRecipe(toCategoryId categoryId: Int) {

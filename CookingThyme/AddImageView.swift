@@ -8,28 +8,47 @@
 import SwiftUI
 
 struct AddImageView: View {
-    @State private var showingImagePicker = false
-    @State private var inputImage: UIImage?
-    @State private var image: Image?
 
     var body: some View {
         VStack {
-            image
-            
-            Button(action: {
-                self.showingImagePicker = true
-            }) {
-                Image(systemName: "plus")
+            GeometryReader { geometry in
+                ScrollView(.horizontal) {
+                    
+                    HStack {
+                        Text("A")
+                            .frame(width: 100)
+                            .border(Color.black)
+
+                        
+                        Text("A")
+                            .frame(width: 100)
+                            .border(Color.black)
+
+
+
+                        Text("A")
+                            .frame(width: 100)
+                            .border(Color.black)
+
+                        Text("A")
+                            .frame(width: 100)
+                            .border(Color.black)
+
+                        Text("A")
+                            .frame(width: 100)
+                            .border(Color.black)
+
+
+                    }
+                    .padding(.horizontal)
+                    .frame(minWidth: geometry.size.width)
+
+
+                }
+                .border(Color.black)
             }
         }
-        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-            ImagePicker(image: self.$inputImage)
-        }
-    }
-
-    func loadImage() {
-        guard let inputImage = inputImage else { return }
-        image = Image(uiImage: inputImage)
+        .frame(width: 300, height: 100)
     }
 }
 

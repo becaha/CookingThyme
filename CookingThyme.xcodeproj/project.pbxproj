@@ -37,9 +37,9 @@
 		DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5032576A70C00808CC8 /* EditableDirection.swift */; };
 		DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5072576DC7700808CC8 /* EditableIngredient.swift */; };
 		DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51225794B7400808CC8 /* ErrorMessage.swift */; };
-		DB49B5172579EA1500808CC8 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5162579EA1500808CC8 /* ImageView.swift */; };
+		DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5162579EA1500808CC8 /* ImagesView.swift */; };
 		DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5182579F1B300808CC8 /* ImageHandler.swift */; };
-		DB49B51B2579F80300808CC8 /* OptionalImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51A2579F80300808CC8 /* OptionalImage.swift */; };
+		DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */; };
 		DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51C257AA4C000808CC8 /* RecipeImage.swift */; };
 		DB49B51F257ABF5800808CC8 /* Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B51E257ABF5800808CC8 /* Border.swift */; };
 		DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B521257AF94D00808CC8 /* ImagePicker.swift */; };
@@ -81,9 +81,9 @@
 		DB49B5032576A70C00808CC8 /* EditableDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDirection.swift; sourceTree = "<group>"; };
 		DB49B5072576DC7700808CC8 /* EditableIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableIngredient.swift; sourceTree = "<group>"; };
 		DB49B51225794B7400808CC8 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
-		DB49B5162579EA1500808CC8 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		DB49B5162579EA1500808CC8 /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		DB49B5182579F1B300808CC8 /* ImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHandler.swift; sourceTree = "<group>"; };
-		DB49B51A2579F80300808CC8 /* OptionalImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalImage.swift; sourceTree = "<group>"; };
+		DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableImagesView.swift; sourceTree = "<group>"; };
 		DB49B51C257AA4C000808CC8 /* RecipeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeImage.swift; sourceTree = "<group>"; };
 		DB49B51E257ABF5800808CC8 /* Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Border.swift; sourceTree = "<group>"; };
 		DB49B521257AF94D00808CC8 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -173,8 +173,8 @@
 				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
 				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
-				DB49B5162579EA1500808CC8 /* ImageView.swift */,
-				DB49B51A2579F80300808CC8 /* OptionalImage.swift */,
+				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
+				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B523257AFE2000808CC8 /* AddImageView.swift */,
 			);
@@ -357,13 +357,13 @@
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
 				DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */,
 				DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */,
-				DB49B5172579EA1500808CC8 /* ImageView.swift in Sources */,
+				DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
-				DB49B51B2579F80300808CC8 /* OptionalImage.swift in Sources */,
+				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,

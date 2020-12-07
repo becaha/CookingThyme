@@ -197,7 +197,7 @@ struct EditRecipeView: View {
                     .foregroundColor(.black)
                 }
                 Section(header: Text("Photos")) {
-                    ImageView()
+                    ImagesView()
                         .frame(minHeight: 200)
                 }
 
