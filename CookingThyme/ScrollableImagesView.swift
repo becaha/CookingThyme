@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO make images scrollable by left/right arrows
 struct ScrollableImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     

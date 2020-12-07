@@ -77,7 +77,6 @@ struct ImagesView: View {
                             //TODO change to add button
                             EditPhotoButton()
                         }
-//                        .zIndex(1)
                     }
                 }
                 .padding()
@@ -112,7 +111,7 @@ struct ImagesView: View {
         Button(action: {
             editPhotoSheetPresented = true
         }) {
-            Image(systemName: "camera").imageScale(.large)
+            Image(systemName: "plus") // or camera
         }
         .actionSheet(isPresented: $editPhotoSheetPresented, content: {
             ActionSheet(title: Text(""), message: nil, buttons:
@@ -131,32 +130,6 @@ struct ImagesView: View {
                     .cancel()
                 ])
         })
-    }
-    
-    @ViewBuilder
-    func PasteButton() -> some View {
-        Button(action: {
-            if UIPasteboard.general.url != nil {
-                confirmPaste = true
-            } else {
-                explainPaste = true
-            }
-        }) {
-            Image(systemName: "doc.on.clipboard").imageScale(.large)
-        }
-        .alert(isPresented: $explainPaste) {
-            Alert(title: Text("Paste Image"),
-                  message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                  dismissButton: .default(Text("Ok")))
-        }
-        .alert(isPresented: $confirmPaste) {
-            Alert(title: Text("Paste Image"),
-                  message: Text(recipe.imageHandler.image != nil ? "Are you sure you want to replace your image?" : ""),
-                  primaryButton: .default(Text("Ok")) {
-                    recipe.addTempImage(url: UIPasteboard.general.url)
-                  },
-                  secondaryButton: .cancel())
-        }
     }
 }
 
