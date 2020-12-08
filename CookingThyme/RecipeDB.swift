@@ -195,7 +195,7 @@ class RecipeDB {
                 sql:
                 """
                 INSERT INTO \(ShoppingItem.Table.databaseTableName) (\(ShoppingItem.Table.name), \(ShoppingItem.Table.amount), \(ShoppingItem.Table.unitName), \(ShoppingItem.Table.completed), \(ShoppingItem.Table.collectionId)) \
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 arguments: [item.name, item.amount, item.unitName.getName(), item.completed.toInt(), collectionId])
             return

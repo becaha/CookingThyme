@@ -10,16 +10,14 @@ import SwiftUI
 // TODO: save when view changes from shopping list
 struct ShoppingListView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
-    
-    static var addItemHint = "Add item"
 
-    @State var newName = addItemHint
+    @State var newName = ""
     
     var body: some View {
         List {
             Section {
                 HStack {
-                    TextField("\(newName)", text: $newName,
+                    TextField("Add item", text: $newName,
                               onCommit: {
                                 addItem()
                                 saveItems()
@@ -63,7 +61,7 @@ struct ShoppingListView: View {
     
     func addItem() {
         collection.addTempShoppingItem(name: newName)
-        newName = ShoppingListView.addItemHint
+        newName = ""
     }
     
     func saveItems() {

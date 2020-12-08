@@ -19,6 +19,7 @@ class RecipeCollectionVM: ObservableObject {
     init(collection: RecipeCollection) {
         self.collection = collection
         self.categories = [RecipeCategory]()
+        self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
         popullateCategories()
     }
     
