@@ -70,3 +70,10 @@ func mainColor() -> Color {
 func mainUIColor() -> UIColor {
     return UIColor.systemGreen
 }
+
+func formBackgroundColor() -> Color {
+    if let uiColor = UIColor(named: "FormBackground") {
+        return Color(uiColor)
+    }
+    return Color(UIColor.systemFill)
+}

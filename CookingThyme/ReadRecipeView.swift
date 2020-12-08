@@ -63,20 +63,7 @@ struct ReadRecipeView: View {
                         }
                     },
                         footer:
-                            VStack(alignment: .center) {
-                                Button(action: {
-                                    collection.addToShoppingList(fromRecipe: recipe.recipe)
-                                }) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .fill(Color(UIColor.tertiarySystemFill))
-                                        
-                                        Text("Add Ingredients to Shopping List")
-//                                            .foregroundColor(.black)
-                                            .padding(.vertical)
-                                    }
-                                }
-                            }
+                            AddIngredientsButton()
                 ) {
                     List {
                         ForEach(recipe.ingredients) { ingredient in
@@ -154,6 +141,27 @@ struct ReadRecipeView: View {
                     }
                 }
         )
+    }
+    
+    @ViewBuilder
+    func AddIngredientsButton() -> some View {
+        VStack(alignment: .center) {
+            Button(action: {
+                collection.addToShoppingList(fromRecipe: recipe.recipe)
+            }) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color(UIColor.tertiarySystemFill))
+                    
+                    HStack {
+                        Image(systemName: "cart.fill")
+                        
+                        Text("Add All to Shopping List")
+                            .padding(.vertical)
+                    }
+                }
+            }
+        }
     }
     
     @ViewBuilder func getImageView() -> some View {

@@ -22,7 +22,7 @@ struct HomeView: View {
                 ShoppingListView()
                     .tabItem {
                         Image(systemName: "cart.fill")
-                        Text("Groceries")
+                        Text("Shopping List")
                     }
                 
                 Text("The Last Tab")

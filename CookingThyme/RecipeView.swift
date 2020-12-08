@@ -23,6 +23,7 @@ struct RecipeView: View {
                 EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }
         }
+        .background(formBackgroundColor())
         .environmentObject(recipe)
     }
 }

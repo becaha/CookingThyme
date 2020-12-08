@@ -9,35 +9,36 @@ import SwiftUI
 
 struct TestView: View {
     var body: some View {
-        Form {
-            List {
-                Section(footer:
-                    VStack(alignment: .center) {
-                        Button(action: {
-                          
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color(UIColor.tertiarySystemFill))
-                                
-                                Text("Add Ingredients to Shopping List")
-    //                                            .foregroundColor(.black)
-                                    .padding(.vertical)
+        VStack {
+            Text("Title")
+        
+            Form {
+                
+                List {
+                    Section(footer:
+                        VStack(alignment: .center) {
+                            Button(action: {
+                              
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .fill(Color(UIColor.tertiarySystemFill))
+                                    
+                                    Text("Add Ingredients to Shopping List")
+        //                                            .foregroundColor(.black)
+                                        .padding(.vertical)
+                                }
                             }
                         }
+                    ) {
+                        Text("A")
+                        Text("A")
+                        Text("A")
                     }
-                ) {
-                    Text("A")
-                    Text("A")
-                    Text("A")
                 }
             }
-            .contextMenu {
-                    Button("Add to Shopping List", action: {
-                            
-                    })
-            }
         }
+        .background(Color(UIColor.quaternarySystemFill))
     }
 }
 

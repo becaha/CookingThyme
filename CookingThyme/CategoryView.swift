@@ -22,7 +22,7 @@ struct CategoryView: View {
             })
             .multilineTextAlignment(.center)
             .font(.system(size: 34, weight: .bold))
-            .padding()
+            .padding(.top)
             
             List {
                 if isEditing {
@@ -64,6 +64,7 @@ struct CategoryView: View {
                 }
             }
         }
+        .background(formBackgroundColor())
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
