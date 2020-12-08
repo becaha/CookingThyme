@@ -25,7 +25,7 @@ struct HomeView: View {
                         Text("Shopping List")
                     }
                 
-                Text("The Last Tab")
+                TimerView()
                     .tabItem {
                         Image(systemName: "timer")
                         Text("Timer")
