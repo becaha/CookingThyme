@@ -11,7 +11,7 @@ struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
-    @EnvironmentObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipe: RecipeVM
     
     @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
@@ -25,10 +25,12 @@ struct ReadRecipeView: View {
     
     @State private var isCreatingRecipe = false
     
+    @State private var confirmAddIngredient: Int?
+    
     var body: some View {
         VStack {
             HStack {
-                Text("\(recipeVM.name)")
+                Text("\(recipe.name)")
                     .font(.system(size: 30, weight: .bold))
                     .multilineTextAlignment(.center)
             }
@@ -45,9 +47,9 @@ struct ReadRecipeView: View {
                         
                         VStack {
                             // should be changing servings but not in db
-                            Picker(selection: $recipeVM.servings, label:
+                            Picker(selection: $recipe.servings, label:
                                     HStack {
-                                        Text("Serving Size: \(recipeVM.servings)")
+                                        Text("Serving Size: \(recipe.servings)")
                                 
                                         Image(systemName: "chevron.down")
                                     }
@@ -59,11 +61,43 @@ struct ReadRecipeView: View {
                             }
                             .pickerStyle(MenuPickerStyle())
                         }
-                    }
+                    },
+                        footer:
+                            VStack(alignment: .center) {
+                                Button(action: {
+                                    collection.addToShoppingList(fromRecipe: recipe.recipe)
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .fill(Color(UIColor.tertiarySystemFill))
+                                        
+                                        Text("Add Ingredients to Shopping List")
+//                                            .foregroundColor(.black)
+                                            .padding(.vertical)
+                                    }
+                                }
+                            }
                 ) {
                     List {
-                        ForEach(recipeVM.ingredients) { ingredient in
-                            IngredientText(ingredient)
+                        ForEach(recipe.ingredients) { ingredient in
+                            HStack {
+                                UIControls.AddButton(action: {
+                                    confirmAddIngredient = ingredient.id
+                                })
+                                
+                                IngredientText(ingredient)
+                            }
+                            if confirmAddIngredient == ingredient.id {
+                                HStack {
+                                    Image(systemName: "cart.fill")
+                                    
+                                    Button("Add to Shopping List", action: {
+                                            collection.addToShoppingList(ingredient)
+                                            confirmAddIngredient = nil
+                                    })
+                                }
+                                .foregroundColor(Color(UIColor.systemGray))
+                            }
                         }
                     }
                 }
@@ -71,7 +105,7 @@ struct ReadRecipeView: View {
                 Section(header: Text("Directions")) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<recipeVM.directions.count) { index in
+                        ForEach(0..<recipe.directions.count) { index in
                             Direction(withIndex: index)
                         }
                     }
@@ -82,7 +116,7 @@ struct ReadRecipeView: View {
             List{
                 ForEach(collection.categories, id: \.self) { category in
                     Button(action: {
-                        recipeVM.copyRecipe(toCategoryId: category.id)
+                        recipe.copyRecipe(toCategoryId: category.id)
                         categoriesPresented = false
                     }) {
                         Text("\(category.name)")
@@ -123,7 +157,7 @@ struct ReadRecipeView: View {
     }
     
     @ViewBuilder func getImageView() -> some View {
-        if recipeVM.imageHandler.image != nil {
+        if recipe.imageHandler.image != nil {
             Section(header: Text("Photos")) {
                 ImagesView(isEditing: false)
             }
@@ -136,7 +170,7 @@ struct ReadRecipeView: View {
                 Text("\(index + 1)")
                     .frame(width: 20, height: 20, alignment: .center)
 
-                TextField("\(recipeVM.directions[index].direction)", text: $newDirection)
+                TextField("\(recipe.directions[index].direction)", text: $newDirection)
             }
             .padding(.vertical)
         }
@@ -155,7 +189,7 @@ struct ReadRecipeView: View {
                     Text("\(index + 1)")
                         .frame(width: 20, height: 20, alignment: .center)
 
-                    Text("\(recipeVM.directions[index].direction)")
+                    Text("\(recipe.directions[index].direction)")
                 }
                 .padding(.vertical)
             }

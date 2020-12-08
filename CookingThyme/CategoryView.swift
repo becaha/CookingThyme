@@ -50,7 +50,7 @@ struct CategoryView: View {
                         }
                         else {
                             NavigationLink("\(recipe.name)", destination:
-                                        RecipeView(recipeVM: RecipeVM(recipe: recipe, category: category))
+                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: category))
                                             .environmentObject(category)
                                             .environmentObject(collection)
                             )

@@ -10,7 +10,7 @@ import GRDB
 
 //TODO: have auto capitalization an option
 struct EditableDirection: View {
-    @EnvironmentObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipe: RecipeVM
     var index: Int
     var autocapitalization: UITextAutocapitalizationType
 
@@ -27,15 +27,15 @@ struct EditableDirection: View {
     }
     
     func getDirection() -> String {
-        if index < recipeVM.tempDirections.count {
-            return recipeVM.tempDirections[index].direction
+        if index < recipe.tempDirections.count {
+            return recipe.tempDirections[index].direction
         }
         return ""
     }
     
     func getBinding() -> Binding<String> {
-        if index < recipeVM.tempDirections.count {
-            return $recipeVM.tempDirections[index].direction
+        if index < recipe.tempDirections.count {
+            return $recipe.tempDirections[index].direction
         }
         return $dummyBinding
     }

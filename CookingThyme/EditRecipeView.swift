@@ -11,7 +11,7 @@ import SwiftUI
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
-    @EnvironmentObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipe: RecipeVM
     var isCreatingRecipe: Bool = false
             
     private var fieldMissing: Bool {
@@ -97,9 +97,7 @@ struct EditRecipeView: View {
                         }
                     },
                     footer:
-                        VStack(alignment: .leading) {
-//                            UIControls.AddButton(action: addIngredient)
-                            
+                        VStack(alignment: .leading) {                            
                             ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
                             
                             ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
@@ -107,18 +105,18 @@ struct EditRecipeView: View {
                         
                 ) {
                     List {
-                        ForEach(0..<recipeVM.tempIngredients.count, id: \.self) { index in
+                        ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
                             HStack {
                                 EditableIngredient(index: index)
-                                    .environmentObject(recipeVM)
+                                    .environmentObject(recipe)
                             }
                             .deletable(isDeleting: true, onDelete: {
-                                recipeVM.removeTempIngredient(at: index)
+                                recipe.removeTempIngredient(at: index)
                             })
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
-                                recipeVM.removeTempIngredient(at: index)
+                                recipe.removeTempIngredient(at: index)
                             }
                         }
                         VStack(alignment: .leading) {
@@ -159,26 +157,26 @@ struct EditRecipeView: View {
                 ) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<recipeVM.tempDirections.count, id: \.self) { index in
+                        ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
                             HStack(alignment: .top, spacing: 20) {
                                 Text("\(index + 1)")
                                     .frame(width: 20, height: 20, alignment: .center)
                                 
                                 EditableDirection(index: index)
-                                    .environmentObject(recipeVM)
+                                    .environmentObject(recipe)
                             }
-                            .deletable(isDeleting: true, onDelete: {                                                   recipeVM.removeTempDirection(at: index)
+                            .deletable(isDeleting: true, onDelete: {                                                   recipe.removeTempDirection(at: index)
                             })
                             .padding(.vertical)
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
-                                recipeVM.removeTempDirection(at: index)
+                                recipe.removeTempDirection(at: index)
                             }
                         }
                         VStack(alignment: .leading) {
                             HStack(alignment: .top, spacing: 20) {
-                                Text("\(recipeVM.tempDirections.count + 1)")
+                                Text("\(recipe.tempDirections.count + 1)")
                                     .frame(width: 20, height: 20, alignment: .center)
 
                                 TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
@@ -229,29 +227,29 @@ struct EditRecipeView: View {
     private func dummyFunc() {}
     
     private func setRecipe() {
-        name = recipeVM.name
-        servings = recipeVM.servings.toString()
+        name = recipe.name
+        servings = recipe.servings.toString()
     }
     
     private func saveRecipe() {
         if name == "" {
             nameFieldMissing = true
         }
-        if recipeVM.tempIngredients.count == 0 {
+        if recipe.tempIngredients.count == 0 {
             ingredientsFieldMissing = true
         }
-        if recipeVM.tempDirections.count == 0 {
+        if recipe.tempDirections.count == 0 {
             directionsFieldMissing = true
         }
         if servings.toInt() < 1 {
             servingsFieldMissing = true
         }
         if !fieldMissing {
-            if recipeVM.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, images: recipeVM.tempImages, servings: servings)
+            if recipe.isCreatingRecipe() {
+                category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
             }
             else {
-                recipeVM.updateRecipe(withId: recipeVM.id, name: name, tempIngredients: recipeVM.tempIngredients, directions: recipeVM.tempDirections, images: recipeVM.tempImages, servings: servings)
+                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
@@ -262,13 +260,13 @@ struct EditRecipeView: View {
     private func addDirection() {
         if direction != "" {
             newDirectionFieldMissing = false
-            recipeVM.addTempDirection(direction)
+            recipe.addTempDirection(direction)
             direction = ""
         }
         else {
             newDirectionFieldMissing = true
         }
-        if recipeVM.tempDirections.count > 0 {
+        if recipe.tempDirections.count > 0 {
             directionsFieldMissing = false
         }
     }
@@ -276,7 +274,7 @@ struct EditRecipeView: View {
     private func addIngredient() {
         if ingredientName != "" && ingredientAmount != "" && ingredientUnit != "" {
             newIngredientFieldMissing = false
-            recipeVM.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
+            recipe.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
             ingredientName = ""
             ingredientAmount = ""
             ingredientUnit = ""
@@ -284,7 +282,7 @@ struct EditRecipeView: View {
         else {
             newIngredientFieldMissing = true
         }
-        if recipeVM.tempIngredients.count > 0 {
+        if recipe.tempIngredients.count > 0 {
             ingredientsFieldMissing = false
         }
     }

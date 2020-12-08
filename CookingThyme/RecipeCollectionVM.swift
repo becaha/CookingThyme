@@ -86,6 +86,17 @@ class RecipeCollectionVM: ObservableObject {
     
     // Shopping List
     
+    func addIngredientShoppingItems(ingredients: [Ingredient]) {
+        for ingredient in ingredients {
+            addIngredientShoppingItem(ingredient)
+        }
+    }
+    
+    func addIngredientShoppingItem(_ ingredient: Ingredient) {
+        let item: ShoppingItem = ShoppingItem(name: ingredient.name, amount: ingredient.amount, unitName: ingredient.unitName, collectionId: collection.id, completed: false)
+        tempShoppingList.append(item)
+    }
+    
     func addTempShoppingItem(name: String, completed: Bool = false) {
         let item: ShoppingItem = ShoppingItem(name: name, amount: nil, unitName: UnitOfMeasurement.none, collectionId: collection.id, completed: completed)
         tempShoppingList.append(item)
@@ -104,6 +115,16 @@ class RecipeCollectionVM: ObservableObject {
     func saveShoppingList() {
         RecipeDB.shared.deleteShoppingItems(withCollectionId: collection.id)
         RecipeDB.shared.createShoppingItems(items: tempShoppingList, withCollectionId: collection.id)
+    }
+    
+    func addToShoppingList(fromRecipe recipe: Recipe) {
+        addIngredientShoppingItems(ingredients: recipe.ingredients)
+        saveShoppingList()
+    }
+    
+    func addToShoppingList(_ ingredient: Ingredient) {
+        addIngredientShoppingItem(ingredient)
+        saveShoppingList()
     }
 }
 

@@ -10,7 +10,7 @@ import SwiftUI
 struct RecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
-    @ObservedObject var recipeVM: RecipeVM
+    @ObservedObject var recipe: RecipeVM
             
     @State private var isEditingRecipe = false
     
@@ -23,7 +23,7 @@ struct RecipeView: View {
                 EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }
         }
-        .environmentObject(recipeVM)
+        .environmentObject(recipe)
     }
 }
 
@@ -31,7 +31,7 @@ struct RecipeView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
         RecipeView(
-            recipeVM: RecipeVM(
+            recipe: RecipeVM(
                 recipe: Recipe(
                     name: "Water",
                     ingredients: [

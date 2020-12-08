@@ -33,7 +33,6 @@ struct UIControls {
             Button(action: action) {
                 Image(systemName: "plus")
                     .frame(width: 20, height: 20, alignment: .center)
-                    .foregroundColor(.black)
             }
             .buttonStyle(PlainButtonStyle())
         }
@@ -41,7 +40,6 @@ struct UIControls {
             Button(action: action) {
                 Image(systemName: "plus")
                     .frame(width: 20, height: 20, alignment: .center)
-                    .foregroundColor(.black)
             }
         }
     }

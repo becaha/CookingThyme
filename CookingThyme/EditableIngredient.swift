@@ -9,7 +9,7 @@ import SwiftUI
 
 //TODO: have auto capitalization an option
 struct EditableIngredient: View {
-    @EnvironmentObject var recipeVM: RecipeVM
+    @EnvironmentObject var recipe: RecipeVM
     var index: Int
     var autocapitalization: UITextAutocapitalizationType
 
@@ -35,43 +35,43 @@ struct EditableIngredient: View {
     }
     
     func getAmount() -> String {
-        if index < recipeVM.tempIngredients.count {
-            return recipeVM.tempIngredients[index].amount
+        if index < recipe.tempIngredients.count {
+            return recipe.tempIngredients[index].amount
         }
         return ""
     }
     
     func getAmountBinding() -> Binding<String> {
-        if index < recipeVM.tempIngredients.count {
-            return $recipeVM.tempIngredients[index].amount
+        if index < recipe.tempIngredients.count {
+            return $recipe.tempIngredients[index].amount
         }
         return $dummyBinding
     }
     
     func getUnit() -> String {
-        if index < recipeVM.tempIngredients.count {
-            return recipeVM.tempIngredients[index].unitName
+        if index < recipe.tempIngredients.count {
+            return recipe.tempIngredients[index].unitName
         }
         return ""
     }
 
     func getUnitBinding() -> Binding<String> {
-        if index < recipeVM.tempIngredients.count {
-            return $recipeVM.tempIngredients[index].unitName
+        if index < recipe.tempIngredients.count {
+            return $recipe.tempIngredients[index].unitName
         }
         return $dummyBinding
     }
 
     func getName() -> String {
-        if index < recipeVM.tempIngredients.count {
-            return recipeVM.tempIngredients[index].name
+        if index < recipe.tempIngredients.count {
+            return recipe.tempIngredients[index].name
         }
         return ""
     }
 
     func getNameBinding() -> Binding<String> {
-        if index < recipeVM.tempIngredients.count {
-            return $recipeVM.tempIngredients[index].name
+        if index < recipe.tempIngredients.count {
+            return $recipe.tempIngredients[index].name
         }
         return $dummyBinding
     }
