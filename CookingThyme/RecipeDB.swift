@@ -46,8 +46,8 @@ class RecipeDB {
                         try fileManager.copyItem(atPath: path, toPath: dbPath)
                     }
                     // RESET DB
-//                    try fileManager.removeItem(atPath: dbPath)
-//                    try fileManager.copyItem(atPath: path, toPath: dbPath)
+                    try fileManager.removeItem(atPath: dbPath)
+                    try fileManager.copyItem(atPath: path, toPath: dbPath)
                 } catch {
                     print("Error copying database")
                 }
@@ -189,6 +189,32 @@ class RecipeDB {
         }
     }
     
+    func createShoppingItem(_ item: ShoppingItem, withCollectionId collectionId: Int) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                INSERT INTO \(ShoppingItem.Table.databaseTableName) (\(ShoppingItem.Table.name), \(ShoppingItem.Table.amount), \(ShoppingItem.Table.unitName), \(ShoppingItem.Table.completed), \(ShoppingItem.Table.collectionId)) \
+                VALUES (?, ?, ?, ?)
+                """,
+                arguments: [item.name, item.amount, item.unitName.getName(), item.completed.toInt(), collectionId])
+            return
+        }
+    }
+    
+    func createShoppingItems(items: [ShoppingItem], withCollectionId collectionId: Int) {
+        do {
+            for item in items {
+                try createShoppingItem(item, withCollectionId: collectionId)
+            }
+
+            return
+        } catch {
+            print("Error creating shopping items")
+            return
+        }
+    }
+    
     //MARK: - Read
     
     func getFullRecipe(byId id: Int) -> Recipe? {
@@ -306,29 +332,6 @@ class RecipeDB {
         }
     }
     
-//    func getAllRecipes(byCollectionId collectionId: Int) -> [Recipe] {
-//        var allRecipes = [Recipe]()
-//        do {
-//            let allRecipes = try dbQueue.read { db -> [Recipe] in
-//                let rows = try Row.fetchCursor(db,
-//                                               sql: """
-//                                                    SELECT \(Recipe.Table.id), \(Recipe.Table.name), \(Recipe.Table.servings) FROM \(Recipe.Table.databaseTableName) \
-//                                                    INNER JOIN \(RecipeCategory.Table.databaseTableName) \
-//                                                    ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.id) = \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId)
-//                                                    WHERE \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeCollectionId) = ?
-//                                                    """,
-//                                               arguments: [collectionId])
-//                while let row = try rows.next() {
-//                    allRecipes.append(Recipe(row: row))
-//                }
-//                return allRecipes
-//            }
-//            return allRecipes
-//        } catch {
-//            return []
-//        }
-//    }
-    
     func getCategory(withId id: Int) -> RecipeCategory? {
         do {
             let category = try dbQueue.read { db -> RecipeCategory? in
@@ -385,6 +388,27 @@ class RecipeDB {
                 return categories
             }
             return categories
+        } catch {
+            return []
+        }
+    }
+    
+    func getShoppingItems(byCollectionId collectionId: Int) -> [ShoppingItem] {
+        var items = [ShoppingItem]()
+        do {
+            let items = try dbQueue.read { db -> [ShoppingItem] in
+                let rows = try Row.fetchCursor(db,
+                                               sql: """
+                                                    select * from \(ShoppingItem.Table.databaseTableName) \
+                                                    where \(ShoppingItem.Table.collectionId) = ?
+                                                    """,
+                                               arguments: [collectionId])
+                while let row = try rows.next() {
+                    items.append(ShoppingItem(row: row))
+                }
+                return items
+            }
+            return items
         } catch {
             return []
         }
@@ -695,6 +719,48 @@ class RecipeDB {
             return
         } catch {
             print("Error deleting recipes in category")
+            return
+        }
+    }
+    
+    func deleteShoppingItem(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(ShoppingItem.Table.databaseTableName) \
+                    WHERE \(ShoppingItem.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting shopping item")
+            return
+        }
+    }
+    
+    func deleteShoppingItems(withCollectionId collectionId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(ShoppingItem.Table.databaseTableName) \
+                    WHERE \(ShoppingItem.Table.collectionId) = ?
+                    """,
+                    arguments: [collectionId])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting shopping items in collection")
             return
         }
     }

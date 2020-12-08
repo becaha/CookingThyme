@@ -7,36 +7,74 @@
 
 import SwiftUI
 
+// TODO: save when view changes from shopping list
 struct ShoppingListView: View {
-    @State var shoppingList: [Ingredient]
+    @EnvironmentObject var collection: RecipeCollectionVM
+    
+    static var addItemHint = "Add item"
+
+    @State var newName = addItemHint
     
     var body: some View {
         List {
-            ForEach(shoppingList) { item in
+            Section {
+                HStack {
+                    TextField("\(newName)", text: $newName,
+                              onCommit: {
+                                addItem()
+                                saveItems()
+                              })
+                          
+                    UIControls.AddButton(action: addItem)
+                }
+            }
+            
+            ForEach(collection.tempShoppingList) { item in
                 HStack {
                     Button(action: {
-                        
+                        collection.toggleCompleted(item)
+                        saveItems()
                     }) {
-                        Circle()
-                            .frame(width: 40, height: 40)
+                        ZStack {
+                            Circle()
+                                .fill(mainColor())
+                                .frame(width: 30, height: 30)
+                                .opacity(item.completed ? 1: 0)
+                            
+                            Circle()
+                                .stroke(mainColor(), lineWidth: 3)
+                                .frame(width: 30, height: 30)
+                        }
                     }
                     
-                    Text("\(item.getFractionAmount()) \(item.unitName.getName()) \(item.name)")
+                    Text("\(item.toString())")
                 }
+            }
+            .onDelete { indexSet in
+                indexSet.forEach { index in
+                    collection.removeTempShoppingItem(at: index)
+                }
+                saveItems()
             }
         }
         .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("Shopping List", displayMode: .inline)
+    }
+    
+    func addItem() {
+        collection.addTempShoppingItem(name: newName)
+        newName = ShoppingListView.addItemHint
+    }
+    
+    func saveItems() {
+        collection.saveShoppingList()
     }
 }
 
 struct ShoppingListView_Previews: PreviewProvider {
     static var previews: some View {
-        ShoppingListView(shoppingList: [
-                      Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.cup),
-                      Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.cup),
-                      Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.cup),
-                      Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.cup),
-                      Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
-                  ])
+        ShoppingListView()
+        .environmentObject(RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
     }
 }
+

@@ -60,3 +60,13 @@ struct CookingThymeApp: App {
         }
     }
 }
+
+// MARK: - ASSETS
+
+func mainColor() -> Color {
+    return Color(UIColor.systemGreen)
+}
+
+func mainUIColor() -> UIColor {
+    return UIColor.systemGreen
+}

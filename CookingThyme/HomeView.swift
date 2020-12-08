@@ -10,12 +10,6 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var collection: RecipeCollectionVM
     
-    init(collection: RecipeCollectionVM) {
-        self.collection = collection
-//        UITabBar.appearance().isTranslucent = false
-//        UITabBar.appearance().barTintColor = UIColor.systemGreen
-    }
-    
     var body: some View {
         NavigationView {
             TabView {
@@ -25,13 +19,7 @@ struct HomeView: View {
                         Text("Recipe Book")
                     }
                 
-//                Text("Another Tab")
-//                    .tabItem {
-//                        Image(systemName: "calendar")
-//                        Text("Calendar")
-//                    }
-                
-                Text("Another Tab")
+                ShoppingListView()
                     .tabItem {
                         Image(systemName: "cart.fill")
                         Text("Groceries")
@@ -45,10 +33,10 @@ struct HomeView: View {
                 
             }
             .font(.headline)
-            .accentColor(Color(UIColor.systemGreen))
+            .accentColor(mainColor())
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
             .background(NavigationBarConfigurator { nc in
-                nc.navigationBar.barTintColor = .systemGreen
+                nc.navigationBar.barTintColor = mainUIColor()
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }

@@ -167,7 +167,7 @@ struct ReadRecipeView: View {
     @ViewBuilder func IngredientText(_ ingredient: Ingredient) -> some View {
         if inEditMode {
             HStack {
-                TextField("\(ingredient.getFractionAmount()) ", text: $newAmount)
+                TextField("\(ingredient.getAmountString()) ", text: $newAmount)
                 
                 TextField("\(ingredient.unitName.getName()) ", text: $newUnit)
 
@@ -175,7 +175,7 @@ struct ReadRecipeView: View {
             }
         }
         else {
-            Text("\(ingredient.getFractionAmount()) \(ingredient.unitName.getName()) \(ingredient.name)")
+            Text("\(ingredient.getAmountString()) \(ingredient.unitName.getName()) \(ingredient.name)")
         }
     }
     

@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import Combine
 
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategory]
+    
+    @Published var tempShoppingList: [ShoppingItem] = []
     
     // MARK: - Init
     
@@ -22,6 +25,7 @@ class RecipeCollectionVM: ObservableObject {
     func refreshCollection() {
         if let collection = RecipeDB.shared.getCollection(withId: collection.id) {
             self.collection = collection
+            self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
             popullateCategories()
         }
     }
@@ -34,15 +38,11 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-//    init(recipes: [Recipe]) {
-//        self.recipeCollection = ["All": recipes]
-//    }
-//
-//    init(recipeCollection: [String: [Recipe]]) {
-//        self.recipeCollection = recipeCollection
-//    }
-    
     // MARK: Access
+    
+    var id: Int {
+        collection.id
+    }
     
     var name: String {
         collection.name
@@ -55,11 +55,6 @@ class RecipeCollectionVM: ObservableObject {
         }
         return categoryNames.sorted()
     }
-    
-//    func recipes(inCategoryId categoryId: Int) -> [Recipe]? {
-//        let recipes = RecipeDB.shared.getRecipes(byCategoryId: categoryId)
-//        return recipes
-//    }
     
     // MARK: Intents
     
@@ -86,6 +81,28 @@ class RecipeCollectionVM: ObservableObject {
         // TODO: we need to let the users know that this will happen
         RecipeDB.shared.deleteRecipes(withCategoryId: id)
         popullateCategories()
+    }
+    
+    // Shopping List
+    
+    func addTempShoppingItem(name: String, completed: Bool = false) {
+        let item: ShoppingItem = ShoppingItem(name: name, amount: nil, unitName: UnitOfMeasurement.none, collectionId: collection.id, completed: completed)
+        tempShoppingList.append(item)
+    }
+    
+    func removeTempShoppingItem(at index: Int) {
+        tempShoppingList.remove(at: index)
+    }
+    
+    func toggleCompleted(_ item: ShoppingItem) {
+        if let index = tempShoppingList.indexOf(element: item) {
+            tempShoppingList[index].completed.toggle()
+        }
+    }
+    
+    func saveShoppingList() {
+        RecipeDB.shared.deleteShoppingItems(withCollectionId: collection.id)
+        RecipeDB.shared.createShoppingItems(items: tempShoppingList, withCollectionId: collection.id)
     }
 }
 

@@ -20,6 +20,7 @@ enum UnitOfMeasurement: CaseIterable {
     case liter
     case mililiter
     case pound
+    case none
     case unknown(String)
     
     func getName() -> String {
@@ -34,6 +35,7 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularName = "liter"
         case .mililiter: singularName = "mililiter"
         case .pound: singularName = "pound"
+        case .none: singularName = ""
         case .unknown(let unitName): singularName = unitName
         }
         return singularName
@@ -51,8 +53,10 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularName = "liter"
         case .mililiter: singularName = "mililiter"
         case .pound: singularName = "pound"
+        case .none: singularName = ""
         case .unknown(let unitName): singularName = unitName
         }
+        //TODO and not none
         if plural {
             return singularName + "s"
         }
@@ -71,6 +75,7 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularShorthand = "L"
         case .mililiter: singularShorthand = "mL"
         case .pound: singularShorthand = "lb"
+        case .none: singularShorthand = ""
         case .unknown(let unitName): singularShorthand = unitName
         }
         return singularShorthand

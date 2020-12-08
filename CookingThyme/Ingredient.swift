@@ -8,7 +8,10 @@
 import Foundation
 import GRDB
 
-struct Ingredient: Identifiable {
+struct Ingredient: Identifiable, Equatable {
+    static func == (lhs: Ingredient, rhs: Ingredient) -> Bool {
+        lhs.id == rhs.id
+    }
     
     struct Table {
         static let databaseTableName = "Ingredient"
@@ -53,7 +56,7 @@ struct Ingredient: Identifiable {
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
-    func getFractionAmount() -> String {
+    func getAmountString() -> String {
         return Fraction.toString(fromDouble: amount)
     }
     
@@ -73,9 +76,19 @@ struct Ingredient: Identifiable {
     static func toTempIngredients(_ ingredients: [Ingredient]) -> [TempIngredient] {
         var temps = [TempIngredient]()
         for ingredient in ingredients {
-            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getFractionAmount(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
+            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
         }
         return temps
+    }
+    
+    func toString() -> String {
+        var string = ""
+        string += getAmountString()
+        if self.unitName.getName() != "" {
+            string += " " + self.unitName.getName() + " "
+        }
+        string += self.name
+        return string
     }
 }
 
