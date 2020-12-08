@@ -36,12 +36,12 @@ struct ShoppingListView: View {
                         ZStack {
                             Circle()
                                 .fill(mainColor())
-                                .frame(width: 30, height: 30)
+                                .frame(width: 20, height: 20)
                                 .opacity(item.completed ? 1: 0)
                             
                             Circle()
                                 .stroke(mainColor(), lineWidth: 3)
-                                .frame(width: 30, height: 30)
+                                .frame(width: 20, height: 20)
                         }
                     }
                     
