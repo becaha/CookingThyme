@@ -13,34 +13,30 @@ struct SimpleTimer {
     var isSetting: Bool = true
     var timerAlert: Bool = false
     
-    var timeRemaining: Int = 0 {
+    var timeRemaining: Double = 0 {
         didSet {
-            if timeRemaining == -1 {
+            if timeRemaining < 0 {
                 timeRemaining = 0
                 isPaused = true
                 timerAlert = true
             }
-            timeRemainingString = timeRemaining.timeFormat() //bloatVar: bloatVar)
+            timeRemainingString = Int(round(timeRemaining)).timeFormat()
         }
     }
     
     var timeRemainingRatio: Double {
-        return timeRemaining > 0 ? Double(timeRemaining) / Double(timeAmount) : 0
+        return timeRemaining > 0 ? timeRemaining / Double(timeAmount) : 0
     }
     
-//    private let bloatVar = 100
+    var step: Double = 0.02
+    
     private var startTime: Date?
     private var timeAmount: Int = 0
-    
+        
     func getSeconds(h hours: Int, m minutes: Int, s seconds: Int) -> Int {
         let secInHour =  3600
         let secInMin = 60
         return (hours * secInHour) + (minutes * secInMin) + seconds
-    }
-    
-    func getBloatedSeconds(h hours: Int, m minutes: Int, s seconds: Int) -> Int {
-        let seconds = getSeconds(h: hours, m: minutes, s: seconds)
-        return seconds // * bloatVar
     }
     
     mutating func pause() {
@@ -58,7 +54,7 @@ struct SimpleTimer {
     }
     
     mutating func repeatTimer() {
-        timeRemaining = timeAmount
+        timeRemaining = Double(timeAmount)
         start()
     }
     
@@ -70,13 +66,13 @@ struct SimpleTimer {
     
     mutating func setTimer(h hours: Int, m minutes: Int, s seconds: Int) {
         timeAmount = getSeconds(h: hours, m: minutes, s: seconds)
-        timeRemaining = timeAmount
+        timeRemaining = Double(timeAmount)
         start()
     }
     
     mutating func count() {
-        if self.timeRemaining > -1 && !isPaused {
-            self.timeRemaining -= 1
+        if self.timeRemaining > 0 && !isPaused {
+            self.timeRemaining -= self.step
         }
     }
     
@@ -84,13 +80,13 @@ struct SimpleTimer {
 
 extension Int {
     // ints in seconds to hours:min:sec format
-//    func timeFormat(bloatVar: Int) -> String {
     func timeFormat() -> String {
 
         let secInHour =  3600.0
         let secInMin = 60.0
+//        let msecInSec = 1000.0
         
-//        var remainder = Double(self / bloatVar)
+//        var remainder = Double(self) / msecInSec
         var remainder = Double(self)
         let hours: Double = floor(remainder / secInHour)
         remainder -= (hours * secInHour)

@@ -8,7 +8,7 @@
 import Foundation
 
 class TimerHandler: ObservableObject {
-    @Published var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @Published var timer = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
     @Published var simpleTimer = SimpleTimer()
     
     init() {}
@@ -42,10 +42,6 @@ class TimerHandler: ObservableObject {
     
     
     // MARK: - Intents
-    
-//    func updateTimeRemaining() {
-//        simpleTimer.updateTimeRemaining()
-//    }
     
     func pause() {
         simpleTimer.pause()

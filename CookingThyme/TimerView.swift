@@ -8,6 +8,7 @@
 import SwiftUI
 
 //TODO let flick happen with hour/min/sec picker
+// TODO have timer with accuracy of miliseconds
 struct TimerView: View {
     @EnvironmentObject var timer: TimerHandler
     
@@ -32,7 +33,9 @@ struct TimerView: View {
                 
             }
             .onReceive(timer.timer) { time in
-                timer.count()
+                if !timer.isPaused {
+                    timer.count()
+                }
             }
         }
     }
