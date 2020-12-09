@@ -131,7 +131,6 @@ struct TimerView: View {
             
             TimerButton("Start", action: {
                 timer.setTimer(h: hours, m: minutes, s: seconds)
-                timer.start()
             })
             .disabled(hours == 0 && minutes == 0 && seconds == 0)
         }
