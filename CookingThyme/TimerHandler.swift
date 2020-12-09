@@ -19,6 +19,14 @@ class TimerHandler: ObservableObject {
         simpleTimer.timeRemainingString
     }
     
+    var timeRemaining: Double {
+        Double(simpleTimer.timeRemaining)
+    }
+    
+    var timeRemainingRatio: Double {
+        simpleTimer.timeRemainingRatio
+    }
+    
     var isPaused: Bool {
         simpleTimer.isPaused
     }
@@ -35,9 +43,9 @@ class TimerHandler: ObservableObject {
     
     // MARK: - Intents
     
-    func updateTimeRemaining() {
-        simpleTimer.updateTimeRemaining()
-    }
+//    func updateTimeRemaining() {
+//        simpleTimer.updateTimeRemaining()
+//    }
     
     func pause() {
         simpleTimer.pause()

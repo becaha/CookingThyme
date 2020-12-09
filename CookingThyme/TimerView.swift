@@ -9,13 +9,13 @@ import SwiftUI
 
 //TODO let flick happen with hour/min/sec picker
 struct TimerView: View {
-    @State private var isActive = true
-    
     @EnvironmentObject var timer: TimerHandler
     
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
     @State private var seconds: Int = 0
+    
+    @State private var animatedTimeRemaining = 0.0
     
     var body: some View {
         GeometryReader { geometry in
@@ -34,13 +34,6 @@ struct TimerView: View {
             .onReceive(timer.timer) { time in
                 timer.count()
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                self.isActive = false
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                self.isActive = true
-                timer.updateTimeRemaining()
-            }
         }
     }
     
@@ -49,10 +42,20 @@ struct TimerView: View {
         VStack {
             
             ZStack {
-                Circle()
-                    .stroke(lineWidth: 5)
-                    .frame(width: 350, height: 350)
-                    .padding()
+                Group {
+                    if !timer.isPaused {
+                        AnimatableCircleStroke(startAngle: angle(for: 0), endAngle: angle(for: -animatedTimeRemaining), clockwise: true)
+                            .onAppear() {
+                                startTimeAnimation()
+                            }
+                    }
+                    else {
+                        AnimatableCircleStroke(startAngle: angle(for: 0), endAngle: angle(for: -timer.timeRemainingRatio), clockwise: true)
+                    }
+                }
+                .foregroundColor(mainColor())
+                .frame(width: 350, height: 350)
+                .padding()
                 
                 Text("\(timer.timeRemainingString)")
                     .font(.system(size: 80))
@@ -77,6 +80,17 @@ struct TimerView: View {
                 Spacer()
             }
 
+        }
+    }
+    
+    private func angle(for degrees: Double) -> Angle {
+        Angle.degrees(degrees * 360 - 90)
+    }
+    
+    func startTimeAnimation() {
+        animatedTimeRemaining = timer.timeRemainingRatio
+        withAnimation(.linear(duration: timer.timeRemaining)) {
+            animatedTimeRemaining = 0
         }
     }
     
