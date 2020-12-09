@@ -15,7 +15,7 @@ struct SimpleTimer {
     
     var timeRemaining: Double = 0 {
         didSet {
-            if timeRemaining < 0 {
+            if timeRemaining <= 0 {
                 timeRemaining = 0
                 isPaused = true
                 timerAlert = true
@@ -28,7 +28,11 @@ struct SimpleTimer {
         return timeRemaining > 0 ? timeRemaining / Double(timeAmount) : 0
     }
     
-    var step: Double = 0.02
+    var step: Double
+    
+    init(step: Double) {
+        self.step = step
+    }
     
     private var startTime: Date?
     private var timeAmount: Int = 0
@@ -45,12 +49,14 @@ struct SimpleTimer {
     }
     
     mutating func stop() {
+        isPaused = true
         isSetting = true
         timerAlert = false
     }
     
     mutating func cancel() {
         isSetting = true
+        stop()
     }
     
     mutating func repeatTimer() {
@@ -70,10 +76,15 @@ struct SimpleTimer {
         start()
     }
     
-    mutating func count() {
-        if self.timeRemaining > 0 && !isPaused {
-            self.timeRemaining -= self.step
+    mutating func countSec() {
+        if self.timeRemaining > 0 {
+            self.timeRemaining -= 1
         }
+    }
+    
+    mutating func updateTimeRemaining(withStepCount stepCount: Double) {
+        let secondsElapsed = stepCount * self.step
+        self.timeRemaining -= secondsElapsed
     }
     
 }
@@ -84,9 +95,6 @@ extension Int {
 
         let secInHour =  3600.0
         let secInMin = 60.0
-//        let msecInSec = 1000.0
-        
-//        var remainder = Double(self) / msecInSec
         var remainder = Double(self)
         let hours: Double = floor(remainder / secInHour)
         remainder -= (hours * secInHour)

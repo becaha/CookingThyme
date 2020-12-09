@@ -9,36 +9,24 @@ import SwiftUI
 
 struct TestView: View {
     var body: some View {
-        VStack {
-            Text("Title")
-        
-            Form {
-                
-                List {
-                    Section(footer:
-                        VStack(alignment: .center) {
-                            Button(action: {
-                              
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .fill(Color(UIColor.tertiarySystemFill))
-                                    
-                                    Text("Add Ingredients to Shopping List")
-        //                                            .foregroundColor(.black)
-                                        .padding(.vertical)
-                                }
-                            }
-                        }
-                    ) {
-                        Text("A")
-                        Text("A")
-                        Text("A")
+        GeometryReader { geometry in
+            HStack {
+                VStack(alignment: .center) {
+                    VStack {
+                    Image(systemName: "plus")
+                        .padding(.bottom, 5)
+                    
+                    Text("Add Photo")
+                        .font(.subheadline)
+                        .padding(.top, 0)
                     }
+                    .frame(width: geometry.size.width/2)
+                    .border(Color.black, width: 3.0, isDashed: true)
                 }
+                .padding()
+//                .frame(width: geometry.size.width)
             }
         }
-        .background(Color(UIColor.quaternarySystemFill))
     }
 }
 

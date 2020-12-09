@@ -6,12 +6,34 @@
 //
 
 import Foundation
+import Combine
 
 class TimerHandler: ObservableObject {
-    @Published var timer = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
-    @Published var simpleTimer = SimpleTimer()
+    @Published var simpleTimer: SimpleTimer
+    var step: Double
+    var stepCount: Double
+    var stepPerSec: Double
+    var stepsLeft: Double?
     
-    init() {}
+    var timerCancellable: AnyCancellable?
+    
+    init() {
+        step = 0.02
+        stepCount = 0
+        stepPerSec = 1 / step
+        simpleTimer = SimpleTimer(step: self.step)
+        
+        timerCancellable = Timer.publish(every: step, on: .main, in: .common).autoconnect()
+            .sink { receiveValue in
+                if !self.simpleTimer.isPaused {
+                    self.stepCount += 1
+                    if self.stepCount == self.stepPerSec {
+                        self.simpleTimer.countSec()
+                        self.stepCount = 0
+                    }
+                }
+            }
+    }
     
     // MARK: - Access
     
@@ -44,6 +66,8 @@ class TimerHandler: ObservableObject {
     // MARK: - Intents
     
     func pause() {
+        simpleTimer.updateTimeRemaining(withStepCount: self.stepCount)
+        self.stepCount = 0
         simpleTimer.pause()
     }
     
@@ -63,7 +87,11 @@ class TimerHandler: ObservableObject {
         simpleTimer.setTimer(h: hours, m: minutes, s: seconds)
     }
   
-    func count() {
-        simpleTimer.count()
+    func countSec() {
+        simpleTimer.countSec()
+    }
+    
+    func updateTimeRemaining(withStepCount stepCount: Double) {
+        simpleTimer.updateTimeRemaining(withStepCount: stepCount)
     }
 }

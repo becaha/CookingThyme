@@ -27,20 +27,6 @@ struct EditableText: View {
         self.autocapitalization = .none
     }
     
-//    init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void, autocapitalization: UITextAutocapitalizationType?) {
-//        self.text = text
-//        self.isEditing = isEditing
-//        self.onChanged = onChanged
-//        self.onDelete = {}
-//        self.isDeletable = false
-//        if let autocap = autocapitalization {
-//            self.autocapitalization = autocap
-//        }
-//        else {
-//            self.autocapitalization = .none
-//        }
-//    }
-    
     init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void, autocapitalization: UITextAutocapitalizationType) {
         self.text = text
         self.isEditing = isEditing

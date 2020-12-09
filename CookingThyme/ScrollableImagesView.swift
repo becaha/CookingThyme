@@ -31,7 +31,9 @@ struct ScrollableImagesView: View {
                         ZStack {
                             if isEditing {
                                 Button(action: {
-                                    recipe.removeTempImage(at: index)
+                                    withAnimation {
+                                        recipe.removeTempImage(at: index)
+                                    }
                                 }) {
                                     ZStack {
                                         Circle()

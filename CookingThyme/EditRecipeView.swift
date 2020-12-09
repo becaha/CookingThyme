@@ -39,7 +39,9 @@ struct EditRecipeView: View {
             if isCreatingRecipe {
                 HStack {
                     Button(action: {
-                        isEditingRecipe = false
+                        withAnimation {
+                            isEditingRecipe = false
+                        }
                     }) {
                         Text("Cancel")
                     }
@@ -59,7 +61,9 @@ struct EditRecipeView: View {
                 VStack(alignment: .leading) {
                     TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
                         if name != "" {
-                            nameFieldMissing = false
+                            withAnimation {
+                                nameFieldMissing = false
+                            }
                         }
                     })
                     .multilineTextAlignment(.center)
@@ -111,7 +115,9 @@ struct EditRecipeView: View {
                                     .environmentObject(recipe)
                             }
                             .deletable(isDeleting: true, onDelete: {
-                                recipe.removeTempIngredient(at: index)
+                                withAnimation {
+                                    recipe.removeTempIngredient(at: index)
+                                }
                             })
                         }
                         .onDelete { indexSet in
@@ -133,11 +139,17 @@ struct EditRecipeView: View {
                                         self.isEditingIngredient = isEditing
                                     },
                                     onCommit: {
-                                        addIngredient()
+                                        withAnimation {
+                                            addIngredient()
+                                        }
                                     })
                                     .autocapitalization(.none)
                                 
-                                UIControls.AddButton(action: addIngredient)
+                                UIControls.AddButton(action: {
+                                    withAnimation {
+                                        addIngredient()
+                                    }
+                                })
                             }
                             
                             ErrorMessage("Must fill in all ingredient slots", isError: $newIngredientFieldMissing)
@@ -148,8 +160,6 @@ struct EditRecipeView: View {
                 Section(header: Text("Directions"),
                         footer:
                             VStack {
-//                                UIControls.AddButton(action: addDirection)
-                                
                                 Group {
                                     ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
                                 }
@@ -165,7 +175,10 @@ struct EditRecipeView: View {
                                 EditableDirection(index: index)
                                     .environmentObject(recipe)
                             }
-                            .deletable(isDeleting: true, onDelete: {                                                   recipe.removeTempDirection(at: index)
+                            .deletable(isDeleting: true, onDelete: {
+                                withAnimation {
+                                    recipe.removeTempDirection(at: index)
+                                }
                             })
                             .padding(.vertical)
                         }
@@ -182,10 +195,16 @@ struct EditRecipeView: View {
                                 TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
                                     self.isEditingDirection = isEditing
                                 }, onCommit: {
-                                    addDirection()
+                                    withAnimation {
+                                        addDirection()
+                                    }
                                 })
                                 
-                                UIControls.AddButton(action: addDirection)
+                                UIControls.AddButton(action: {
+                                    withAnimation {
+                                        addDirection()
+                                    }
+                                })
                             }
                             
                             ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
@@ -202,13 +221,17 @@ struct EditRecipeView: View {
             }
         }
         .onAppear {
-            setRecipe()
+//            withAnimation {
+                setRecipe()
+//            }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
                 Button(action: {
-                    isEditingRecipe = false
+                    withAnimation {
+                        isEditingRecipe = false
+                    }
                 }) {
                     Text("Cancel")
                 }
@@ -223,8 +246,6 @@ struct EditRecipeView: View {
                 }
         )
     }
-    
-    private func dummyFunc() {}
     
     private func setRecipe() {
         name = recipe.name
@@ -253,7 +274,9 @@ struct EditRecipeView: View {
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-            isEditingRecipe = false
+            withAnimation {
+                isEditingRecipe = false
+            }
         }
     }
     

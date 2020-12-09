@@ -20,6 +20,13 @@ class RecipeCollectionVM: ObservableObject {
         self.collection = collection
         self.categories = [RecipeCategory]()
         self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
+            .sorted(by: { (itemA, itemB) -> Bool in
+                if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
+                    return true
+                }
+                return false
+            })
+            
         popullateCategories()
     }
     
@@ -86,6 +93,28 @@ class RecipeCollectionVM: ObservableObject {
     
     // Shopping List
     
+    //MARK: - Access
+    
+    var completedItems: [ShoppingItem] {
+        var items = [ShoppingItem]()
+        for item in tempShoppingList {
+            if item.completed {
+                items.append(item)
+            }
+        }
+        return items
+    }
+    
+    var notCompletedItems: [ShoppingItem] {
+        var items = [ShoppingItem]()
+        for item in tempShoppingList {
+            if !item.completed {
+                items.append(item)
+            }
+        }
+        return items
+    }
+    
     func addIngredientShoppingItems(ingredients: [Ingredient]) {
         for ingredient in ingredients {
             addIngredientShoppingItem(ingredient)
@@ -106,6 +135,22 @@ class RecipeCollectionVM: ObservableObject {
         tempShoppingList.remove(at: index)
     }
     
+    func removeTempShoppingItem(_ item: ShoppingItem) {
+        if let index = tempShoppingList.indexOf(element: item) {
+            tempShoppingList.remove(at: index)
+        }
+    }
+    
+    func removeCompletedShoppingItems() {
+        for item in tempShoppingList {
+            if item.completed {
+                if let index = tempShoppingList.indexOf(element: item) {
+                    removeTempShoppingItem(at: index)
+                }
+            }
+        }
+    }
+    
     func toggleCompleted(_ item: ShoppingItem) {
         if let index = tempShoppingList.indexOf(element: item) {
             tempShoppingList[index].completed.toggle()
@@ -119,12 +164,10 @@ class RecipeCollectionVM: ObservableObject {
     
     func addToShoppingList(fromRecipe recipe: Recipe) {
         addIngredientShoppingItems(ingredients: recipe.ingredients)
-        saveShoppingList()
     }
     
     func addToShoppingList(_ ingredient: Ingredient) {
         addIngredientShoppingItem(ingredient)
-        saveShoppingList()
     }
 }
 

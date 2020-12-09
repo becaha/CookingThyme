@@ -19,49 +19,92 @@ struct ShoppingListView: View {
                 HStack {
                     TextField("Add item", text: $newName,
                               onCommit: {
-                                addItem()
-                                saveItems()
+                                withAnimation {
+                                    addItem()
+                                }
                               })
                           
-                    UIControls.AddButton(action: addItem)
+                    UIControls.AddButton(action: {
+                        withAnimation {
+                            addItem()
+                        }
+                    })
                 }
             }
             
-            ForEach(collection.tempShoppingList) { item in
-                HStack {
-                    Button(action: {
-                        collection.toggleCompleted(item)
-                        saveItems()
-                    }) {
-                        ZStack {
-                            Circle()
-                                .fill(mainColor())
-                                .frame(width: 20, height: 20)
-                                .opacity(item.completed ? 1: 0)
-                            
-                            Circle()
-                                .stroke(mainColor(), lineWidth: 3)
-                                .frame(width: 20, height: 20)
+            Section(header: Text("")) {
+                ForEach(collection.notCompletedItems) { item in
+                    ItemView(item: item)
+                }
+                .onDelete { indexSet in
+                    indexSet.forEach { index in
+                        collection.removeTempShoppingItem(collection.notCompletedItems[index])
+                    }
+                    saveItems()
+                }
+            }
+
+            
+            Section(header:
+                    HStack {
+                        Text("Completed Items")
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                collection.removeCompletedShoppingItems()
+                            }
+                        }) {
+                            Text("Remove Completed Items")
                         }
                     }
-                    
-                    Text("\(item.toString())")
+            ) {
+                ForEach(collection.completedItems) { item in
+                    ItemView(item: item)
+                }
+                .onDelete { indexSet in
+                    indexSet.forEach { index in
+                        collection.removeTempShoppingItem(collection.completedItems[index])
+                    }
+                    saveItems()
                 }
             }
-            .onDelete { indexSet in
-                indexSet.forEach { index in
-                    collection.removeTempShoppingItem(at: index)
-                }
-                saveItems()
-            }
+            .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("Shopping List", displayMode: .inline)
     }
     
+    @ViewBuilder
+    func ItemView(item: ShoppingItem) -> some View {
+        HStack {
+            Button(action: {
+                withAnimation {
+                    collection.toggleCompleted(item)
+                    saveItems()
+                }
+            }) {
+                ZStack {
+                    Circle()
+                        .fill(mainColor())
+                        .frame(width: 20, height: 20)
+                        .opacity(item.completed ? 1: 0)
+                    
+                    Circle()
+                        .stroke(mainColor(), lineWidth: 3)
+                        .frame(width: 20, height: 20)
+                }
+            }
+            
+            Text("\(item.toString())")
+        }
+    }
+    
     func addItem() {
         collection.addTempShoppingItem(name: newName)
         newName = ""
+        saveItems()
     }
     
     func saveItems() {

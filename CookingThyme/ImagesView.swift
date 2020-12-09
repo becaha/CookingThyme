@@ -49,16 +49,19 @@ struct ImagesView: View {
                                 ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                             }
                             else if isEditing {
-                                VStack {
-                                    EditPhotoButton()
-                                        .padding(.bottom, 5)
-                                    
-                                    Text("Add Photo")
-                                        .font(.subheadline)
-                                        .padding(.top, 0)
+                                VStack(alignment: .center) {
+                                    VStack {
+                                        EditPhotoButton()
+                                            .padding(.bottom, 5)
+                                        
+                                        Text("Add Photo")
+                                            .font(.subheadline)
+                                            .padding(.top, 0)
+                                    }
+                                    .border(Color.black, width: 3.0, isDashed: true)
+                                    .frame(width: geometry.size.width/2)
                                 }
-                                .padding()
-                                .border(Color.black, width: 3.0, isDashed: true)
+                                .frame(width: geometry.size.width)
                             }
                         }
                     }
@@ -74,7 +77,7 @@ struct ImagesView: View {
                                 .stroke(Color.black)
                                 .frame(width: 40, height: 40)
                             
-                            //TODO change to add button
+                            //TODO add button or camera button
                             EditPhotoButton()
                         }
                     }
@@ -102,8 +105,10 @@ struct ImagesView: View {
     }
     
     func loadImage() {
-        guard let inputImage = selectedImage else { return }
-        recipe.addTempImage(uiImage: inputImage)
+        withAnimation {
+            guard let inputImage = selectedImage else { return }
+            recipe.addTempImage(uiImage: inputImage)
+        }
     }
     
     @ViewBuilder

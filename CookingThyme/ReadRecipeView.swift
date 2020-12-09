@@ -69,7 +69,9 @@ struct ReadRecipeView: View {
                         ForEach(recipe.ingredients) { ingredient in
                             HStack {
                                 UIControls.AddButton(action: {
-                                    confirmAddIngredient = ingredient.id
+                                    withAnimation {
+                                        confirmAddIngredient = ingredient.id
+                                    }
                                 })
                                 
                                 IngredientText(ingredient)
@@ -79,8 +81,10 @@ struct ReadRecipeView: View {
                                     Image(systemName: "cart.fill")
                                     
                                     Button("Add to Shopping List", action: {
+                                        withAnimation {
                                             collection.addToShoppingList(ingredient)
                                             confirmAddIngredient = nil
+                                        }
                                     })
                                 }
                                 .foregroundColor(Color(UIColor.systemGray))
@@ -134,7 +138,9 @@ struct ReadRecipeView: View {
                     .padding(.trailing)
                                     
                     Button(action: {
-                        isEditingRecipe = true
+                        withAnimation {
+                            isEditingRecipe = true
+                        }
                     })
                     {
                         Text("Edit")
@@ -147,7 +153,9 @@ struct ReadRecipeView: View {
     func AddIngredientsButton() -> some View {
         VStack(alignment: .center) {
             Button(action: {
-                collection.addToShoppingList(fromRecipe: recipe.recipe)
+                withAnimation {
+                    collection.addToShoppingList(fromRecipe: recipe.recipe)
+                }
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)

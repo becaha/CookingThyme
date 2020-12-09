@@ -44,10 +44,14 @@ struct HomeView: View {
         .alert(isPresented: $timer.timerAlert) {
             Alert(title: Text("Timer"),
                   primaryButton: .default(Text("Stop")) {
-                    timer.stop()
+                    withAnimation {
+                        timer.stop()
+                    }
                   },
                   secondaryButton: .default(Text("Repeat")) {
-                    timer.repeatTimer()
+                    withAnimation {
+                        timer.repeatTimer()
+                    }
                   }
             )
         }

@@ -32,20 +32,25 @@ struct CategoryView: View {
                                                         
                             Spacer()
                             
-                            UIControls.AddButton(action: createRecipe, isPlain: false)
+                            UIControls.AddButton(action: {
+                                createRecipe()
+                            }, isPlain: false)
                         }
-                    }.sheet(isPresented: $isCreatingRecipe) {
+                    }
+                    .sheet(isPresented: $isCreatingRecipe) {
                         CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
                             .environmentObject(RecipeVM(category: category))
                     }
                 }
-            
+
                 Section {
                     ForEach(category.recipes) { recipe in
                         if isEditing {
                             Text("\(recipe.name)")
                                 .deletable(isDeleting: isEditing, onDelete: {
-                                    category.deleteRecipe(withId: recipe.id)
+                                    withAnimation {
+                                        category.deleteRecipe(withId: recipe.id)
+                                    }
                                 })
                         }
                         else {

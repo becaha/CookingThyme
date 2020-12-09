@@ -179,7 +179,7 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB49B520257ABF6C00808CC8 /* ViewModifiers */,
+				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
@@ -193,10 +193,8 @@
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
 				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
-				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
 				DB49B52B257EF64500808CC8 /* ShoppingListView.swift */,
-				DB49B53A257FDD8D00808CC8 /* TestView.swift */,
 				DB49B53C2580163500808CC8 /* TimerView.swift */,
 			);
 			name = View;
@@ -234,9 +232,10 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		DB49B520257ABF6C00808CC8 /* ViewModifiers */ = {
+		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4FE256F488200808CC8 /* Deletable.swift */,
@@ -244,8 +243,9 @@
 				DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */,
 				DB49B54025801B4600808CC8 /* IsActive.swift */,
 				DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */,
+				DB49B53A257FDD8D00808CC8 /* TestView.swift */,
 			);
-			name = ViewModifiers;
+			name = ViewHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

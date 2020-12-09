@@ -8,7 +8,7 @@
 import SwiftUI
 
 //TODO let flick happen with hour/min/sec picker
-// TODO have timer with accuracy of miliseconds
+// TODO flashes when stoppedon other screen and you go to timer
 struct TimerView: View {
     @EnvironmentObject var timer: TimerHandler
     
@@ -30,12 +30,6 @@ struct TimerView: View {
                     }
                 }
                 .position(x: geometry.size.width/2, y: geometry.size.height/2)
-                
-            }
-            .onReceive(timer.timer) { time in
-                if !timer.isPaused {
-                    timer.count()
-                }
             }
         }
     }
@@ -43,7 +37,6 @@ struct TimerView: View {
     @ViewBuilder
     func Countdown() -> some View {
         VStack {
-            
             ZStack {
                 Group {
                     if !timer.isPaused {
@@ -71,14 +64,17 @@ struct TimerView: View {
                 Spacer()
 
                 TimerButton("Cancel", action : {
-                    timer.cancel()
+                    withAnimation {
+                        timer.cancel()
+                    }
                 })
                 
                 Spacer()
                 
-                TimerButton(timer.isPaused ? "Resume" : "Pause", action : {
+                TimerButton(timer.isPaused && !timer.timerAlert ? "Resume" : "Pause", action : {
                     timer.pause()
                 })
+                .transition(.scale(scale: 1))
                 
                 Spacer()
             }
@@ -147,7 +143,9 @@ struct TimerView: View {
             .padding()
             
             TimerButton("Start", action: {
-                timer.setTimer(h: hours, m: minutes, s: seconds)
+                withAnimation {
+                    timer.setTimer(h: hours, m: minutes, s: seconds)
+                }
             })
             .disabled(hours == 0 && minutes == 0 && seconds == 0)
         }
