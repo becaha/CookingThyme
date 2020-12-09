@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var collection: RecipeCollectionVM
+    @ObservedObject var timer = TimerHandler()
     
     var body: some View {
         NavigationView {
@@ -40,7 +41,18 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
+        .alert(isPresented: $timer.timerAlert) {
+            Alert(title: Text("Timer"),
+                  primaryButton: .default(Text("Stop")) {
+                    timer.stop()
+                  },
+                  secondaryButton: .default(Text("Repeat")) {
+                    timer.repeatTimer()
+                  }
+            )
+        }
         .environmentObject(collection)
+        .environmentObject(timer)
     }
 }
 

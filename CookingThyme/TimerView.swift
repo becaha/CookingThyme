@@ -7,26 +7,21 @@
 
 import SwiftUI
 
+//TODO let flick happen with hour/min/sec picker
 struct TimerView: View {
     @State private var isActive = true
-    @State private var timeRemaining: Int = 0
-    @State private var timeRemainingString: String = ""
-    @State private var countdownTime: Int?
-    @State private var startTime: Date?
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    @EnvironmentObject var timer: TimerHandler
     
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
     @State private var seconds: Int = 0
     
-    @State private var isSetting = false
-    @State private var isPaused = false
-
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 VStack {
-                    if isSetting {
+                    if timer.isSetting {
                         SetTimer(width: geometry.size.width/9)
                     }
                     else {
@@ -36,22 +31,15 @@ struct TimerView: View {
                 .position(x: geometry.size.width/2, y: geometry.size.height/2)
                 
             }
-            .onReceive(timer) { time in
-                if self.timeRemaining > 0 {
-                    self.timeRemaining -= 1
-                    timeRemainingString = timeRemaining.timeFormat()
-                }
+            .onReceive(timer.timer) { time in
+                timer.count()
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
                 self.isActive = false
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 self.isActive = true
-                if let startTime = self.startTime {
-                    let timeElapsed = Date().timeIntervalSince(startTime)
-                    timeRemaining -= Int(timeElapsed)
-                    timeRemainingString = timeRemaining.timeFormat()
-                }
+                timer.updateTimeRemaining()
             }
         }
     }
@@ -59,23 +47,37 @@ struct TimerView: View {
     @ViewBuilder
     func Countdown() -> some View {
         VStack {
-            Text("\(timeRemainingString)")
             
-            TimerButton(isPaused ? "Resume" : "Pause", action : {
-                isPaused.toggle()
-            })
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 5)
+                    .frame(width: 350, height: 350)
+                    .padding()
+                
+                Text("\(timer.timeRemainingString)")
+                    .font(.system(size: 80))
+            }
             
-            TimerButton("Cancel", action : {
-                isSetting = true
-            })
+            Spacer()
+                .frame(height: 70)
+            
+            HStack {
+                Spacer()
+
+                TimerButton("Cancel", action : {
+                    timer.cancel()
+                })
+                
+                Spacer()
+                
+                TimerButton(timer.isPaused ? "Resume" : "Pause", action : {
+                    timer.pause()
+                })
+                
+                Spacer()
+            }
 
         }
-    }
-    
-    func getSeconds(h hours: Int, m minutes: Int, s seconds: Int) -> Int {
-        let secInHour =  3600
-        let secInMin = 60
-        return (hours * secInHour) + (minutes * secInMin) + seconds
     }
     
     @ViewBuilder
@@ -128,9 +130,8 @@ struct TimerView: View {
             .padding()
             
             TimerButton("Start", action: {
-                startTime = Date()
-                isSetting = false
-                timeRemaining = getSeconds(h: hours, m: minutes, s: seconds)
+                timer.setTimer(h: hours, m: minutes, s: seconds)
+                timer.start()
             })
             .disabled(hours == 0 && minutes == 0 && seconds == 0)
         }
@@ -138,14 +139,15 @@ struct TimerView: View {
     
     @ViewBuilder
     func TimerButton(_ text: String, action: @escaping () -> Void) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(formBackgroundColor())
-            
-            Text("\(text)")
-                .padding()
+        Button(action: action) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(formBackgroundColor())
+                    .frame(width: 100, height: 55)
+                
+                Text("\(text)")
+            }
         }
-        .frame(width: 100, height: 20)
     }
     
 }
@@ -153,22 +155,5 @@ struct TimerView: View {
 struct TimerView_Previews: PreviewProvider {
     static var previews: some View {
         TimerView()
-    }
-}
-
-extension Int {
-    // ints in seconds to hours:min:sec format
-    func timeFormat() -> String {
-        let secInHour =  3600.0
-        let secInMin = 60.0
-        
-        var remainder = Double(self)
-        let hours: Double = floor(remainder / secInHour)
-        remainder -= (hours * secInHour)
-        let minutes: Double = floor(remainder / secInMin)
-        remainder -= (minutes * secInMin)
-        let seconds = remainder
-        let timeString = String(format: "%02d:%02d:%02d", Int(hours), Int(minutes), Int(seconds))
-        return timeString
     }
 }
