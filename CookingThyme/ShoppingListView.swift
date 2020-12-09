@@ -54,9 +54,11 @@ struct ShoppingListView: View {
                         Button(action: {
                             withAnimation {
                                 collection.removeCompletedShoppingItems()
+                                saveItems()
                             }
                         }) {
-                            Text("Remove Completed Items")
+                            Image(systemName: "trash")
+                                .imageScale(.large)
                         }
                     }
             ) {
@@ -69,6 +71,7 @@ struct ShoppingListView: View {
                     }
                     saveItems()
                 }
+                
             }
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }

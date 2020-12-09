@@ -20,13 +20,7 @@ class RecipeCollectionVM: ObservableObject {
         self.collection = collection
         self.categories = [RecipeCategory]()
         self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
-            .sorted(by: { (itemA, itemB) -> Bool in
-                if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
-                    return true
-                }
-                return false
-            })
-            
+        sortShoppingList()
         popullateCategories()
     }
     
@@ -34,8 +28,18 @@ class RecipeCollectionVM: ObservableObject {
         if let collection = RecipeDB.shared.getCollection(withId: collection.id) {
             self.collection = collection
             self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
+            sortShoppingList()
             popullateCategories()
         }
+    }
+    
+    func sortShoppingList() {
+        tempShoppingList = tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
+            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
+                return true
+            }
+            return false
+        })
     }
     
     func popullateCategories() {
@@ -124,11 +128,13 @@ class RecipeCollectionVM: ObservableObject {
     func addIngredientShoppingItem(_ ingredient: Ingredient) {
         let item: ShoppingItem = ShoppingItem(name: ingredient.name, amount: ingredient.amount, unitName: ingredient.unitName, collectionId: collection.id, completed: false)
         tempShoppingList.append(item)
+        sortShoppingList()
     }
     
     func addTempShoppingItem(name: String, completed: Bool = false) {
         let item: ShoppingItem = ShoppingItem(name: name, amount: nil, unitName: UnitOfMeasurement.none, collectionId: collection.id, completed: completed)
         tempShoppingList.append(item)
+        sortShoppingList()
     }
     
     func removeTempShoppingItem(at index: Int) {

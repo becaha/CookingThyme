@@ -32,7 +32,7 @@ struct ShoppingItem: Identifiable {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        let id = Double(name.hashValue) + Double(unitName.getName().count)
+        var id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
         if let uuid = Int(UUID().uuidString) {
             self.id = uuid
         }
