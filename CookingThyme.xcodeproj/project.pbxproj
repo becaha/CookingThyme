@@ -53,6 +53,13 @@
 		DB49B54125801B4600808CC8 /* IsActive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B54025801B4600808CC8 /* IsActive.swift */; };
 		DB49B54525806B8300808CC8 /* SimpleTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B54425806B8300808CC8 /* SimpleTimer.swift */; };
 		DB49B547258070C400808CC8 /* AnimatableCircleStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */; };
+		DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */; };
+		DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B54D2581B74900808CC8 /* WebRecipe.swift */; };
+		DB49B5592581BB0D00808CC8 /* RecipeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */; };
+		DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B55A2581E56B00808CC8 /* WebIngredient.swift */; };
+		DB49B55D2581E63000808CC8 /* WebMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B55C2581E63000808CC8 /* WebMeasurement.swift */; };
+		DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B55E2581E67300808CC8 /* WebUnit.swift */; };
+		DB49B5612581E84000808CC8 /* WebSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5602581E84000808CC8 /* WebSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +113,13 @@
 		DB49B54025801B4600808CC8 /* IsActive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsActive.swift; sourceTree = "<group>"; };
 		DB49B54425806B8300808CC8 /* SimpleTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTimer.swift; sourceTree = "<group>"; };
 		DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableCircleStroke.swift; sourceTree = "<group>"; };
+		DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesWebHandler.swift; sourceTree = "<group>"; };
+		DB49B54D2581B74900808CC8 /* WebRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRecipe.swift; sourceTree = "<group>"; };
+		DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearch.swift; sourceTree = "<group>"; };
+		DB49B55A2581E56B00808CC8 /* WebIngredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebIngredient.swift; sourceTree = "<group>"; };
+		DB49B55C2581E63000808CC8 /* WebMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebMeasurement.swift; sourceTree = "<group>"; };
+		DB49B55E2581E67300808CC8 /* WebUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebUnit.swift; sourceTree = "<group>"; };
+		DB49B5602581E84000808CC8 /* WebSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,23 +193,17 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B5572581BAED00808CC8 /* Editable */,
+				DB49B5562581BAC800808CC8 /* Images */,
+				DB49B5532581BA4600808CC8 /* ShoppingList */,
+				DB49B5522581BA4100808CC8 /* Timer */,
+				DB49B5552581BA8300808CC8 /* Recipe */,
+				DB49B5542581BA7900808CC8 /* RecipeCategory */,
+				DB49B5512581BA3200808CC8 /* RecipeCollection */,
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
-				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
-				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
-				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
-				DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
-				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
-				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
-				DB49B4FA256E015000808CC8 /* EditableText.swift */,
-				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
-				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
-				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
-				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
-				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
-				DB49B52B257EF64500808CC8 /* ShoppingListView.swift */,
-				DB49B53C2580163500808CC8 /* TimerView.swift */,
+				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -208,6 +216,7 @@
 				DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */,
 				DB49B5182579F1B300808CC8 /* ImageHandler.swift */,
 				DB49B53E258018C200808CC8 /* TimerHandler.swift */,
+				DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -215,18 +224,12 @@
 		DB49B4DA2565E4E100808CC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */,
-				DB49B4EE2568B8EB00808CC8 /* RecipeCategory.swift */,
+				DB49B54C2581B73500808CC8 /* WebModel */,
+				DB49B54B2581B71F00808CC8 /* DB */,
+				DB49B54A2581B6EF00808CC8 /* Table */,
 				DB49B4B82565E49E00808CC8 /* Fraction.swift */,
-				DB49B4BC2565E49F00808CC8 /* Ingredient.swift */,
 				DB49B4C42565E49F00808CC8 /* Rational.swift */,
-				DB49B4C32565E49F00808CC8 /* Recipe.swift */,
 				DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */,
-				DB49B4E225672AE000808CC8 /* RecipeDB.swift */,
-				DB49B4EC2568B15B00808CC8 /* Direction.swift */,
-				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
-				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
-				DB49B531257F379400808CC8 /* ShoppingItem.swift */,
 				DB49B54425806B8300808CC8 /* SimpleTimer.swift */,
 			);
 			name = Model;
@@ -235,6 +238,7 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
@@ -246,6 +250,103 @@
 				DB49B53A257FDD8D00808CC8 /* TestView.swift */,
 			);
 			name = ViewHelpers;
+			sourceTree = "<group>";
+		};
+		DB49B54A2581B6EF00808CC8 /* Table */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4EE2568B8EB00808CC8 /* RecipeCategory.swift */,
+				DB49B4BC2565E49F00808CC8 /* Ingredient.swift */,
+				DB49B4C32565E49F00808CC8 /* Recipe.swift */,
+				DB49B4EC2568B15B00808CC8 /* Direction.swift */,
+				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
+				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
+				DB49B531257F379400808CC8 /* ShoppingItem.swift */,
+			);
+			name = Table;
+			sourceTree = "<group>";
+		};
+		DB49B54B2581B71F00808CC8 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */,
+				DB49B4E225672AE000808CC8 /* RecipeDB.swift */,
+			);
+			name = DB;
+			sourceTree = "<group>";
+		};
+		DB49B54C2581B73500808CC8 /* WebModel */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B54D2581B74900808CC8 /* WebRecipe.swift */,
+				DB49B55A2581E56B00808CC8 /* WebIngredient.swift */,
+				DB49B55C2581E63000808CC8 /* WebMeasurement.swift */,
+				DB49B55E2581E67300808CC8 /* WebUnit.swift */,
+				DB49B5602581E84000808CC8 /* WebSection.swift */,
+			);
+			name = WebModel;
+			sourceTree = "<group>";
+		};
+		DB49B5512581BA3200808CC8 /* RecipeCollection */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4C12565E49F00808CC8 /* RecipeCollectionView.swift */,
+			);
+			name = RecipeCollection;
+			sourceTree = "<group>";
+		};
+		DB49B5522581BA4100808CC8 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B53C2580163500808CC8 /* TimerView.swift */,
+			);
+			name = Timer;
+			sourceTree = "<group>";
+		};
+		DB49B5532581BA4600808CC8 /* ShoppingList */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B52B257EF64500808CC8 /* ShoppingListView.swift */,
+			);
+			name = ShoppingList;
+			sourceTree = "<group>";
+		};
+		DB49B5542581BA7900808CC8 /* RecipeCategory */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
+			);
+			name = RecipeCategory;
+			sourceTree = "<group>";
+		};
+		DB49B5552581BA8300808CC8 /* Recipe */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
+				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
+				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
+				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
+			);
+			name = Recipe;
+			sourceTree = "<group>";
+		};
+		DB49B5562581BAC800808CC8 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
+				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		DB49B5572581BAED00808CC8 /* Editable */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B4FA256E015000808CC8 /* EditableText.swift */,
+				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
+				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
+			);
+			name = Editable;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -369,13 +470,16 @@
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B53B257FDD8D00808CC8 /* TestView.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
+				DB49B5592581BB0D00808CC8 /* RecipeSearch.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
 				DB49B547258070C400808CC8 /* AnimatableCircleStroke.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
 				DB49B54525806B8300808CC8 /* SimpleTimer.swift in Sources */,
 				DB49B53D2580163500808CC8 /* TimerView.swift in Sources */,
+				DB49B55D2581E63000808CC8 /* WebMeasurement.swift in Sources */,
 				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
+				DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */,
 				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
@@ -384,9 +488,11 @@
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
 				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
+				DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */,
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
 				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
 				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
+				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
 				DB49B532257F379400808CC8 /* ShoppingItem.swift in Sources */,
@@ -396,11 +502,13 @@
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
+				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
+				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,
 				DB49B4D42565E49F00808CC8 /* Recipe.swift in Sources */,
