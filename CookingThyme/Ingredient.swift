@@ -57,6 +57,9 @@ struct Ingredient: Identifiable, Equatable {
     }
     
     func getAmountString() -> String {
+        if amount == 0 {
+            return ""
+        }
         return Fraction.toString(fromDouble: amount)
     }
     
@@ -83,9 +86,12 @@ struct Ingredient: Identifiable, Equatable {
     
     func toString() -> String {
         var string = ""
-        string += getAmountString()
+        let amountString = getAmountString()
+        if amountString != "" {
+            string += amountString + " "
+        }
         if self.unitName.getName() != "" {
-            string += " " + self.unitName.getName() + " "
+            string += self.unitName.getName() + " "
         }
         string += self.name
         return string

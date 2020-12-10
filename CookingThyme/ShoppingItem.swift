@@ -58,10 +58,10 @@ struct ShoppingItem: Identifiable {
     func toString() -> String {
         var string = ""
         if let amountDouble = self.amount {
-            string += Fraction.toString(fromDouble: amountDouble)
+            string += Fraction.toString(fromDouble: amountDouble) + " "
         }
         if self.unitName.getName() != "" {
-            string += " " + self.unitName.getName() + " "
+            string += self.unitName.getName() + " "
         }
         string += self.name
         return string

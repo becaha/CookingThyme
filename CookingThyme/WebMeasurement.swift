@@ -8,10 +8,10 @@
 import Foundation
 
 struct WebMeasurement {
-    var quantity: String?
-    var unit: WebUnit?
+    var quantity: String = "0"
+    var unit: WebUnit = WebUnit()
     
-    init(quantity: String?, unit: WebUnit?) {
+    init(quantity: String, unit: WebUnit) {
         self.quantity = quantity
         self.unit = unit
     }

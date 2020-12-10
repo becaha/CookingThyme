@@ -16,7 +16,7 @@ struct ReadRecipeView: View {
     @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
     
-    @State private var directionIndicesCompleted = [Int]()
+//    @State private var directionIndicesCompleted = [Int]()
     @State private var inEditMode = false
     @State private var newAmount: String = ""
     @State private var newUnit: String = ""
@@ -63,7 +63,8 @@ struct ReadRecipeView: View {
                         }
                     },
                         footer:
-                            AddIngredientsButton()
+                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe)
+
                 ) {
                     List {
                         ForEach(recipe.ingredients) { ingredient in
@@ -96,7 +97,7 @@ struct ReadRecipeView: View {
                 Section(header: Text("Directions")) {
                     // TODO make list collapsable so after a step is done, it collapses
                     List {
-                        ForEach(0..<recipe.directions.count) { index in
+                        ForEach(0..<recipe.directions.count, id: \.self) { index in
                             Direction(withIndex: index)
                         }
                     }
@@ -149,29 +150,6 @@ struct ReadRecipeView: View {
         )
     }
     
-    @ViewBuilder
-    func AddIngredientsButton() -> some View {
-        VStack(alignment: .center) {
-            Button(action: {
-                withAnimation {
-                    collection.addToShoppingList(fromRecipe: recipe.recipe)
-                }
-            }) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(Color(UIColor.tertiarySystemFill))
-                    
-                    HStack {
-                        Image(systemName: "cart.fill")
-                        
-                        Text("Add All to Shopping List")
-                            .padding(.vertical)
-                    }
-                }
-            }
-        }
-    }
-    
     @ViewBuilder func getImageView() -> some View {
         if recipe.imageHandler.image != nil {
             Section(header: Text("Photos")) {
@@ -180,36 +158,15 @@ struct ReadRecipeView: View {
         }
     }
     
-    @ViewBuilder func DirectionText(withIndex index: Int) -> some View {
-        if inEditMode {
-            Group {
-                Text("\(index + 1)")
-                    .frame(width: 20, height: 20, alignment: .center)
+    @ViewBuilder
+    func DirectionText(withIndex index: Int) -> some View {
+        Group {
+            Text("\(index + 1)")
+                .frame(width: 20, height: 20, alignment: .center)
 
-                TextField("\(recipe.directions[index].direction)", text: $newDirection)
-            }
-            .padding(.vertical)
+            TextField("\(recipe.directions[index].direction)", text: $newDirection)
         }
-        else {
-            if directionIndicesCompleted.contains(index) {
-                HStack(alignment: .center) {
-                    Text("\(index + 1)")
-
-                    Spacer()
-
-                    Image(systemName: "plus").imageScale(.medium)
-                }
-            }
-            else {
-                Group {
-                    Text("\(index + 1)")
-                        .frame(width: 20, height: 20, alignment: .center)
-
-                    Text("\(recipe.directions[index].direction)")
-                }
-                .padding(.vertical)
-            }
-        }
+        .padding(.vertical)
     }
     
     // on click to edit an ingredient, this will be added to that ingredient, off click will save that to
@@ -225,7 +182,7 @@ struct ReadRecipeView: View {
             }
         }
         else {
-            Text("\(ingredient.getAmountString()) \(ingredient.unitName.getName()) \(ingredient.name)")
+            RecipeControls.ReadIngredientText(ingredient)
         }
     }
     
@@ -237,16 +194,7 @@ struct ReadRecipeView: View {
             .foregroundColor(.black)
         }
         else {
-            Button(action: {
-                withAnimation {
-                    directionIndicesCompleted.toggleElement(index)
-                }
-            }) {
-                HStack(alignment: .top, spacing: 20) {
-                    DirectionText(withIndex: index)
-                }
-                .foregroundColor(.black)
-            }
+            RecipeControls.ReadDirection(withIndex: index, recipe: recipe.recipe)
         }
     }
 }

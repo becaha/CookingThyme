@@ -69,6 +69,9 @@ struct CategoryView: View {
                 }
             }
         }
+        .onAppear {
+            category.popullateRecipes()
+        }
         .background(formBackgroundColor())
         .listStyle(InsetGroupedListStyle())
         .navigationBarTitle("", displayMode: .inline)

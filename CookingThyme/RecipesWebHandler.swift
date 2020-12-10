@@ -8,33 +8,52 @@
 import Foundation
 
 class RecipesWebHandler: ObservableObject {
-    @Published var foundRecipes = [WebRecipe]()
+    @Published var recipeList = [WebRecipe]()
+    @Published var recipeDetail: WebRecipe?
+    @Published var recipeDetailError = false
+    @Published var recipesStore = [Int: WebRecipe]()
+    @Published var listingRecipes = false
+    @Published var isMore = false
+        
+    var lastQuery = ""
     
-    var recipeList = [NSNumber]() {
-        didSet {
-            setRecipes()
-        }
-    }
+    var recipeListIndex = 0
+    var requestPageSize = 20
     
     // tasty
-    
     static let tastyAppKey = "9bacb7affdmsh5c06e2b4dd670efp196956jsn7dc7caf94abd"
 
-
-    
     init() {}
     
+    func listMoreRecipes() {
+        internalListRecipes(withQuery: lastQuery)
+    }
     
     func listRecipes(withQuery query: String) {
+        recipeListIndex = 0
+        recipeList = []
+        lastQuery = query
+        internalListRecipes(withQuery: query)
+    }
+        
+    func internalListRecipes(withQuery query: String) {
+        listingRecipes = true
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "tasty.p.rapidapi.com"
         urlComponents.path = "/recipes/list"
-        urlComponents.queryItems = [
-            URLQueryItem(name: "from", value: "0"),
-            URLQueryItem(name: "size", value: "10"),
-            URLQueryItem(name: "q", value: query)
+        var queryItems = [
+            URLQueryItem(name: "from", value: recipeListIndex.toString()),
+            URLQueryItem(name: "size", value: requestPageSize.toString())
         ]
+        
+        if query != "" {
+            queryItems.append(URLQueryItem(name: "q", value: query))
+        }
+        
+        self.recipeListIndex += self.requestPageSize
+        
+        urlComponents.queryItems = queryItems
         
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
@@ -43,7 +62,7 @@ class RecipesWebHandler: ObservableObject {
         request.setValue("tasty.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         
-        var recipeList = [NSNumber]()
+        var recipes = [WebRecipe]()
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             do {
@@ -53,18 +72,26 @@ class RecipesWebHandler: ObservableObject {
                 }
                 
                 if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    if let count = jsonObject["count"] as? Int {
+                        if self.recipeListIndex < count {
+                            self.isMore = true
+                        }
+                        else {
+                            self.isMore = false
+                        }
+                    }
                     if let results = jsonObject["results"] as? [Any] {
                         for result in results {
                             if let recipe = result as? [String: Any] {
                                 let name = recipe["name"] as? String
-                                let id = recipe["id"] as? NSNumber
-                                if let recipeId = id {
-                                    recipeList.append(recipeId)
+                                let id = recipe["id"] as? Int
+                                if let recipeId = id, let recipeName = name {
+                                    recipes.append(WebRecipe(id: recipeId, name: recipeName))
                                 }
                             }
                         }
                         DispatchQueue.main.async {
-                            self.setRecipeList(recipeList)
+                            self.setRecipeList(recipes)
                         }
                     }
                 }
@@ -76,18 +103,18 @@ class RecipesWebHandler: ObservableObject {
         }.resume()
     }
     
-    func setRecipeList(_ recipeList: [NSNumber]) {
-        self.recipeList = recipeList
+    func setRecipeList(_ recipeList: [WebRecipe]) {
+        self.recipeList.append(contentsOf: recipeList)
+        listingRecipes = false
     }
     
-    func setRecipes() {
-        for recipeId in recipeList {
-            listRecipeDetail(withId: recipeId)
+    func listRecipeDetail(_ recipe: WebRecipe) {
+        recipeDetailError = false
+        if self.recipesStore[recipe.id] != nil {
+            self.recipeDetail = recipe
+            return
         }
-    }
-    
-    func listRecipeDetail(withId id: NSNumber) {
-        guard let idString = id.toString() else {return}
+        let idString = recipe.id.toString()
         
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -110,14 +137,22 @@ class RecipesWebHandler: ObservableObject {
                     print("No data in response: \(error?.localizedDescription ?? "Unknown error").")
                     return
                 }
+                
+                if let response = response as? HTTPURLResponse {
+                    if response.statusCode != 200 {
+                        self.recipeDetailError = true
+                        return
+                    }
+                    
+                }
 
-                var recipe = WebRecipe()
-                recipe.id = id
+                var recipe = recipe
                 
                 if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     // name
-                    let name = jsonObject["name"] as? String
-                    recipe.name = name
+                    if let name = jsonObject["name"] as? String {
+                        recipe.name = name
+                    }
                     
                     // instructions
                     if let instructions = jsonObject["instructions"] as? [Any] {
@@ -135,8 +170,12 @@ class RecipesWebHandler: ObservableObject {
                     }
                     
                     // servings
-                    let servings = jsonObject["num_servings"] as? NSNumber
-                    recipe.servings = servings
+                    if let servings = jsonObject["num_servings"] as? Double {
+                        recipe.servings = Int(max(1, round(servings)))
+                    }
+                    else if let servings = jsonObject["num_servings"] as? Int {
+                        recipe.servings = servings
+                    }
 
                     // sections
                     var recipeSections = [WebSection]()
@@ -161,8 +200,9 @@ class RecipesWebHandler: ObservableObject {
                                             var sectionIngredient = WebIngredient()
                                             
                                             if let ingredient = component["ingredient"] as? [String: Any] {
-                                                let name = ingredient["name"] as? String
-                                                sectionIngredient.name = name
+                                                if let name = ingredient["name"] as? String {
+                                                    sectionIngredient.name = name
+                                                }
                                             }
                                             if let measurements = component["measurements"] as? [Any] {
                                                 // measurements
@@ -174,15 +214,22 @@ class RecipesWebHandler: ObservableObject {
                                                     
                                                     if let measurement = measurement as? [String: Any] {
                                                         // quantity
-                                                        let quantity = measurement["quantity"] as? String
-                                                        ingredientMeasurement.quantity = quantity
+                                                        if let quantity = measurement["quantity"] as? String {
+                                                            ingredientMeasurement.quantity = quantity
+                                                        }
                                                         
                                                         // unit
                                                         if let unit = measurement["unit"] as? [String: Any] {
-                                                            let unitName = unit["name"] as? String
-                                                            let abbreviation = unit["abbreviation"] as? String
+                                                            var measurementUnit = WebUnit()
                                                             
-                                                            ingredientMeasurement.unit = WebUnit(name: unitName, abbreviation: abbreviation)
+                                                            if let unitName = unit["name"] as? String {
+                                                                measurementUnit.name = unitName
+                                                            }
+                                                            if let abbreviation = unit["abbreviation"] as? String {
+                                                                measurementUnit.abbreviation = abbreviation
+                                                            }
+                                                            
+                                                            ingredientMeasurement.unit = measurementUnit
                                                         }
                                                     }
                                                     
@@ -206,19 +253,34 @@ class RecipesWebHandler: ObservableObject {
                         
                     recipe.sections = recipeSections
                     DispatchQueue.main.async {
-                        self.setRecipe(recipe)
+                        self.setRecipeDetail(recipe)
                     }
                 }
             }
             catch {
                 print(error)
+                self.recipeDetailError = true
             }
             
         }.resume()
     }
     
-    func setRecipe(_ recipe: WebRecipe) {
-        self.foundRecipes.append(recipe)
+    func setRecipeDetail(_ recipe: WebRecipe) {
+        if isValid(recipe) {
+            self.recipeDetail = recipe
+            self.recipesStore[recipe.id] = recipe
+        }
+        else {
+            print("error getting recipe with id \(recipe.id)")
+        }
+    }
+    
+    func isValid(_ recipe: WebRecipe) -> Bool {
+        if recipe.name != "", recipe.directions.count > 0, recipe.sections.count > 0,
+           recipe.sections[0].ingredients.count > 0 {
+            return true
+        }
+        return false
     }
     
     func prettyPrinting(data: Data) {

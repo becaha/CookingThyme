@@ -8,10 +8,10 @@
 import Foundation
 
 struct WebUnit {
-    var name: String?
-    var abbreviation: String?
+    var name: String = ""
+    var abbreviation: String = ""
     
-    init(name: String?, abbreviation: String?) {
+    init(name: String, abbreviation: String) {
         self.name = name
         self.abbreviation = abbreviation
     }

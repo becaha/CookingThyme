@@ -1,0 +1,103 @@
+//
+//  PublicRecipeVM.swift
+//  CookingThyme
+//
+//  Created by Rebecca Nybo on 12/10/20.
+//
+
+import Foundation
+import Combine
+
+class PublicRecipeVM: ObservableObject {
+    @Published var publicRecipe: WebRecipe
+    @Published var recipe: Recipe
+    @Published var recipesWebHandler = RecipesWebHandler()
+    @Published var isPopullating = true
+    @Published var recipeNotFound = false
+    
+    private var webHandlerCancellable: AnyCancellable?
+    private var recipeDetailCancellable: AnyCancellable?
+    private var recipeDetailErrorCancellable: AnyCancellable?
+
+    init(publicRecipe: WebRecipe) {
+        self.publicRecipe = publicRecipe
+        self.recipe = Recipe()
+        
+        
+        self.webHandlerCancellable = self.recipesWebHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
+        self.recipeDetailCancellable = self.recipesWebHandler.$recipeDetail.sink { (recipe) in
+            if let recipe = recipe {
+                self.publicRecipe = recipe
+                self.recipe = PublicRecipeVM.convertToRecipe(fromPublicRecipe: recipe)
+                self.isPopullating = false
+            }
+        }
+        
+        self.recipeDetailErrorCancellable = self.recipesWebHandler.$recipeDetailError.sink { (isError) in
+            self.recipeNotFound = isError
+        }
+    }
+    
+    func popullateDetail() {
+        recipesWebHandler.listRecipeDetail(publicRecipe)
+    }
+    
+    // MARK: - Model Access
+    
+    var name: String {
+        if recipe.name != "" {
+            return recipe.name.lowercased().capitalized
+        }
+        else {
+            return publicRecipe.name.lowercased().capitalized
+        }
+    }
+    
+    var servings: Int {
+        get { recipe.servings }
+        set { recipe.servings = newValue }
+    }
+    
+    var ingredients: [Ingredient] {
+        recipe.ingredients
+    }
+    
+    var directions: [Direction] {
+        recipe.directions
+    }
+    
+    // MARK: - Intents
+    
+    
+    static func convertIngredients(_ ingredients: [WebIngredient]) -> [TempIngredient] {
+        var tempIngredients = [TempIngredient]()
+        
+        for ingredient in ingredients {
+            let tempIngredient = TempIngredient(name: ingredient.name, amount: ingredient.measurements[0].quantity, unitName: ingredient.measurements[0].unit.name, recipeId: 0, id: nil)
+            tempIngredients.append(tempIngredient)
+        }
+        
+        return tempIngredients
+    }
+    
+    
+    static func convertToRecipe(fromPublicRecipe publicRecipe: WebRecipe) -> Recipe {
+        let directions = Direction.toDirections(directionStrings: publicRecipe.directions, withRecipeId: 0)
+        let ingredients = Ingredient.toIngredients(PublicRecipeVM.convertIngredients(publicRecipe.sections[0].ingredients))
+        let images = [RecipeImage]()
+        return Recipe(name: publicRecipe.name, ingredients: ingredients, directions: directions, images: images, servings: publicRecipe.servings)
+    }
+    
+    func convertToRecipe(fromPublicRecipe publicRecipe: WebRecipe, withCategoryId categoryId: Int) -> Recipe {
+        let recipe = PublicRecipeVM.convertToRecipe(fromPublicRecipe: publicRecipe)
+        return RecipeCategoryVM.createRecipe(forCategoryId: categoryId, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())!
+    }
+    
+    func copyRecipe(toCategoryId categoryId: Int) {
+        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
+    }
+}

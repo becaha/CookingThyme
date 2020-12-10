@@ -134,10 +134,6 @@ class RecipeVM: ObservableObject {
         return recipe.servings == 0
     }
     
-    func setServingSize(_ size: Int) {
-        recipe.servings = size
-    }
-    
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
         let doubleAmount = Fraction.toDouble(fromString: amount)
         let unit = Ingredient.makeUnit(fromUnit: unit)
@@ -153,6 +149,10 @@ class RecipeVM: ObservableObject {
     }
     
     func copyRecipe(toCategoryId categoryId: Int) {
+        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
+    }
+    
+    static func copy(recipe: Recipe, toCategoryId categoryId: Int) {
         if let category = RecipeDB.shared.getCategory(withId: categoryId) {
             RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())
         }

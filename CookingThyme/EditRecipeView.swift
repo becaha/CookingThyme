@@ -152,7 +152,7 @@ struct EditRecipeView: View {
                                 })
                             }
                             
-                            ErrorMessage("Must fill in all ingredient slots", isError: $newIngredientFieldMissing)
+                            ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
                         }
                     }
                 }
@@ -295,7 +295,7 @@ struct EditRecipeView: View {
     }
     
     private func addIngredient() {
-        if ingredientName != "" && ingredientAmount != "" && ingredientUnit != "" {
+        if ingredientName != "" || ingredientAmount != "" || ingredientUnit != "" {
             newIngredientFieldMissing = false
             recipe.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
             ingredientName = ""

@@ -20,16 +20,16 @@ struct HomeView: View {
                         Text("Recipe Book")
                     }
                 
-                RecipeSearch()
-                    .tabItem {
-                        Image(systemName: "search")
-                        Text("Recipe Search")
-                    }
-                
                 ShoppingListView()
                     .tabItem {
                         Image(systemName: "cart.fill")
                         Text("Shopping List")
+                    }
+                
+                RecipeSearch()
+                    .tabItem {
+                        Image(systemName: "magnifyingglass")
+                        Text("Recipe Search")
                     }
                 
                 TimerView()

@@ -40,7 +40,6 @@ struct ShoppingListView: View {
                     indexSet.forEach { index in
                         collection.removeTempShoppingItem(collection.notCompletedItems[index])
                     }
-                    saveItems()
                 }
             }
 
@@ -54,7 +53,6 @@ struct ShoppingListView: View {
                         Button(action: {
                             withAnimation {
                                 collection.removeCompletedShoppingItems()
-                                saveItems()
                             }
                         }) {
                             Image(systemName: "trash")
@@ -69,7 +67,6 @@ struct ShoppingListView: View {
                     indexSet.forEach { index in
                         collection.removeTempShoppingItem(collection.completedItems[index])
                     }
-                    saveItems()
                 }
                 
             }
@@ -85,7 +82,6 @@ struct ShoppingListView: View {
             Button(action: {
                 withAnimation {
                     collection.toggleCompleted(item)
-                    saveItems()
                 }
             }) {
                 ZStack {
@@ -107,11 +103,6 @@ struct ShoppingListView: View {
     func addItem() {
         collection.addTempShoppingItem(name: newName)
         newName = ""
-        saveItems()
-    }
-    
-    func saveItems() {
-        collection.saveShoppingList()
     }
 }
 

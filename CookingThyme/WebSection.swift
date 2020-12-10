@@ -8,8 +8,8 @@
 import Foundation
 
 struct WebSection {
-    var name: String?
-    var ingredients: [WebIngredient]?
+    var name: String = ""
+    var ingredients: [WebIngredient] = []
     
     init(name: String, ingredients: [WebIngredient]) {
         self.name = name

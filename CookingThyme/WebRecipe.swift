@@ -8,13 +8,13 @@
 import Foundation
 
 struct WebRecipe: Identifiable {
-    var id: NSNumber?
-    var name: String?
-    var sections: [WebSection]?
-    var servings: NSNumber?
-    var directions: [String]?
+    var id: Int
+    var name: String = ""
+    var sections: [WebSection] = []
+    var servings: Int = 0
+    var directions: [String] = []
     
-    init(id: NSNumber, name: String?, sections: [WebSection]?, servings: NSNumber?, directions: [String]?) {
+    init(id: Int, name: String, sections: [WebSection], servings: Int, directions: [String]) {
         self.id = id
         self.name = name
         self.sections = sections
@@ -22,6 +22,9 @@ struct WebRecipe: Identifiable {
         self.directions = directions
     }
     
-    init() {}
+    init(id: Int, name: String) {
+        self.id = id
+        self.name = name
+    }
     
 }

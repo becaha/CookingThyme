@@ -9,13 +9,19 @@ import SwiftUI
 
 struct UIControls {
     
-//    @ViewBuilder
-//    static func AddButton(action: @escaping () -> Void) -> some View {
-//        Button(action: action) {
-//            Text("Add")
-//                .foregroundColor(.black)
-//        }
-//    }
+    @ViewBuilder
+    static func Loading() -> some View {
+        HStack {
+            Spacer()
+            
+            ProgressView()
+                .frame(alignment: .center)
+            
+            Spacer()
+        }
+    }
+    
+    
     
     @ViewBuilder
     static func EditButton(action: @escaping () -> Void, isEditing: Bool) -> some View {

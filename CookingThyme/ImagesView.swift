@@ -31,14 +31,7 @@ struct ImagesView: View {
         
         VStack(alignment: .center) {
             if isLoading {
-                HStack {
-                    Spacer()
-                    
-                    ProgressView()
-                        .frame(alignment: .center)
-                    
-                    Spacer()
-                }
+                UIControls.Loading()
             }
             else {
                 HStack {

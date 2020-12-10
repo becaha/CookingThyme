@@ -8,24 +8,29 @@
 import SwiftUI
 
 struct TestView: View {
+    @State var isLoading = true
+    
     var body: some View {
-        GeometryReader { geometry in
+        VStack {
             HStack {
-                VStack(alignment: .center) {
-                    VStack {
-                    Image(systemName: "plus")
-                        .padding(.bottom, 5)
-                    
-                    Text("Add Photo")
-                        .font(.subheadline)
-                        .padding(.top, 0)
-                    }
-                    .frame(width: geometry.size.width/2)
-                    .border(Color.black, width: 3.0, isDashed: true)
-                }
-                .padding()
-//                .frame(width: geometry.size.width)
+                Text("hi")
+                    .font(.system(size: 30, weight: .bold))
+                    .multilineTextAlignment(.center)
             }
+            .padding()
+            
+            
+                Form {
+                    if isLoading {
+//                        VStack {
+                            UIControls.Loading()
+//                        }
+//                        .frame(height: 500)
+                    }
+                    else {
+                    Section {}
+                    }
+                }
         }
     }
 }
