@@ -150,7 +150,8 @@ struct ReadRecipeView: View {
         )
     }
     
-    @ViewBuilder func getImageView() -> some View {
+    @ViewBuilder
+    func getImageView() -> some View {
         if recipe.imageHandler.image != nil {
             Section(header: Text("Photos")) {
                 ImagesView(isEditing: false)

@@ -14,15 +14,23 @@ class PublicRecipeVM: ObservableObject {
     @Published var recipesWebHandler = RecipesWebHandler()
     @Published var isPopullating = true
     @Published var recipeNotFound = false
-    
+    @Published var imageHandler = ImageHandler()
+
     private var webHandlerCancellable: AnyCancellable?
     private var recipeDetailCancellable: AnyCancellable?
     private var recipeDetailErrorCancellable: AnyCancellable?
+    private var imageHandlerCancellable: AnyCancellable?
+    
+    // MARK: - Init
 
     init(publicRecipe: WebRecipe) {
         self.publicRecipe = publicRecipe
         self.recipe = Recipe()
         
+        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
         
         self.webHandlerCancellable = self.recipesWebHandler.objectWillChange
             .sink { _ in
@@ -33,6 +41,7 @@ class PublicRecipeVM: ObservableObject {
             if let recipe = recipe {
                 self.publicRecipe = recipe
                 self.recipe = PublicRecipeVM.convertToRecipe(fromPublicRecipe: recipe)
+                self.imageHandler.setImages(self.recipe.images)
                 self.isPopullating = false
             }
         }
@@ -88,7 +97,10 @@ class PublicRecipeVM: ObservableObject {
     static func convertToRecipe(fromPublicRecipe publicRecipe: WebRecipe) -> Recipe {
         let directions = Direction.toDirections(directionStrings: publicRecipe.directions, withRecipeId: 0)
         let ingredients = Ingredient.toIngredients(PublicRecipeVM.convertIngredients(publicRecipe.sections[0].ingredients))
-        let images = [RecipeImage]()
+        var images = [RecipeImage]()
+        if publicRecipe.imageURL != "" {
+            images.append(RecipeImage(type: ImageType.url, data: publicRecipe.imageURL, recipeId: 0))
+        }
         return Recipe(name: publicRecipe.name, ingredients: ingredients, directions: directions, images: images, servings: publicRecipe.servings)
     }
     

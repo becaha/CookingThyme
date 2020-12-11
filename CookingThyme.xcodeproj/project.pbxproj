@@ -64,6 +64,7 @@
 		DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B564258276C700808CC8 /* RecipeControls.swift */; };
 		DB49B56725827ADA00808CC8 /* PublicRecipeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */; };
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
+		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +129,7 @@
 		DB49B564258276C700808CC8 /* RecipeControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeControls.swift; sourceTree = "<group>"; };
 		DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeVM.swift; sourceTree = "<group>"; };
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,6 +349,7 @@
 			children = (
 				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
 				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
+				DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
+				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B53B257FDD8D00808CC8 /* TestView.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,

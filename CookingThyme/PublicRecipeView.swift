@@ -44,6 +44,10 @@ struct PublicRecipeView: View {
                     }
                 }
                 else {
+                    Section(header: Text("Photos")) {
+                        ReadImagesView(uiImages: recipe.imageHandler.images)
+                    }
+                    
                     Section(header:
                         HStack {
                             Text("Ingredients")

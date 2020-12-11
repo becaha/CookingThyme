@@ -21,7 +21,7 @@ class RecipesWebHandler: ObservableObject {
     var requestPageSize = 20
     
     // tasty
-    static let tastyAppKey = "9bacb7affdmsh5c06e2b4dd670efp196956jsn7dc7caf94abd"
+    static let tastyAppKey = "fdc13d3f7cmsh63c39a29ed19133p14dbc4jsnd1975167bc8f"
 
     init() {}
     
@@ -74,10 +74,14 @@ class RecipesWebHandler: ObservableObject {
                 if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     if let count = jsonObject["count"] as? Int {
                         if self.recipeListIndex < count {
-                            self.isMore = true
+                            DispatchQueue.main.async {
+                                self.isMore = true
+                            }
                         }
                         else {
-                            self.isMore = false
+                            DispatchQueue.main.async {
+                                self.isMore = false
+                            }
                         }
                     }
                     if let results = jsonObject["results"] as? [Any] {
@@ -152,6 +156,10 @@ class RecipesWebHandler: ObservableObject {
                     // name
                     if let name = jsonObject["name"] as? String {
                         recipe.name = name
+                    }
+                    
+                    if let thumbnail_url = jsonObject["thumbnail_url"] as? String {
+                        recipe.imageURL = thumbnail_url
                     }
                     
                     // instructions

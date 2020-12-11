@@ -27,6 +27,18 @@ struct RecipeSearch: View {
                     }
                 }
                 
+                if recipeWebHandler.recipeList.count == 0 && !isLoading && hasSearched {
+                    Section(header:
+                        HStack {
+                            Spacer()
+                            
+                            Text("No Results")
+                            
+                            Spacer()
+                        }
+                    ) {}
+                }
+                
                 if recipeWebHandler.recipeList.count > 0 {
                     List {
                         ForEach(recipeWebHandler.recipeList) { recipe in

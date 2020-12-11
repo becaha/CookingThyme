@@ -77,6 +77,11 @@ struct EditRecipeView: View {
             .padding()
                             
             Form {
+                Section(header: Text("Photos")) {
+                    ImagesView()
+                        .frame(minHeight: 200)
+                }
+                
                 Section(header:
                     HStack {
                         Text("Ingredients")
@@ -212,10 +217,6 @@ struct EditRecipeView: View {
                         .padding(.vertical)
                     }
                     .foregroundColor(.black)
-                }
-                Section(header: Text("Photos")) {
-                    ImagesView()
-                        .frame(minHeight: 200)
                 }
 
             }
