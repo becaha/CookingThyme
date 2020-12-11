@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: make sure serving size doesnt change actual recipe that gets saved
+
 struct PublicRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @ObservedObject var recipe: PublicRecipeVM
@@ -15,6 +17,9 @@ struct PublicRecipeView: View {
     @State private var categoriesPresented = false
     
     @State private var confirmAddIngredient: Int?
+    @State private var addedIngredients = [Int]()
+    @State private var addedAllIngredients = false
+
     
     private var isLoading: Bool {
         return recipe.isPopullating && !recipe.recipeNotFound
@@ -72,16 +77,21 @@ struct PublicRecipeView: View {
                             }
                         },
                             footer:
-                                RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe)
+                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe, action: addAllIngredients)
                         ) {
                         List {
                             ForEach(recipe.ingredients) { ingredient in
                                 HStack {
-                                    UIControls.AddButton(action: {
-                                        withAnimation {
-                                            confirmAddIngredient = ingredient.id
-                                        }
-                                    })
+                                    if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {                                        Image(systemName: "checkmark")
+                                            .foregroundColor(mainColor())
+                                    }
+                                    else {
+                                        UIControls.AddButton(action: {
+                                            withAnimation {
+                                                confirmAddIngredient = ingredient.id
+                                            }
+                                        })
+                                    }
                                     
                                     RecipeControls.ReadIngredientText(ingredient)
                                 }
@@ -93,6 +103,7 @@ struct PublicRecipeView: View {
                                             withAnimation {
                                                 collection.addToShoppingList(ingredient)
                                                 confirmAddIngredient = nil
+                                                addedIngredients.append(ingredient.id)
                                             }
                                         })
                                     }
@@ -154,6 +165,10 @@ struct PublicRecipeView: View {
                 }
                 .disabled(isLoading || recipe.recipeNotFound)
         )
+    }
+    
+    func addAllIngredients() {
+        self.addedAllIngredients = true
     }
     
 }

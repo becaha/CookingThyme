@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+// TODO deal with plural ingredient unitNames
+// TODO have title not sticky
+
 struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
@@ -23,9 +26,14 @@ struct ReadRecipeView: View {
     @State private var newName: String = ""
     @State private var newDirection: String = ""
     
+    
     @State private var isCreatingRecipe = false
     
     @State private var confirmAddIngredient: Int?
+    @State private var addedAllIngredients = false
+    @State private var addedIngredients = [Int]()
+
+
     
     var body: some View {
         VStack {
@@ -63,17 +71,23 @@ struct ReadRecipeView: View {
                         }
                     },
                         footer:
-                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe)
+                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe, action: addAllIngredients)
 
                 ) {
                     List {
                         ForEach(recipe.ingredients) { ingredient in
                             HStack {
-                                UIControls.AddButton(action: {
-                                    withAnimation {
-                                        confirmAddIngredient = ingredient.id
-                                    }
-                                })
+                                if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(mainColor())
+                                }
+                                else {
+                                    UIControls.AddButton(action: {
+                                        withAnimation {
+                                            confirmAddIngredient = ingredient.id
+                                        }
+                                    })
+                                }
                                 
                                 IngredientText(ingredient)
                             }
@@ -85,10 +99,11 @@ struct ReadRecipeView: View {
                                         withAnimation {
                                             collection.addToShoppingList(ingredient)
                                             confirmAddIngredient = nil
+                                            addedIngredients.append(ingredient.id)
                                         }
                                     })
                                 }
-                                .foregroundColor(Color(UIColor.systemGray))
+                                .foregroundColor(mainColor())
                             }
                         }
                     }
@@ -148,6 +163,10 @@ struct ReadRecipeView: View {
                     }
                 }
         )
+    }
+    
+    func addAllIngredients() {
+        self.addedAllIngredients = true
     }
     
     @ViewBuilder
