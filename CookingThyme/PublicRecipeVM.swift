@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// recipe that comes from the Tasty API
 class PublicRecipeVM: ObservableObject {
     @Published var publicRecipe: WebRecipe
     @Published var recipe: Recipe
@@ -51,6 +52,7 @@ class PublicRecipeVM: ObservableObject {
         }
     }
     
+    // calls api to get detail of a recipe (its parts)
     func popullateDetail() {
         recipesWebHandler.listRecipeDetail(publicRecipe)
     }
@@ -81,7 +83,7 @@ class PublicRecipeVM: ObservableObject {
     
     // MARK: - Intents
     
-    
+    // converts Web Ingredients from api result to Temp Ingredients for ui
     static func convertIngredients(_ ingredients: [WebIngredient]) -> [TempIngredient] {
         var tempIngredients = [TempIngredient]()
         
@@ -93,7 +95,7 @@ class PublicRecipeVM: ObservableObject {
         return tempIngredients
     }
     
-    
+    // converts WebRecipe from api result to Recipe
     static func convertToRecipe(fromPublicRecipe publicRecipe: WebRecipe) -> Recipe {
         let directions = Direction.toDirections(directionStrings: publicRecipe.directions, withRecipeId: 0)
         let ingredients = Ingredient.toIngredients(PublicRecipeVM.convertIngredients(publicRecipe.sections[0].ingredients))
@@ -104,11 +106,13 @@ class PublicRecipeVM: ObservableObject {
         return Recipe(name: publicRecipe.name, ingredients: ingredients, directions: directions, images: images, servings: publicRecipe.servings)
     }
     
+    // converts WebRecipe from api result to Recipe to be copied to the given category of user's collection
     func convertToRecipe(fromPublicRecipe publicRecipe: WebRecipe, withCategoryId categoryId: Int) -> Recipe {
         let recipe = PublicRecipeVM.convertToRecipe(fromPublicRecipe: publicRecipe)
         return RecipeCategoryVM.createRecipe(forCategoryId: categoryId, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())!
     }
     
+    // copies recipe to category of user's collection
     func copyRecipe(toCategoryId categoryId: Int) {
         RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
     }

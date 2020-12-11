@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+// handles URL and UI Images
 class ImageHandler: ObservableObject {
     @Published private(set) var image: UIImage? {
         willSet {
@@ -22,6 +23,7 @@ class ImageHandler: ObservableObject {
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
     
+    // encodes uiImage into string to be put in db
     func encodeImage(_ image: UIImage) -> String? {
         if let imageData = image.pngData() {
             return imageData.base64EncodedString(options: .lineLength64Characters)
@@ -29,6 +31,7 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
+    // decodes image string into uiImage to be used in UI
     func decodeImage(_ imageString: String) -> UIImage? {
         if let decodedData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
             return UIImage(data: decodedData)
@@ -36,6 +39,7 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
+    // sets images for UI
     func setImages(_ images: [RecipeImage]) {
         self.images = []
         for image in images {
@@ -43,6 +47,7 @@ class ImageHandler: ObservableObject {
         }
     }
     
+    // sets image for UI
     func setImage(_ image: RecipeImage) {
         if image.type == ImageType.url {
             addImage(url: URL(string: image.data))
@@ -54,21 +59,22 @@ class ImageHandler: ObservableObject {
         }
     }
     
-    // editing
+    // adds URL image
     func addImage(url: URL?) {
         imageURL = url?.imageURL
         setImageData()
     }
     
+    // adds UIImage
     func addImage(uiImage: UIImage) {
         self.image = uiImage
     }
     
-    // what happens if it is last added?
     func removeImage(at index: Int) {
         self.images.remove(at: index)
     }
     
+    // sets image data for a imageURL
     private func setImageData() {
         image = nil
         if let imageUrl = imageURL {
@@ -82,10 +88,12 @@ class ImageHandler: ObservableObject {
         }
     }
     
+    // sets zoom scale to fit for gien image and size
     func zoomToFit(_ image: UIImage?, in size: CGSize) {
         self.zoomScale = ImageHandler.getZoomScale(image, in: size)
     }
     
+    // gets zoom scale for image in size
     static func getZoomScale(_ image: UIImage?, in size: CGSize) -> CGFloat {
         if let image = image, image.size.width > 0, image.size.height > 0 {
             let horizontalZoom = size.width / image.size.width
@@ -98,6 +106,7 @@ class ImageHandler: ObservableObject {
 }
 
 extension URL {
+    // gets imageURL from URL
     var imageURL: URL {
         for query in query?.components(separatedBy: "&") ?? [] {
             let queryComponents = query.components(separatedBy: "=")

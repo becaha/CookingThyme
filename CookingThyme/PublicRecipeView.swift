@@ -172,27 +172,3 @@ struct PublicRecipeView: View {
     }
     
 }
-
-//struct PublicRecipeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationView {
-//        ReadRecipeView(isPresented: <#T##Binding<Bool>#>,
-//            recipeVM: RecipeVM(recipe: Recipe(
-//                name: "Water",
-//                ingredients: [
-//                    Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.Cup),
-//                    Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.Cup),
-//                    Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.Cup),
-//                    Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.Cup),
-//                    Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.Cup)
-//                ],
-//                directions: [
-//                    Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),
-//                    Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
-//                    Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
-//                servings: 1)
-//        ))
-//        }
-//    }
-//}
-

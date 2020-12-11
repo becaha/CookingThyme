@@ -23,13 +23,13 @@ struct Recipe: Identifiable {
     // MARK: - DB Properties
 
     var id: Int
-    // TODO do I want to format this or let them write it in as they want
     var name: String {
         didSet {
             name = name.lowercased().capitalized
         }
     }
     // TODO take a whole thing and half it (package rice with no amount -> 1/2 package rice)
+    // when servings change, change the amounts of all ingredients to reflect it
     var servings: Int {
         willSet {
             changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
@@ -47,7 +47,6 @@ struct Recipe: Identifiable {
         self.recipeCategoryId = 0
     }
     
-    // TODO remove??
     init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int) {
         self.name = name.lowercased().capitalized
         self.ingredients = ingredients
@@ -84,32 +83,7 @@ struct Recipe: Identifiable {
         images.append(RecipeImage(row: row))
     }
     
-//    var name: String
-//    var ingredients: [Ingredient]
-//    var directions: [String]
-//    var servings: Int {
-//        willSet {
-//            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
-//        }
-//    }
-//    var id: UUID
-//    
-//    init(name: String, ingredients: [Ingredient], directions: [String], servings: Int) {
-//        self.name = name
-//        self.ingredients = ingredients
-//        self.directions = directions
-//        self.servings = servings
-//        self.id = UUID()
-//    }
-//    
-//    init() {
-//        self.name = ""
-//        self.ingredients = [Ingredient]()
-//        self.directions = [String]()
-//        self.servings = 0
-//        self.id = UUID()
-//    }
-    
+    // change ingredient amounts according to the serving size change
     mutating func changeIngredientAmounts(withRatio ratio: Double) {
         var newIngredients = [Ingredient]()
         for ingredient in ingredients {

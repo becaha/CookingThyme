@@ -37,6 +37,7 @@ class TimerHandler: ObservableObject {
     
     // MARK: - Access
     
+    // time remaining formatted to a string for ui
     var timeRemainingString: String {
         simpleTimer.timeRemainingString
     }
@@ -45,6 +46,7 @@ class TimerHandler: ObservableObject {
         Double(simpleTimer.timeRemaining)
     }
     
+    // ratio of time remaining to amount
     var timeRemainingRatio: Double {
         simpleTimer.timeRemainingRatio
     }
@@ -53,10 +55,12 @@ class TimerHandler: ObservableObject {
         simpleTimer.isPaused
     }
     
+    // is setting timer
     var isSetting: Bool {
         simpleTimer.isSetting
     }
     
+    // alert the user that the timer has gone off
     var timerAlert: Bool {
         get { simpleTimer.timerAlert }
         set { simpleTimer.timerAlert = newValue }
@@ -87,10 +91,12 @@ class TimerHandler: ObservableObject {
         simpleTimer.setTimer(h: hours, m: minutes, s: seconds)
     }
   
+    // updates timer by counting one second
     func countSec() {
         simpleTimer.countSec()
     }
     
+    // updates time remaining in timer by steps counted
     func updateTimeRemaining(withStepCount stepCount: Double) {
         simpleTimer.updateTimeRemaining(withStepCount: stepCount)
     }

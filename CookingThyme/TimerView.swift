@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-//TODO let flick happen with hour/min/sec picker
-// TODO flashes when stoppedon other screen and you go to timer
+// TODO flashes when stopped on other screen and you go to timer
 struct TimerView: View {
     @EnvironmentObject var timer: TimerHandler
     
@@ -34,6 +33,7 @@ struct TimerView: View {
         }
     }
     
+    // countdown view of the timer when timer is set and started
     @ViewBuilder
     func Countdown() -> some View {
         VStack {
@@ -82,10 +82,12 @@ struct TimerView: View {
         }
     }
     
+    // angle for circle time countdown animation
     private func angle(for degrees: Double) -> Angle {
         Angle.degrees(degrees * 360 - 90)
     }
     
+    // starts time countdown animation
     func startTimeAnimation() {
         animatedTimeRemaining = timer.timeRemainingRatio
         withAnimation(.linear(duration: timer.timeRemaining)) {
@@ -93,6 +95,7 @@ struct TimerView: View {
         }
     }
     
+    // timer set view, set hours, min, sec
     @ViewBuilder
     func SetTimer(width: CGFloat) -> some View {
         VStack {
@@ -151,6 +154,7 @@ struct TimerView: View {
         }
     }
     
+    // style for timer buttons
     @ViewBuilder
     func TimerButton(_ text: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {

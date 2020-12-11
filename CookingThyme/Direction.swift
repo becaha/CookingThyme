@@ -39,6 +39,7 @@ struct Direction {
         direction = row[Table.direction]
     }
     
+    // takes directions strings from edit recipe and changs them to directions with the actual recipe id for db
     static func toDirections(directionStrings: [String], withRecipeId recipeId: Int) -> [Direction] {
         var directions = [Direction]()
         for index in 0..<directionStrings.count {
@@ -47,6 +48,7 @@ struct Direction {
         return directions
     }
     
+    // takes directions from db and changes them to strings to be used in edit recipe
     static func toStrings(directions: [Direction]) -> [String] {
         var directionStrings = [String]()
         for direction in directions {

@@ -28,17 +28,15 @@ class RecipeCategoryVM: ObservableObject {
     var name: String {
         category.name
     }
-
-//    var collectionId: Int {
-//        category.recipeCollectionId
-//    }
     
     // MARK: - Intents
     
+    // gets recipes of category from db
     func popullateRecipes() {
         self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
     }
     
+    // gets category from db
     func refreshCategory() {
         if let category = RecipeDB.shared.getCategory(withId: category.id) {
             self.category = category
@@ -46,6 +44,7 @@ class RecipeCategoryVM: ObservableObject {
         }
     }
     
+    // creates recipe for given category with given parts
     static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
@@ -57,6 +56,7 @@ class RecipeCategoryVM: ObservableObject {
         return createdRecipe
     }
     
+    // creates recipe with given partss
     func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         let ingredients = Ingredient.toIngredients(tempIngredients)
@@ -67,6 +67,7 @@ class RecipeCategoryVM: ObservableObject {
         return createdRecipe
     }
     
+    // deletes recipe and associated parts
     func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
@@ -75,6 +76,7 @@ class RecipeCategoryVM: ObservableObject {
         popullateRecipes()
     }
     
+    // updates category name
     func updateCategory(toName name: String) {
         collection.updateCategory(forCategoryId: category.id, toName: name)
         refreshCategory()

@@ -20,15 +20,17 @@ class RecipesWebHandler: ObservableObject {
     var recipeListIndex = 0
     var requestPageSize = 20
     
-    // tasty
+    // tasty key
     static let tastyAppKey = "fdc13d3f7cmsh63c39a29ed19133p14dbc4jsnd1975167bc8f"
 
     init() {}
     
+    // lists paginated recipes with last used query string
     func listMoreRecipes() {
         internalListRecipes(withQuery: lastQuery)
     }
     
+    // lists recipes with given query string, first call to api
     func listRecipes(withQuery query: String) {
         recipeListIndex = 0
         recipeList = []
@@ -36,6 +38,7 @@ class RecipesWebHandler: ObservableObject {
         internalListRecipes(withQuery: query)
     }
         
+    // lists recipes with given query string
     func internalListRecipes(withQuery query: String) {
         listingRecipes = true
         var urlComponents = URLComponents()
@@ -107,11 +110,14 @@ class RecipesWebHandler: ObservableObject {
         }.resume()
     }
     
+    // sets list of recipes
     func setRecipeList(_ recipeList: [WebRecipe]) {
         self.recipeList.append(contentsOf: recipeList)
         listingRecipes = false
     }
     
+    // lists detail for a recipe (gets the parts of the recipe)
+    // very deep api result caused a very deep function
     func listRecipeDetail(_ recipe: WebRecipe) {
         recipeDetailError = false
         if self.recipesStore[recipe.id] != nil {
@@ -273,6 +279,7 @@ class RecipesWebHandler: ObservableObject {
         }.resume()
     }
     
+    // sets the detail of a recipe
     func setRecipeDetail(_ recipe: WebRecipe) {
         if isValid(recipe) {
             self.recipeDetail = recipe
@@ -283,6 +290,7 @@ class RecipesWebHandler: ObservableObject {
         }
     }
     
+    // recipe is valid
     func isValid(_ recipe: WebRecipe) -> Bool {
         if recipe.name != "", recipe.directions.count > 0, recipe.sections.count > 0,
            recipe.sections[0].ingredients.count > 0 {
@@ -291,14 +299,14 @@ class RecipesWebHandler: ObservableObject {
         return false
     }
     
-    func prettyPrinting(data: Data) {
-        if let object = try? JSONSerialization.jsonObject(with: data, options: []) {
-            if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
-                let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                print(prettyPrintedString)
-            }
-        }
-    }
+//    func prettyPrinting(data: Data) {
+//        if let object = try? JSONSerialization.jsonObject(with: data, options: []) {
+//            if let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+//                let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+//                print(prettyPrintedString)
+//            }
+//        }
+//    }
 }
 
 extension NSNumber {

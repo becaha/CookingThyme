@@ -47,7 +47,6 @@
 		DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */; };
 		DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B52B257EF64500808CC8 /* ShoppingListView.swift */; };
 		DB49B532257F379400808CC8 /* ShoppingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B531257F379400808CC8 /* ShoppingItem.swift */; };
-		DB49B53B257FDD8D00808CC8 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B53A257FDD8D00808CC8 /* TestView.swift */; };
 		DB49B53D2580163500808CC8 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B53C2580163500808CC8 /* TimerView.swift */; };
 		DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B53E258018C200808CC8 /* TimerHandler.swift */; };
 		DB49B54125801B4600808CC8 /* IsActive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B54025801B4600808CC8 /* IsActive.swift */; };
@@ -112,7 +111,6 @@
 		DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarConfigurator.swift; sourceTree = "<group>"; };
 		DB49B52B257EF64500808CC8 /* ShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListView.swift; sourceTree = "<group>"; };
 		DB49B531257F379400808CC8 /* ShoppingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingItem.swift; sourceTree = "<group>"; };
-		DB49B53A257FDD8D00808CC8 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		DB49B53C2580163500808CC8 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		DB49B53E258018C200808CC8 /* TimerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerHandler.swift; sourceTree = "<group>"; };
 		DB49B54025801B4600808CC8 /* IsActive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsActive.swift; sourceTree = "<group>"; };
@@ -203,6 +201,7 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B57025833F6B00808CC8 /* PublicRecipe */,
 				DB49B5572581BAED00808CC8 /* Editable */,
 				DB49B5562581BAC800808CC8 /* Images */,
 				DB49B5532581BA4600808CC8 /* ShoppingList */,
@@ -213,9 +212,6 @@
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
-				DB49B53A257FDD8D00808CC8 /* TestView.swift */,
-				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
-				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -364,6 +360,15 @@
 			name = Editable;
 			sourceTree = "<group>";
 		};
+		DB49B57025833F6B00808CC8 /* PublicRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
+				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
+			);
+			name = PublicRecipe;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -484,7 +489,6 @@
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
-				DB49B53B257FDD8D00808CC8 /* TestView.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
 				DB49B5592581BB0D00808CC8 /* RecipeSearch.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,

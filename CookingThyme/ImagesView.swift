@@ -97,6 +97,7 @@ struct ImagesView: View {
         }
     }
     
+    // loads image selected from camera roll
     func loadImage() {
         withAnimation {
             guard let inputImage = selectedImage else { return }

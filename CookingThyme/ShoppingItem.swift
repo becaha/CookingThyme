@@ -32,7 +32,7 @@ struct ShoppingItem: Identifiable {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        var id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
+        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
         if let uuid = Int(UUID().uuidString) {
             self.id = uuid
         }
@@ -55,6 +55,7 @@ struct ShoppingItem: Identifiable {
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
+    // converts shopping item to one line string (1 cup apple juice)
     func toString() -> String {
         var string = ""
         if let amountDouble = self.amount {

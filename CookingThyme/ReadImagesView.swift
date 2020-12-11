@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// for Web Recipe Images
 struct ReadImagesView: View {
     var uiImages: [UIImage]
 
@@ -39,9 +40,3 @@ struct ReadImagesView: View {
         .frame(height: 150)
     }
 }
-
-//struct ReadImagesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ReadImagesView()
-//    }
-//}

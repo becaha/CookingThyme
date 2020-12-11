@@ -7,6 +7,7 @@
 
 import Foundation
 
+// represents a fraction, 1/2
 struct Rational {
     let numerator : Int
     let denominator: Int
@@ -18,6 +19,7 @@ struct Rational {
     
     // TODO use tablespoons and teaspoons for smaller measures
     // denominator can be 8, 4, 3, 2
+    // initializes Rational with a double and converts to closest rational, ex. 0.49 -> 1/2
     init(decimal: Double) {
         let closestEighth = Rational.findClosest(denominator: 8, decimal: decimal)
         let closestThird = Rational.findClosest(denominator: 3, decimal: decimal)
@@ -32,6 +34,7 @@ struct Rational {
         self.init(numerator: fraction.numerator, denominator: fraction.denominator)
     }
     
+    // reduces the fraction
     static func reduce(numerator: Int, denominator: Int) -> (numerator: Int, denominator: Int) {
         var newNumerator = numerator
         var newDenominator = denominator
@@ -56,6 +59,7 @@ struct Rational {
         return (newNumerator, newDenominator)
     }
     
+    // finds factors of num
     static func findFactors(num: Int) -> [Int] {
         var factors = [Int]()
         var endFactor = num
@@ -72,6 +76,7 @@ struct Rational {
         return factors
     }
     
+    // finds closest fraction to decimal with accuracy of 1/3 and 1/8's
     static func findClosest(denominator: Int, decimal: Double) -> (closestNumerator: Int, closestDistance: Double) {
         var closestNumerator: Int = 1
         var closestDistance: Double = abs((1.0 / Double(denominator)) - decimal)

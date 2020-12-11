@@ -16,18 +16,22 @@ struct SimpleTimer {
     var timeRemaining: Double = 0 {
         didSet {
             if timeRemaining <= 0 {
+                // time has run out, pause and alert user
                 timeRemaining = 0
                 isPaused = true
                 timerAlert = true
             }
+            // every time the time remaining is set, set the string format
             timeRemainingString = Int(round(timeRemaining)).timeFormat()
         }
     }
     
+    // ratio of time left versus time amount
     var timeRemainingRatio: Double {
         return timeRemaining > 0 ? timeRemaining / Double(timeAmount) : 0
     }
     
+    // the step of publishing accuracy
     var step: Double
     
     init(step: Double) {
@@ -37,6 +41,7 @@ struct SimpleTimer {
     private var startTime: Date?
     private var timeAmount: Int = 0
         
+    // gets seconds from given hours, min, sec
     func getSeconds(h hours: Int, m minutes: Int, s seconds: Int) -> Int {
         let secInHour =  3600
         let secInMin = 60
@@ -76,12 +81,14 @@ struct SimpleTimer {
         start()
     }
     
+    // counts down the time remaining by one second
     mutating func countSec() {
         if self.timeRemaining > 0 {
             self.timeRemaining -= 1
         }
     }
     
+    // updates time remaining by seconds elapsed 
     mutating func updateTimeRemaining(withStepCount stepCount: Double) {
         let secondsElapsed = stepCount * self.step
         self.timeRemaining -= secondsElapsed

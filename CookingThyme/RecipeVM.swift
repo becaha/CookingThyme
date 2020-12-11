@@ -32,31 +32,6 @@ class RecipeVM: ObservableObject {
         popullateRecipe()
     }
     
-    func popullateRecipe() {
-        if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
-            if let recipeWithIngredients = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
-                if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: recipe.id) {
-                    recipe = recipeWithImages
-                    self.tempDirections = recipe.directions
-                    self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
-                    self.tempImages = recipe.images
-                    popullateImages()
-                }
-            }
-        }
-    }
-    
-    func popullateImages() {
-        imageHandler.setImages(tempImages)
-    }
-    
-    func refreshRecipe() {
-        if let recipe = RecipeDB.shared.getRecipe(byId: recipe.id) {
-            self.recipe = recipe
-            popullateRecipe()
-        }
-    }
-    
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
         self.category = category
@@ -90,6 +65,56 @@ class RecipeVM: ObservableObject {
     }
     
     // MARK: - Intents
+    
+    // gets recipe, directions, ingredients, and images from db
+    func popullateRecipe() {
+        if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
+            if let recipeWithIngredients = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
+                if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: recipe.id) {
+                    recipe = recipeWithImages
+                    self.tempDirections = recipe.directions
+                    self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
+                    self.tempImages = recipe.images
+                    popullateImages()
+                }
+            }
+        }
+    }
+    
+    // sends images to image handler to prep for ui
+    func popullateImages() {
+        imageHandler.setImages(tempImages)
+    }
+    
+    // gets recipe from db
+    func refreshRecipe() {
+        if let recipe = RecipeDB.shared.getRecipe(byId: recipe.id) {
+            self.recipe = recipe
+            popullateRecipe()
+        }
+    }
+    
+    // update recipe to given recipe parts
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
+        category.deleteRecipe(withId: id)
+        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
+            self.recipe = recipe
+            refreshRecipe()
+        }
+    }
+    
+    func copyRecipe(toCategoryId categoryId: Int) {
+        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
+    }
+    
+    static func copy(recipe: Recipe, toCategoryId categoryId: Int) {
+        if let category = RecipeDB.shared.getCategory(withId: categoryId) {
+            let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())
+            if recipe == nil {
+                print("error copying recipe")
+            }
+        }
+    }
     
     // - Temporary for Editing
     
@@ -134,28 +159,11 @@ class RecipeVM: ObservableObject {
         return recipe.servings == 0
     }
     
+    // creates ingredient from given name, amount, unit in strings
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
         let doubleAmount = Fraction.toDouble(fromString: amount)
         let unit = Ingredient.makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
-    }
-    
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
-        category.deleteRecipe(withId: id)
-        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
-            self.recipe = recipe
-            refreshRecipe()
-        }
-    }
-    
-    func copyRecipe(toCategoryId categoryId: Int) {
-        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
-    }
-    
-    static func copy(recipe: Recipe, toCategoryId categoryId: Int) {
-        if let category = RecipeDB.shared.getCategory(withId: categoryId) {
-            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())
-        }
     }
 }
 

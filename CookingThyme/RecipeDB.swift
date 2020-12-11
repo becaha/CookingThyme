@@ -25,11 +25,12 @@ class RecipeDB {
     var fileManager: FileManager
     var bundlePath: String
     
-    //MARK: - Singleton
+    // MARK: - Singleton
     
     static let shared = RecipeDB()
     
     private init() {
+        // connect to db
         if let path = Bundle.main.path(forResource: Constant.fileName, ofType: Constant.fileExtension) {
             bundlePath = path
             
@@ -216,15 +217,6 @@ class RecipeDB {
     }
     
     //MARK: - Read
-    
-    func getFullRecipe(byId id: Int) -> Recipe? {
-        if let recipe = getRecipe(byId: id) {
-            if let recipeWithIngredients = getIngredients(forRecipe: recipe, withId: id) {
-                return getDirections(forRecipe: recipeWithIngredients, withId: id)
-            }
-        }
-        return nil
-    }
     
     func getRecipe(byId id: Int) -> Recipe? {
         do {
@@ -680,7 +672,6 @@ class RecipeDB {
         }
     }
     
-    // do we want this to delete recipes in category?
     func deleteCategory(withId id: Int) {
         do {
             try dbQueue.write{ (db: Database) in

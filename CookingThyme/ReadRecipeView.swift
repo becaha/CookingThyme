@@ -9,7 +9,6 @@ import SwiftUI
 
 // TODO deal with plural ingredient unitNames
 // TODO have title not sticky
-
 struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
@@ -165,6 +164,7 @@ struct ReadRecipeView: View {
         )
     }
     
+    // add all ingredients to shopping list is true, change + to checks
     func addAllIngredients() {
         self.addedAllIngredients = true
     }
@@ -189,8 +189,6 @@ struct ReadRecipeView: View {
         .padding(.vertical)
     }
     
-    // on click to edit an ingredient, this will be added to that ingredient, off click will save that to
-    // temporary changed ingredients
     @ViewBuilder func IngredientText(_ ingredient: Ingredient) -> some View {
         if inEditMode {
             HStack {

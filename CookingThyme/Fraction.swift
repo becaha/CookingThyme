@@ -7,6 +7,7 @@
 
 import Foundation
 
+// represents a fraction with a whole part like 1 1/2
 struct Fraction {
     var whole: Int
     var rational: Rational?
@@ -20,6 +21,7 @@ struct Fraction {
         }
     }
     
+    // for getting fraction meaning from vulgar fraction
     enum VulgarFraction: String {
         case one_eighth = "\u{215B}"
         case one_fourth = "\u{BC}"
@@ -78,6 +80,7 @@ struct Fraction {
         }
     }
     
+    // gets fraction pieces from string "1/2" -> 1, 2
     static func getFractionPieces(_ fraction: String) -> [String] {
         let pieces = fraction.components(separatedBy: "/")
         if pieces.count == 1 {
@@ -86,6 +89,11 @@ struct Fraction {
         return pieces
     }
     
+    // MARK: - Fraction Conversions (Doubles, Fractions, Strings)
+    // the amounts are stored in db as doubles and shown in UI as strings
+    // the Fraction and Rational classes are used to help the conversion from double -> string and back
+    
+    // converts fraction string to Fraction
     static func toFraction(fromFractionString fractionString: String) -> Fraction {
         let pieces = fractionString.components(separatedBy: " ")
         var nextPiece = 0
@@ -104,19 +112,7 @@ struct Fraction {
         return Fraction(whole: whole, rational: nil)
     }
     
-    static func toDouble(fromString string: String) -> Double {
-        let fraction = toFraction(fromString: string)
-        return toDouble(fromFraction: fraction)
-    }
-    
-    static func toDouble(fromFraction fraction: Fraction) -> Double {
-        var rationalDouble: Double = 0
-        if let rational = fraction.rational {
-            rationalDouble = Double(rational.numerator) / Double(rational.denominator)
-        }
-        return Double(fraction.whole) + rationalDouble
-    }
-    
+    // converts double to Fraction
     static func toFraction(fromDouble double: Double) -> Fraction {
         let decimalPart = double.truncatingRemainder(dividingBy: 1)
         let wholePart = Int(double - decimalPart)
@@ -128,11 +124,28 @@ struct Fraction {
         return Fraction(whole: wholePart, rational: rational)
     }
     
+    // converts fraction string to double
+    static func toDouble(fromString string: String) -> Double {
+        let fraction = toFraction(fromString: string)
+        return toDouble(fromFraction: fraction)
+    }
+    
+    // converts Fraction to double
+    static func toDouble(fromFraction fraction: Fraction) -> Double {
+        var rationalDouble: Double = 0
+        if let rational = fraction.rational {
+            rationalDouble = Double(rational.numerator) / Double(rational.denominator)
+        }
+        return Double(fraction.whole) + rationalDouble
+    }
+    
+    // converts double to string
     static func toString(fromDouble double: Double) -> String {
         let fraction = toFraction(fromDouble: double)
         return toString(fromFraction: fraction)
     }
     
+    // converts Fraction to string
     static func toString(fromFraction fraction: Fraction) -> String {
         if let rational = fraction.rational {
             if fraction.whole == 0 {

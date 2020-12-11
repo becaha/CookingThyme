@@ -222,9 +222,7 @@ struct EditRecipeView: View {
             }
         }
         .onAppear {
-//            withAnimation {
-                setRecipe()
-//            }
+            setRecipe()
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
@@ -268,7 +266,10 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
+                let createdRecipe = category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
+                if createdRecipe == nil {
+                    print("error")
+                }
             }
             else {
                 recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)

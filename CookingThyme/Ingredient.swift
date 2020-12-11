@@ -30,11 +30,11 @@ struct Ingredient: Identifiable, Equatable {
     var recipeId: Int
     var temp = false
     
-    // TODO get rid of
     init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
+        // is temporary, will be replaced
         let id = Double(name.hashValue) + Double(unitName.getName().count)
         if let uuid = Int(UUID().uuidString) {
             self.id = uuid
@@ -42,7 +42,8 @@ struct Ingredient: Identifiable, Equatable {
         else {
             self.id = Int(id)
         }
-        self.recipeId = 0 // BAD
+        // is temporary, will be replaced
+        self.recipeId = 0
         self.temp = true
     }
     
@@ -56,6 +57,7 @@ struct Ingredient: Identifiable, Equatable {
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
+    // gets the string value of the ingredient amount
     func getAmountString() -> String {
         if amount == 0 {
             return ""
@@ -63,10 +65,12 @@ struct Ingredient: Identifiable, Equatable {
         return Fraction.toString(fromDouble: amount)
     }
     
+    // makes enum UnitOfMeasurement from unit String
     static func makeUnit(fromUnit unitString: String) -> UnitOfMeasurement {
         return UnitOfMeasurement.fromString(unitString: unitString)
     }
     
+    // takes temporary ingredients (made in edit recipe) and turns into ingredients ready to be put in db
     static func toIngredients(_ temps: [TempIngredient]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for temp in temps {
@@ -76,6 +80,7 @@ struct Ingredient: Identifiable, Equatable {
         return ingredients
     }
     
+    // takes ingredients and turns into temp ingredients for use in edit recipe
     static func toTempIngredients(_ ingredients: [Ingredient]) -> [TempIngredient] {
         var temps = [TempIngredient]()
         for ingredient in ingredients {
@@ -84,6 +89,7 @@ struct Ingredient: Identifiable, Equatable {
         return temps
     }
     
+    // turns ingredient into a one line string (1 cup apple juice)
     func toString() -> String {
         var string = ""
         let amountString = getAmountString()
@@ -98,6 +104,7 @@ struct Ingredient: Identifiable, Equatable {
     }
 }
 
+// used as a temporary ingredient while editing recipe (amount and unit name are string for easy editing)
 struct TempIngredient {
     
     var name: String
