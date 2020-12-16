@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// if screen is active
 struct IsActive: ViewModifier {
     @Binding var isActive: Bool
     
@@ -20,12 +21,6 @@ struct IsActive: ViewModifier {
             }
     }
 }
-
-//struct IsActive_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Text("Hi").isActive(isActive)
-//    }
-//}
 
 extension View {
     func isActive(_ isActive: Binding<Bool>) -> some View {

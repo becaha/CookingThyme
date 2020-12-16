@@ -84,6 +84,7 @@ struct RecipeCollectionView: View {
         }
     }
     
+    // adds new category
     func addCategory() {
         if newCategory != "" {
             newCategoryMissingField = false

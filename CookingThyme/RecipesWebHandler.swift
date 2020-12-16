@@ -19,9 +19,6 @@ class RecipesWebHandler: ObservableObject {
     
     var recipeListIndex = 0
     var requestPageSize = 20
-    
-    // tasty key
-    static let tastyAppKey = "fdc13d3f7cmsh63c39a29ed19133p14dbc4jsnd1975167bc8f"
 
     init() {}
     
@@ -61,7 +58,7 @@ class RecipesWebHandler: ObservableObject {
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var request = URLRequest(url: urlComponents.url!)
-        request.setValue(RecipesWebHandler.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
+        request.setValue(TastyAPI.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
         request.setValue("tasty.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         
@@ -106,7 +103,6 @@ class RecipesWebHandler: ObservableObject {
             catch {
                 print(error)
             }
-            
         }.resume()
     }
     
@@ -137,7 +133,7 @@ class RecipesWebHandler: ObservableObject {
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var request = URLRequest(url: urlComponents.url!)
-        request.setValue(RecipesWebHandler.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
+        request.setValue(TastyAPI.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
         request.setValue("tasty.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
 

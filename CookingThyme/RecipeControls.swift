@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// controls for recipes
 struct RecipeControls {
     @ViewBuilder
     static func ReadDirection(withIndex index: Int, recipe: Recipe) -> some View {

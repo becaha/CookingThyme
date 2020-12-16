@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+// convert urls to base64 encoded image in db
 // handles URL and UI Images
 class ImageHandler: ObservableObject {
     @Published private(set) var image: UIImage? {

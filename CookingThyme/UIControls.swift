@@ -21,8 +21,6 @@ struct UIControls {
         }
     }
     
-    
-    
     @ViewBuilder
     static func EditButton(action: @escaping () -> Void, isEditing: Bool) -> some View {
         Button(action: action) {
@@ -30,8 +28,6 @@ struct UIControls {
                 .foregroundColor(.black)
         }
     }
-    
-    
     
     @ViewBuilder
     static func AddButton(action: @escaping () -> Void, isPlain: Bool = true) -> some View {

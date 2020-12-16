@@ -8,6 +8,7 @@
 import SwiftUI
 
 // TODO: make perfect
+// for a nice dashed or not dashed border
 struct Border: ViewModifier {
     var color: Color
     var lineWidth: CGFloat

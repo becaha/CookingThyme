@@ -34,195 +34,18 @@ struct EditRecipeView: View {
     @State private var ingredientName: String = ""
     @State private var direction: String = ""
     
+    @State private var cameraRollSheetPresented = false
+    @State private var selectedImage: UIImage?
+        
     var body: some View {
         VStack {
-            if isCreatingRecipe {
-                HStack {
-                    Button(action: {
-                        withAnimation {
-                            isEditingRecipe = false
-                        }
-                    }) {
-                        Text("Cancel")
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        saveRecipe()
-                    }) {
-                        Text("Done")
-                    }
-                }
-                .padding([.top, .leading, .trailing])
-            }
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
-                        if name != "" {
-                            withAnimation {
-                                nameFieldMissing = false
-                            }
-                        }
-                    })
-                    .multilineTextAlignment(.center)
-                    .font(.system(size: 30, weight: .bold))
-                    
-                    ErrorMessage("Must have a name", isError: $nameFieldMissing)
-                        .padding(0)
-                }
-                .padding(.bottom, 0)
-            }
-            .padding()
-                            
-            Form {
-                Section(header: Text("Photos")) {
-                    ImagesView()
-                        .frame(minHeight: 200)
-                }
-                
-                Section(header:
-                    HStack {
-                        Text("Ingredients")
-                        
-                        Spacer()
-                        
-                        VStack {
-                            // TODO make serving size look like you need to choose it
-                            Picker(selection: $servings, label:
-                                    HStack {
-                                        Text("Serving Size: \(servings)")
-                                
-                                        Image(systemName: "chevron.down")
-                                    }
-                            )
-                            {
-                                ForEach(1..<101, id: \.self) { num in
-                                    Text("\(num.toString())").tag(num.toString())
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
-                        }
-                    },
-                    footer:
-                        VStack(alignment: .leading) {                            
-                            ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
-                            
-                            ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
-                        }
-                        
-                ) {
-                    List {
-                        ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
-                            HStack {
-                                EditableIngredient(index: index)
-                                    .environmentObject(recipe)
-                            }
-                            .deletable(isDeleting: true, onDelete: {
-                                withAnimation {
-                                    recipe.removeTempIngredient(at: index)
-                                }
-                            })
-                        }
-                        .onDelete { indexSet in
-                            indexSet.map{ $0 }.forEach { index in
-                                recipe.removeTempIngredient(at: index)
-                            }
-                        }
-                        VStack(alignment: .leading) {
-                            HStack {
-                                TextField("Amount ", text: $ingredientAmount)
-                                    .keyboardType(.numbersAndPunctuation)
-                                    
-                                TextField("Unit ", text: $ingredientUnit)
-                                    .autocapitalization(.none)
-
-
-                                TextField("Name", text: $ingredientName,
-                                    onEditingChanged: { (isEditing) in
-                                        self.isEditingIngredient = isEditing
-                                    },
-                                    onCommit: {
-                                        withAnimation {
-                                            addIngredient()
-                                        }
-                                    })
-                                    .autocapitalization(.none)
-                                
-                                UIControls.AddButton(action: {
-                                    withAnimation {
-                                        addIngredient()
-                                    }
-                                })
-                            }
-                            
-                            ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
-                        }
-                    }
-                }
-                
-                Section(header: Text("Directions"),
-                        footer:
-                            VStack {
-                                Group {
-                                    ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
-                                }
-                            }
-                ) {
-                    // TODO make list collapsable so after a step is done, it collapses
-                    List {
-                        ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
-                            HStack(alignment: .top, spacing: 20) {
-                                Text("\(index + 1)")
-                                    .frame(width: 20, height: 20, alignment: .center)
-                                
-                                EditableDirection(index: index)
-                                    .environmentObject(recipe)
-                            }
-                            .deletable(isDeleting: true, onDelete: {
-                                withAnimation {
-                                    recipe.removeTempDirection(at: index)
-                                }
-                            })
-                            .padding(.vertical)
-                        }
-                        .onDelete { indexSet in
-                            indexSet.map{ $0 }.forEach { index in
-                                recipe.removeTempDirection(at: index)
-                            }
-                        }
-                        VStack(alignment: .leading) {
-                            HStack(alignment: .top, spacing: 20) {
-                                Text("\(recipe.tempDirections.count + 1)")
-                                    .frame(width: 20, height: 20, alignment: .center)
-
-                                TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
-                                    self.isEditingDirection = isEditing
-                                }, onCommit: {
-                                    withAnimation {
-                                        addDirection()
-                                    }
-                                })
-                                
-                                UIControls.AddButton(action: {
-                                    withAnimation {
-                                        addDirection()
-                                    }
-                                })
-                            }
-                            
-                            ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
-                        }
-                        .padding(.vertical)
-                    }
-                    .foregroundColor(.black)
-                }
-
-            }
+            EditableRecipe()
         }
         .onAppear {
             setRecipe()
+        }
+        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
+            ImagePicker(image: self.$selectedImage)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
@@ -237,13 +60,27 @@ struct EditRecipeView: View {
                 .padding(.leading, 0)
             ,
             trailing:
-                Button(action: {
-                    saveRecipe()
-                })
-                {
-                    Text("Done")
+                HStack {
+                    Button(action: {
+                        cameraRollSheetPresented = true
+                    }) {
+                        Image(systemName: "square.and.arrow.down")
+                    }
+                    .padding(.trailing)
+                
+                    Button(action: {
+                        saveRecipe()
+                    })
+                    {
+                        Text("Done")
+                    }
                 }
         )
+    }
+    
+    private func transcribeImage() {
+        guard let inputImage = selectedImage else { return }
+        recipe.transcribeRecipe(fromImage: inputImage)
     }
     
     private func setRecipe() {
@@ -309,6 +146,173 @@ struct EditRecipeView: View {
         }
         if recipe.tempIngredients.count > 0 {
             ingredientsFieldMissing = false
+        }
+    }
+    
+    @ViewBuilder
+    func EditableRecipe() -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
+                    if name != "" {
+                        withAnimation {
+                            nameFieldMissing = false
+                        }
+                    }
+                })
+                .multilineTextAlignment(.center)
+                .font(.system(size: 30, weight: .bold))
+                
+                ErrorMessage("Must have a name", isError: $nameFieldMissing)
+                    .padding(0)
+            }
+            .padding(.bottom, 0)
+        }
+        .padding()
+                        
+        Form {
+            Section(header: Text("Photos")) {
+                ImagesView()
+                    .frame(minHeight: 200)
+            }
+            
+            Section(header:
+                HStack {
+                    Text("Ingredients")
+                    
+                    Spacer()
+                    
+                    VStack {
+                        // TODO make serving size look like you need to choose it
+                        Picker(selection: $servings, label:
+                                HStack {
+                                    Text("Serving Size: \(servings)")
+                            
+                                    Image(systemName: "chevron.down")
+                                }
+                        )
+                        {
+                            ForEach(1..<101, id: \.self) { num in
+                                Text("\(num.toString())").tag(num.toString())
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                    }
+                },
+                footer:
+                    VStack(alignment: .leading) {
+                        ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
+                        
+                        ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
+                    }
+                    
+            ) {
+                List {
+                    ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
+                        HStack {
+                            EditableIngredient(index: index)
+                                .environmentObject(recipe)
+                        }
+                        .deletable(isDeleting: true, onDelete: {
+                            withAnimation {
+                                recipe.removeTempIngredient(at: index)
+                            }
+                        })
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map{ $0 }.forEach { index in
+                            recipe.removeTempIngredient(at: index)
+                        }
+                    }
+                    VStack(alignment: .leading) {
+                        HStack {
+                            TextField("Amount ", text: $ingredientAmount)
+                                .keyboardType(.numbersAndPunctuation)
+                                
+                            TextField("Unit ", text: $ingredientUnit)
+                                .autocapitalization(.none)
+
+
+                            TextField("Name", text: $ingredientName,
+                                onEditingChanged: { (isEditing) in
+                                    self.isEditingIngredient = isEditing
+                                },
+                                onCommit: {
+                                    withAnimation {
+                                        addIngredient()
+                                    }
+                                })
+                                .autocapitalization(.none)
+                            
+                            UIControls.AddButton(action: {
+                                withAnimation {
+                                    addIngredient()
+                                }
+                            })
+                        }
+                        
+                        ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
+                    }
+                }
+            }
+            
+            Section(header: Text("Directions"),
+                    footer:
+                        VStack {
+                            Group {
+                                ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
+                            }
+                        }
+            ) {
+                // TODO make list collapsable so after a step is done, it collapses
+                List {
+                    ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
+                        HStack(alignment: .top, spacing: 20) {
+                            Text("\(index + 1)")
+                                .frame(width: 20, height: 20, alignment: .center)
+                            
+                            EditableDirection(index: index)
+                                .environmentObject(recipe)
+                        }
+                        .deletable(isDeleting: true, onDelete: {
+                            withAnimation {
+                                recipe.removeTempDirection(at: index)
+                            }
+                        })
+                        .padding(.vertical)
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map{ $0 }.forEach { index in
+                            recipe.removeTempDirection(at: index)
+                        }
+                    }
+                    VStack(alignment: .leading) {
+                        HStack(alignment: .top, spacing: 20) {
+                            Text("\(recipe.tempDirections.count + 1)")
+                                .frame(width: 20, height: 20, alignment: .center)
+
+                            TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
+                                self.isEditingDirection = isEditing
+                            }, onCommit: {
+                                withAnimation {
+                                    addDirection()
+                                }
+                            })
+                            
+                            UIControls.AddButton(action: {
+                                withAnimation {
+                                    addDirection()
+                                }
+                            })
+                        }
+                        
+                        ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
+                    }
+                    .padding(.vertical)
+                }
+                .foregroundColor(.black)
+            }
+
         }
     }
 }

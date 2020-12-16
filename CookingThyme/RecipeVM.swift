@@ -15,9 +15,13 @@ class RecipeVM: ObservableObject {
     @Published var tempDirections: [Direction] = []
     @Published var tempIngredients: [TempIngredient] = []
     @Published var tempImages: [RecipeImage] = []
-    @Published var imageHandler = ImageHandler()
+    @Published var recipeText: String?
     
+    @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
+    
+    @Published var transcriber = RecipeTranscriber()
+    private var recipeTranscriberCancellable: AnyCancellable?    
     
     // MARK: - Init
     
@@ -27,6 +31,11 @@ class RecipeVM: ObservableObject {
         self.imageHandlerCancellable = self.imageHandler.objectWillChange
             .sink { _ in
                 self.objectWillChange.send()
+            }
+        
+        self.recipeTranscriberCancellable = self.transcriber.$recipeText
+            .sink { recipeText in
+                self.recipeText = recipeText
             }
         
         popullateRecipe()
@@ -164,6 +173,12 @@ class RecipeVM: ObservableObject {
         let doubleAmount = Fraction.toDouble(fromString: amount)
         let unit = Ingredient.makeUnit(fromUnit: unit)
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
+    }
+    
+    // transcribe images to recipes
+    
+    func transcribeRecipe(fromImage image: UIImage) {
+        transcriber.transcribe(uiImage: image)
     }
 }
 

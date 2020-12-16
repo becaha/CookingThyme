@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// for a deletable item
 struct Deletable: ViewModifier {
     @State var isDeleting: Bool
     @State var onDelete: () -> Void

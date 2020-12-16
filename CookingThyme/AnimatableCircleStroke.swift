@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// for the timer animatable circle
 struct AnimatableCircle: Shape {
     var startAngle: Angle
     var endAngle: Angle

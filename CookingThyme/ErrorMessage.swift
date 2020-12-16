@@ -26,9 +26,3 @@ struct ErrorMessage: View {
         }
     }
 }
-
-//struct ErrorMessage_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ErrorMessage("error")
-//    }
-//}

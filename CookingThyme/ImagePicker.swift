@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// to pick image from camera roll integration from UIViewController
 struct ImagePicker: UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// to be able to edit nav bar with UIViewController integration
 struct NavigationBarConfigurator: UIViewControllerRepresentable {
     var configure: (UINavigationController) -> Void = { _ in }
 
@@ -18,5 +19,4 @@ struct NavigationBarConfigurator: UIViewControllerRepresentable {
             self.configure(nc)
         }
     }
-
 }
