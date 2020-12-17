@@ -20,7 +20,7 @@ struct RecipeView: View {
                 ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }
             else {
-                EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
+                EditRecipeView(isEditingRecipe: self.$isEditingRecipe, isImportingRecipe: self.$isEditingRecipe)
 
             }
         }

@@ -22,6 +22,9 @@ struct RecipeCollectionView: View {
     @State var updatedCategory: String = ""
     @State var isEditingCategory = false
     
+    @State var deleteCategoryAlert = false
+    @State var deleteCategoryId: Int?
+    
     var body: some View {
         NavigationView {
             List {
@@ -42,6 +45,7 @@ struct RecipeCollectionView: View {
                 }
                 ForEach(collection.categories, id: \.self) { category in
                     if isEditing {
+                        // can edit category name in collection view
 //                        EditableText(category.name, isEditing: isEditing,
 //                             onChanged: { categoryName in
 //                                 recipeCollectionVM.updateCategory(forCategoryId: category.id, toName: categoryName)
@@ -52,8 +56,19 @@ struct RecipeCollectionView: View {
 //                        )
                         Text("\(category.name)")
                             .deletable(isDeleting: true, onDelete: {
-                                collection.deleteCategory(withId: category.id)
+                                deleteCategoryId = category.id
+                                deleteCategoryAlert = true
                             })
+                            .alert(isPresented: $deleteCategoryAlert) {
+                                Alert(title: Text("Delete Category"),
+                                      message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
+                                      primaryButton: .default(Text("Ok")) {
+                                        if let deleteCategoryId = self.deleteCategoryId {
+                                            collection.deleteCategory(withId: deleteCategoryId)
+                                        }
+                                      },
+                                      secondaryButton: .cancel())
+                            }
                     }
                     else {
                         NavigationLink(

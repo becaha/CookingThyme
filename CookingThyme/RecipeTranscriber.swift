@@ -103,8 +103,6 @@ class RecipeTranscriber: ObservableObject {
     }
     
     func setTranscription(_ transcription: String) {
-        let setTranscription = transcription
-        print(setTranscription)
         self.recipeText = transcription
     }
 }

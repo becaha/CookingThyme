@@ -18,19 +18,30 @@ struct Rational {
     }
     
     // TODO use tablespoons and teaspoons for smaller measures
-    // denominator can be 8, 4, 3, 2
+    // denominator can be 10, 9, 8, 7, 6, 5, 4, 3, 2
     // initializes Rational with a double and converts to closest rational, ex. 0.49 -> 1/2
     init(decimal: Double) {
+        var rationalDistances = [(closestNumerator: Int, denominator: Int, closestDistance: Double)]()
+        let closestTenth = Rational.findClosest(denominator: 10, decimal: decimal)
+        let closestNinth = Rational.findClosest(denominator: 9, decimal: decimal)
         let closestEighth = Rational.findClosest(denominator: 8, decimal: decimal)
+        let closestSeventh = Rational.findClosest(denominator: 7, decimal: decimal)
+        let closestSixth = Rational.findClosest(denominator: 6, decimal: decimal)
         let closestThird = Rational.findClosest(denominator: 3, decimal: decimal)
+        rationalDistances.append(contentsOf: [closestTenth, closestNinth, closestEighth, closestSeventh, closestSixth, closestThird])
         
         var fraction: (numerator: Int, denominator: Int)
-        if closestThird.closestDistance <= closestEighth.closestDistance {
-            fraction = Rational.reduce(numerator: closestThird.closestNumerator, denominator: 3)
+        var closestRationalDistance = closestTenth
+        if let minRationalDistance = rationalDistances.min(by: { $0.closestDistance < $1.closestDistance }) {
+            closestRationalDistance = minRationalDistance
         }
-        else {
-            fraction = Rational.reduce(numerator: closestEighth.closestNumerator, denominator: 8)
-        }
+        fraction = Rational.reduce(numerator: closestRationalDistance.closestNumerator, denominator: closestRationalDistance.denominator)
+//        if closestThird.closestDistance <= closestEighth.closestDistance {
+//            fraction = Rational.reduce(numerator: closestThird.closestNumerator, denominator: 3)
+//        }
+//        else {
+//            fraction = Rational.reduce(numerator: closestEighth.closestNumerator, denominator: 8)
+//        }
         self.init(numerator: fraction.numerator, denominator: fraction.denominator)
     }
     
@@ -77,7 +88,7 @@ struct Rational {
     }
     
     // finds closest fraction to decimal with accuracy of 1/3 and 1/8's
-    static func findClosest(denominator: Int, decimal: Double) -> (closestNumerator: Int, closestDistance: Double) {
+    static func findClosest(denominator: Int, decimal: Double) -> (closestNumerator: Int, denominator: Int, closestDistance: Double) {
         var closestNumerator: Int = 1
         var closestDistance: Double = abs((1.0 / Double(denominator)) - decimal)
         for numerator in 2..<denominator {
@@ -87,6 +98,6 @@ struct Rational {
                 closestNumerator = numerator
             }
         }
-        return (closestNumerator, abs(closestDistance))
+        return (closestNumerator, denominator, abs(closestDistance))
     }
 }

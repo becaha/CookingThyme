@@ -111,6 +111,7 @@ struct ImagesView: View {
         }) {
             Image(systemName: "plus") // or camera
         }
+        .foregroundColor(mainColor())
         .actionSheet(isPresented: $editPhotoSheetPresented, content: {
             ActionSheet(title: Text(""), message: nil, buttons:
                 [

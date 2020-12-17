@@ -15,16 +15,15 @@ struct CreateRecipeView: View {
     
     var body: some View {
         NavigationView {
-            if recipe.recipeText == nil {
+            if !isImportingRecipe {
                 VStack {
-                    EditRecipeView(isEditingRecipe: $isCreatingRecipe, isCreatingRecipe: true)
+                    EditRecipeView(isEditingRecipe: $isCreatingRecipe, isCreatingRecipe: true, isImportingRecipe: $isImportingRecipe)
                 }
                 .navigationBarTitle("", displayMode: .inline)
             }
             else {
-                ImportedRecipe(isCreatingRecipe: $isCreatingRecipe, recipeText: recipe.recipeText!)
+                ImportedRecipe(isCreatingRecipe: $isCreatingRecipe)
             }
         }
-        .foregroundColor(mainColor())
     }
 }

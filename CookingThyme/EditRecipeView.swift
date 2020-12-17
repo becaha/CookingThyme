@@ -36,6 +36,8 @@ struct EditRecipeView: View {
     
     @State private var cameraRollSheetPresented = false
     @State private var selectedImage: UIImage?
+    
+    @Binding var isImportingRecipe: Bool
         
     var body: some View {
         VStack {
@@ -58,6 +60,7 @@ struct EditRecipeView: View {
                     Text("Cancel")
                 }
                 .padding(.leading, 0)
+                .foregroundColor(mainColor())
             ,
             trailing:
                 HStack {
@@ -75,12 +78,14 @@ struct EditRecipeView: View {
                         Text("Done")
                     }
                 }
+                .foregroundColor(mainColor())
         )
     }
     
     private func transcribeImage() {
         guard let inputImage = selectedImage else { return }
         recipe.transcribeRecipe(fromImage: inputImage)
+        isImportingRecipe = true
     }
     
     private func setRecipe() {
@@ -89,6 +94,7 @@ struct EditRecipeView: View {
     }
     
     private func saveRecipe() {
+        servingsFieldMissing = false
         if name == "" {
             nameFieldMissing = true
         }

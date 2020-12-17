@@ -34,7 +34,7 @@ class RecipeVM: ObservableObject {
             }
         
         self.recipeTranscriberCancellable = self.transcriber.$recipeText
-            .sink { recipeText in
+            .sink { (recipeText) in
                 self.recipeText = recipeText
             }
         
@@ -44,6 +44,16 @@ class RecipeVM: ObservableObject {
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
         self.category = category
+        
+        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
+        self.recipeTranscriberCancellable = self.transcriber.$recipeText
+            .sink { (recipeText) in
+                self.recipeText = recipeText
+            }
     }
     
     // MARK: - Model Access

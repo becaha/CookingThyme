@@ -23,55 +23,63 @@ struct Fraction {
     
     // for getting fraction meaning from vulgar fraction
     enum VulgarFraction: String {
+        case one_tenth = "\u{2152}"
+        case one_ninth = "\u{2151}"
         case one_eighth = "\u{215B}"
+        case one_seventh = "\u{2150}"
+        case one_sixth = "\u{2159}"
+        case one_fifth = "\u{2155}"
         case one_fourth = "\u{BC}"
         case one_third = "\u{2153}"
         case three_eighths = "\u{215C}"
+        case two_fifths = "\u{2156}"
         case one_half = "\u{BD}"
+        case three_fifths = "\u{2157}"
         case five_eighths = "\u{215D}"
         case two_thirds = "\u{2154}"
         case three_fourths = "\u{BE}"
-        case seven_eighths = "\u{215E}"
-        
-        case five_sixths = "\u{215A}"
         case four_fifths = "\u{2158}"
-        case three_fifths = "\u{2157}"
-        case two_fifths = "\u{2156}"
-        case one_fifth = "\u{2155}"
-        case one_sixth = "\u{2159}"
-        case one_seventh = "\u{2150}"
-        case one_ninth = "\u{2151}"
-        case one_tenth = "\u{2152}"
-        
+        case five_sixths = "\u{215A}"
+        case seven_eighths = "\u{215E}"
+
         static func getFractionComponents(fraction: String) -> [String] {
             var fractionComponents = [String]()
             switch fraction {
-            case VulgarFraction.one_tenth.rawValue,
-                 VulgarFraction.one_ninth.rawValue,
-                 VulgarFraction.one_eighth.rawValue,
-                 VulgarFraction.one_seventh.rawValue,
-                 VulgarFraction.one_sixth.rawValue:
-                fractionComponents = ["1", "8"] // .125
-            case VulgarFraction.one_fifth.rawValue,
-                 VulgarFraction.one_fourth.rawValue:
+            case VulgarFraction.one_tenth.rawValue:
+                fractionComponents = ["1", "10"] // .1
+            case VulgarFraction.one_ninth.rawValue:
+                fractionComponents = ["1", "9"] // .111
+            case VulgarFraction.one_eighth.rawValue:
+                 fractionComponents = ["1", "8"] // .125
+            case VulgarFraction.one_seventh.rawValue:
+                fractionComponents = ["1", "7"] // .143
+            case VulgarFraction.one_sixth.rawValue:
+                fractionComponents = ["1", "6"] // .167
+            case VulgarFraction.one_fifth.rawValue:
+                fractionComponents = ["1", "5"] // .2
+            case VulgarFraction.one_fourth.rawValue:
                 fractionComponents = ["1", "4"] // .25
             case VulgarFraction.one_third.rawValue:
                 fractionComponents = ["1", "3"] // .33
-            case VulgarFraction.three_eighths.rawValue,
-                 VulgarFraction.two_fifths.rawValue:
+            case VulgarFraction.three_eighths.rawValue:
                 fractionComponents = ["3", "8"] // .375
+            case VulgarFraction.two_fifths.rawValue:
+                fractionComponents = ["2", "5"] // .4
             case VulgarFraction.one_half.rawValue:
                 fractionComponents = ["1", "2"] // .5
-            case VulgarFraction.three_fifths.rawValue,
-                 VulgarFraction.five_eighths.rawValue:
+            case VulgarFraction.three_fifths.rawValue:
+                fractionComponents = ["3", "5"] // .6
+            case VulgarFraction.five_eighths.rawValue:
                 fractionComponents = ["5", "8"] // .625
             case VulgarFraction.two_thirds.rawValue:
                 fractionComponents = ["2", "3"] // .67
-            case VulgarFraction.three_fourths.rawValue,
-                 VulgarFraction.four_fifths.rawValue:
+            case VulgarFraction.three_fourths.rawValue:
                 fractionComponents = ["3", "4"] // .75
-            case VulgarFraction.five_sixths.rawValue,
-                 VulgarFraction.seven_eighths.rawValue:
+            case VulgarFraction.four_fifths.rawValue:
+                fractionComponents = ["4", "5"] // .8
+            case VulgarFraction.five_sixths.rawValue:
+                fractionComponents = ["5", "6"] // .833
+            case VulgarFraction.seven_eighths.rawValue:
                 fractionComponents = ["7", "8"] // .875
             default:
                 fractionComponents = []

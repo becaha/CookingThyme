@@ -28,7 +28,7 @@ struct Recipe: Identifiable {
             name = name.lowercased().capitalized
         }
     }
-    // TODO take a whole thing and half it (package rice with no amount -> 1/2 package rice)
+
     // when servings change, change the amounts of all ingredients to reflect it
     var servings: Int {
         willSet {

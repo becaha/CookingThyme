@@ -8,12 +8,20 @@
 import SwiftUI
 
 struct ImportedRecipe: View {
+    @EnvironmentObject var recipe: RecipeVM
     @Binding var isCreatingRecipe: Bool
-    var recipeText: String
     
     var body: some View {
         VStack {
-            Text("\(recipeText)")
+            if recipe.recipeText != nil {
+                ScrollView {
+                    Text("\(recipe.recipeText!)")
+                }
+                .foregroundColor(.black)
+            }
+            else {
+                UIControls.Loading()
+            }
         }
         .navigationBarItems(
             leading:

@@ -7,8 +7,7 @@
 
 import Foundation
 
-// TODO: fix measurement shorthands
-// TODO: check if is correct unit of measure, (if not, should we add it? should we give them only a set of units to pick from?
+// TODO: localization for unit names
 // used for representing a unit of measurement for ingredients
 enum UnitOfMeasurement: CaseIterable {
     case cup
@@ -20,6 +19,11 @@ enum UnitOfMeasurement: CaseIterable {
     case liter
     case mililiter
     case pound
+    case ounce
+    case fluidOunce
+    case gram
+    case kilogram
+    case milligram
     case none
     case unknown(String)
     
@@ -35,6 +39,11 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularName = "liter"
         case .mililiter: singularName = "mililiter"
         case .pound: singularName = "pound"
+        case .ounce: singularName = "ounce"
+        case .fluidOunce: singularName = "fluid ounce"
+        case .gram: singularName = "gram"
+        case .kilogram: singularName = "kilogram"
+        case .milligram: singularName = "milligram"
         case .none: singularName = ""
         case .unknown(let unitName): singularName = unitName
         }
@@ -53,12 +62,18 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularName = "liter"
         case .mililiter: singularName = "mililiter"
         case .pound: singularName = "pound"
+        case .ounce: singularName = "ounce"
+        case .fluidOunce: singularName = "fluid ounce"
+        case .gram: singularName = "gram"
+        case .kilogram: singularName = "kilogram"
+        case .milligram: singularName = "milligram"
         case .none: singularName = ""
         case .unknown(let unitName): singularName = unitName
         }
-        //TODO and not none
         if plural {
-            return singularName + "s"
+            if singularName != "" {
+                return singularName + "s"
+            }
         }
         return singularName
     }
@@ -75,6 +90,11 @@ enum UnitOfMeasurement: CaseIterable {
         case .liter: singularShorthand = "L"
         case .mililiter: singularShorthand = "mL"
         case .pound: singularShorthand = "lb"
+        case .ounce: singularShorthand = "oz"
+        case .fluidOunce: singularShorthand = "fl oz"
+        case .gram: singularShorthand = "g"
+        case .kilogram: singularShorthand = "kg"
+        case .milligram: singularShorthand = "mg"
         case .none: singularShorthand = ""
         case .unknown(let unitName): singularShorthand = unitName
         }
@@ -85,7 +105,7 @@ enum UnitOfMeasurement: CaseIterable {
         return [.cup, .pint, .quart, .gallon, .teaspoon, .tablespoon, .liter, .mililiter, .pound]
     }
     
-    // TODO what to do with unknown unit
+    // TODO unknown unit handling
     static func fromString(unitString: String) -> UnitOfMeasurement {
         for unit in UnitOfMeasurement.allCases {
             if unitString.lowercased() == unit.getName().lowercased() ||
