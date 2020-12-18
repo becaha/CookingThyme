@@ -242,7 +242,7 @@
 		DB49B4DA2565E4E100808CC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE76F258A8E4C003DC95F /* Credentials */,
+				DBCDE778258D5C19003DC95F /* Credentials */,
 				DB49B54C2581B73500808CC8 /* WebModel */,
 				DB49B54B2581B71F00808CC8 /* DB */,
 				DB49B54A2581B6EF00808CC8 /* Table */,
@@ -380,13 +380,13 @@
 			name = PublicRecipe;
 			sourceTree = "<group>";
 		};
-		DBCDE76F258A8E4C003DC95F /* Credentials */ = {
+		DBCDE778258D5C19003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
 				DBCDE770258A8E73003DC95F /* CloudVisionAPI.swift */,
 				DBCDE772258A8E9C003DC95F /* TastyAPI.swift */,
 			);
-			name = Credentials;
+			path = Credentials;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
