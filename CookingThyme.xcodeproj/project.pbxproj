@@ -66,6 +66,8 @@
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
 		DBCDE775258A8F9B003DC95F /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
+		DBCDE77A258D5E2D003DC95F /* Credentials in Resources */ = {isa = PBXBuildFile; fileRef = DBCDE779258D5E2D003DC95F /* Credentials */; };
+		DBCDE77E258D5E51003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE77C258D5E51003DC95F /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +134,8 @@
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
+		DBCDE779258D5E2D003DC95F /* Credentials */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Credentials; sourceTree = "<group>"; };
+		DBCDE77C258D5E51003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +242,8 @@
 		DB49B4DA2565E4E100808CC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DBCDE77C258D5E51003DC95F /* Keys.swift */,
+				DBCDE779258D5E2D003DC95F /* Credentials */,
 				DB49B54C2581B73500808CC8 /* WebModel */,
 				DB49B54B2581B71F00808CC8 /* DB */,
 				DB49B54A2581B6EF00808CC8 /* Table */,
@@ -435,6 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */,
+				DBCDE77A258D5E2D003DC95F /* Credentials in Resources */,
 				DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */,
 				DB49B4F3256CBC8F00808CC8 /* recipe.sqlite in Resources */,
 			);
@@ -537,6 +544,7 @@
 				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
+				DBCDE77E258D5E51003DC95F /* Keys.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,

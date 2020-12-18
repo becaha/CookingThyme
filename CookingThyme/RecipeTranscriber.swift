@@ -44,7 +44,7 @@ class RecipeTranscriber: ObservableObject {
         urlComponents.host = "vision.googleapis.com"
         urlComponents.path = "/v1/images:annotate"
         urlComponents.queryItems = [
-            URLQueryItem(name: "key", value: CloudVisionAPI.key)
+            URLQueryItem(name: "key", value: Keys.cloudVisionApi)
         ]
         
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")

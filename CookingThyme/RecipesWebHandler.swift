@@ -58,7 +58,7 @@ class RecipesWebHandler: ObservableObject {
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var request = URLRequest(url: urlComponents.url!)
-        request.setValue(TastyAPI.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
+        request.setValue(Keys.tastyApiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.setValue("tasty.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
         
@@ -133,7 +133,7 @@ class RecipesWebHandler: ObservableObject {
         urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
         var request = URLRequest(url: urlComponents.url!)
-        request.setValue(TastyAPI.tastyAppKey, forHTTPHeaderField: "x-rapidapi-key")
+        request.setValue(Keys.tastyApiKey, forHTTPHeaderField: "x-rapidapi-key")
         request.setValue("tasty.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.httpMethod = "GET"
 
