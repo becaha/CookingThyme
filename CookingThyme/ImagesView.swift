@@ -69,7 +69,7 @@ struct ImagesView: View {
                                 .stroke(Color.black)
                                 .frame(width: 40, height: 40)
                             
-                            //TODO add button or camera button
+                            //TODO add button or camera button?
                             EditPhotoButton()
                         }
                     }

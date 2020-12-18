@@ -96,7 +96,6 @@ class RecipeCollectionVM: ObservableObject {
     // deletes category from collection
     func deleteCategory(withId id: Int) {
         RecipeDB.shared.deleteCategory(withId: id)
-        // TODO: we need to let the users know that this will happen
         RecipeDB.shared.deleteRecipes(withCategoryId: id)
         popullateCategories()
     }
