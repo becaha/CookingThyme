@@ -64,8 +64,6 @@
 		DB49B56725827ADA00808CC8 /* PublicRecipeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */; };
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
-		DBCDE771258A8E73003DC95F /* CloudVisionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE770258A8E73003DC95F /* CloudVisionAPI.swift */; };
-		DBCDE773258A8E9C003DC95F /* TastyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE772258A8E9C003DC95F /* TastyAPI.swift */; };
 		DBCDE775258A8F9B003DC95F /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 /* End PBXBuildFile section */
@@ -132,8 +130,6 @@
 		DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeVM.swift; sourceTree = "<group>"; };
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
-		DBCDE770258A8E73003DC95F /* CloudVisionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudVisionAPI.swift; sourceTree = "<group>"; };
-		DBCDE772258A8E9C003DC95F /* TastyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TastyAPI.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -242,7 +238,6 @@
 		DB49B4DA2565E4E100808CC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE778258D5C19003DC95F /* Credentials */,
 				DB49B54C2581B73500808CC8 /* WebModel */,
 				DB49B54B2581B71F00808CC8 /* DB */,
 				DB49B54A2581B6EF00808CC8 /* Table */,
@@ -380,15 +375,6 @@
 			name = PublicRecipe;
 			sourceTree = "<group>";
 		};
-		DBCDE778258D5C19003DC95F /* Credentials */ = {
-			isa = PBXGroup;
-			children = (
-				DBCDE770258A8E73003DC95F /* CloudVisionAPI.swift */,
-				DBCDE772258A8E9C003DC95F /* TastyAPI.swift */,
-			);
-			path = Credentials;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -507,7 +493,6 @@
 				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
-				DBCDE771258A8E73003DC95F /* CloudVisionAPI.swift in Sources */,
 				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
@@ -537,7 +522,6 @@
 				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
 				DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */,
 				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
-				DBCDE773258A8E9C003DC95F /* TastyAPI.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
