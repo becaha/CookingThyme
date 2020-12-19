@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: measurement page to ask how many tbsp in an ounce
 // TODO: drag and drop recipes from one category to another
 // TOOD: deletes
 // TODO: edit category name
@@ -30,7 +31,8 @@ struct RecipeCollectionView: View {
     @State var addCategoryExpanded = false
     @State var currentCategory: RecipeCategoryVM?
     
-    @State var addRecipeExpanded = false
+    @State private var isCreatingRecipe = false
+
     
     var body: some View {
         NavigationView {
@@ -59,26 +61,60 @@ struct RecipeCollectionView: View {
         //                        .padding()
                             
                             ForEach(collection.categories, id: \.self) { category in
-                                Button(action: {
-                                    currentCategory = RecipeCategoryVM(category: category, collection: collection)
-                                }) {
-                                    VStack {
-                                        ZStack {
-                                            CircleImage(width: 60, height: 60)
-                                            
-                                            Circle()
-                                                .stroke(Color.white, lineWidth: 1)
-                                                .shadow(radius: 5)
+                                VStack {
+                                    ZStack {
+                                        Button(action: {
+                                            currentCategory = RecipeCategoryVM(category: category, collection: collection)
+                                        }) {
+                                            ZStack {
+                                                CircleImage(isSelected: currentCategory?.id == category.id, width: 60, height: 60)
+                                                
+                                                Circle()
+                                                    .stroke(Color.white, lineWidth: 1)
+                                                    .shadow(radius: 5)
+                                            }
+                                            .frame(width: 60, height: 60)
                                         }
-                                        .frame(width: 60, height: 60)
+                                        .disabled(isEditing ? true : false)
                                         
-                                        Text("\(category.name)")
-                                            .font(.subheadline)
-                                            .foregroundColor(.black)
-                                            .fontWeight(category.id == currentCategory?.id ? .bold : .none)
+                                        if isEditing {
+                                            Button(action: {
+                                                deleteCategoryId = category.id
+                                                deleteCategoryAlert = true
+                                            }) {
+                                                ZStack {
+//                                                    Circle()
+//                                                        .fill(Color.white)
+//                                                        .frame(width: 40, height: 40)
+//                                                        .opacity(0.8)
+//                                                    
+//                                                    Circle()
+//                                                        .stroke(Color.black)
+//                                                        .frame(width: 40, height: 40)
+                                                    
+                                                    Image(systemName: "trash")
+                                                        .foregroundColor(.black)
+                                                }
+                                            }
+                                        }
                                     }
+                                    
+                                    Text("\(category.name)")
+                                        .font(.subheadline)
+                                        .foregroundColor(.black)
+                                        .fontWeight(category.id == currentCategory?.id ? .bold : .none)
                                 }
                                 .padding()
+                                .alert(isPresented: $deleteCategoryAlert) {
+                                    Alert(title: Text("Delete Category"),
+                                          message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
+                                          primaryButton: .default(Text("Ok")) {
+                                            if let deleteCategoryId = self.deleteCategoryId {
+                                                collection.deleteCategory(withId: deleteCategoryId)
+                                            }
+                                          },
+                                          secondaryButton: .cancel())
+                                }
                             }
                         }
                     }
@@ -128,61 +164,41 @@ struct RecipeCollectionView: View {
                 .background(formBackgroundColor())
                 .border(Color.white, width: 2)
                 
-//                Form {
-//                Section(header:
-//                    HStack(alignment: .center) {
-//                        Spacer()
-//
-//                        if !addCategoryExpanded {
-//                            Button(action: {
-//                                addCategoryExpanded = true
-//                            }) {
-//                                ZStack {
-//                                    Circle()
-//                                        .frame(width: 40, height: 40)
-//                                        .foregroundColor(.white)
-//                                        .shadow(radius: 10)
-//
-//                                    Image(systemName: "plus")
-//                                }
-//                            }
-//                        }
-//                        else {
-//                            ZStack {
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .fill(Color.white)
-//                                    .shadow(radius: 10)
-//
-//                                HStack {
-//                                    TextField("New Category", text: $newCategory, onCommit: {
-//                                        addCategory()
-//                                    })
-//
-//                                    Spacer()
-//
-//                                    UIControls.AddButton(action: addCategory, isPlain: false)
-//                                }
-//                                .padding()
-//                            }
-//                            .frame(width: 200, height: 60)
-//                        }
-//                    }
-//                    .padding(.horizontal, 10)
-//                    .padding(.bottom)
-//                    .zIndex(1)
-//                ) {
-                    List {
-                        ForEach(currentCategory?.recipes ?? []) { recipe in
-                            NavigationLink("\(recipe.name)", destination:
-                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: currentCategory!))
-                                            .environmentObject(currentCategory!)
-                                            .environmentObject(collection)
-                            )
+                List {
+                    ForEach(currentCategory?.recipes ?? []) { recipe in
+                        NavigationLink("\(recipe.name)", destination:
+                                    RecipeView(recipe: RecipeVM(recipe: recipe, category: currentCategory!))
+                                        .environmentObject(currentCategory!)
+                                        .environmentObject(collection)
+                        )
+                    }
+                }
+                .padding(.top, 0)
+                
+                HStack(alignment: .center) {
+                    Spacer()
+
+                    Button(action: {
+                        createRecipe()
+                    }) {
+                        ZStack {
+                            Circle()
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.white)
+                                .shadow(radius: 10)
+
+                            Image(systemName: "plus")
                         }
                     }
-                    .padding(.top, 0)
-//                }
-//                }
+                    .sheet(isPresented: $isCreatingRecipe) {
+                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
+                            .environmentObject(RecipeVM(category: currentCategory!))
+                    }
+                }
+                .padding(.horizontal, 10)
+                .padding(.bottom)
+                .background(formBackgroundColor())
+                .zIndex(1)
             }
 //            List {
 //                if isEditing {
@@ -248,6 +264,10 @@ struct RecipeCollectionView: View {
         .onAppear {
             currentCategory = RecipeCategoryVM(category: collection.allCategory, collection: collection)
         }
+    }
+    
+    private func createRecipe() {
+        isCreatingRecipe = true
     }
     
 //    func ExpandableAddButton(expanded: Binding<Bool>, textString: String, textBinding: Binding<String>, addAction: @escaping () -> Void) -> some View {

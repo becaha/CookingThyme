@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CircleImage: View {
+    var isSelected: Bool
     var uiImage: UIImage?
     var width: CGFloat
     var height: CGFloat
@@ -28,28 +29,12 @@ struct CircleImage: View {
     }
     
     func getCategoryColor() -> Color {
-//        return Color.white
-        
-        let randomNum = Double.random(in: 0..<1)
-        switch(randomNum) {
-        case _ where randomNum < 0.2:
-            return Color.yellow
-        case _ where randomNum < 0.4:
-            return Color.blue
-        case _ where randomNum < 0.6:
-            return Color.red
-        case _ where randomNum < 0.8:
-            return Color.pink
-        case _ where randomNum < 1:
-            return Color.orange
-        default:
-            return Color.white
-        }
+        return Color.green.opacity(isSelected ? 1 : 0.5)
     }
 }
 
-struct CircleImage_Previews: PreviewProvider {
-    static var previews: some View {
-        CircleImage(width: 60, height: 60)
-    }
-}
+//struct CircleImage_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CircleImage(width: 60, height: 60)
+//    }
+//}

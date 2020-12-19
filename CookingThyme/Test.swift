@@ -59,7 +59,7 @@ struct Test: View {
                                 }) {
                                     VStack {
                                         ZStack {
-                                            CircleImage(width: 60, height: 60)
+//                                            CircleImage(width: 60, height: 60)
                                             
                                             Circle()
                                                 .stroke(Color.white, lineWidth: 1)
