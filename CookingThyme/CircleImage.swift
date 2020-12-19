@@ -28,23 +28,23 @@ struct CircleImage: View {
     }
     
     func getCategoryColor() -> Color {
-        return Color.white
+//        return Color.white
         
-//        let randomNum = Double.random(in: 0..<1)
-//        switch(randomNum) {
-//        case _ where randomNum < 0.2:
-//            return Color.yellow
-//        case _ where randomNum < 0.4:
-//            return Color.blue
-//        case _ where randomNum < 0.6:
-//            return Color.red
-//        case _ where randomNum < 0.8:
-//            return Color.pink
-//        case _ where randomNum < 1:
-//            return Color.orange
-//        default:
-//            return Color.white
-//        }
+        let randomNum = Double.random(in: 0..<1)
+        switch(randomNum) {
+        case _ where randomNum < 0.2:
+            return Color.yellow
+        case _ where randomNum < 0.4:
+            return Color.blue
+        case _ where randomNum < 0.6:
+            return Color.red
+        case _ where randomNum < 0.8:
+            return Color.pink
+        case _ where randomNum < 1:
+            return Color.orange
+        default:
+            return Color.white
+        }
     }
 }
 

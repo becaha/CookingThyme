@@ -128,49 +128,49 @@ struct RecipeCollectionView: View {
                 .background(formBackgroundColor())
                 .border(Color.white, width: 2)
                 
-                Form {
-                Section(header:
-                    HStack(alignment: .center) {
-                        Spacer()
-                        
-                        if !addCategoryExpanded {
-                            Button(action: {
-                                addCategoryExpanded = true
-                            }) {
-                                ZStack {
-                                    Circle()
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(.white)
-                                        .shadow(radius: 10)
-
-                                    Image(systemName: "plus")
-                                }
-                            }
-                        }
-                        else {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.white)
-                                    .shadow(radius: 10)
-
-                                HStack {
-                                    TextField("New Category", text: $newCategory, onCommit: {
-                                        addCategory()
-                                    })
-
-                                    Spacer()
-
-                                    UIControls.AddButton(action: addCategory, isPlain: false)
-                                }
-                                .padding()
-                            }
-                            .frame(width: 200, height: 60)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.bottom)
-                    .zIndex(1)
-                ) {
+//                Form {
+//                Section(header:
+//                    HStack(alignment: .center) {
+//                        Spacer()
+//
+//                        if !addCategoryExpanded {
+//                            Button(action: {
+//                                addCategoryExpanded = true
+//                            }) {
+//                                ZStack {
+//                                    Circle()
+//                                        .frame(width: 40, height: 40)
+//                                        .foregroundColor(.white)
+//                                        .shadow(radius: 10)
+//
+//                                    Image(systemName: "plus")
+//                                }
+//                            }
+//                        }
+//                        else {
+//                            ZStack {
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .fill(Color.white)
+//                                    .shadow(radius: 10)
+//
+//                                HStack {
+//                                    TextField("New Category", text: $newCategory, onCommit: {
+//                                        addCategory()
+//                                    })
+//
+//                                    Spacer()
+//
+//                                    UIControls.AddButton(action: addCategory, isPlain: false)
+//                                }
+//                                .padding()
+//                            }
+//                            .frame(width: 200, height: 60)
+//                        }
+//                    }
+//                    .padding(.horizontal, 10)
+//                    .padding(.bottom)
+//                    .zIndex(1)
+//                ) {
                     List {
                         ForEach(currentCategory?.recipes ?? []) { recipe in
                             NavigationLink("\(recipe.name)", destination:
@@ -181,8 +181,8 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .padding(.top, 0)
-                }
-                }
+//                }
+//                }
             }
 //            List {
 //                if isEditing {
