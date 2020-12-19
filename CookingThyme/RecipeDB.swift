@@ -303,6 +303,29 @@ class RecipeDB {
         }
     }
     
+    func getAllRecipes(withCollectionId collectionId: Int) -> [Recipe] {
+        var allRecipes = [Recipe]()
+        do {
+            let allRecipes = try dbQueue.read { db -> [Recipe] in
+                let rows = try Row.fetchCursor(db,
+                                               sql: """
+                                                    SELECT DISTINCT \(Recipe.Table.databaseTableName).\(Recipe.Table.id), \(Recipe.Table.databaseTableName).\(Recipe.Table.name), \(Recipe.Table.databaseTableName).\(Recipe.Table.servings), \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId) FROM \(Recipe.Table.databaseTableName) \
+                                                    INNER JOIN \(RecipeCategory.Table.databaseTableName) \
+                                                    ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.id) = \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId)
+                                                    WHERE \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeCollectionId) = ?
+                                                    """,
+                                               arguments: [collectionId])
+                while let row = try rows.next() {
+                    allRecipes.append(Recipe(row: row))
+                }
+                return allRecipes
+            }
+            return allRecipes
+        } catch {
+            return []
+        }
+    }
+    
     func getRecipes(byCategoryId categoryId: Int) -> [Recipe] {
         var categoryRecipes = [Recipe]()
         do {

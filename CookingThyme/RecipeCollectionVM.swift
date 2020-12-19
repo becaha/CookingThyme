@@ -48,6 +48,7 @@ class RecipeCollectionVM: ObservableObject {
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
         self.categories = [RecipeCategory]()
+        self.categories.append(RecipeCategory(name: "All", recipeCollectionId: collection.id))
         for category in categories {
             self.categories.append(category)
         }
@@ -61,6 +62,11 @@ class RecipeCollectionVM: ObservableObject {
     
     var name: String {
         collection.name
+    }
+    
+    // the all category is appended first
+    var allCategory: RecipeCategory {
+        categories[0]
     }
     
     var categoryNames: [String] {

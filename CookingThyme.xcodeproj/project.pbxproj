@@ -68,6 +68,8 @@
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE77A258D5E2D003DC95F /* Credentials in Resources */ = {isa = PBXBuildFile; fileRef = DBCDE779258D5E2D003DC95F /* Credentials */; };
 		DBCDE77E258D5E51003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE77C258D5E51003DC95F /* Keys.swift */; };
+		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
+		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -136,6 +138,8 @@
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE779258D5E2D003DC95F /* Credentials */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Credentials; sourceTree = "<group>"; };
 		DBCDE77C258D5E51003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +224,7 @@
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
+				DBCDE780258D5F55003DC95F /* Test.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -358,6 +363,7 @@
 				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
 				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
 				DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */,
+				DBCDE782258D63C8003DC95F /* CircleImage.swift */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -519,6 +525,7 @@
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
+				DBCDE781258D5F55003DC95F /* Test.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
@@ -542,6 +549,7 @@
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
 				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
+				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
 				DBCDE77E258D5E51003DC95F /* Keys.swift in Sources */,

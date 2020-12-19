@@ -12,6 +12,13 @@ class RecipeCategoryVM: ObservableObject {
     @Published var category: RecipeCategory
     @Published var recipes: [Recipe]
     
+    init(collection: RecipeCollectionVM) {
+        self.category = RecipeCategory(name: "All", recipeCollectionId: collection.id)
+        self.collection = collection
+        recipes = []
+        popullateRecipes()
+    }
+    
     init(category: RecipeCategory, collection: RecipeCollectionVM) {
         self.category = category
         self.collection = collection
@@ -33,7 +40,12 @@ class RecipeCategoryVM: ObservableObject {
     
     // gets recipes of category from db
     func popullateRecipes() {
-        self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
+        if category.name == "All" {
+            self.recipes = RecipeDB.shared.getAllRecipes(withCollectionId: collection.id)
+        }
+        else {
+            self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
+        }
     }
     
     // gets category from db
