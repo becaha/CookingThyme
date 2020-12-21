@@ -89,7 +89,13 @@ class PublicRecipeVM: ObservableObject {
         var tempIngredients = [TempIngredient]()
         
         for ingredient in ingredients {
-            let tempIngredient = TempIngredient(name: ingredient.name, amount: ingredient.measurements[0].quantity, unitName: ingredient.measurements[0].unit.name, recipeId: 0, id: nil)
+            var amount = "1"
+            var unitName =  ""
+            if ingredient.measurements.count > 0 {
+                amount = ingredient.measurements[0].quantity
+                unitName = ingredient.measurements[0].unit.name
+            }
+            let tempIngredient = TempIngredient(name: ingredient.name, amount: amount, unitName: unitName, recipeId: 0, id: nil)
             tempIngredients.append(tempIngredient)
         }
         

@@ -11,6 +11,7 @@ import SwiftUI
 struct EditableText: View {
     var text: String = ""
     var isEditing: Bool
+    var isSelected: Bool
     var onChanged: (String) -> Void
     var onDelete: () -> Void
     var isDeletable: Bool
@@ -21,6 +22,17 @@ struct EditableText: View {
     init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void) {
         self.text = text
         self.isEditing = isEditing
+        self.isSelected = false
+        self.onChanged = onChanged
+        self.onDelete = {}
+        self.isDeletable = false
+        self.autocapitalization = .none
+    }
+    
+    init(_ text: String, isEditing: Bool, isSelected: Bool, onChanged: @escaping (String) -> Void) {
+        self.text = text
+        self.isEditing = isEditing
+        self.isSelected = isSelected
         self.onChanged = onChanged
         self.onDelete = {}
         self.isDeletable = false
@@ -30,6 +42,7 @@ struct EditableText: View {
     init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void, autocapitalization: UITextAutocapitalizationType) {
         self.text = text
         self.isEditing = isEditing
+        self.isSelected = false
         self.onChanged = onChanged
         self.onDelete = {}
         self.isDeletable = false
@@ -39,6 +52,7 @@ struct EditableText: View {
     init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void, onDelete: @escaping () -> Void) {
         self.text = text
         self.isEditing = isEditing
+        self.isSelected = false
         self.onChanged = onChanged
         self.onDelete = onDelete
         self.isDeletable = true
@@ -47,20 +61,20 @@ struct EditableText: View {
 
     var body: some View {
         ZStack {
-            TextField(text, text: $editableText, onEditingChanged: { began in
-                callOnChanged()
-            })
-//            .multilineTextAlignment(.center)
-            .autocapitalization(autocapitalization)
-            .opacity(isEditing ? 1 : 0)
-            .disabled(!isEditing)
-            
             if !isEditing {
                 Text(text)
+                    .fontWeight(isSelected ? .bold : .none)
                     .opacity(isEditing ? 0 : 1)
                     .onAppear {
                         callOnChanged()
                     }
+            }
+            else {
+                TextField(text, text: $editableText, onEditingChanged: { began in
+                    callOnChanged()
+                })
+                .autocapitalization(autocapitalization)
+                .opacity(isEditing ? 1 : 0)
             }
         }
         .deletable(isDeleting: isEditing && isDeletable, onDelete: onDelete)

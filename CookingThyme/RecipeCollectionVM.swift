@@ -79,6 +79,14 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
+    func deleteRecipe(withId id: Int) {
+        RecipeDB.shared.deleteRecipe(withId: id)
+        RecipeDB.shared.deleteDirections(withRecipeId: id)
+        RecipeDB.shared.deleteIngredients(withRecipeId: id)
+        RecipeDB.shared.deleteImages(withRecipeId: id)
+//        popullateRecipes()
+    }
+    
     // adds new category to collection
     func addCategory(_ category: String) -> Void {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id)
