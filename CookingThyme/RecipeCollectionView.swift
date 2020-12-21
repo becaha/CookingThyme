@@ -77,7 +77,7 @@ struct RecipeCollectionView: View {
                                         }
                                         .disabled(isEditing ? true : false)
                                         
-                                        if isEditing {
+                                        if isEditing && category.name != "All" {
                                             Button(action: {
                                                 deleteCategoryId = category.id
                                                 deleteCategoryAlert = true
@@ -99,7 +99,14 @@ struct RecipeCollectionView: View {
                                         }
                                     }
                                     
-                                    Text("\(category.name)")
+//                                    Text("\(category.name)")
+//                                        .font(.subheadline)
+//                                        .foregroundColor(.black)
+//                                        .fontWeight(category.id == currentCategory?.id ? .bold : .none)
+                                    
+                                    EditableText("\(category.name)", isEditing: isEditing, onChanged: { name in
+                                        collection.updateCategory(forCategoryId: category.id, toName: name)
+                                    })
                                         .font(.subheadline)
                                         .foregroundColor(.black)
                                         .fontWeight(category.id == currentCategory?.id ? .bold : .none)
