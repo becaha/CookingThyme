@@ -4,6 +4,12 @@
 //
 //  Created by Rebecca Nybo on 11/19/20.
 //
+//
+//  RecipeDB.swift
+//  CookingThyme
+//
+//  Created by Rebecca Nybo on 11/19/20.
+//
 
 import Foundation
 import GRDB

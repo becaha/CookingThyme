@@ -345,9 +345,9 @@ extension Array where Element: Identifiable {
 //    static var previews: some View {
 //        HStack {
 //            Text("hi")
-//            
+//
 //            Spacer()
-//            
+//
 //            UIControls.AddButton(action: {
 //                print("was called")
 //            })

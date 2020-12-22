@@ -13,7 +13,7 @@ import SwiftUI
 // TODO: click off of add new category to dismiss
 // TODO: have images or icons for categories, imaage from recipe in category
 
-// TODO: cant add recipe to All category, can delete recipe from All category?
+// TODO: can add recipe to All category?, can delete recipe from All category?
 // TODO: all category only have a unique recipe
 // TODO: cannot add same recipe twice to category
 struct RecipeCollectionView: View {
@@ -32,7 +32,6 @@ struct RecipeCollectionView: View {
     @State var deleteCategoryId: Int?
     
     @State var addCategoryExpanded = false
-    @State var currentCategory: RecipeCategoryVM?
     
     @State private var isCreatingRecipe = false
 
@@ -47,10 +46,10 @@ struct RecipeCollectionView: View {
                                 VStack {
                                     ZStack {
                                         Button(action: {
-                                            currentCategory = RecipeCategoryVM(category: category, collection: collection)
+                                            collection.setCurrentCategory(category)
                                         }) {
                                             ZStack {
-                                                CircleImage(isSelected: currentCategory?.id == category.id, width: 60, height: 60)
+                                                CircleImage(isSelected: collection.currentCategory?.id == category.id, width: 60, height: 60)
                                                 
                                                 Circle()
                                                     .stroke(Color.white, lineWidth: 1)
@@ -72,7 +71,7 @@ struct RecipeCollectionView: View {
                                             }
                                         }
                                     }
-                                    EditableText("\(category.name)", isEditing: isEditing, isSelected: category.id == currentCategory?.id ? true : false, onChanged: { name in
+                                    EditableText("\(category.name)", isEditing: isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
                                         collection.updateCategory(forCategoryId: category.id, toName: name)
                                     })
                                         .font(.subheadline)
@@ -138,7 +137,37 @@ struct RecipeCollectionView: View {
                 .background(formBackgroundColor())
                 .border(Color.white, width: 2)
                 
-                RecipesList()
+//                    CategoryView()
+//                        .environmentObject(collection.currentCategory!)
+//                }
+                
+                if collection.currentCategory != nil {
+                    List {
+                        ForEach(collection.currentCategory!.recipes) { recipe in
+                            if isEditing {
+                                Text("\(recipe.name)")
+                                    .deletable(isDeleting: true, onDelete: {
+                                        withAnimation {
+                                            collection.deleteRecipe(withId: recipe.id)
+                                        }
+                                    })
+                            }
+                            else {
+                                NavigationLink("\(recipe.name)", destination:
+                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                .environmentObject(collection.currentCategory!)
+                                                .environmentObject(collection)
+                                )
+                            }
+                        }
+                        .onDelete { indexSet in
+                            indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                                collection.deleteRecipe(withId: recipe.id)
+                            }
+                        }
+                    }
+                    .padding(.top, 0)
+                }
                 
                 HStack(alignment: .center) {
                     Spacer()
@@ -157,7 +186,8 @@ struct RecipeCollectionView: View {
                     }
                     .sheet(isPresented: $isCreatingRecipe) {
                         CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
-                            .environmentObject(RecipeVM(category: currentCategory!))
+                            .environmentObject(RecipeVM(category: collection.currentCategory!))
+                            .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
                     }
                 }
                 .padding(.horizontal, 10)
@@ -175,34 +205,6 @@ struct RecipeCollectionView: View {
                     isEditing: isEditing)
             )
         }
-        .onAppear {
-            currentCategory = RecipeCategoryVM(category: collection.allCategory, collection: collection)
-        }
-    }
-    
-    private func RecipesList() -> some View {
-        List {
-            ForEach(currentCategory?.recipes ?? []) { recipe in
-                NavigationLink("\(recipe.name)", destination:
-                            RecipeView(recipe: RecipeVM(recipe: recipe, category: currentCategory!))
-                                .environmentObject(currentCategory!)
-                                .environmentObject(collection)
-                )
-                .deletable(isDeleting: isEditing, onDelete: {
-                    withAnimation {
-                        collection.deleteRecipe(withId: recipe.id)
-                        currentCategory = RecipeCategoryVM(category: currentCategory!.category, collection: collection)
-                    }
-                })
-            }
-            .onDelete { indexSet in
-                indexSet.map{ currentCategory!.recipes[$0] }.forEach { recipe in
-                    collection.deleteRecipe(withId: recipe.id)
-                    currentCategory = RecipeCategoryVM(category: currentCategory!.category, collection: collection)
-                }
-            }
-        }
-        .padding(.top, 0)
     }
     
     private func createRecipe() {

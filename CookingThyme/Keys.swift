@@ -10,6 +10,6 @@ import Foundation
 struct Keys {
     static let tastyApi = "fdc13d3f7cmsh63c39a29ed19133p14dbc4jsnd1975167bc8f"
     
-    static let cloudVisionApi = "AIzaSyDD9BK_fTSOjIgjT0aGsFG7vytJtee61vU"
+    static let cloudVisionApi = "AIzaSyBd4mD8e43GEW3aaUqX5gE1MAHhDGByYZY"
 
 }

@@ -21,7 +21,7 @@ class RecipeVM: ObservableObject {
     private var imageHandlerCancellable: AnyCancellable?
     
     @Published var transcriber = RecipeTranscriber()
-    private var recipeTranscriberCancellable: AnyCancellable?    
+    private var recipeTranscriberCancellable: AnyCancellable?
     
     // MARK: - Init
     
@@ -122,6 +122,7 @@ class RecipeVM: ObservableObject {
         }
     }
     
+    // TODO: no duplicate recipes, just move
     func copyRecipe(toCategoryId categoryId: Int) {
         RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
     }

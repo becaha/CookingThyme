@@ -11,6 +11,7 @@ import Combine
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategory]
+    @Published var currentCategory: RecipeCategoryVM?
     
     @Published var tempShoppingList: [ShoppingItem] = []
     
@@ -22,6 +23,7 @@ class RecipeCollectionVM: ObservableObject {
         self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
         sortShoppingList()
         popullateCategories()
+        resetCurrentCategory()
     }
     
     // gets collection from db
@@ -79,12 +81,27 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
+    func setCurrentCategory(_ category: RecipeCategory) {
+        currentCategory = RecipeCategoryVM(category: category, collection: self)
+    }
+    
+    func refreshCurrrentCategory() {
+        if let currentCategory = self.currentCategory {
+            self.currentCategory = RecipeCategoryVM(category: currentCategory.category, collection: self)
+        }
+    }
+    
+    func resetCurrentCategory() {
+        currentCategory = RecipeCategoryVM(category: allCategory, collection: self)
+    }
+    
+    // TODO: delete recipe from category vs last recipe
     func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
         RecipeDB.shared.deleteImages(withRecipeId: id)
-//        popullateRecipes()
+        refreshCurrrentCategory()
     }
     
     // adds new category to collection
@@ -112,6 +129,9 @@ class RecipeCollectionVM: ObservableObject {
         RecipeDB.shared.deleteCategory(withId: id)
         RecipeDB.shared.deleteRecipes(withCategoryId: id)
         popullateCategories()
+        if let currentCategory = self.currentCategory, id == currentCategory.id {
+            resetCurrentCategory()
+        }
     }
     
     // MARK: - Shopping List

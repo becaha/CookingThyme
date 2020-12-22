@@ -29,7 +29,7 @@ struct PublicRecipeView: View {
         VStack {
             HStack {
                 Text("\(recipe.name)")
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.title)
                     .multilineTextAlignment(.center)
             }
             .padding()
