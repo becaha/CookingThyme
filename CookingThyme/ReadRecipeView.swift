@@ -37,6 +37,13 @@ struct ReadRecipeView: View {
     var body: some View {
         VStack {
             Form {
+                HStack {
+                    Text("\(recipe.name)")
+                        .font(.system(size: 30, weight: .bold))
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+                
                 getImageView()
                 
                 Section(header:
