@@ -122,7 +122,7 @@ struct ReadRecipeView: View {
             List{
                 ForEach(collection.categories, id: \.self) { category in
                     Button(action: {
-                        recipe.copyRecipe(toCategoryId: category.id)
+                        recipe.moveRecipe(toCategoryId: category.id)
                         categoriesPresented = false
                     }) {
                         Text("\(category.name)")
@@ -135,7 +135,7 @@ struct ReadRecipeView: View {
         .actionSheet(isPresented: $actionSheetPresented, content: {
             ActionSheet(title: Text(""), message: nil, buttons:
                 [
-                    .default(Text("Add to category"), action: {
+                    .default(Text("Move to category"), action: {
                         categoriesPresented = true
                     }),
                     .cancel()

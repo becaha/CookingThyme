@@ -122,9 +122,8 @@ class RecipeVM: ObservableObject {
         }
     }
     
-    // TODO: no duplicate recipes, just move
-    func copyRecipe(toCategoryId categoryId: Int) {
-        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
+    func moveRecipe(toCategoryId categoryId: Int) {
+        RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
     }
     
     static func copy(recipe: Recipe, toCategoryId categoryId: Int) {

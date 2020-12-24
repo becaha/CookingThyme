@@ -184,7 +184,11 @@ struct RecipeCollectionView: View {
                             Image(systemName: "plus")
                         }
                     }
-                    .sheet(isPresented: $isCreatingRecipe) {
+                    .sheet(isPresented: $isCreatingRecipe, onDismiss: {
+                        if let currentCategory = collection.currentCategory {
+                            collection.setCurrentCategory(currentCategory.category)
+                        }
+                    }) {
                         CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
                             .environmentObject(RecipeVM(category: collection.currentCategory!))
                             .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
