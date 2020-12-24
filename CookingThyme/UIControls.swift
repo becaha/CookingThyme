@@ -25,7 +25,6 @@ struct UIControls {
     static func EditButton(action: @escaping () -> Void, isEditing: Bool) -> some View {
         Button(action: action) {
             Text(isEditing ? "Done" : "Edit")
-                .foregroundColor(.black)
         }
     }
     

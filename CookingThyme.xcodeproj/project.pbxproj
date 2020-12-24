@@ -69,6 +69,7 @@
 		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
 		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
 		DBCDE785259166AA003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE784259166AA003DC95F /* Keys.swift */; };
+		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +139,7 @@
 		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		DBCDE784259166AA003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +273,7 @@
 				DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */,
 				DB49B564258276C700808CC8 /* RecipeControls.swift */,
 				DB49B56A2582CEF400808CC8 /* SearchBar.swift */,
+				DBCDE78725945661003DC95F /* FormTitle.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -560,6 +563,7 @@
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
+				DBCDE78825945661003DC95F /* FormTitle.swift in Sources */,
 				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,

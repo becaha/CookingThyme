@@ -36,13 +36,6 @@ struct ReadRecipeView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("\(recipe.name)")
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-            }
-            .padding()
-            
             Form {
                 getImageView()
                 
@@ -133,7 +126,7 @@ struct ReadRecipeView: View {
             .listStyle(InsetGroupedListStyle())
         })
         .actionSheet(isPresented: $actionSheetPresented, content: {
-            ActionSheet(title: Text(""), message: nil, buttons:
+            ActionSheet(title: Text("Move recipe"), message: nil, buttons:
                 [
                     .default(Text("Move to category"), action: {
                         categoriesPresented = true

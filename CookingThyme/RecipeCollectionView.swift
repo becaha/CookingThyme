@@ -12,10 +12,6 @@ import SwiftUI
 // TODO: drag and drop recipes from one category to another
 // TODO: click off of add new category to dismiss
 // TODO: have images or icons for categories, imaage from recipe in category
-
-// TODO: can add recipe to All category?, can delete recipe from All category?
-// TODO: all category only have a unique recipe
-// TODO: cannot add same recipe twice to category
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
@@ -153,11 +149,15 @@ struct RecipeCollectionView: View {
                                     })
                             }
                             else {
-                                NavigationLink("\(recipe.name)", destination:
+                                NavigationLink(destination:
                                             RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
                                                 .environmentObject(collection.currentCategory!)
                                                 .environmentObject(collection)
-                                )
+                                ) {
+                                    Text("\(recipe.name)")
+                                        .fontWeight(.regular)
+                                }
+                                
                             }
                         }
                         .onDelete { indexSet in

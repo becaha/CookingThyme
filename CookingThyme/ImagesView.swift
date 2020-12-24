@@ -113,7 +113,7 @@ struct ImagesView: View {
         }
         .foregroundColor(mainColor())
         .actionSheet(isPresented: $editPhotoSheetPresented, content: {
-            ActionSheet(title: Text(""), message: nil, buttons:
+            ActionSheet(title: Text("Add photo"), message: nil, buttons:
                 [
                     .default(Text("Pick from camera roll"), action: {
                         cameraRollSheetPresented = true

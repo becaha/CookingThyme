@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: serving size low num to high
 // TODO: have cursor go to next item in list after one is entered
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
@@ -35,6 +36,7 @@ struct EditRecipeView: View {
     @State private var direction: String = ""
     
     @State private var cameraRollSheetPresented = false
+    @State private var importRecipePresented = false
     @State private var selectedImage: UIImage?
     
     @Binding var isImportingRecipe: Bool
@@ -49,6 +51,14 @@ struct EditRecipeView: View {
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
             ImagePicker(image: self.$selectedImage)
         }
+        .actionSheet(isPresented: $importRecipePresented, content: {
+            ActionSheet(title: Text("Import recipe"), message: nil, buttons: [
+                .default(Text("From camera roll"), action: {
+                    cameraRollSheetPresented = true
+                }),
+                .cancel()
+            ])
+        })
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
@@ -65,7 +75,7 @@ struct EditRecipeView: View {
             trailing:
                 HStack {
                     Button(action: {
-                        cameraRollSheetPresented = true
+                        importRecipePresented = true
                     }) {
                         Image(systemName: "square.and.arrow.down")
                     }

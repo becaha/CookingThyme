@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct CookingThymeApp: App {
+    init() {
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(mainColor())
+        UIView.appearance(whenContainedInInstancesOf: [UINavigationController.self]).tintColor = UIColor(mainColor())
+    }
+    
     var body: some Scene {
         WindowGroup {
 //            EditRecipeView()

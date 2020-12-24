@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// TODO: action sheet titles
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategory]
@@ -50,9 +51,17 @@ class RecipeCollectionVM: ObservableObject {
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
         self.categories = [RecipeCategory]()
-        self.categories.append(RecipeCategory(name: "All", recipeCollectionId: collection.id))
+        var hasAllCategory = false
         for category in categories {
+            if category.name == "All" {
+                hasAllCategory = true
+            }
             self.categories.append(category)
+        }
+        
+        if !hasAllCategory {
+            // TODO: when creating a collection, add category All
+            RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
         }
     }
     
@@ -66,9 +75,13 @@ class RecipeCollectionVM: ObservableObject {
         collection.name
     }
     
-    // the all category is appended first
-    var allCategory: RecipeCategory {
-        categories[0]
+    var allCategory: RecipeCategory? {
+        for category in categories {
+            if category.name == "All" {
+                return category
+            }
+        }
+        return nil
     }
     
     var categoryNames: [String] {
@@ -92,7 +105,10 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func resetCurrentCategory() {
-        currentCategory = RecipeCategoryVM(category: allCategory, collection: self)
+        if allCategory == nil {
+            print("error")
+        }
+        currentCategory = RecipeCategoryVM(category: allCategory!, collection: self)
     }
     
     // TODO: delete recipe from category vs last recipe

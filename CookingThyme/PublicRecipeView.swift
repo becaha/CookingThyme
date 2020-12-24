@@ -144,13 +144,15 @@ struct PublicRecipeView: View {
             .listStyle(InsetGroupedListStyle())
         })
         .actionSheet(isPresented: $actionSheetPresented, content: {
-            ActionSheet(title: Text(""), message: nil, buttons:
+            ActionSheet(title: Text("Save recipe to collection"),
+                message: nil, buttons:
                 [
-                    .default(Text("Add to category"), action: {
+                    .default(Text("Save to category"), action: {
                         categoriesPresented = true
                     }),
                     .cancel()
-                ])
+                ]
+            )
         })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:

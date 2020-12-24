@@ -12,12 +12,12 @@ class RecipeCategoryVM: ObservableObject {
     @Published var category: RecipeCategory
     @Published var recipes: [Recipe]
     
-    init(collection: RecipeCollectionVM) {
-        self.category = RecipeCategory(name: "All", recipeCollectionId: collection.id)
-        self.collection = collection
-        recipes = []
-        popullateRecipes()
-    }
+//    init(collection: RecipeCollectionVM) {
+//        self.category = RecipeCategory(name: "All", recipeCollectionId: collection.id)
+//        self.collection = collection
+//        recipes = []
+//        popullateRecipes()
+//    }
     
     init(category: RecipeCategory, collection: RecipeCollectionVM) {
         self.category = category
