@@ -76,22 +76,51 @@ class RecipeTranscriber: ObservableObject {
                     print("No data in response: \(error?.localizedDescription ?? "Unknown error").")
                     return
                 }
+                
+                var transcription = Transcription()
+
                 if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     print(jsonObject)
                     if let responses = jsonObject["responses"] as? [Any] {
-//                        for response in responses {
                             if let response = responses[0] as? [String: Any] {
                                 if let textAnnotations = response["textAnnotations"] as? [Any] {
-                                    if let textAnnotation = textAnnotations[0] as? [String: Any] {
-                                        if let description = textAnnotation["description"] as? String {
-                                            DispatchQueue.main.async {
-                                                self.setTranscription(description)
+                                    var annotations = [Annotation]()
+                                    
+                                    for textAnnotation in textAnnotations {
+                                        if let textAnnotation = textAnnotation as? [String: Any] {
+                                            var annotation = Annotation()
+                                            
+                                            if let boundingPoly = textAnnotation["boundingPoly"] as? [String:Any] {                                              if let boundingPolyVertices = boundingPoly["vertices"] as? [Any] {
+                                                    var vertices = [(Int, Int)]()
+                                                
+                                                    for boundingPolyVertex in boundingPolyVertices {
+                                                        if let boundingPolyVertex = boundingPolyVertex as? [String: Any] {
+                                                            var vertexX = 0
+                                                            var vertexY = 0
+                                                            if let x = boundingPolyVertex["x"] as? Int {
+                                                                vertexX = x
+                                                            }
+                                                            if let y = boundingPolyVertex["y"] as? Int {
+                                                                vertexY = y
+                                                            }
+                                                            vertices.append((vertexX, vertexY))
+                                                        }
+                                                    }
+                                                    annotation.boundingPoly = vertices
+                                                }
                                             }
+                                            if let description = textAnnotation["description"] as? String {
+                                                annotation.description = description
+                                            }
+                                            annotations.append(annotation)
                                         }
+                                    }
+                                    transcription.annotations = annotations
+                                    DispatchQueue.main.async {
+                                        self.setTranscription(transcription)
                                     }
                                 }
                             }
-//                        }
                     }
                 }
             }
@@ -102,7 +131,14 @@ class RecipeTranscriber: ObservableObject {
         .resume()
     }
     
-    func setTranscription(_ transcription: String) {
-        self.recipeText = transcription
+    func setTranscription(_ transcription: Transcription) {
+        analyzeTranscription(transcription)
+        self.recipeText = transcription.annotations[0].description
+    }
+    
+    func analyzeTranscription(_ transcription: Transcription) {
+        for annotation in transcription.annotations {
+            print(annotation)
+        }
     }
 }

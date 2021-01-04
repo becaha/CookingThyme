@@ -27,6 +27,20 @@ class RecipeCollectionVM: ObservableObject {
         resetCurrentCategory()
     }
     
+    func sortCategories() {
+        var currentCategories = categories
+        currentCategories.sort(by: { (a:RecipeCategory, b:RecipeCategory) -> Bool in
+            if a.name == "All" {
+                return true
+            }
+            if b.name == "All" {
+                return false
+            }
+            return a.name < b.name
+        })
+        self.categories = currentCategories
+    }
+    
     // gets collection from db
     func refreshCollection() {
         if let collection = RecipeDB.shared.getCollection(withId: collection.id) {
@@ -58,6 +72,7 @@ class RecipeCollectionVM: ObservableObject {
             }
             self.categories.append(category)
         }
+        sortCategories()
         
         if !hasAllCategory {
             // TODO: when creating a collection, add category All
@@ -84,13 +99,13 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
-    var categoryNames: [String] {
-        var categoryNames = [String]()
-        for category in categories {
-            categoryNames.append(category.name)
-        }
-        return categoryNames.sorted()
-    }
+//    var categoryNames: [String] {
+//        var categoryNames = [String]()
+//        for category in categories {
+//            categoryNames.append(category.name)
+//        }
+//        return categoryNames.sorted()
+//    }
     
     // MARK: Intents
     
@@ -108,7 +123,9 @@ class RecipeCollectionVM: ObservableObject {
         if allCategory == nil {
             print("error")
         }
-        currentCategory = RecipeCategoryVM(category: allCategory!, collection: self)
+        else {
+            currentCategory = RecipeCategoryVM(category: allCategory!, collection: self)
+        }
     }
     
     // TODO: delete recipe from category vs last recipe
