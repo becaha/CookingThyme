@@ -66,7 +66,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
                 imageHandler.addImages(recipeWithImages.images)
             }
         }
-        let images = imageHandler.images
     }
     
     // gets category from db

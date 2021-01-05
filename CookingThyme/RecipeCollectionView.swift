@@ -45,7 +45,7 @@ struct RecipeCollectionView: View {
                                             collection.setCurrentCategory(category)
                                         }) {
                                             ZStack {
-                                                CircleImage(image: category.imageHandler.image, width: 60, height: 60)
+                                                CircleImage(images: category.imageHandler.images, width: 60, height: 60)
                                                 
                                                 Circle()
                                                     .stroke(Color.white, lineWidth: 1)
