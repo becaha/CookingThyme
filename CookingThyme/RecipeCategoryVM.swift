@@ -6,23 +6,34 @@
 //
 
 import Foundation
+import Combine
 
-class RecipeCategoryVM: ObservableObject {
+class RecipeCategoryVM: ObservableObject, Hashable {
+    static func == (lhs: RecipeCategoryVM, rhs: RecipeCategoryVM) -> Bool {
+        return lhs.category == rhs.category
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(category.hashValue)
+    }
+    
     var collection: RecipeCollectionVM
     @Published var category: RecipeCategory
     @Published var recipes: [Recipe]
     
-//    init(collection: RecipeCollectionVM) {
-//        self.category = RecipeCategory(name: "All", recipeCollectionId: collection.id)
-//        self.collection = collection
-//        recipes = []
-//        popullateRecipes()
-//    }
-    
+    @Published var imageHandler = ImageHandler()
+    private var imageHandlerCancellable: AnyCancellable?
+
     init(category: RecipeCategory, collection: RecipeCollectionVM) {
         self.category = category
         self.collection = collection
         recipes = []
+        
+        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
         popullateRecipes()
     }
     
@@ -46,6 +57,16 @@ class RecipeCategoryVM: ObservableObject {
         else {
             self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
         }
+        popullateImages()
+    }
+    
+    func popullateImages() {
+        for recipe in self.recipes {
+            if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipe, withRecipeId: recipe.id) {
+                imageHandler.addImages(recipeWithImages.images)
+            }
+        }
+        let images = imageHandler.images
     }
     
     // gets category from db

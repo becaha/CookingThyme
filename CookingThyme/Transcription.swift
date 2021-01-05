@@ -20,18 +20,3 @@ struct Transcription {
         annotations = [Annotation]()
     }
 }
-
-struct Annotation {
-    var description: String
-    var boundingPoly: [(Int, Int)]
-    
-    init(description: String, boundingPoly: [(Int, Int)]) {
-        self.description = description
-        self.boundingPoly = boundingPoly
-    }
-    
-    init() {
-        description = ""
-        boundingPoly = [(Int, Int)]()
-    }
-}

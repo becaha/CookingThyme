@@ -13,7 +13,6 @@
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
 		DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B72565E49E00808CC8 /* UIControls.swift */; };
 		DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B82565E49E00808CC8 /* Fraction.swift */; };
-		DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B92565E49E00808CC8 /* CategoryView.swift */; };
 		DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BA2565E49F00808CC8 /* ScreenView.swift */; };
 		DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */; };
 		DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BC2565E49F00808CC8 /* Ingredient.swift */; };
@@ -71,6 +70,7 @@
 		DBCDE785259166AA003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE784259166AA003DC95F /* Keys.swift */; };
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
+		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,7 +84,6 @@
 		DB49B4B02565E47400808CC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB49B4B72565E49E00808CC8 /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
 		DB49B4B82565E49E00808CC8 /* Fraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
-		DB49B4B92565E49E00808CC8 /* CategoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		DB49B4BA2565E49F00808CC8 /* ScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
 		DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitOfMeasurement.swift; sourceTree = "<group>"; };
 		DB49B4BC2565E49F00808CC8 /* Ingredient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
@@ -142,6 +141,7 @@
 		DBCDE784259166AA003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
+		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,7 +221,6 @@
 				DB49B5532581BA4600808CC8 /* ShoppingList */,
 				DB49B5522581BA4100808CC8 /* Timer */,
 				DB49B5552581BA8300808CC8 /* Recipe */,
-				DB49B5542581BA7900808CC8 /* RecipeCategory */,
 				DB49B5512581BA3200808CC8 /* RecipeCollection */,
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
@@ -340,14 +339,6 @@
 			name = ShoppingList;
 			sourceTree = "<group>";
 		};
-		DB49B5542581BA7900808CC8 /* RecipeCategory */ = {
-			isa = PBXGroup;
-			children = (
-				DB49B4B92565E49E00808CC8 /* CategoryView.swift */,
-			);
-			name = RecipeCategory;
-			sourceTree = "<group>";
-		};
 		DB49B5552581BA8300808CC8 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
@@ -402,6 +393,7 @@
 			isa = PBXGroup;
 			children = (
 				DBCDE78A25A3B057003DC95F /* Transcription.swift */,
+				DBCDE78C25A3BA8A003DC95F /* Annotation.swift */,
 			);
 			name = Transcription;
 			sourceTree = "<group>";
@@ -555,7 +547,6 @@
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
 				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
 				DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */,
-				DB49B4CA2565E49F00808CC8 /* CategoryView.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
@@ -580,6 +571,7 @@
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,
 				DB49B4D42565E49F00808CC8 /* Recipe.swift in Sources */,
+				DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -157,6 +157,7 @@ class RecipeVM: ObservableObject {
         if let url = url {
             tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
             imageHandler.addImage(url: url)
+            category.imageHandler.addImage(url: url)
         }
     }
     
@@ -164,12 +165,14 @@ class RecipeVM: ObservableObject {
         if let imageData = imageHandler.encodeImage(uiImage) {
             tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
             imageHandler.addImage(uiImage: uiImage)
+            category.imageHandler.addImage(uiImage: uiImage)
         }
     }
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
         imageHandler.removeImage(at: index)
+        category.imageHandler.removeImage(at: index)
     }
 
     

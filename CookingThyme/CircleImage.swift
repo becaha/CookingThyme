@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct CircleImage: View {
-    var isSelected: Bool
-    var uiImage: UIImage?
+//    @EnvironmentObject var collection: RecipeCollectionVM
+//    @EnvironmentObject var category: RecipeCategoryVM
+//    var isSelected: Bool
+    var image: UIImage?
     var width: CGFloat
     var height: CGFloat
     
     var body: some View {
         VStack {
-            if uiImage != nil {
-                Image(uiImage: uiImage!)
-                    .scaleEffect(ImageHandler.getZoomScale(uiImage, in: CGSize(width: width, height: height)))
-                    .frame(width: width, height: height, alignment: .center)
-                    .clipped()
+            if image != nil {
+                CategoryImage()
             }
             else {
                 Circle()
@@ -28,8 +27,22 @@ struct CircleImage: View {
         }
     }
     
+    @ViewBuilder
+    func CategoryImage() -> some View {
+        Image(uiImage: image!)
+            .scaleEffect(ImageHandler.getZoomScale(image!, in: CGSize(width: width, height: height)))
+            .frame(width: width, height: height, alignment: .center)
+            .clipShape(Circle())
+    }
+    
+//    func getImage() -> UIImage? {
+//        let name = category.name
+//        return category.imageHandler.image
+//    }
+    
     func getCategoryColor() -> Color {
-        return Color.green.opacity(isSelected ? 1 : 0.5)
+//        return Color.green.opacity(isSelected ? 1 : 0.5)
+        return Color.green.opacity(1)
     }
 }
 

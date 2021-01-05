@@ -40,6 +40,13 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
+    // adds recipe images for UI
+    func addImages(_ images: [RecipeImage]) {
+        for image in images {
+            setImage(image)
+        }
+    }
+    
     // sets images for UI
     func setImages(_ images: [RecipeImage]) {
         self.images = []

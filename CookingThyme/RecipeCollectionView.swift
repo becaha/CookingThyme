@@ -45,7 +45,7 @@ struct RecipeCollectionView: View {
                                             collection.setCurrentCategory(category)
                                         }) {
                                             ZStack {
-                                                CircleImage(isSelected: collection.currentCategory?.id == category.id, width: 60, height: 60)
+                                                CircleImage(image: category.imageHandler.image, width: 60, height: 60)
                                                 
                                                 Circle()
                                                     .stroke(Color.white, lineWidth: 1)
@@ -74,6 +74,8 @@ struct RecipeCollectionView: View {
                                         .foregroundColor(.black)
                                 }
                                 .padding()
+                                .padding(.horizontal, 7)
+                                .environmentObject(category)
                                 .alert(isPresented: $deleteCategoryAlert) {
                                     Alert(title: Text("Delete Category"),
                                           message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
@@ -186,7 +188,7 @@ struct RecipeCollectionView: View {
                     }
                     .sheet(isPresented: $isCreatingRecipe, onDismiss: {
                         if let currentCategory = collection.currentCategory {
-                            collection.setCurrentCategory(currentCategory.category)
+                            collection.setCurrentCategory(currentCategory)
                         }
                     }) {
                         CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)

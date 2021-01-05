@@ -11,7 +11,7 @@ import Combine
 // TODO: action sheet titles
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
-    @Published var categories: [RecipeCategory]
+    @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
     
     @Published var tempShoppingList: [ShoppingItem] = []
@@ -20,7 +20,7 @@ class RecipeCollectionVM: ObservableObject {
     
     init(collection: RecipeCollection) {
         self.collection = collection
-        self.categories = [RecipeCategory]()
+        self.categories = [RecipeCategoryVM]()
         self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
         sortShoppingList()
         popullateCategories()
@@ -29,7 +29,7 @@ class RecipeCollectionVM: ObservableObject {
     
     func sortCategories() {
         var currentCategories = categories
-        currentCategories.sort(by: { (a:RecipeCategory, b:RecipeCategory) -> Bool in
+        currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
             if a.name == "All" {
                 return true
             }
@@ -64,13 +64,13 @@ class RecipeCollectionVM: ObservableObject {
     // gets categories from db
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
-        self.categories = [RecipeCategory]()
+        self.categories = [RecipeCategoryVM]()
         var hasAllCategory = false
         for category in categories {
             if category.name == "All" {
                 hasAllCategory = true
             }
-            self.categories.append(category)
+            self.categories.append(RecipeCategoryVM(category: category, collection: self))
         }
         sortCategories()
         
@@ -90,7 +90,7 @@ class RecipeCollectionVM: ObservableObject {
         collection.name
     }
     
-    var allCategory: RecipeCategory? {
+    var allCategory: RecipeCategoryVM? {
         for category in categories {
             if category.name == "All" {
                 return category
@@ -109,13 +109,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
-    func setCurrentCategory(_ category: RecipeCategory) {
-        currentCategory = RecipeCategoryVM(category: category, collection: self)
+    func setCurrentCategory(_ category: RecipeCategoryVM) {
+        currentCategory = category
     }
     
     func refreshCurrrentCategory() {
         if let currentCategory = self.currentCategory {
-            self.currentCategory = RecipeCategoryVM(category: currentCategory.category, collection: self)
+            self.currentCategory = currentCategory
         }
     }
     
@@ -124,7 +124,7 @@ class RecipeCollectionVM: ObservableObject {
             print("error")
         }
         else {
-            currentCategory = RecipeCategoryVM(category: allCategory!, collection: self)
+            currentCategory = allCategory!
         }
     }
     
