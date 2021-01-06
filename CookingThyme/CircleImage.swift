@@ -37,7 +37,7 @@ struct CircleImage: View {
     
     func getCategoryColor() -> Color {
 //        return Color.green.opacity(isSelected ? 1 : 0.5)
-        return Color.green.opacity(1)
+        return Color.green.opacity(0.8)
     }
 }
 

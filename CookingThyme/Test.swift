@@ -12,14 +12,41 @@ struct Test: View {
     let recipes = ["A", "B", "C"]
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    Text("a")
-                }
+        HStack {
+            ZStack {
+                Circle()
+                    .fill(mainColor())
+                
+                Circle()
+                    .stroke(Color.white, lineWidth: 2)
             }
-            .navigationBarTitle(Text("Nav"))
+            .frame(width: 60, height: 60)
+            .shadow(color: Color.gray, radius: 1)
+
+            ZStack {
+                Circle()
+                    .fill(mainColor())
+                
+                Circle()
+                    .stroke(Color.white, lineWidth: 2)
+            }
+            .frame(width: 60, height: 60)
+            .shadow(color: Color.gray, radius: 5)
+            .padding(.horizontal)
+
+            
+            ZStack {
+                Circle()
+                    .fill(mainColor())
+                
+                Circle()
+                    .stroke(Color.white, lineWidth: 2)
+            }
+            .frame(width: 60, height: 60)
+            .shadow(color: Color.gray, radius: 1)
+            
         }
+        .padding()
     }
 }
 

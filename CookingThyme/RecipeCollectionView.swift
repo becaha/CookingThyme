@@ -48,10 +48,10 @@ struct RecipeCollectionView: View {
                                                 CircleImage(images: category.imageHandler.images, width: 60, height: 60)
                                                 
                                                 Circle()
-                                                    .stroke(Color.white, lineWidth: 1)
-                                                    .shadow(radius: 5)
+                                                    .stroke(Color.white, lineWidth: 2)
                                             }
                                             .frame(width: 60, height: 60)
+                                            .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
                                         }
                                         .disabled(isEditing ? true : false)
                                         
@@ -61,6 +61,11 @@ struct RecipeCollectionView: View {
                                                 deleteCategoryAlert = true
                                             }) {
                                                 ZStack {
+                                                    Circle()
+                                                        .fill(Color.white)
+                                                        .frame(width: 30, height: 30)
+                                                        .opacity(0.8)
+                                                    
                                                     Image(systemName: "trash")
                                                         .foregroundColor(.black)
                                                 }
@@ -102,7 +107,7 @@ struct RecipeCollectionView: View {
                                     Circle()
                                         .frame(width: 40, height: 40)
                                         .foregroundColor(.white)
-                                        .shadow(radius: 10)
+                                        .shadow(radius: 5)
 
                                     Image(systemName: "plus")
                                 }
@@ -181,7 +186,7 @@ struct RecipeCollectionView: View {
                             Circle()
                                 .frame(width: 40, height: 40)
                                 .foregroundColor(.white)
-                                .shadow(radius: 10)
+                                .shadow(radius: 5)
 
                             Image(systemName: "plus")
                         }

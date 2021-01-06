@@ -11,13 +11,15 @@ import Combine
 // convert urls to base64 encoded image in db
 // handles URL and UI Images
 class ImageHandler: ObservableObject {
-    @Published private(set) var image: UIImage? {
-        willSet {
-            if let image = newValue {
-                self.images.append(image)
-            }
-        }
-    }
+    @Published private(set) var image: UIImage? // {
+//        willSet {
+//            if let image = newValue {
+//                self.images.append(image)
+//                let totalImages = self.images
+//                print(totalImages)
+//            }
+//        }
+//    }
     @Published private(set) var images: [UIImage] = []
     @Published var zoomScale: CGFloat = 1.0
 
@@ -64,6 +66,9 @@ class ImageHandler: ObservableObject {
             imageURL = nil
             let decodedImage = decodeImage(image.data)
             self.image = decodedImage
+            if let image = decodedImage {
+                self.images.append(image)
+            }
         }
     }
     
@@ -76,6 +81,7 @@ class ImageHandler: ObservableObject {
     // adds UIImage
     func addImage(uiImage: UIImage) {
         self.image = uiImage
+        self.images.append(uiImage)
     }
     
     func removeImage(at index: Int) {
@@ -93,6 +99,9 @@ class ImageHandler: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .replaceError(with: nil)
                 .assign(to: \ImageHandler.image, on: self)
+            if let image = self.image {
+                self.images.append(image)
+            }
         }
     }
     
