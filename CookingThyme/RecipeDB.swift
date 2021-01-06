@@ -179,6 +179,26 @@ class RecipeDB {
         }
     }
     
+    func createImage(_ image: RecipeImage, withCategoryId categoryId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+                try db.execute(
+                    sql:
+                    """
+                    INSERT INTO \(RecipeImage.Table.databaseTableName) \
+                    (\(RecipeImage.Table.type), \(RecipeImage.Table.data), \(RecipeImage.Table.categoryId)) \
+                    VALUES (?, ?, ?)
+                    """,
+                    arguments: [image.type.rawValue, image.data, categoryId])
+            }
+            
+            return
+        } catch {
+            print("Error creating image")
+            return
+        }
+    }
+    
     func createCategory(withName name: String, forCollectionId collectionId: Int) {
         do {
             try dbQueue.write{ (db: Database) in
@@ -304,6 +324,28 @@ class RecipeDB {
                 return updatedRecipe
             }
             return updatedRecipe
+        } catch {
+            return nil
+        }
+    }
+    
+    func getImage(withCategoryId categoryId: Int) -> RecipeImage? {
+        do {
+            let image = try dbQueue.inDatabase { (db: Database) -> RecipeImage? in
+                let row = try Row.fetchOne(db,
+                                           sql: """
+                                                select * from \(RecipeImage.Table.databaseTableName) \
+                                                where \(RecipeImage.Table.categoryId) = ?
+                                                """,
+                                           arguments: [categoryId])
+                if let returnedRow = row {
+                    return RecipeImage(row: returnedRow)
+                }
+                return nil
+            }
+            
+            return image
+            
         } catch {
             return nil
         }
@@ -691,6 +733,27 @@ class RecipeDB {
                     WHERE \(RecipeImage.Table.id) = ?
                     """,
                     arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting image")
+            return
+        }
+    }
+    
+    func deleteImage(withCategoryId categoryId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(RecipeImage.Table.databaseTableName) \
+                    WHERE \(RecipeImage.Table.categoryId) = ?
+                    """,
+                    arguments: [categoryId])
                 
                 return
             }

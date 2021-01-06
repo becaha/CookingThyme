@@ -16,17 +16,27 @@ struct RecipeImage {
         static let type = "Type"
         static let data = "Data"
         static let recipeId = "RecipeId"
+        static let categoryId = "CategoryId"
     }
     
     var id: Int
     var type: ImageType
     var data: String
-    var recipeId: Int
+    // has either recipeId or categoryId
+    var recipeId: Int?
+    var categoryId: Int?
     
     init(type: ImageType, data: String, recipeId: Int) {
         self.type = type
         self.data = data
         self.recipeId = recipeId
+        self.id = 0
+    }
+    
+    init(type: ImageType, data: String, categoryId: Int) {
+        self.type = type
+        self.data = data
+        self.categoryId = categoryId
         self.id = 0
     }
     
@@ -41,6 +51,7 @@ struct RecipeImage {
         }
         data = row[Table.data]
         recipeId = row[Table.recipeId]
+        categoryId = row[Table.categoryId]
     }
 }
 

@@ -155,24 +155,26 @@ class RecipeVM: ObservableObject {
     
     func addTempImage(url: URL?) {
         if let url = url {
-            tempImages.append(RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id))
+            let image = RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id)
+            tempImages.append(image)
             imageHandler.addImage(url: url)
-            category.imageHandler.addImage(url: url)
+            category.addImage(image, withURL: url)
         }
     }
     
     func addTempImage(uiImage: UIImage) {
         if let imageData = imageHandler.encodeImage(uiImage) {
-            tempImages.append(RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id))
+            let image  = RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id)
+            tempImages.append(image)
             imageHandler.addImage(uiImage: uiImage)
-            category.imageHandler.addImage(uiImage: uiImage)
+            category.addImage(image, withUIImage: uiImage)
         }
     }
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
         imageHandler.removeImage(at: index)
-        category.imageHandler.removeImage(at: index)
+        category.removeImage(at: index)
     }
 
     

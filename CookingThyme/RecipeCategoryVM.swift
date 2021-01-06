@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class RecipeCategoryVM: ObservableObject, Hashable {
     static func == (lhs: RecipeCategoryVM, rhs: RecipeCategoryVM) -> Bool {
@@ -57,15 +58,36 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         else {
             self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
         }
-        popullateImages()
+        popullateImage()
     }
     
-    func popullateImages() {
-        for recipe in self.recipes {
-            if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipe, withRecipeId: recipe.id) {
-                imageHandler.addImages(recipeWithImages.images)
-            }
+    func popullateImage() {
+        if let image = RecipeDB.shared.getImage(withCategoryId: id) {
+            imageHandler.setImage(image)
         }
+    }
+    
+    // sets first image found in the recipes of the category as the category image
+    func setDefaultImage(_ image: RecipeImage) {
+        if imageHandler.image == nil {
+            RecipeDB.shared.createImage(image, withCategoryId: id)
+            popullateImage()
+        }
+    }
+    
+    func addImage(_ image: RecipeImage, withURL url: URL) {
+        setDefaultImage(image)
+        imageHandler.addImage(url: url)
+    }
+    
+    func addImage(_ image: RecipeImage, withUIImage uiImage: UIImage) {
+        setDefaultImage(image)
+        imageHandler.addImage(uiImage: uiImage)
+    }
+    
+    // TODO should remove image if it is the category image if was removed from recipe?
+    func removeImage(at index: Int) {
+//        imageHandler.removeImage(at: index)
     }
     
     // gets category from db
