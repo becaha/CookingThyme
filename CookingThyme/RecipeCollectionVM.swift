@@ -16,14 +16,24 @@ class RecipeCollectionVM: ObservableObject {
     
     @Published var tempShoppingList: [ShoppingItem] = []
     
+    @Published var imageHandler = ImageHandler()
+    private var imageHandlerCancellable: AnyCancellable?
+    
     // MARK: - Init
     
     init(collection: RecipeCollection) {
         self.collection = collection
         self.categories = [RecipeCategoryVM]()
         self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
+        
+        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
         sortShoppingList()
         popullateCategories()
+        popullateImages()
         resetCurrentCategory()
     }
     
@@ -48,6 +58,7 @@ class RecipeCollectionVM: ObservableObject {
             self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
             sortShoppingList()
             popullateCategories()
+            popullateImages()
         }
     }
     
@@ -78,6 +89,17 @@ class RecipeCollectionVM: ObservableObject {
             // TODO: when creating a collection, add category All
             RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
         }
+    }
+    
+    func popullateImages() {
+        for category in categories {
+            let name = category.name
+            if let image = RecipeDB.shared.getImage(withCategoryId: category.id) {
+                imageHandler.setImage(image)
+            }
+        }
+        let images = imageHandler.images
+        print(images)
     }
     
     // MARK: Access

@@ -15,8 +15,6 @@ class ImageHandler: ObservableObject {
         willSet {
             if let image = newValue {
                 self.images.append(image)
-                let totalImages = self.images
-                print(totalImages)
             }
         }
     }
@@ -66,10 +64,9 @@ class ImageHandler: ObservableObject {
             imageURL = nil
             let decodedImage = decodeImage(image.data)
             self.image = decodedImage
-//            if let image = decodedImage {
-//                self.images.append(image)
-//            }
         }
+//        let images = self.images
+//        print(images)
     }
     
     // adds URL image
@@ -99,9 +96,6 @@ class ImageHandler: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .replaceError(with: nil)
                 .assign(to: \ImageHandler.image, on: self)
-//            if let image = self.image {
-//                self.images.append(image)
-//            }
         }
     }
     
