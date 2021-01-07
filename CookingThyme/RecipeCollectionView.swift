@@ -10,19 +10,19 @@ import SwiftUI
 // TODO: measurement page to ask how many tbsp in an ounce
 
 // TODO: drag and drop recipes from one category to another
-// TODO: click off of add new category to dismiss
 // TODO: have images or icons for categories, imaage from recipe in category
 
 // TODO: edit all photo or not have a photo for all
 // TODO: all category when click on recipe should be edited in own category if has one
 // TODO: update images
+// TODO: update categories
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
     @State private var isEditing = false
     
     @State var newCategoryMissingField: Bool = false
-    
+    @State var addCategoryExpanded = false
     @State var newCategory: String = ""
     
     @State var editCategory: RecipeCategoryVM?
@@ -30,8 +30,6 @@ struct RecipeCollectionView: View {
     
     @State var deleteCategoryAlert = false
     @State var deleteCategoryId: Int?
-    
-    @State var addCategoryExpanded = false
     
     @State private var isCreatingRecipe = false
     
@@ -194,6 +192,9 @@ struct RecipeCollectionView: View {
                                 }
                                 .padding()
                             }
+                            .onTapGesture(count: 1, perform: {
+                                print(addCategoryExpanded)
+                            })
                             .frame(width: 200, height: 60)
                         }
                     }
@@ -279,6 +280,11 @@ struct RecipeCollectionView: View {
                     },
                     isEditing: isEditing)
             )
+            .onTapGesture(count: 1) {
+                if addCategoryExpanded == true {
+                    addCategoryExpanded = false
+                }
+            }
         }
     }
     
