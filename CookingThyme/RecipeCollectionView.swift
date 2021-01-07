@@ -12,6 +12,10 @@ import SwiftUI
 // TODO: drag and drop recipes from one category to another
 // TODO: click off of add new category to dismiss
 // TODO: have images or icons for categories, imaage from recipe in category
+
+// TODO: edit all photo or not have a photo for all
+// TODO: all category when click on recipe should be edited in own category if has one
+
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
@@ -21,7 +25,7 @@ struct RecipeCollectionView: View {
     
     @State var newCategory: String = ""
     
-    @State var updatedCategory: String = ""
+    @State var editCategoryId: Int?
     @State var isEditingCategory = false
     
     @State var deleteCategoryAlert = false
@@ -30,7 +34,13 @@ struct RecipeCollectionView: View {
     @State var addCategoryExpanded = false
     
     @State private var isCreatingRecipe = false
+    
+    @State private var presentPasteAlert = false
+    @State private var confirmPaste = false
+    @State private var explainPaste = false
 
+    @State private var cameraRollSheetPresented = false
+    @State private var selectedImage: UIImage?
     
     var body: some View {
         NavigationView {
@@ -56,22 +66,57 @@ struct RecipeCollectionView: View {
                                         .disabled(isEditing ? true : false)
                                         
                                         if isEditing && category.name != "All" {
-                                            Button(action: {
-                                                deleteCategoryId = category.id
-                                                deleteCategoryAlert = true
-                                            }) {
+                                            Menu {
+                                                Menu {
+                                                    Button(action: {
+                                                        cameraRollSheetPresented = true
+                                                    }) {
+                                                        Label("Pick from camera roll", systemImage: "photo.on.rectangle")
+                                                    }
+
+                                                    Button(action: {
+                                                        presentPasteAlert = true
+                                                        if UIPasteboard.general.url != nil {
+                                                            confirmPaste = true
+                                                        } else {
+                                                            explainPaste = true
+                                                        }
+                                                    }) {
+                                                        Label("Paste", systemImage: "doc.on.clipboard")
+                                                    }
+                                                } label: {
+                                                    Button(action: {
+                                                        editCategoryId = category.id
+                                                    }) {
+                                                        Label("Edit Photo", systemImage: "camera")
+                                                    }
+                                                }
+                                                
+                                                Button(action: {
+                                                    deleteCategoryId = category.id
+                                                    deleteCategoryAlert = true
+                                                }) {
+                                                    Label("Delete", systemImage: "trash")
+                                                }
+                                                
+                                                Button(action: {
+                                                }) {
+                                                    Label("Cancel", systemImage: "")
+                                                }
+                                            } label: {
                                                 ZStack {
                                                     Circle()
                                                         .fill(Color.white)
                                                         .frame(width: 30, height: 30)
                                                         .opacity(0.8)
-                                                    
-                                                    Image(systemName: "trash")
+
+                                                    Image(systemName: "pencil")
                                                         .foregroundColor(.black)
                                                 }
                                             }
                                         }
                                     }
+                                    
                                     EditableText("\(category.name)", isEditing: isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
                                         collection.updateCategory(forCategoryId: category.id, toName: name)
                                     })
@@ -95,6 +140,27 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .padding(.trailing, 60)
+                    .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
+                        ImagePicker(image: self.$selectedImage)
+                    }
+                    .alert(isPresented: $presentPasteAlert) {
+                        if confirmPaste {
+                            return Alert(title: Text("Add Image"),
+                                  message: Text(""),
+                                  primaryButton: .default(Text("Ok")) {
+                                    if let categoryId = editCategoryId {
+                                        RecipeCategoryVM.setImage(withCategoryId: categoryId, url: UIPasteboard.general.url)
+                                        editCategoryId = nil
+                                    }
+                                  },
+                                  secondaryButton: .default(Text("Cancel")) {
+                                    editCategoryId = nil
+                                  })
+                        }
+                        return Alert(title: Text("Paste Image"),
+                              message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
+                              dismissButton: .default(Text("Ok")))
+                    }
                     
                     HStack(alignment: .center) {
                         Spacer()
@@ -215,6 +281,17 @@ struct RecipeCollectionView: View {
                     },
                     isEditing: isEditing)
             )
+        }
+    }
+    
+    // loads image selected from camera roll
+    func loadImage() {
+        withAnimation {
+            guard let inputImage = selectedImage else { return }
+            if let categoryId = self.editCategoryId {
+                RecipeCategoryVM.setImage(withCategoryId: categoryId, uiImage: inputImage)
+                self.editCategoryId = nil
+            }
         }
     }
     

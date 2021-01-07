@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CircleImage: View {
 //    @EnvironmentObject var collection: RecipeCollectionVM
-//    @EnvironmentObject var category: RecipeCategoryVM
+    @EnvironmentObject var category: RecipeCategoryVM
 //    var isSelected: Bool
     var images: [UIImage]
     var width: CGFloat
@@ -24,6 +24,9 @@ struct CircleImage: View {
                 Circle()
                     .foregroundColor(getCategoryColor())
             }
+        }
+        .onAppear {
+            category.refreshCategory()
         }
     }
     

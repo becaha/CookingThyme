@@ -75,6 +75,14 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
+    static func setImage(withCategoryId id: Int, url: URL?) {
+        
+    }
+    
+    static func setImage(withCategoryId id: Int, uiImage: UIImage) {
+        
+    }
+    
     func addImage(_ image: RecipeImage, withURL url: URL) {
         setDefaultImage(image)
         imageHandler.addImage(url: url)

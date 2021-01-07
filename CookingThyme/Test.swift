@@ -45,6 +45,34 @@ struct Test: View {
             .frame(width: 60, height: 60)
             .shadow(color: Color.gray, radius: 1)
             
+            Menu {
+                Button(action: {
+                    
+                }) {
+                    Label("Add", systemImage: "plus.circle")
+                }
+                Button(action: {
+                    
+                }) {
+                    Label("Delete", systemImage: "minus.circle")
+                }
+                Button(action: {
+                    
+                }) {
+                    Label("Edit", systemImage: "pencil.circle")
+                }
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 30, height: 30)
+                        .opacity(0.8)
+                    
+                    Image(systemName: "pencil")
+                        .foregroundColor(.black)
+                }
+            }
+            
         }
         .padding()
     }

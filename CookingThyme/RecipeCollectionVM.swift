@@ -110,7 +110,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: Intents
     
     func setCurrentCategory(_ category: RecipeCategoryVM) {
-//        category.refreshCategory()
+        category.refreshCategory()
         currentCategory = category
         
     }
