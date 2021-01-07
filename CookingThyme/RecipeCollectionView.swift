@@ -33,6 +33,8 @@ struct RecipeCollectionView: View {
     
     @State private var isCreatingRecipe = false
     
+    @State private var presentAlert = false
+    
     @State private var presentPasteAlert = false
     @State private var confirmPaste = false
     @State private var explainPaste = false
@@ -75,7 +77,7 @@ struct RecipeCollectionView: View {
 
                                                     Button(action: {
                                                         editCategory = category
-                                                        presentPasteAlert = true
+                                                        presentAlert = true
                                                         if UIPasteboard.general.url != nil {
                                                             confirmPaste = true
                                                         } else {
@@ -91,6 +93,7 @@ struct RecipeCollectionView: View {
                                                 Button(action: {
                                                     deleteCategoryId = category.id
                                                     deleteCategoryAlert = true
+                                                    presentAlert = true
                                                 }) {
                                                     Label("Delete", systemImage: "trash")
                                                 }
@@ -122,16 +125,6 @@ struct RecipeCollectionView: View {
                                 .padding()
                                 .padding(.horizontal, 7)
                                 .environmentObject(category)
-                                .alert(isPresented: $deleteCategoryAlert) {
-                                    Alert(title: Text("Delete Category"),
-                                          message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
-                                          primaryButton: .default(Text("Ok")) {
-                                            if let deleteCategoryId = self.deleteCategoryId {
-                                                collection.deleteCategory(withId: deleteCategoryId)
-                                            }
-                                          },
-                                          secondaryButton: .cancel())
-                                }
                             }
                         }
                     }
@@ -139,7 +132,7 @@ struct RecipeCollectionView: View {
                     .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
                         ImagePicker(image: self.$selectedImage)
                     }
-                    .alert(isPresented: $presentPasteAlert) {
+                    .alert(isPresented: $presentAlert) {
                         if confirmPaste {
                             return Alert(title: Text("Add Image"),
                                   message: Text(""),
@@ -153,9 +146,20 @@ struct RecipeCollectionView: View {
                                     editCategory = nil
                                   })
                         }
-                        return Alert(title: Text("Paste Image"),
-                              message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                              dismissButton: .default(Text("Ok")))
+                        if explainPaste {
+                            return Alert(title: Text("Paste Image"),
+                                  message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
+                                  dismissButton: .default(Text("Ok")))
+                        }
+                        // deleteCategoryAlert
+                        return Alert(title: Text("Delete Category"),
+                              message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
+                              primaryButton: .default(Text("Ok")) {
+                                if let deleteCategoryId = self.deleteCategoryId {
+                                    collection.deleteCategory(withId: deleteCategoryId)
+                                }
+                              },
+                              secondaryButton: .cancel())
                     }
                     
                     HStack(alignment: .center) {
@@ -163,7 +167,9 @@ struct RecipeCollectionView: View {
                         
                         if !addCategoryExpanded {
                             Button(action: {
-                                addCategoryExpanded = true
+                                withAnimation {
+                                    addCategoryExpanded = true
+                                }
                             }) {
                                 ZStack {
                                     Circle()
@@ -192,9 +198,7 @@ struct RecipeCollectionView: View {
                                 }
                                 .padding()
                             }
-                            .onTapGesture(count: 1, perform: {
-                                print(addCategoryExpanded)
-                            })
+                            .onTapGesture(count: 1, perform: {})
                             .frame(width: 200, height: 60)
                         }
                     }
@@ -212,24 +216,26 @@ struct RecipeCollectionView: View {
                 if collection.currentCategory != nil {
                     List {
                         ForEach(collection.currentCategory!.recipes) { recipe in
-                            if isEditing {
-                                Text("\(recipe.name)")
-                                    .deletable(isDeleting: true, onDelete: {
-                                        withAnimation {
-                                            collection.deleteRecipe(withId: recipe.id)
-                                        }
-                                    })
-                            }
-                            else {
-                                NavigationLink(destination:
-                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                                .environmentObject(collection.currentCategory!)
-                                                .environmentObject(collection)
-                                ) {
+                            Group {
+                                if isEditing {
                                     Text("\(recipe.name)")
-                                        .fontWeight(.regular)
+                                        .deletable(isDeleting: true, onDelete: {
+                                            withAnimation {
+                                                collection.deleteRecipe(withId: recipe.id)
+                                            }
+                                        })
                                 }
-                                
+                                else {
+                                    NavigationLink(destination:
+                                                RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                    .environmentObject(collection.currentCategory!)
+                                                    .environmentObject(collection)
+                                    ) {
+                                        Text("\(recipe.name)")
+                                            .fontWeight(.regular)
+                                    }
+                                    
+                                }
                             }
                         }
                         .onDelete { indexSet in
@@ -280,11 +286,11 @@ struct RecipeCollectionView: View {
                     },
                     isEditing: isEditing)
             )
-            .onTapGesture(count: 1) {
-                if addCategoryExpanded == true {
+            .gesture(addCategoryExpanded ? TapGesture(count: 1).onEnded {
+                withAnimation {
                     addCategoryExpanded = false
                 }
-            }
+            } : nil)
         }
     }
     
