@@ -92,6 +92,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             image.recipeId = nil
             image.categoryId = id
             setImage(image, replace: true)
+            collection.popullateCategories()
         }
     }
     
@@ -101,6 +102,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             recipeImage.recipeId = nil
             recipeImage.categoryId = id
             setImage(recipeImage, replace: true)
+            collection.popullateCategories()
         }
     }
     
