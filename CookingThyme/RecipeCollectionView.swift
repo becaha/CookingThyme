@@ -15,7 +15,7 @@ import SwiftUI
 
 // TODO: edit all photo or not have a photo for all
 // TODO: all category when click on recipe should be edited in own category if has one
-
+// TODO: update images
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     

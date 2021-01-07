@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: why does this appear so many times
 struct CircleImage: View {
 //    @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM

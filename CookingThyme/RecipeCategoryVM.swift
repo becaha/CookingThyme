@@ -36,6 +36,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             }
         
         popullateRecipes()
+        popullateImage()
     }
     
     // MARK: - Model Access
@@ -58,7 +59,9 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         else {
             self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
         }
-        popullateImage()
+        self.recipes.sort { (recipeA, recipeB) -> Bool in
+            return recipeA.name < recipeB.name
+        }
     }
     
     func popullateImage() {
@@ -121,6 +124,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         if let category = RecipeDB.shared.getCategory(withId: category.id) {
             self.category = category
             popullateRecipes()
+            popullateImage()
         }
     }
     
@@ -143,6 +147,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings) {
             createdRecipe = recipe
             popullateRecipes()
+            popullateImage()
         }
         return createdRecipe
     }
@@ -154,6 +159,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
         RecipeDB.shared.deleteImages(withRecipeId: id)
         popullateRecipes()
+        popullateImage()
     }
     
     // updates category name
