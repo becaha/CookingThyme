@@ -25,7 +25,7 @@ struct RecipeCollectionView: View {
     
     @State var newCategory: String = ""
     
-    @State var editCategoryId: Int?
+    @State var editCategory: RecipeCategoryVM?
     @State var isEditingCategory = false
     
     @State var deleteCategoryAlert = false
@@ -69,12 +69,14 @@ struct RecipeCollectionView: View {
                                             Menu {
                                                 Menu {
                                                     Button(action: {
+                                                        editCategory = category
                                                         cameraRollSheetPresented = true
                                                     }) {
                                                         Label("Pick from camera roll", systemImage: "photo.on.rectangle")
                                                     }
 
                                                     Button(action: {
+                                                        editCategory = category
                                                         presentPasteAlert = true
                                                         if UIPasteboard.general.url != nil {
                                                             confirmPaste = true
@@ -85,11 +87,7 @@ struct RecipeCollectionView: View {
                                                         Label("Paste", systemImage: "doc.on.clipboard")
                                                     }
                                                 } label: {
-                                                    Button(action: {
-                                                        editCategoryId = category.id
-                                                    }) {
-                                                        Label("Edit Photo", systemImage: "camera")
-                                                    }
+                                                    Label("Edit Photo", systemImage: "camera")
                                                 }
                                                 
                                                 Button(action: {
@@ -148,13 +146,13 @@ struct RecipeCollectionView: View {
                             return Alert(title: Text("Add Image"),
                                   message: Text(""),
                                   primaryButton: .default(Text("Ok")) {
-                                    if let categoryId = editCategoryId {
-                                        RecipeCategoryVM.setImage(withCategoryId: categoryId, url: UIPasteboard.general.url)
-                                        editCategoryId = nil
+                                    if let category = editCategory {
+                                        category.setImage(url: UIPasteboard.general.url)
+                                        editCategory = nil
                                     }
                                   },
                                   secondaryButton: .default(Text("Cancel")) {
-                                    editCategoryId = nil
+                                    editCategory = nil
                                   })
                         }
                         return Alert(title: Text("Paste Image"),
@@ -288,9 +286,9 @@ struct RecipeCollectionView: View {
     func loadImage() {
         withAnimation {
             guard let inputImage = selectedImage else { return }
-            if let categoryId = self.editCategoryId {
-                RecipeCategoryVM.setImage(withCategoryId: categoryId, uiImage: inputImage)
-                self.editCategoryId = nil
+            if let category = self.editCategory {
+                category.setImage(uiImage: inputImage)
+                self.editCategory = nil
             }
         }
     }

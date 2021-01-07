@@ -68,28 +68,46 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // sets first image found in the recipes of the category as the category image
-    func setDefaultImage(_ image: RecipeImage) {
+    func setImage(_ image: RecipeImage, replace: Bool) {
         if imageHandler.image == nil {
-            RecipeDB.shared.createImage(image, withCategoryId: id)
-            popullateImage()
+            createImage(image)
+        }
+        else if replace == true {
+            RecipeDB.shared.deleteImage(withCategoryId: id)
+            createImage(image)
         }
     }
     
-    static func setImage(withCategoryId id: Int, url: URL?) {
-        
+    func createImage(_ image: RecipeImage) {
+        RecipeDB.shared.createImage(image, withCategoryId: id)
+        popullateImage()
     }
     
-    static func setImage(withCategoryId id: Int, uiImage: UIImage) {
-        
+    func setImage(url: URL?) {
+        if let url = url {
+            var image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: 0)
+            image.recipeId = nil
+            image.categoryId = id
+            setImage(image, replace: true)
+        }
+    }
+    
+    func setImage(uiImage: UIImage) {
+        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: 0) {
+            var recipeImage = image
+            recipeImage.recipeId = nil
+            recipeImage.categoryId = id
+            setImage(recipeImage, replace: true)
+        }
     }
     
     func addImage(_ image: RecipeImage, withURL url: URL) {
-        setDefaultImage(image)
+        setImage(image, replace: false)
         imageHandler.addImage(url: url)
     }
     
     func addImage(_ image: RecipeImage, withUIImage uiImage: UIImage) {
-        setDefaultImage(image)
+        setImage(image, replace: false)
         imageHandler.addImage(uiImage: uiImage)
     }
     

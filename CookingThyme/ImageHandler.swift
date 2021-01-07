@@ -27,7 +27,7 @@ class ImageHandler: ObservableObject {
     private var fetchImageCancellable: AnyCancellable?
     
     // encodes uiImage into string to be put in db
-    func encodeImage(_ image: UIImage) -> String? {
+    static func encodeImage(_ image: UIImage) -> String? {
         if let imageData = image.pngData() {
             return imageData.base64EncodedString(options: .lineLength64Characters)
         }

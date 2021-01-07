@@ -153,18 +153,28 @@ class RecipeVM: ObservableObject {
         tempIngredients.remove(at: index)
     }
     
+    static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: Int) -> RecipeImage {
+        return RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipeId)
+    }
+    
     func addTempImage(url: URL?) {
         if let url = url {
-            let image = RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipe.id)
+            let image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: recipe.id)
             tempImages.append(image)
             imageHandler.addImage(url: url)
             category.addImage(image, withURL: url)
         }
     }
     
+    static func toRecipeImage(fromUIImage uiImage: UIImage, withRecipeId recipeId: Int) -> RecipeImage? {
+        if let imageData = ImageHandler.encodeImage(uiImage) {
+            return RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipeId)
+        }
+        return nil
+    }
+    
     func addTempImage(uiImage: UIImage) {
-        if let imageData = imageHandler.encodeImage(uiImage) {
-            let image  = RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipe.id)
+        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: recipe.id) {
             tempImages.append(image)
             imageHandler.addImage(uiImage: uiImage)
             category.addImage(image, withUIImage: uiImage)
