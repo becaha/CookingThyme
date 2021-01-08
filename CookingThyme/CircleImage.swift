@@ -8,35 +8,34 @@
 import SwiftUI
 
 // TODO: why does this appear so many times
+// TODO: transition easy for photo to appear
+// TODO: change photo
 struct CircleImage: View {
-//    @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
-//    var isSelected: Bool
-    var images: [UIImage]
     var width: CGFloat
     var height: CGFloat
     
     var body: some View {
         VStack {
-            if images.count > 0 {
-                CategoryImage()
-            }
-            else {
+            ZStack {
                 Circle()
                     .foregroundColor(getCategoryColor())
+                
+                if category.imageHandler.images.count > 0 {
+                    CategoryImage()
+                        .animation(.easeInOut(duration: 5.0))
+                        .transition(.opacity)
+                }
             }
-        }
-        .onAppear {
-            category.refreshCategory()
         }
     }
     
     @ViewBuilder
     func CategoryImage() -> some View {
-        Image(uiImage: images[0])
-            .scaleEffect(ImageHandler.getZoomScale(images[0], in: CGSize(width: width, height: height)))
-            .frame(width: width, height: height, alignment: .center)
-            .clipShape(Circle())
+        Image(uiImage: category.imageHandler.images[0])
+                .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: width, height: height)))
+                .frame(width: width, height: height, alignment: .center)
+                .clipShape(Circle())
     }
     
     func getCategoryColor() -> Color {

@@ -48,29 +48,6 @@ struct RecipeCollectionView: View {
                 ZStack {
                     ScrollView(.horizontal) {
                         HStack {
-                            ForEach(collection.imageHandler.images, id: \.self) { image in
-                                VStack {
-                                    ZStack {
-                                        Button(action: {
-//                                            collection.setCurrentCategory(category)
-                                        }) {
-                                            ZStack {
-                                                CircleImage(images: [image], width: 60, height: 60)
-                                                    .environmentObject(collection.currentCategory!)
-                                                
-                                                Circle()
-                                                    .stroke(Color.white, lineWidth: 2)
-                                            }
-                                            .frame(width: 60, height: 60)
-                                            .shadow(color: Color.gray, radius: 1)
-                                        }
-                                        .disabled(isEditing ? true : false)
-                                    }
-                                }
-                            }
-                        }
-                        
-                        HStack {
                             ForEach(collection.categories, id: \.self) { category in
                                 VStack {
                                     ZStack {
@@ -78,7 +55,19 @@ struct RecipeCollectionView: View {
                                             collection.setCurrentCategory(category)
                                         }) {
                                             ZStack {
-                                                CircleImage(images: category.imageHandler.images, width: 60, height: 60)
+                                                VStack {
+                                                    ZStack {
+                                                        Circle()
+                                                            .foregroundColor(Color.green.opacity(0.8))
+                                                        
+                                                        if category.imageHandler.images.count > 0 {
+                                                            Image(uiImage: category.imageHandler.images[0])
+                                                                    .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: 60, height: 60)))
+                                                                    .frame(width: 60, height: 60, alignment: .center)
+                                                                    .clipShape(Circle())
+                                                        }
+                                                    }
+                                                }
                                                 
                                                 Circle()
                                                     .stroke(Color.white, lineWidth: 2)

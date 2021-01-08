@@ -70,7 +70,7 @@
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
 		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
-		DBCDE79125A8D6D4003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE79025A8D6D4003DC95F /* Keys.swift */; };
+		DBCDE79625A8EE8C003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE79525A8EE8C003DC95F /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,7 +141,7 @@
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
 		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
-		DBCDE79025A8D6D4003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		DBCDE79525A8EE8C003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,7 +248,7 @@
 		DB49B4DA2565E4E100808CC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE79225A8D6E7003DC95F /* Credentials */,
+				DBCDE79725A8EE9C003DC95F /* Credentials */,
 				DBCDE78925A3B041003DC95F /* Transcription */,
 				DB49B54C2581B73500808CC8 /* WebModel */,
 				DB49B54B2581B71F00808CC8 /* DB */,
@@ -390,12 +390,12 @@
 			name = Transcription;
 			sourceTree = "<group>";
 		};
-		DBCDE79225A8D6E7003DC95F /* Credentials */ = {
+		DBCDE79725A8EE9C003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE79025A8D6D4003DC95F /* Keys.swift */,
+				DBCDE79525A8EE8C003DC95F /* Keys.swift */,
 			);
-			path = Credentials;
+			name = Credentials;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -528,6 +528,7 @@
 				DB49B56725827ADA00808CC8 /* PublicRecipeVM.swift in Sources */,
 				DB49B53D2580163500808CC8 /* TimerView.swift in Sources */,
 				DB49B55D2581E63000808CC8 /* WebMeasurement.swift in Sources */,
+				DBCDE79625A8EE8C003DC95F /* Keys.swift in Sources */,
 				DBCDE775258A8F9B003DC95F /* RecipeTranscriber.swift in Sources */,
 				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
 				DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */,
@@ -561,7 +562,6 @@
 				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
 				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
-				DBCDE79125A8D6D4003DC95F /* Keys.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
