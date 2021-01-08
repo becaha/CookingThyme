@@ -48,6 +48,29 @@ struct RecipeCollectionView: View {
                 ZStack {
                     ScrollView(.horizontal) {
                         HStack {
+                            ForEach(collection.imageHandler.images, id: \.self) { image in
+                                VStack {
+                                    ZStack {
+                                        Button(action: {
+//                                            collection.setCurrentCategory(category)
+                                        }) {
+                                            ZStack {
+                                                CircleImage(images: [image], width: 60, height: 60)
+                                                    .environmentObject(collection.currentCategory!)
+                                                
+                                                Circle()
+                                                    .stroke(Color.white, lineWidth: 2)
+                                            }
+                                            .frame(width: 60, height: 60)
+                                            .shadow(color: Color.gray, radius: 1)
+                                        }
+                                        .disabled(isEditing ? true : false)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        HStack {
                             ForEach(collection.categories, id: \.self) { category in
                                 VStack {
                                     ZStack {

@@ -5,6 +5,8 @@
 //  Created by Rebecca Nybo on 11/18/20.
 //
 
+// https://stackoverflow.com/questions/57847239/xcode-source-control-push-local-changes-stuck-on-loading
+
 import SwiftUI
 
 @main

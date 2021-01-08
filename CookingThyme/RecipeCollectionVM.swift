@@ -98,8 +98,6 @@ class RecipeCollectionVM: ObservableObject {
                 imageHandler.setImage(image)
             }
         }
-        let images = imageHandler.images
-        print(images)
     }
     
     // MARK: Access
