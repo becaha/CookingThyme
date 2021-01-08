@@ -67,7 +67,6 @@
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
 		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
-		DBCDE785259166AA003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE784259166AA003DC95F /* Keys.swift */; };
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
 		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
@@ -138,7 +137,6 @@
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
-		DBCDE784259166AA003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
 		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
@@ -384,7 +382,6 @@
 		DBCDE786259166BE003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE784259166AA003DC95F /* Keys.swift */,
 			);
 			name = Credentials;
 			sourceTree = "<group>";
@@ -540,7 +537,6 @@
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */,
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
-				DBCDE785259166AA003DC95F /* Keys.swift in Sources */,
 				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
 				DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */,
