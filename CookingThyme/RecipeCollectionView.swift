@@ -55,19 +55,7 @@ struct RecipeCollectionView: View {
                                             collection.setCurrentCategory(category)
                                         }) {
                                             ZStack {
-                                                VStack {
-                                                    ZStack {
-                                                        Circle()
-                                                            .foregroundColor(Color.green.opacity(0.8))
-                                                        
-                                                        if category.imageHandler.images.count > 0 {
-                                                            Image(uiImage: category.imageHandler.images[0])
-                                                                    .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: 60, height: 60)))
-                                                                    .frame(width: 60, height: 60, alignment: .center)
-                                                                    .clipShape(Circle())
-                                                        }
-                                                    }
-                                                }
+                                                CircleImage(width: 60, height: 60)
                                                 
                                                 Circle()
                                                     .stroke(Color.white, lineWidth: 2)

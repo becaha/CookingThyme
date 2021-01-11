@@ -8,13 +8,18 @@
 import SwiftUI
 
 // TODO: why does this appear so many times
-// TODO: transition easy for photo to appear
-// TODO: change photo
+// TODO: transition which animation?
 struct CircleImage: View {
     @EnvironmentObject var category: RecipeCategoryVM
     var width: CGFloat
     var height: CGFloat
     
+    var isLoading: Bool {
+        return category.imageHandler.loadingImages && category.imageHandler.images.count == 0
+    }
+    
+    @State var opacity: Double = 0
+
     var body: some View {
         VStack {
             ZStack {
@@ -22,20 +27,19 @@ struct CircleImage: View {
                     .foregroundColor(getCategoryColor())
                 
                 if category.imageHandler.images.count > 0 {
-                    CategoryImage()
-                        .animation(.easeInOut(duration: 5.0))
-                        .transition(.opacity)
+                    Image(uiImage: category.imageHandler.images[0])
+                        .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: width, height: height)))
+                        .frame(width: width, height: height, alignment: .center)
+                        .clipShape(Circle())
+                        .opacity(opacity)
+                        .onAppear {
+                            withAnimation(Animation.easeInOut(duration: 1.5)) {
+                                self.opacity = 1
+                            }
+                        }
                 }
             }
         }
-    }
-    
-    @ViewBuilder
-    func CategoryImage() -> some View {
-        Image(uiImage: category.imageHandler.images[0])
-                .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: width, height: height)))
-                .frame(width: width, height: height, alignment: .center)
-                .clipShape(Circle())
     }
     
     func getCategoryColor() -> Color {

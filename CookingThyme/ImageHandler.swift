@@ -20,6 +20,7 @@ class ImageHandler: ObservableObject {
     }
     @Published private(set) var images: [UIImage] = []
     @Published var zoomScale: CGFloat = 1.0
+    @Published var loadingImages: Bool = false
 
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
@@ -49,6 +50,9 @@ class ImageHandler: ObservableObject {
     
     // sets images for UI
     func setImages(_ images: [RecipeImage]) {
+        if images.count > 0 {
+            self.loadingImages = true
+        }
         self.images = []
         for image in images {
             setImage(image)

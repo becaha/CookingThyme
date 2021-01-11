@@ -20,10 +20,8 @@ struct ImagesView: View {
     @State private var cameraRollSheetPresented = false
     @State private var selectedImage: UIImage?
     
-    
-    //TODO
     private var isLoading: Bool {
-        return recipe.imageHandler.imageURL != nil && recipe.imageHandler.image == nil
+        return recipe.imageHandler.loadingImages
     }
     
     var body: some View {

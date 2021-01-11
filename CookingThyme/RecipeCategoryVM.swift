@@ -66,7 +66,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     func popullateImage() {
         if let image = RecipeDB.shared.getImage(withCategoryId: id) {
-            imageHandler.setImage(image)
+            imageHandler.setImages([image])
         }
     }
     
