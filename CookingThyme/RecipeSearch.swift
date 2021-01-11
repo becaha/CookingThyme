@@ -25,6 +25,7 @@ struct RecipeSearch: View {
                         hasSearched = true
                         recipeWebHandler.listRecipes(withQuery: result)
                     }
+                    .foregroundColor(mainColor())
                 }
                 
                 if recipeWebHandler.recipeList.count == 0 && !isLoading && hasSearched {

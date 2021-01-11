@@ -125,7 +125,7 @@ struct EditRecipeView: View {
                 }
             }
             else {
-                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
+                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, categoryId: recipe.categoryId)
             }
             // have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place

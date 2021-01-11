@@ -65,7 +65,7 @@ struct RecipeCollectionView: View {
                                         }
                                         .disabled(isEditing ? true : false)
                                         
-                                        if isEditing && category.name != "All" {
+                                        if isEditing {
                                             Menu {
                                                 Menu {
                                                     Button(action: {
@@ -116,11 +116,11 @@ struct RecipeCollectionView: View {
                                         }
                                     }
                                     
-                                    EditableText("\(category.name)", isEditing: isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
+                                    EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
                                         collection.updateCategory(forCategoryId: category.id, toName: name)
                                     })
-                                        .font(.subheadline)
-                                        .foregroundColor(.black)
+                                    .font(.subheadline)
+                                    .foregroundColor(.black)
                                 }
                                 .padding()
                                 .padding(.horizontal, 7)
@@ -291,6 +291,9 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = false
                 }
             } : nil)
+            .onAppear {
+                collection.refreshCurrrentCategory()
+            }
         }
     }
     

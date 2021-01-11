@@ -57,6 +57,7 @@ class ImageHandler: ObservableObject {
         for image in images {
             setImage(image)
         }
+        self.loadingImages = false
     }
     
     // sets image for UI

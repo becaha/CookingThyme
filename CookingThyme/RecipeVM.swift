@@ -83,6 +83,10 @@ class RecipeVM: ObservableObject {
         recipe.images
     }
     
+    var categoryId: Int {
+        recipe.recipeCategoryId
+    }
+    
     // MARK: - Intents
     
     // gets recipe, directions, ingredients, and images from db
@@ -114,12 +118,13 @@ class RecipeVM: ObservableObject {
     }
     
     // update recipe to given recipe parts
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, categoryId: Int) {
         category.deleteRecipe(withId: id)
-        if let recipe = category.createRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
+        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: categoryId, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             self.recipe = recipe
             refreshRecipe()
         }
+        category.refreshCategory()
     }
     
     func moveRecipe(toCategoryId categoryId: Int) {

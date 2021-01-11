@@ -93,7 +93,6 @@ class RecipeCollectionVM: ObservableObject {
     
     func popullateImages() {
         for category in categories {
-            let name = category.name
             if let image = RecipeDB.shared.getImage(withCategoryId: category.id) {
                 imageHandler.setImage(image)
             }
@@ -130,12 +129,13 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: Intents
     
     func setCurrentCategory(_ category: RecipeCategoryVM) {
+        category.popullateCategory()
         currentCategory = category
     }
     
     func refreshCurrrentCategory() {
         if let currentCategory = self.currentCategory {
-            currentCategory.refreshCategory()
+            currentCategory.popullateCategory()
             self.currentCategory = currentCategory
         }
     }

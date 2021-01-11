@@ -30,6 +30,7 @@ struct ShoppingListView: View {
                             addItem()
                         }
                     })
+                    .foregroundColor(mainColor())
                 }
             }
             

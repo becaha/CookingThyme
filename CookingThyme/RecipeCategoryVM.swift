@@ -35,8 +35,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
                 self.objectWillChange.send()
             }
         
-        popullateRecipes()
-        popullateImage()
+        popullateCategory()
     }
     
     // MARK: - Model Access
@@ -123,12 +122,22 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     func refreshCategory() {
         if let category = RecipeDB.shared.getCategory(withId: category.id) {
             self.category = category
-            popullateRecipes()
-            popullateImage()
+            popullateCategory()
         }
     }
     
-    // creates recipe for given category with given parts
+    func popullateCategory() {
+        popullateRecipes()
+        popullateImage()
+    }
+    
+    // creates recipe given temp ingredients
+    static func createRecipe(forCategoryId categoryId: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
+        let ingredients = Ingredient.toIngredients(tempIngredients)
+        return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
+    }
+    
+    // creates recipe given ingredients
     static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
@@ -140,11 +149,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         return createdRecipe
     }
     
-    // creates recipe with given partss
+    // creates recipe with given parts
     func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
-        let ingredients = Ingredient.toIngredients(tempIngredients)
-        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings) {
+        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             createdRecipe = recipe
             popullateRecipes()
             popullateImage()
