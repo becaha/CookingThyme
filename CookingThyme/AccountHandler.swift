@@ -10,13 +10,24 @@ import Foundation
 class AccountHandler: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
+    @Published var loginPresented: Bool = false
+    @Published var collection: RecipeCollectionVM?
     
     init() {
         self.user = User()
     }
     
+    init(username: String) {
+        self.user = User()
+        if let user = RecipeDB.shared.getAccount(withUsername: username) {
+            setAuthToken(withUserId: user.id)
+        }
+        setUserCollection()
+    }
+    
     init(user: User) {
         self.user = user
+        setUserCollection()
     }
     
     // MARK: - Model Access
@@ -46,6 +57,12 @@ class AccountHandler: ObservableObject {
     func signup(username: String, password: String, email: String) {
         if let user = user.signup(username: username, password: password, email: email) {
             setAuthToken(withUserId: user.id)
+        }
+    }
+    
+    func setUserCollection() {
+        if let collection = RecipeDB.shared.getCollection(withUsername: username) {
+            self.collection = RecipeCollectionVM(collection: collection)
         }
     }
 }

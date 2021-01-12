@@ -476,6 +476,27 @@ class RecipeDB {
         }
     }
     
+    func getCollection(withUsername username: String) -> RecipeCollection? {
+        do {
+            let collection = try dbQueue.read { db -> RecipeCollection? in
+                let row = try Row.fetchOne(db,
+                                               sql: """
+                                                    select * from \(RecipeCollection.Table.databaseTableName) \
+                                                    where \(RecipeCollection.Table.name) = ?
+                                                    """,
+                                               arguments: [username])
+                if let returnedRow = row {
+                    return RecipeCollection(row: returnedRow)
+                }
+                return nil
+            }
+            return collection
+        } catch {
+            return nil
+        }
+    }
+    
+    // TODO: deprecated
     func getCollection(withId id: Int) -> RecipeCollection? {
         do {
             let collection = try dbQueue.read { db -> RecipeCollection? in

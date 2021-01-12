@@ -23,7 +23,8 @@ struct LoginView: View {
                 Group {
                     TextField("Username", text: $username)
 
-                    TextField("Password", text: $password)
+                    SecureField("Password", text: $password)
+                        
                 }
                 .formed()
                 
@@ -51,7 +52,7 @@ struct LoginView: View {
                     
                     TextField("Email", text: $email)
                     
-                    TextField("Password", text: $email)
+                    SecureField("Password", text: $password)
                 }
                 .formed()
                     
@@ -76,7 +77,7 @@ struct LoginView: View {
             
         }
         .padding()
-        .foregroundColor(mainColor())
+        .accentColor(mainColor())
         .background(formBackgroundColor())
         .ignoresSafeArea()
     }

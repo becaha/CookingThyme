@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var collection: RecipeCollectionVM
+    @EnvironmentObject var account: AccountHandler
     @ObservedObject var timer = TimerHandler()
-    
+        
     var body: some View {
         NavigationView {
             TabView {
+                RecipeSearch()
+                    .tabItem {
+                        Image(systemName: "magnifyingglass")
+                        Text("Recipe Search")
+                    }
+                
                 RecipeCollectionView()
                     .tabItem {
                         Image(systemName: "book.fill")
@@ -24,12 +30,6 @@ struct HomeView: View {
                     .tabItem {
                         Image(systemName: "cart.fill")
                         Text("Shopping List")
-                    }
-                
-                RecipeSearch()
-                    .tabItem {
-                        Image(systemName: "magnifyingglass")
-                        Text("Recipe Search")
                     }
                 
                 TimerView()
@@ -47,6 +47,9 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
+        .sheet(isPresented: $account.loginPresented) {
+            LoginView()
+        }
         .alert(isPresented: $timer.timerAlert) {
             Alert(title: Text("Timer"),
                   primaryButton: .default(Text("Stop")) {
@@ -61,13 +64,13 @@ struct HomeView: View {
                   }
             )
         }
-        .environmentObject(collection)
+        .environmentObject(account)
         .environmentObject(timer)
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
+        HomeView()
     }
 }

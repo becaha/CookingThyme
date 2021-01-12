@@ -10,6 +10,8 @@ import SwiftUI
 // TODO: cannot add ingredients twice
 // TODO: save when view changes from shopping list
 struct ShoppingListView: View {
+    @EnvironmentObject var account: AccountHandler
+
     @EnvironmentObject var collection: RecipeCollectionVM
 
     @State var newName = ""
