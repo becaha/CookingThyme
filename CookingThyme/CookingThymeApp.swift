@@ -84,3 +84,10 @@ func formBackgroundColor() -> Color {
     }
     return Color(UIColor.systemFill)
 }
+
+func formBorderColor() -> Color {
+    if let uiColor = UIColor(named: "FormBorder") {
+        return Color(uiColor)
+    }
+    return Color(UIColor.gray)
+}

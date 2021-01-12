@@ -63,6 +63,11 @@
 		DB49B56725827ADA00808CC8 /* PublicRecipeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */; };
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
+		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
+		DB83F6A625AE16590041DAA7 /* AccountHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* AccountHandler.swift */; };
+		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
+		DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */; };
+		DB83F6AC25AE438C0041DAA7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6AB25AE438C0041DAA7 /* LoginView.swift */; };
 		DBCDE775258A8F9B003DC95F /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
@@ -134,6 +139,11 @@
 		DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeVM.swift; sourceTree = "<group>"; };
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
+		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DB83F6A525AE16590041DAA7 /* AccountHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHandler.swift; sourceTree = "<group>"; };
+		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFormItem.swift; sourceTree = "<group>"; };
+		DB83F6AB25AE438C0041DAA7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
@@ -226,6 +236,7 @@
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
 				DBCDE780258D5F55003DC95F /* Test.swift */,
+				DB83F6AB25AE438C0041DAA7 /* LoginView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -241,6 +252,7 @@
 				DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */,
 				DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */,
 				DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */,
+				DB83F6A525AE16590041DAA7 /* AccountHandler.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -276,6 +288,7 @@
 				DB49B564258276C700808CC8 /* RecipeControls.swift */,
 				DB49B56A2582CEF400808CC8 /* SearchBar.swift */,
 				DBCDE78725945661003DC95F /* FormTitle.swift */,
+				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -290,6 +303,8 @@
 				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
 				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
 				DB49B531257F379400808CC8 /* ShoppingItem.swift */,
+				DB83F6A325AE15400041DAA7 /* User.swift */,
+				DB83F6A725AE2A780041DAA7 /* Auth.swift */,
 			);
 			name = Table;
 			sourceTree = "<group>";
@@ -534,6 +549,8 @@
 				DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */,
 				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
+				DB83F6A625AE16590041DAA7 /* AccountHandler.swift in Sources */,
+				DB83F6AC25AE438C0041DAA7 /* LoginView.swift in Sources */,
 				DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
 				DBCDE781258D5F55003DC95F /* Test.swift in Sources */,
@@ -549,6 +566,7 @@
 				DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
+				DB83F6A425AE15400041DAA7 /* User.swift in Sources */,
 				DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */,
 				DB49B532257F379400808CC8 /* ShoppingItem.swift in Sources */,
 				DB49B5082576DC7700808CC8 /* EditableIngredient.swift in Sources */,
@@ -563,10 +581,12 @@
 				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
+				DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
 				DBCDE78825945661003DC95F /* FormTitle.swift in Sources */,
+				DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */,
 				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,

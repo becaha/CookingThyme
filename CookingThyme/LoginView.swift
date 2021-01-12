@@ -1,13 +1,13 @@
 //
-//  Test.swift
+//  LoginView.swift
 //  CookingThyme
 //
-//  Created by Rebecca Nybo on 12/18/20.
+//  Created by Rebecca Nybo on 1/12/21.
 //
 
 import SwiftUI
 
-struct Test: View {
+struct LoginView: View {
     @ObservedObject var account = AccountHandler()
     
     @State var email: String = ""
@@ -17,6 +17,8 @@ struct Test: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             if isLoggingIn {
                 Group {
                     TextField("Username", text: $username)
@@ -70,10 +72,13 @@ struct Test: View {
                 }
             }
             
+            Spacer()
+            
         }
         .padding()
         .foregroundColor(mainColor())
         .background(formBackgroundColor())
+        .ignoresSafeArea()
     }
     
     func login() {
@@ -85,8 +90,8 @@ struct Test: View {
     }
 }
 
-struct Test_Previews: PreviewProvider {
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        Test()
+        LoginView()
     }
 }

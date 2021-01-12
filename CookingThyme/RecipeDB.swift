@@ -242,6 +242,67 @@ class RecipeDB {
         }
     }
     
+    func createAccount(_ account: User) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.password), \(User.Table.email)) \
+                VALUES (?, ?, ?)
+                """,
+                arguments: [account.username, account.password, account.email])
+            return
+        }
+    }
+    
+    func createAccount(username: String, password: String, email: String) -> User? {
+        do {
+            let account = try dbQueue.write{ (db: Database) -> User in
+
+                try db.execute(
+                    sql:
+                    """
+                    INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.password), \(User.Table.email)) \
+                    VALUES (?, ?, ?)
+                    """,
+                    arguments: [username, password, email])
+
+                let accountId = db.lastInsertedRowID
+
+                return User(id: Int(accountId), username: username, password: password, email: email)
+            }
+            
+            return account
+        } catch {
+            print("Error creating account")
+            return nil
+        }
+    }
+    
+    func createAuth(withUserId userId: Int, authToken: String, timestamp: String) -> Auth? {
+        do {
+            let auth = try dbQueue.write{ (db: Database) -> Auth in
+
+                try db.execute(
+                    sql:
+                    """
+                    INSERT INTO \(Auth.Table.databaseTableName) (\(Auth.Table.userId), \(Auth.Table.authToken), \(Auth.Table.timestamp)) \
+                    VALUES (?, ?, ?)
+                    """,
+                    arguments: [userId, authToken, timestamp])
+
+                let authId = db.lastInsertedRowID
+
+                return Auth(id: Int(authId), userId: userId, authToken: authToken, timestamp: timestamp)
+            }
+
+            return auth
+        } catch {
+            print("Error creating auth")
+            return nil
+        }
+    }
+    
     //MARK: - Read
     
     func getRecipe(byId id: Int) -> Recipe? {
@@ -477,6 +538,50 @@ class RecipeDB {
         }
     }
     
+    func getAccount(withUsername username: String) -> User? {
+        do {
+            let account = try dbQueue.inDatabase { (db: Database) -> User? in
+                let row = try Row.fetchOne(db,
+                                           sql: """
+                                                select * from \(User.Table.databaseTableName) \
+                                                where \(User.Table.username) = ?
+                                                """,
+                                           arguments: [username])
+                if let returnedRow = row {
+                    return User(row: returnedRow)
+                }
+                return nil
+            }
+            
+            return account
+            
+        } catch {
+            return nil
+        }
+    }
+    
+    func getAuth(withUserId userId: Int) -> Auth? {
+        do {
+            let auth = try dbQueue.inDatabase { (db: Database) -> Auth? in
+                let row = try Row.fetchOne(db,
+                                           sql: """
+                                                select * from \(Auth.Table.databaseTableName) \
+                                                where \(Auth.Table.userId) = ?
+                                                """,
+                                           arguments: [userId])
+                if let returnedRow = row {
+                    return Auth(row: returnedRow)
+                }
+                return nil
+            }
+            
+            return auth
+            
+        } catch {
+            return nil
+        }
+    }
+    
     // MARK: - Update
     
     func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) -> Recipe? {
@@ -633,6 +738,37 @@ class RecipeDB {
         } catch {
             print("Error updating collection")
             return
+        }
+    }
+    
+    func updateAuth(withId id: Int, userId: Int, authToken: String, timestamp: String) -> Auth? {
+        do {
+            let auth = try dbQueue.write{ (db: Database) -> Auth in
+
+                try db.execute(
+                    sql:
+                    """
+                    UPDATE \(Auth.Table.databaseTableName) \
+                    SET \(Auth.Table.userId) = ?, \
+                    \(Auth.Table.authToken) = ?, \
+                    \(Auth.Table.timestamp) = ? \
+                    WHERE \(Auth.Table.id) = ?
+                    """,
+                    arguments: [userId, authToken, timestamp, id])
+
+                let authId = db.lastInsertedRowID
+                
+                if authId != id {
+                    print("Error updating auth")
+                }
+
+                return Auth(id: id, userId: userId, authToken: authToken, timestamp: timestamp)
+            }
+            
+            return auth
+        } catch {
+            print("Error updating recipe")
+            return nil
         }
     }
     
@@ -844,6 +980,48 @@ class RecipeDB {
             return
         } catch {
             print("Error deleting shopping items in collection")
+            return
+        }
+    }
+    
+    func deleteAccount(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(User.Table.databaseTableName) \
+                    WHERE \(User.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting account")
+            return
+        }
+    }
+    
+    func deleteAuth(withUserId userId: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Auth.Table.databaseTableName) \
+                    WHERE \(Auth.Table.userId) = ?
+                    """,
+                    arguments: [userId])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting auth")
             return
         }
     }

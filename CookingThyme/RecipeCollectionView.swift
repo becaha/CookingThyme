@@ -7,15 +7,15 @@
 
 import SwiftUI
 
+// TODO: Login/account
+
 // TODO: measurement page to ask how many tbsp in an ounce
 
 // TODO: drag and drop recipes from one category to another
 // TODO: have images or icons for categories, imaage from recipe in category
 
-// TODO: edit all photo or not have a photo for all
-// TODO: all category when click on recipe should be edited in own category if has one
-// TODO: update images
-// TODO: update categories
+// TODO: edit all photo or not have a photo for all?
+// TODO: if edit name of category and then its photo, will not update the photo
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
@@ -117,6 +117,7 @@ struct RecipeCollectionView: View {
                                     }
                                     
                                     EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
+                                        // without this, the image will update, it causes an early refresh
                                         collection.updateCategory(forCategoryId: category.id, toName: name)
                                     })
                                     .font(.subheadline)
