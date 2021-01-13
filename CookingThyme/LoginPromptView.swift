@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginPromptView: View {
-    @EnvironmentObject var account: AccountHandler
+    @EnvironmentObject var user: UserVM
     
     var message: String
     
@@ -17,9 +17,12 @@ struct LoginPromptView: View {
             Spacer()
             
             Button(action: {
-                account.loginPresented = true
+                user.loginPresented = true
             }) {
+                Text("Login")
+                
                 Text("\(message)")
+                    .foregroundColor(.black)
             }
             
             Spacer()

@@ -1,5 +1,5 @@
 //
-//  Account.swift
+//  User.swift
 //  CookingThyme
 //
 //  Created by Rebecca Nybo on 1/12/21.
@@ -10,6 +10,8 @@ import GRDB
 
 // TODO: password encryption https://cocoapods.org/pods/CryptoSwift
 struct User {
+    static let userKey = "CookingThymeCurrentUser"
+
     struct Table {
         static let databaseTableName = "User"
         static let id = "Id"
@@ -51,31 +53,51 @@ struct User {
         self.email = row[Table.email]
     }
     
-    // gets account of user if the password is correct
+    // saves current username to user defaults to keep user logged in
+    func setCurrentUser(_ username: String?) {
+        UserDefaults.standard.set(username, forKey: User.userKey)
+    }
+    
+    
+    // gets user of user if the password is correct
     func login(username: String, password: String) -> User? {
-        if let account = RecipeDB.shared.getAccount(withUsername: username) {
-            if isCorrectPassword(account, withPassword: password) {
-                return account
+        if let user = RecipeDB.shared.getUser(withUsername: username) {
+            if isCorrectPassword(user, withPassword: password) {
+                setCurrentUser(user.username)
+                return user
             }
         }
+        // resets current user due to failed login attempt
+        setCurrentUser(nil)
         return nil
     }
     
     func signup(username: String, password: String, email: String) -> User? {
-        if let account = RecipeDB.shared.createAccount(username: username, password: password, email: email) {
-            return login(username: account.username, password: account.password)
+        if let user = RecipeDB.shared.createUser(username: username, password: password, email: email) {
+            return login(username: user.username, password: user.password)
         }
         return nil
     }
     
-    func isCorrectPassword(_ account: User, withPassword password: String) -> Bool {
-        if account.password == password {
+    func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {
+        if user.password == password {
             return true
         }
         return false
     }
     
     func delete(id: Int) {
-        RecipeDB.shared.deleteAccount(withId: id)
+        RecipeDB.shared.deleteUser(withId: id)
+    }
+    
+    func getUserCollection() -> RecipeCollectionVM? {
+        if let collection = RecipeDB.shared.getCollection(withUsername: username) {
+            return RecipeCollectionVM(collection: collection)
+        }
+        return nil
+    }
+    
+    func createUserCollection() {
+        RecipeDB.shared.createCollection(withUsername: username)
     }
 }

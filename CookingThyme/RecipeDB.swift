@@ -216,6 +216,23 @@ class RecipeDB {
         }
     }
     
+    func createCollection(withUsername username: String) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    INSERT INTO \(RecipeCollection.Table.databaseTableName) (\(RecipeCollection.Table.name)) \
+                    VALUES (?)
+                    """,
+                    arguments: [username])
+            }
+        } catch {
+            print("Error creating collection")
+        }
+    }
+    
     func createShoppingItem(_ item: ShoppingItem, withCollectionId collectionId: Int) throws {
         try dbQueue.write{ (db: Database) in
             try db.execute(
@@ -242,7 +259,7 @@ class RecipeDB {
         }
     }
     
-    func createAccount(_ account: User) throws {
+    func createUser(_ user: User) throws {
         try dbQueue.write{ (db: Database) in
             try db.execute(
                 sql:
@@ -250,14 +267,14 @@ class RecipeDB {
                 INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.password), \(User.Table.email)) \
                 VALUES (?, ?, ?)
                 """,
-                arguments: [account.username, account.password, account.email])
+                arguments: [user.username, user.password, user.email])
             return
         }
     }
     
-    func createAccount(username: String, password: String, email: String) -> User? {
+    func createUser(username: String, password: String, email: String) -> User? {
         do {
-            let account = try dbQueue.write{ (db: Database) -> User in
+            let user = try dbQueue.write{ (db: Database) -> User in
 
                 try db.execute(
                     sql:
@@ -267,14 +284,14 @@ class RecipeDB {
                     """,
                     arguments: [username, password, email])
 
-                let accountId = db.lastInsertedRowID
+                let userId = db.lastInsertedRowID
 
-                return User(id: Int(accountId), username: username, password: password, email: email)
+                return User(id: Int(userId), username: username, password: password, email: email)
             }
             
-            return account
+            return user
         } catch {
-            print("Error creating account")
+            print("Error creating user")
             return nil
         }
     }
@@ -559,9 +576,9 @@ class RecipeDB {
         }
     }
     
-    func getAccount(withUsername username: String) -> User? {
+    func getUser(withUsername username: String) -> User? {
         do {
-            let account = try dbQueue.inDatabase { (db: Database) -> User? in
+            let user = try dbQueue.inDatabase { (db: Database) -> User? in
                 let row = try Row.fetchOne(db,
                                            sql: """
                                                 select * from \(User.Table.databaseTableName) \
@@ -574,7 +591,7 @@ class RecipeDB {
                 return nil
             }
             
-            return account
+            return user
             
         } catch {
             return nil
@@ -1005,7 +1022,7 @@ class RecipeDB {
         }
     }
     
-    func deleteAccount(withId id: Int) {
+    func deleteUser(withId id: Int) {
         do {
             try dbQueue.write{ (db: Database) in
 
@@ -1021,7 +1038,7 @@ class RecipeDB {
             }
             return
         } catch {
-            print("Error deleting account")
+            print("Error deleting user")
             return
         }
     }

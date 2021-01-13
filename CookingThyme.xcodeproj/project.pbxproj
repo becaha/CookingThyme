@@ -64,7 +64,7 @@
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
-		DB83F6A625AE16590041DAA7 /* AccountHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* AccountHandler.swift */; };
+		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
 		DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */; };
 		DB83F6AC25AE438C0041DAA7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6AB25AE438C0041DAA7 /* LoginView.swift */; };
@@ -141,7 +141,7 @@
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		DB83F6A525AE16590041DAA7 /* AccountHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHandler.swift; sourceTree = "<group>"; };
+		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFormItem.swift; sourceTree = "<group>"; };
 		DB83F6AB25AE438C0041DAA7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -255,7 +255,7 @@
 				DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */,
 				DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */,
 				DBCDE774258A8F9B003DC95F /* RecipeTranscriber.swift */,
-				DB83F6A525AE16590041DAA7 /* AccountHandler.swift */,
+				DB83F6A525AE16590041DAA7 /* UserVM.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -553,7 +553,7 @@
 				DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */,
 				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
-				DB83F6A625AE16590041DAA7 /* AccountHandler.swift in Sources */,
+				DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */,
 				DB83F6AC25AE438C0041DAA7 /* LoginView.swift in Sources */,
 				DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Test: View {
-    @ObservedObject var account = AccountHandler()
+    @ObservedObject var account = UserVM()
     
     @State var email: String = ""
     @State var username: String = ""

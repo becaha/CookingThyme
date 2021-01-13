@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var account: AccountHandler
+    @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()
         
     var body: some View {
@@ -20,17 +20,33 @@ struct HomeView: View {
                         Text("Recipe Search")
                     }
                 
-                RecipeCollectionView()
-                    .tabItem {
-                        Image(systemName: "book.fill")
-                        Text("Recipe Book")
+                Group {
+                    if user.collection == nil {
+                        LoginPromptView(message: "to start creating a recipe book.")
                     }
+                    else {
+                        RecipeCollectionView()
+                    }
+                }
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("Recipe Book")
+                }
+                .environmentObject(user.collection!)
                 
-                ShoppingListView()
-                    .tabItem {
-                        Image(systemName: "cart.fill")
-                        Text("Shopping List")
+                Group {
+                    if user.collection == nil {
+                        LoginPromptView(message: "to start creating a shopping list.")
                     }
+                    else {
+                        ShoppingListView()
+                    }
+                }
+                .tabItem {
+                    Image(systemName: "cart.fill")
+                    Text("Shopping List")
+                }
+                .environmentObject(user.collection!)
                 
                 TimerView()
                     .tabItem {
@@ -47,7 +63,7 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
-        .sheet(isPresented: $account.loginPresented) {
+        .sheet(isPresented: $user.loginPresented) {
             LoginView()
         }
         .alert(isPresented: $timer.timerAlert) {
@@ -64,8 +80,8 @@ struct HomeView: View {
                   }
             )
         }
-        .environmentObject(account)
         .environmentObject(timer)
+        .environmentObject(user)
     }
 }
 

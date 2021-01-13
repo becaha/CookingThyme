@@ -10,8 +10,6 @@ import SwiftUI
 // TODO: cannot add ingredients twice
 // TODO: save when view changes from shopping list
 struct ShoppingListView: View {
-    @EnvironmentObject var account: AccountHandler
-
     @EnvironmentObject var collection: RecipeCollectionVM
 
     @State var newName = ""
@@ -110,10 +108,10 @@ struct ShoppingListView: View {
     }
 }
 
-struct ShoppingListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ShoppingListView()
-        .environmentObject(RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
-    }
-}
+//struct ShoppingListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ShoppingListView()
+//        .environmentObject(RecipeCollectionVM(collection: RecipeCollection(id: 1, name: "Becca")))
+//    }
+//}
 

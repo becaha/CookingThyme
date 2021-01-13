@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var account = AccountHandler()
+    @ObservedObject var user = UserVM()
     
     @State var email: String = ""
     @State var username: String = ""
@@ -83,11 +83,11 @@ struct LoginView: View {
     }
     
     func login() {
-        account.login(username: username, password: password)
+        user.login(username: username, password: password)
     }
     
     func signup() {
-        account.signup(username: username, password: password, email: email)
+        user.signup(username: username, password: password, email: email)
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeSearch: View {
-    @EnvironmentObject var account: AccountHandler
+    @EnvironmentObject var user: UserVM
     
     @EnvironmentObject var collection: RecipeCollectionVM
     @ObservedObject var recipeWebHandler = RecipesWebHandler()

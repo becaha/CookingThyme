@@ -11,20 +11,21 @@ import SwiftUI
 
 @main
 struct CookingThymeApp: App {
-    @ObservedObject var account = AccountHandler()
+    @ObservedObject var user = UserVM()
     
     init() {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(mainColor())
         UIView.appearance(whenContainedInInstancesOf: [UINavigationController.self]).tintColor = UIColor(mainColor())
-        
-        let username = "Becca"
-        account = AccountHandler(username: username)
+        // sets current logged in user
+        if let currentUsername = UserDefaults.standard.string(forKey: User.userKey) {
+            self.user = UserVM(username: currentUsername)
+        }
     }
     
     var body: some Scene {
         WindowGroup {
             HomeView()
-                .environmentObject(account)
+                .environmentObject(user)
         }
     }
 }

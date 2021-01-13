@@ -1,33 +1,46 @@
 //
-//  AccountHandler.swift
+//  UserVM.swift
 //  CookingThyme
 //
 //  Created by Rebecca Nybo on 1/12/21.
 //
 
 import Foundation
+import Combine
 
-class AccountHandler: ObservableObject {
+class UserVM: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
     @Published var loginPresented: Bool = false
     @Published var collection: RecipeCollectionVM?
     
+    private var collectionCancellable: AnyCancellable?
+        
     init() {
         self.user = User()
     }
     
+    // is called to set user that is logged in from user defaults
     init(username: String) {
         self.user = User()
-        if let user = RecipeDB.shared.getAccount(withUsername: username) {
-            setAuthToken(withUserId: user.id)
+        if let user = RecipeDB.shared.getUser(withUsername: username) {
+            self.user = user
+            if let collection = self.user.getUserCollection() {
+                self.collection = collection
+            }
         }
-        setUserCollection()
+        
+        self.collectionCancellable = self.collection?.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
     }
     
     init(user: User) {
         self.user = user
-        setUserCollection()
+        if let collection = user.getUserCollection() {
+            self.collection = collection
+        }
     }
     
     // MARK: - Model Access
@@ -41,7 +54,7 @@ class AccountHandler: ObservableObject {
     }
     
     // MARK: - Intents
-    
+
     func login(username: String, password: String) {
         if let user = user.login(username: username, password: password) {
             setAuthToken(withUserId: user.id)
@@ -57,12 +70,7 @@ class AccountHandler: ObservableObject {
     func signup(username: String, password: String, email: String) {
         if let user = user.signup(username: username, password: password, email: email) {
             setAuthToken(withUserId: user.id)
-        }
-    }
-    
-    func setUserCollection() {
-        if let collection = RecipeDB.shared.getCollection(withUsername: username) {
-            self.collection = RecipeCollectionVM(collection: collection)
+            user.createUserCollection()
         }
     }
 }
