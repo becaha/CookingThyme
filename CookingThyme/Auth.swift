@@ -9,8 +9,8 @@ import Foundation
 import GRDB
 
 struct Auth {
-    // TODO: allow a login for a year?
-    let loginDuration: TimeInterval = 31536000
+    // TODO: allow a sign in for a year?
+    let signinDuration: TimeInterval = 31536000
     static let formatter = DateFormatter()
     
     struct Table {
@@ -57,7 +57,7 @@ struct Auth {
     }
     
     // logs the user in and returns the auth token
-    static func login(withUserId userId: Int) -> String? {
+    static func signin(withUserId userId: Int) -> String? {
         if let auth = RecipeDB.shared.createAuth(withUserId: userId, authToken: createAuthToken(), timestamp: createTimestamp()) {
             if auth.isValid() {
                 return auth.authToken
@@ -76,14 +76,14 @@ struct Auth {
     
     func isValid() -> Bool {
         if let timestamp = Auth.formatter.date(from: timestamp) {
-            if Date().distance(to: timestamp) < loginDuration {
+            if Date().distance(to: timestamp) < signinDuration {
                 return true
             }
         }
         return false
     }
     
-    func logout(withUserId userId: Int) {
+    func signout(withUserId userId: Int) {
         RecipeDB.shared.deleteAuth(withUserId: userId)
     }
 }

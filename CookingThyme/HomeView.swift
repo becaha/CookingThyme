@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()
+    
+    @State var presentSettings = false
         
     var body: some View {
         NavigationView {
@@ -22,31 +24,31 @@ struct HomeView: View {
                 
                 Group {
                     if user.collection == nil {
-                        LoginPromptView(message: "to start creating a recipe book.")
+                        SigninPromptView(message: "to start creating a recipe book.")
                     }
                     else {
                         RecipeCollectionView()
+                            .environmentObject(user.collection!)
                     }
                 }
                 .tabItem {
                     Image(systemName: "book.fill")
                     Text("Recipe Book")
                 }
-                .environmentObject(user.collection!)
                 
                 Group {
                     if user.collection == nil {
-                        LoginPromptView(message: "to start creating a shopping list.")
+                        SigninPromptView(message: "to start creating a shopping list.")
                     }
                     else {
                         ShoppingListView()
+                            .environmentObject(user.collection!)
                     }
                 }
                 .tabItem {
                     Image(systemName: "cart.fill")
                     Text("Shopping List")
                 }
-                .environmentObject(user.collection!)
                 
                 TimerView()
                     .tabItem {
@@ -55,16 +57,27 @@ struct HomeView: View {
                     }
                 
             }
+            .sheet(isPresented: $presentSettings) {
+                Settings(isPresented: $presentSettings)
+            }
             .font(.headline)
             .accentColor(mainColor())
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
+            .navigationBarItems(trailing:
+                Button(action: {
+                    presentSettings.toggle()
+                }) {
+                    Image(systemName: "gear")
+                        .foregroundColor(.black)
+                }
+            )
             .background(NavigationBarConfigurator { nc in
                 nc.navigationBar.barTintColor = mainUIColor()
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
-        .sheet(isPresented: $user.loginPresented) {
-            LoginView()
+        .sheet(isPresented: $user.signinPresented) {
+            SigninView()
         }
         .alert(isPresented: $timer.timerAlert) {
             Alert(title: Text("Timer"),

@@ -1,5 +1,5 @@
 //
-//  LoginPromptView.swift
+//  SigninPromptView.swift
 //  CookingThyme
 //
 //  Created by Rebecca Nybo on 1/12/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoginPromptView: View {
+struct SigninPromptView: View {
     @EnvironmentObject var user: UserVM
     
     var message: String
@@ -17,9 +17,9 @@ struct LoginPromptView: View {
             Spacer()
             
             Button(action: {
-                user.loginPresented = true
+                user.signinPresented = true
             }) {
-                Text("Login")
+                Text("Sign In")
                 
                 Text("\(message)")
                     .foregroundColor(.black)
@@ -30,8 +30,8 @@ struct LoginPromptView: View {
     }
 }
 
-//struct LoginPromptView_Previews: PreviewProvider {
+//struct SigninPromptView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        LoginPromptView(message: "Login to start creating your recipe book")
+//        SigninPromptView(message: "Signin to start creating your recipe book")
 //    }
 //}

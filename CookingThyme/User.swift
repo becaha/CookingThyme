@@ -54,29 +54,36 @@ struct User {
     }
     
     // saves current username to user defaults to keep user logged in
-    func setCurrentUser(_ username: String?) {
+    func setCurrentUsername(_ username: String?) {
         UserDefaults.standard.set(username, forKey: User.userKey)
     }
     
     
     // gets user of user if the password is correct
-    func login(username: String, password: String) -> User? {
+    func signin(username: String, password: String) -> User? {
         if let user = RecipeDB.shared.getUser(withUsername: username) {
             if isCorrectPassword(user, withPassword: password) {
-                setCurrentUser(user.username)
+                setCurrentUsername(user.username)
                 return user
             }
         }
-        // resets current user due to failed login attempt
-        setCurrentUser(nil)
+        // resets current user due to failed sign in attempt
+        setCurrentUsername(nil)
         return nil
     }
     
     func signup(username: String, password: String, email: String) -> User? {
         if let user = RecipeDB.shared.createUser(username: username, password: password, email: email) {
-            return login(username: user.username, password: user.password)
+            return signin(username: user.username, password: user.password)
         }
         return nil
+    }
+    
+    // deletes current auth and user defaults and resets to blank user
+    mutating func signout() {
+        RecipeDB.shared.deleteAuth(withUserId: id)
+        setCurrentUsername(nil)
+        self = User()
     }
     
     func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {

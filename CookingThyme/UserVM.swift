@@ -11,7 +11,7 @@ import Combine
 class UserVM: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
-    @Published var loginPresented: Bool = false
+    @Published var signinPresented: Bool = false
     @Published var collection: RecipeCollectionVM?
     
     private var collectionCancellable: AnyCancellable?
@@ -44,6 +44,12 @@ class UserVM: ObservableObject {
     }
     
     // MARK: - Model Access
+    var isSignedOut: Bool {
+        if username == "" {
+            return true
+        }
+        return false
+    }
     
     var username: String {
         user.username
@@ -55,14 +61,14 @@ class UserVM: ObservableObject {
     
     // MARK: - Intents
 
-    func login(username: String, password: String) {
-        if let user = user.login(username: username, password: password) {
+    func signin(username: String, password: String) {
+        if let user = user.signin(username: username, password: password) {
             setAuthToken(withUserId: user.id)
         }
     }
     
     func setAuthToken(withUserId userId: Int) {
-        if let authToken = Auth.login(withUserId: userId) {
+        if let authToken = Auth.signin(withUserId: userId) {
             self.authToken = authToken
         }
     }
@@ -72,5 +78,9 @@ class UserVM: ObservableObject {
             setAuthToken(withUserId: user.id)
             user.createUserCollection()
         }
+    }
+    
+    func signout() {
+        user.signout()
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// TODO: Login/user
+// TODO: signin/user
 
 // TODO: measurement page to ask how many tbsp in an ounce
 

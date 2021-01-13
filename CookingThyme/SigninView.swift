@@ -1,5 +1,5 @@
 //
-//  LoginView.swift
+//  SigninView.swift
 //  CookingThyme
 //
 //  Created by Rebecca Nybo on 1/12/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct SigninView: View {
     @ObservedObject var user = UserVM()
     
     @State var email: String = ""
@@ -29,9 +29,9 @@ struct LoginView: View {
                 .formed()
                 
                 Button(action: {
-                    login()
+                    signin()
                 }) {
-                    Text("Login")
+                    Text("Sign In")
                         .foregroundColor(.white)
                 }
                 .formed(backgroundColor: mainColor())
@@ -69,7 +69,7 @@ struct LoginView: View {
                         isLoggingIn = true
                     }
                 }) {
-                    Text("Login")
+                    Text("Sign In")
                 }
             }
             
@@ -82,8 +82,8 @@ struct LoginView: View {
         .ignoresSafeArea()
     }
     
-    func login() {
-        user.login(username: username, password: password)
+    func signin() {
+        user.signin(username: username, password: password)
     }
     
     func signup() {
@@ -91,8 +91,8 @@ struct LoginView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct SigninView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        SigninView()
     }
 }
