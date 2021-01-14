@@ -58,12 +58,6 @@ struct HomeView: View {
                     }
                 
             }
-//            .sheet(isPresented: $presentSettings, onDismiss: {
-//                let user = self.user.user
-//                print(user)
-//            }) {
-//                Settings(isPresented: $presentSettings)
-//            }
             .font(.headline)
             .accentColor(mainColor())
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
@@ -82,13 +76,10 @@ struct HomeView: View {
             })
         }
         .sheet(isPresented: $user.sheetPresented, onDismiss: {
-            settingsPresented = false
             user.signinPresented = false
-            let user = self.user.user
-            print(user)
         }) {
-            HomeSheet(isPresented: $user.sheetPresented, isSettingsPresented: $settingsPresented, isSigninPresented: $user.signinPresented)
-//            SigninView(isPresented: $user.signinPresented)
+            HomeSheet(isPresented: $user.sheetPresented)
+                .environmentObject(user)
         }
         .alert(isPresented: $timer.timerAlert) {
             Alert(title: Text("Timer"),

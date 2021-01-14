@@ -12,6 +12,7 @@ struct Settings: View {
     @EnvironmentObject var user: UserVM
     
     @Binding var isPresented: Bool
+
     @State var isEditing = false
     
     var body: some View {
@@ -25,7 +26,7 @@ struct Settings: View {
                                 
                                 Button(action: {
                                     user.signinPresented = true
-                                    isPresented = false
+                                    isPresented = true
                                 }) {
                                     Text("Sign In")
                                         .bold()

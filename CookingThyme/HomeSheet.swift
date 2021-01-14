@@ -12,17 +12,16 @@ struct HomeSheet: View {
     
     @Binding var isPresented: Bool
     
-    @Binding var isSettingsPresented: Bool
-    @Binding var isSigninPresented: Bool
-
-    
     var body: some View {
-        if isSettingsPresented {
-            Settings(isPresented: $isPresented)
+        Group {
+            if user.signinPresented {
+                SigninView(isPresented: $isPresented)
+            }
+            else {
+                Settings(isPresented: $isPresented)
+            }
         }
-        else {
-            SigninView(isPresented: $isPresented)
-        }
+        .environmentObject(user)
     }
 }
 
