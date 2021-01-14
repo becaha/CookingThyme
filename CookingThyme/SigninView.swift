@@ -10,16 +10,18 @@ import SwiftUI
 struct SigninView: View {
     @ObservedObject var user = UserVM()
     
+    @Binding var isPresented: Bool
+    
     @State var email: String = ""
     @State var username: String = ""
     @State var password: String = ""
-    @State var isLoggingIn: Bool = true
+    @State var isSigningIn: Bool = true
     
     var body: some View {
         VStack {
             Spacer()
             
-            if isLoggingIn {
+            if isSigningIn {
                 Group {
                     TextField("Username", text: $username)
 
@@ -39,7 +41,7 @@ struct SigninView: View {
                 
                 Button(action: {
                     withAnimation {
-                        isLoggingIn = false
+                        isSigningIn = false
                     }
                 }) {
                     Text("Sign Up")
@@ -66,7 +68,7 @@ struct SigninView: View {
                 
                 Button(action: {
                     withAnimation {
-                        isLoggingIn = true
+                        isSigningIn = true
                     }
                 }) {
                     Text("Sign In")
@@ -84,15 +86,17 @@ struct SigninView: View {
     
     func signin() {
         user.signin(username: username, password: password)
+        isPresented = false
     }
     
     func signup() {
         user.signup(username: username, password: password, email: email)
+        isPresented = false
     }
 }
 
-struct SigninView_Previews: PreviewProvider {
-    static var previews: some View {
-        SigninView()
-    }
-}
+//struct SigninView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SigninView()
+//    }
+//}

@@ -11,13 +11,26 @@ import Combine
 class UserVM: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
+    @Published var sheetPresented: Bool = false
     @Published var signinPresented: Bool = false
     @Published var collection: RecipeCollectionVM?
     
     private var collectionCancellable: AnyCancellable?
+    private var signinPresentedCancellable: AnyCancellable?
+
         
     init() {
         self.user = User()
+        
+        self.collectionCancellable = self.collection?.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
+        self.signinPresentedCancellable = self.$signinPresented
+            .sink { signinPresented in
+                self.sheetPresented = signinPresented
+            }
     }
     
     // is called to set user that is logged in from user defaults
@@ -34,13 +47,11 @@ class UserVM: ObservableObject {
             .sink { _ in
                 self.objectWillChange.send()
             }
-    }
-    
-    init(user: User) {
-        self.user = user
-        if let collection = user.getUserCollection() {
-            self.collection = collection
-        }
+        
+        self.signinPresentedCancellable = self.$signinPresented
+            .sink { signinPresented in
+                self.sheetPresented = signinPresented
+            }
     }
     
     // MARK: - Model Access

@@ -11,7 +11,8 @@ struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()
     
-    @State var presentSettings = false
+//    @State var presentSheet = false
+    @State var settingsPresented = false
         
     var body: some View {
         NavigationView {
@@ -57,15 +58,19 @@ struct HomeView: View {
                     }
                 
             }
-            .sheet(isPresented: $presentSettings) {
-                Settings(isPresented: $presentSettings)
-            }
+//            .sheet(isPresented: $presentSettings, onDismiss: {
+//                let user = self.user.user
+//                print(user)
+//            }) {
+//                Settings(isPresented: $presentSettings)
+//            }
             .font(.headline)
             .accentColor(mainColor())
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
             .navigationBarItems(trailing:
                 Button(action: {
-                    presentSettings.toggle()
+                    user.sheetPresented = true
+                    settingsPresented = true
                 }) {
                     Image(systemName: "gear")
                         .foregroundColor(.black)
@@ -76,8 +81,14 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
-        .sheet(isPresented: $user.signinPresented) {
-            SigninView()
+        .sheet(isPresented: $user.sheetPresented, onDismiss: {
+            settingsPresented = false
+            user.signinPresented = false
+            let user = self.user.user
+            print(user)
+        }) {
+            HomeSheet(isPresented: $user.sheetPresented, isSettingsPresented: $settingsPresented, isSigninPresented: $user.signinPresented)
+//            SigninView(isPresented: $user.signinPresented)
         }
         .alert(isPresented: $timer.timerAlert) {
             Alert(title: Text("Timer"),
