@@ -11,12 +11,14 @@ import Combine
 class UserVM: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
-    @Published var sheetPresented: Bool = false
+    @Published var sheetPresented: Bool = false // TODO move
     @Published var signinPresented: Bool = false
     @Published var collection: RecipeCollectionVM?
+    @Published var isSignedIn: Bool = false
     
     private var collectionCancellable: AnyCancellable?
     private var signinPresentedCancellable: AnyCancellable?
+    private var userCancellable: AnyCancellable?
 
         
     init() {
@@ -31,17 +33,21 @@ class UserVM: ObservableObject {
             .sink { signinPresented in
                 self.sheetPresented = signinPresented
             }
+        
+        self.userCancellable = self.$user
+            .sink { user in
+                if user.username != "" {
+                    self.isSignedIn = true
+                }
+                else {
+                    self.isSignedIn = false
+                }
+            }
     }
     
     // is called to set user that is logged in from user defaults
     init(username: String) {
         self.user = User()
-        if let user = RecipeDB.shared.getUser(withUsername: username) {
-            self.user = user
-            if let collection = self.user.getUserCollection() {
-                self.collection = collection
-            }
-        }
         
         self.collectionCancellable = self.collection?.objectWillChange
             .sink { _ in
@@ -52,15 +58,26 @@ class UserVM: ObservableObject {
             .sink { signinPresented in
                 self.sheetPresented = signinPresented
             }
+        
+        self.userCancellable = self.$user
+            .sink { user in
+                if user.username != "" {
+                    self.isSignedIn = true
+                }
+                else {
+                    self.isSignedIn = false
+                }
+            }
+        
+        if let user = RecipeDB.shared.getUser(withUsername: username) {
+            self.user = user
+            if let collection = self.user.getUserCollection() {
+                self.collection = collection
+            }
+        }
     }
     
     // MARK: - Model Access
-    var isSignedOut: Bool {
-        if username == "" {
-            return true
-        }
-        return false
-    }
     
     var username: String {
         user.username
@@ -71,7 +88,7 @@ class UserVM: ObservableObject {
     }
     
     // MARK: - Intents
-
+    
     func signin(username: String, password: String) {
         if let user = user.signin(username: username, password: password) {
             setAuthToken(withUserId: user.id)

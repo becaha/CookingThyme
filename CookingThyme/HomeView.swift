@@ -10,10 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()
-    
-//    @State var presentSheet = false
-    @State var settingsPresented = false
-        
+            
     var body: some View {
         NavigationView {
             TabView {
@@ -24,10 +21,10 @@ struct HomeView: View {
                     }
                 
                 Group {
-                    if user.collection == nil {
+                    if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a recipe book.")
                     }
-                    else {
+                    else if user.collection != nil {
                         RecipeCollectionView()
                             .environmentObject(user.collection!)
                     }
@@ -38,10 +35,10 @@ struct HomeView: View {
                 }
                 
                 Group {
-                    if user.collection == nil {
+                    if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a shopping list.")
                     }
-                    else {
+                    else if user.collection != nil {
                         ShoppingListView()
                             .environmentObject(user.collection!)
                     }
@@ -64,7 +61,6 @@ struct HomeView: View {
             .navigationBarItems(trailing:
                 Button(action: {
                     user.sheetPresented = true
-                    settingsPresented = true
                 }) {
                     Image(systemName: "gear")
                         .foregroundColor(.black)

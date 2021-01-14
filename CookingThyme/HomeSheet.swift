@@ -14,7 +14,7 @@ struct HomeSheet: View {
     
     var body: some View {
         Group {
-            if user.signinPresented {
+            if user.signinPresented && isPresented {
                 SigninView(isPresented: $isPresented)
             }
             else {

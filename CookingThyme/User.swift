@@ -60,9 +60,10 @@ struct User {
     
     
     // gets user of user if the password is correct
-    func signin(username: String, password: String) -> User? {
+    mutating func signin(username: String, password: String) -> User? {
         if let user = RecipeDB.shared.getUser(withUsername: username) {
             if isCorrectPassword(user, withPassword: password) {
+                self = user
                 setCurrentUsername(user.username)
                 return user
             }
@@ -72,7 +73,7 @@ struct User {
         return nil
     }
     
-    func signup(username: String, password: String, email: String) -> User? {
+    mutating func signup(username: String, password: String, email: String) -> User? {
         if let user = RecipeDB.shared.createUser(username: username, password: password, email: email) {
             return signin(username: user.username, password: user.password)
         }

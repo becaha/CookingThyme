@@ -18,6 +18,7 @@ struct SigninPromptView: View {
             
             Button(action: {
                 user.signinPresented = true
+                user.sheetPresented = true
             }) {
                 Text("Sign In")
                 

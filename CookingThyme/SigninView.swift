@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SigninView: View {
-    @ObservedObject var user = UserVM()
+    @EnvironmentObject var user: UserVM
     
     @Binding var isPresented: Bool
     

@@ -19,14 +19,16 @@ struct Settings: View {
         NavigationView {
             VStack {
                 List {
-                    if user.isSignedOut {
+                    if isPresented && !user.isSignedIn {
                         Section {
                             HStack {
                                 Spacer()
                                 
                                 Button(action: {
-                                    user.signinPresented = true
-                                    isPresented = true
+                                    withAnimation {
+                                        user.signinPresented = true
+                                        isPresented = true
+                                    }
                                 }) {
                                     Text("Sign In")
                                         .bold()
@@ -79,8 +81,10 @@ struct Settings: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    user.signout()
-                                    isPresented = false
+                                    withAnimation {
+                                        isPresented = false
+                                        user.signout()
+                                    }
                                 }) {
                                     Text("Sign Out")
                                         .bold()

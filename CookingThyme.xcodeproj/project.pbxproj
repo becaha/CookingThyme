@@ -231,6 +231,9 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB83F6B525B0C7270041DAA7 /* Settings */,
+				DB83F6B425B0BA8D0041DAA7 /* Home */,
+				DB83F6B325B0BA7A0041DAA7 /* Signin */,
 				DB49B57025833F6B00808CC8 /* PublicRecipe */,
 				DB49B5572581BAED00808CC8 /* Editable */,
 				DB49B5562581BAC800808CC8 /* Images */,
@@ -240,12 +243,7 @@
 				DB49B5512581BA3200808CC8 /* RecipeCollection */,
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
-				DB49B525257EEABA00808CC8 /* HomeView.swift */,
 				DBCDE780258D5F55003DC95F /* Test.swift */,
-				DB83F6AB25AE438C0041DAA7 /* SigninView.swift */,
-				DB83F6AD25AE4B120041DAA7 /* SigninPromptView.swift */,
-				DB83F6AF25AF92CE0041DAA7 /* Settings.swift */,
-				DB83F6B125AFF4090041DAA7 /* HomeSheet.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -403,6 +401,32 @@
 				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
 			);
 			name = PublicRecipe;
+			sourceTree = "<group>";
+		};
+		DB83F6B325B0BA7A0041DAA7 /* Signin */ = {
+			isa = PBXGroup;
+			children = (
+				DB83F6AB25AE438C0041DAA7 /* SigninView.swift */,
+				DB83F6AD25AE4B120041DAA7 /* SigninPromptView.swift */,
+			);
+			name = Signin;
+			sourceTree = "<group>";
+		};
+		DB83F6B425B0BA8D0041DAA7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				DB49B525257EEABA00808CC8 /* HomeView.swift */,
+				DB83F6B125AFF4090041DAA7 /* HomeSheet.swift */,
+			);
+			name = Home;
+			sourceTree = "<group>";
+		};
+		DB83F6B525B0C7270041DAA7 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				DB83F6AF25AF92CE0041DAA7 /* Settings.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		DBCDE78925A3B041003DC95F /* Transcription */ = {
