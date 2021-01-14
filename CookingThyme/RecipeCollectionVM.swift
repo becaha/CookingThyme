@@ -86,7 +86,6 @@ class RecipeCollectionVM: ObservableObject {
         sortCategories()
         
         if !hasAllCategory {
-            // TODO: when creating a collection, add category All
             RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
         }
     }

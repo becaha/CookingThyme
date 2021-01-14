@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: on dismiss sign in sheet, come back to tab I was on
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()
@@ -28,6 +29,9 @@ struct HomeView: View {
                         RecipeCollectionView()
                             .environmentObject(user.collection!)
                     }
+                    else {
+                        UIControls.Loading()
+                    }
                 }
                 .tabItem {
                     Image(systemName: "book.fill")
@@ -41,6 +45,9 @@ struct HomeView: View {
                     else if user.collection != nil {
                         ShoppingListView()
                             .environmentObject(user.collection!)
+                    }
+                    else {
+                        UIControls.Loading()
                     }
                 }
                 .tabItem {

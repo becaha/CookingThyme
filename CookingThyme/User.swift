@@ -60,7 +60,7 @@ struct User {
     
     
     // gets user of user if the password is correct
-    mutating func signin(username: String, password: String) -> User? {
+    mutating func signin(username: String, password: String) throws -> User? {
         if let user = RecipeDB.shared.getUser(withUsername: username) {
             if isCorrectPassword(user, withPassword: password) {
                 self = user
@@ -70,14 +70,22 @@ struct User {
         }
         // resets current user due to failed sign in attempt
         setCurrentUsername(nil)
-        return nil
+        throw UserError.badSignin
     }
     
-    mutating func signup(username: String, password: String, email: String) -> User? {
-        if let user = RecipeDB.shared.createUser(username: username, password: password, email: email) {
-            return signin(username: user.username, password: user.password)
+    mutating func signup(username: String, password: String, email: String) throws -> User? {
+        do {
+            if let user = try RecipeDB.shared.createUser(username: username, password: password, email: email) {
+                return try signin(username: user.username, password: user.password)
+            }
         }
-        return nil
+        catch CreateUserError.usernameTaken {
+            throw UserError.badSignup(taken: "username")
+        }
+        catch CreateUserError.emailTaken {
+            throw UserError.badSignup(taken: "email")
+        }
+        throw UserError.badSignup(taken: "")
     }
     
     // deletes current auth and user defaults and resets to blank user
@@ -106,6 +114,13 @@ struct User {
     }
     
     func createUserCollection() {
-        RecipeDB.shared.createCollection(withUsername: username)
+        if let collection = RecipeDB.shared.createCollection(withUsername: username) {
+            RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
+        }
     }
+}
+
+enum UserError: Error {
+    case badSignin
+    case badSignup(taken: String)
 }

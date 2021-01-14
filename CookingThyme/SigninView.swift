@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: no capitalization, keyboards
+// TODO: error when signed in user, restart sim, sign out, try to sign in
 struct SigninView: View {
     @EnvironmentObject var user: UserVM
     
@@ -16,6 +18,9 @@ struct SigninView: View {
     @State var username: String = ""
     @State var password: String = ""
     @State var isSigningIn: Bool = true
+    
+    @State var signinErrorMessage = ""
+    @State var signupErrorMessage = ""
     
     var body: some View {
         VStack {
@@ -30,6 +35,15 @@ struct SigninView: View {
                 }
                 .formed()
                 
+                HStack {
+                    Text("\(signinErrorMessage)")
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .padding(0)
+                    
+                    Spacer()
+                }
+                
                 Button(action: {
                     signin()
                 }) {
@@ -42,6 +56,7 @@ struct SigninView: View {
                 Button(action: {
                     withAnimation {
                         isSigningIn = false
+                        reset()
                     }
                 }) {
                     Text("Sign Up")
@@ -57,6 +72,15 @@ struct SigninView: View {
                     SecureField("Password", text: $password)
                 }
                 .formed()
+                
+                HStack {
+                    Text("\(signupErrorMessage)")
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .padding(0)
+                    
+                    Spacer()
+                }
                     
                 Button(action: {
                     signup()
@@ -69,6 +93,7 @@ struct SigninView: View {
                 Button(action: {
                     withAnimation {
                         isSigningIn = true
+                        reset()
                     }
                 }) {
                     Text("Sign In")
@@ -84,14 +109,48 @@ struct SigninView: View {
         .ignoresSafeArea()
     }
     
+    func reset() {
+        username = ""
+        password = ""
+        email = ""
+        signupErrorMessage = ""
+        signinErrorMessage = ""
+    }
+    
     func signin() {
         user.signin(username: username, password: password)
-        isPresented = false
+        if user.signinError {
+            signinErrorMessage = "Username or password incorrect."
+        }
+        else {
+            reset()
+            isPresented = false
+        }
     }
     
     func signup() {
         user.signup(username: username, password: password, email: email)
-        isPresented = false
+        signupErrorMessage = ""
+        if user.signupErrors.count == 0 {
+            isPresented = false
+        }
+        
+        if user.signupErrors.contains(InvalidSignup.usernameTaken) {
+            signupErrorMessage += "Username already taken. "
+        }
+        if user.signupErrors.contains(InvalidSignup.emailTaken) {
+            signupErrorMessage += "Email already taken. "
+        }
+        
+        if user.signupErrors.contains(InvalidSignup.username) {
+            signupErrorMessage += "Invalid username. "
+        }
+        if user.signupErrors.contains(InvalidSignup.password) {
+            signupErrorMessage += "Invalid password. "
+        }
+        if user.signupErrors.contains(InvalidSignup.email) {
+            signupErrorMessage += "Invalid email."
+        }
     }
 }
 

@@ -216,9 +216,9 @@ class RecipeDB {
         }
     }
     
-    func createCollection(withUsername username: String) {
+    func createCollection(withUsername username: String) -> RecipeCollection? {
         do {
-            try dbQueue.write{ (db: Database) in
+            let collection = try dbQueue.write{ (db: Database) -> RecipeCollection in
 
                 try db.execute(
                     sql:
@@ -227,9 +227,16 @@ class RecipeDB {
                     VALUES (?)
                     """,
                     arguments: [username])
+                
+                let collectionId = db.lastInsertedRowID
+
+                return RecipeCollection(id: Int(collectionId), name: username)
             }
+            
+            return collection
         } catch {
             print("Error creating collection")
+            return nil
         }
     }
     
@@ -259,20 +266,7 @@ class RecipeDB {
         }
     }
     
-    func createUser(_ user: User) throws {
-        try dbQueue.write{ (db: Database) in
-            try db.execute(
-                sql:
-                """
-                INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.password), \(User.Table.email)) \
-                VALUES (?, ?, ?)
-                """,
-                arguments: [user.username, user.password, user.email])
-            return
-        }
-    }
-    
-    func createUser(username: String, password: String, email: String) -> User? {
+    func createUser(username: String, password: String, email: String) throws -> User? {
         do {
             let user = try dbQueue.write{ (db: Database) -> User in
 
@@ -292,6 +286,12 @@ class RecipeDB {
             return user
         } catch {
             print("Error creating user")
+            if error.localizedDescription.contains("UNIQUE constraint failed: User.Email") {
+                throw CreateUserError.emailTaken
+            }
+            if error.localizedDescription.contains("UNIQUE constraint failed: User.Username") {
+                throw CreateUserError.usernameTaken
+            }
             return nil
         }
     }
@@ -1063,4 +1063,9 @@ class RecipeDB {
             return
         }
     }
+}
+
+enum CreateUserError: Error {
+    case usernameTaken
+    case emailTaken
 }

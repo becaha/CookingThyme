@@ -20,7 +20,7 @@ struct SigninPromptView: View {
                 user.signinPresented = true
                 user.sheetPresented = true
             }) {
-                Text("Sign In")
+                Text("Sign in")
                 
                 Text("\(message)")
                     .foregroundColor(.black)
