@@ -24,7 +24,7 @@ struct ShoppingListView: View {
                                     addItem()
                                 }
                               })
-                          
+
                     UIControls.AddButton(action: {
                         withAnimation {
                             addItem()
@@ -33,7 +33,7 @@ struct ShoppingListView: View {
                     .foregroundColor(mainColor())
                 }
             }
-            
+
             Section(header: Text("")) {
                 ForEach(collection.notCompletedItems) { item in
                     ItemView(item: item)
@@ -45,13 +45,13 @@ struct ShoppingListView: View {
                 }
             }
 
-            
+
             Section(header:
                     HStack {
                         Text("Completed Items")
-                        
+
                         Spacer()
-                        
+
                         Button(action: {
                             withAnimation {
                                 collection.removeCompletedShoppingItems()
@@ -70,7 +70,7 @@ struct ShoppingListView: View {
                         collection.removeTempShoppingItem(collection.completedItems[index])
                     }
                 }
-                
+
             }
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
@@ -91,17 +91,17 @@ struct ShoppingListView: View {
                         .fill(mainColor())
                         .frame(width: 20, height: 20)
                         .opacity(item.completed ? 1: 0)
-                    
+
                     Circle()
                         .stroke(mainColor(), lineWidth: 3)
                         .frame(width: 20, height: 20)
                 }
             }
-            
+
             Text("\(item.toString())")
         }
     }
-    
+
     func addItem() {
         collection.addTempShoppingItem(name: newName)
         newName = ""

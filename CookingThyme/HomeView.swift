@@ -21,7 +21,7 @@ struct HomeView: View {
                         Text("Recipe Search")
                     }
                 
-                Group {
+                VStack {
                     if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a recipe book.")
                     }
@@ -29,25 +29,19 @@ struct HomeView: View {
                         RecipeCollectionView()
                             .environmentObject(user.collection!)
                     }
-                    else {
-                        UIControls.Loading()
-                    }
                 }
                 .tabItem {
                     Image(systemName: "book.fill")
                     Text("Recipe Book")
                 }
                 
-                Group {
+                VStack {
                     if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a shopping list.")
                     }
                     else if user.collection != nil {
                         ShoppingListView()
                             .environmentObject(user.collection!)
-                    }
-                    else {
-                        UIControls.Loading()
                     }
                 }
                 .tabItem {

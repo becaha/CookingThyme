@@ -38,7 +38,7 @@ struct Settings: View {
                             }
                         }
                     }
-                    else {
+                    else if isPresented {
                         Section(header: Text("Account Details")) {
                             HStack {
                                 Text("Username")
