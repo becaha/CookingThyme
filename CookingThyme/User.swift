@@ -102,10 +102,6 @@ struct User {
         return false
     }
     
-    func delete(id: Int) {
-        RecipeDB.shared.deleteUser(withId: id)
-    }
-    
     func getUserCollection() -> RecipeCollectionVM? {
         if let collection = RecipeDB.shared.getCollection(withUsername: username) {
             return RecipeCollectionVM(collection: collection)
@@ -117,6 +113,11 @@ struct User {
         if let collection = RecipeDB.shared.createCollection(withUsername: username) {
             RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
         }
+    }
+    
+    mutating func delete() {
+        RecipeDB.shared.deleteUser(withId: id)
+        signout()
     }
 }
 

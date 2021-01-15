@@ -12,6 +12,7 @@ struct Settings: View {
     @EnvironmentObject var user: UserVM
     
     @Binding var isPresented: Bool
+    @State var presentDeleteAlert = false
 
     @State var isEditing = false
     
@@ -100,6 +101,7 @@ struct Settings: View {
                                 
                                 Button(action: {
                                     // TODO
+                                    presentDeleteAlert = true
                                     isPresented = false
                                 }) {
                                     Text("Delete Account")
@@ -113,6 +115,16 @@ struct Settings: View {
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
+            }
+            .alert(isPresented: $presentDeleteAlert) {
+                Alert(title: Text("Confirm Delete Account"),
+                      primaryButton: .default(Text("Delete")) {
+                        withAnimation {
+                            user.delete()
+                        }
+                      },
+                      secondaryButton: .cancel()
+                )
             }
             .navigationBarTitle(Text("Settings"), displayMode: .inline)
             .navigationBarItems(trailing:

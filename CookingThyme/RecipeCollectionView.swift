@@ -7,14 +7,10 @@
 
 import SwiftUI
 
-// TODO: signin/user
-
 // TODO: measurement page to ask how many tbsp in an ounce
 
 // TODO: drag and drop recipes from one category to another
-// TODO: have images or icons for categories, imaage from recipe in category
 
-// TODO: edit all photo or not have a photo for all?
 // TODO: if edit name of category and then its photo, will not update the photo
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM

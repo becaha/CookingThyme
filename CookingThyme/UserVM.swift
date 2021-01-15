@@ -149,6 +149,10 @@ class UserVM: ObservableObject {
     func signout() {
         user.signout()
     }
+    
+    func delete() {
+        user.delete()
+    }
 }
 
 enum InvalidSignup: Error {

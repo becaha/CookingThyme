@@ -31,8 +31,16 @@ struct SigninView: View {
             if isSigningIn {
                 Group {
                     TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
 
-                    SecureField("Password", text: $password)
+                    SecureField("Password", text: $password) {
+                        signin()
+                    }
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    
+                    Text("\(password)")
                         
                 }
                 .formed()
@@ -68,10 +76,18 @@ struct SigninView: View {
             else {
                 Group {
                     TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
                     
                     TextField("Email", text: $email)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
                     
-                    SecureField("Password", text: $password)
+                    SecureField("Password", text: $password) {
+                        signup()
+                    }
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
                 }
                 .formed()
                 
