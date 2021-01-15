@@ -39,8 +39,6 @@ struct SigninView: View {
                     }
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    
-                    Text("\(password)")
                         
                 }
                 .formed()
@@ -82,6 +80,7 @@ struct SigninView: View {
                     TextField("Email", text: $email)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
                     
                     SecureField("Password", text: $password) {
                         signup()

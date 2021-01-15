@@ -102,7 +102,6 @@ struct Settings: View {
                                 Button(action: {
                                     // TODO
                                     presentDeleteAlert = true
-                                    isPresented = false
                                 }) {
                                     Text("Delete Account")
                                         .bold()
@@ -120,6 +119,7 @@ struct Settings: View {
                 Alert(title: Text("Confirm Delete Account"),
                       primaryButton: .default(Text("Delete")) {
                         withAnimation {
+                            isPresented = false
                             user.delete()
                         }
                       },

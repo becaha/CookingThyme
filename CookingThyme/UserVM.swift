@@ -132,12 +132,14 @@ class UserVM: ObservableObject {
     func isValidUser(username: String, password: String, email: String) -> Bool {
         self.signupErrors = []
         if username == "" {
+            // TODO: check if username is taken here
             self.signupErrors.append(InvalidSignup.username)
         }
         if password == "" {
             self.signupErrors.append(InvalidSignup.password)
         }
-        if email == "" {
+        // TODO: confirm email
+        if email == "" || !email.contains("@") || !email.contains(".") {
             self.signupErrors.append(InvalidSignup.email)
         }
         if self.signupErrors.count > 0 {
