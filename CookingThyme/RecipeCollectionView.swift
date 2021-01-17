@@ -119,6 +119,9 @@ struct RecipeCollectionView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.black)
                                 }
+                                .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+                                    return drop(providers: providers, category: category)
+                                }
                                 .padding()
                                 .padding(.horizontal, 7)
                                 .environmentObject(category)
@@ -227,9 +230,11 @@ struct RecipeCollectionView: View {
                                         Text("\(recipe.name)")
                                             .fontWeight(.regular)
                                     }
-                                    
                                 }
                             }
+//                            .onDrag {
+//                                NSItemProvider(object: recipe as NSString)
+//                            }
                         }
                         .onDelete { indexSet in
                             indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
@@ -288,6 +293,27 @@ struct RecipeCollectionView: View {
                 collection.refreshCurrrentCategory()
             }
         }
+    }
+    
+    func moveRecipe(_ recipe: String, toCategory category: String) {
+        let val = recipe
+        print(val)
+    }
+    
+    private func drop(providers: [NSItemProvider], category: String) -> Bool {
+        if let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) }) {
+            let _ = provider.loadObject(ofClass: String.self) { object, error in
+                if let value = object {
+                    DispatchQueue.main.async {
+                        moveRecipe(value, toCategory: category)
+                    }
+                }
+            }
+
+            return true
+        }
+
+        return false
     }
     
     // loads image selected from camera roll

@@ -24,8 +24,9 @@ struct CookingThymeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .environmentObject(user)
+//            HomeView()
+//                .environmentObject(user)
+            Test()
         }
     }
 }

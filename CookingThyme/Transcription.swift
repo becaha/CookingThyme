@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Transcription {
+struct Transcription: Encodable {
     var annotations: [Annotation]
 //    var fullAnnotation: Annotation
     

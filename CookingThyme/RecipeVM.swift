@@ -20,7 +20,7 @@ class RecipeVM: ObservableObject {
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     
-    @Published var transcriber = RecipeTranscriber()
+    @Published var transcriber = ImageTranscriber()
     private var recipeTranscriberCancellable: AnyCancellable?
     
     // MARK: - Init
@@ -208,7 +208,7 @@ class RecipeVM: ObservableObject {
     // transcribe images to recipes
     
     func transcribeRecipe(fromImage image: UIImage) {
-        transcriber.transcribe(uiImage: image)
+        transcriber.createTranscription(fromImage: image)
     }
 }
 
