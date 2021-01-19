@@ -26,15 +26,20 @@ struct Test: View {
             
             VStack {
                 ForEach(recipes, id: \.self) { recipe in
-                    Text("\(recipe)")
-                        .onDrag {
-                            NSItemProvider(object: recipe as NSString)
-                        }
-                        .padding()
+                    NavigationLink(destination: Text("Recipe")) {
+                        Text("\(recipe)")
+                            .onDrag {
+                                NSItemProvider(object: recipe as NSString)
+                            }
+                    }
+                    .formItem(isNavLink: true)
+//                    .onDrag {
+//                        NSItemProvider(object: recipe as NSString)
+//                    }
                 }
             }
         }
-        .padding()
+//        .padding()
         .foregroundColor(mainColor())
         .background(formBackgroundColor())
     }

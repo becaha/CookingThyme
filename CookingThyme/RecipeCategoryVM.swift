@@ -21,7 +21,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     var collection: RecipeCollectionVM
     @Published var category: RecipeCategory
     @Published var recipes: [Recipe]
-    
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
 

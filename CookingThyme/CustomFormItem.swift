@@ -30,45 +30,73 @@ import SwiftUI
 
 struct CustomFormItem: ViewModifier {
     var backgroundColor: Color
+    var isNavLink: Bool
     
     init() {
         self.backgroundColor = Color.white
+        self.isNavLink = false
     }
     
     init(backgroundColor: Color) {
         self.backgroundColor = backgroundColor
+        self.isNavLink = false
+    }
+    
+    init(isNavLink: Bool) {
+        self.backgroundColor = Color.white
+        self.isNavLink = isNavLink
     }
     
     func body(content: Content) -> some View {
-        content
-        .padding()
-        .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(formBorderColor())
+        ZStack {
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(formBorderColor())
+            
+            RoundedRectangle(cornerRadius: 7)
+                .fill(backgroundColor)
+            
+            HStack {
+                content
+                    .foregroundColor(.black)
+             
+                Spacer()
                 
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(backgroundColor)
+                if isNavLink {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(mainColor())
+                }
             }
-        )
+            .padding()
+        }
+        .frame(height: 40)
+        .padding(.horizontal)
+        .padding(.vertical, 5)
     }
 }
 
 struct CustomFormItem_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            Text("Hi").formed()
+            Divider()
+
+            Text("Hi").formItem()
+            
+            Text("Hi").formItem()
         }
 //        .background(formBackgroundColor())
     }
 }
 
 extension View {
-    func formed() -> some View {
+    func formItem() -> some View {
         modifier(CustomFormItem())
     }
     
-    func formed(backgroundColor: Color) -> some View {
+    func formItem(backgroundColor: Color) -> some View {
         modifier(CustomFormItem(backgroundColor: backgroundColor))
+    }
+    
+    func formItem(isNavLink: Bool) -> some View {
+        modifier(CustomFormItem(isNavLink: isNavLink))
     }
 }

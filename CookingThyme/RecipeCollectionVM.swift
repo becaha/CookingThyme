@@ -216,6 +216,23 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: - Intents
     
+    func getRecipe(withName name: String) -> Recipe? {
+        if let currentCategory = self.currentCategory {
+            for recipe in currentCategory.recipes {
+                if recipe.name == name {
+                    return recipe
+                }
+            }
+        }
+        return nil
+    }
+    
+    func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
+        if let recipe = getRecipe(withName: name) {
+            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
+        }
+    }
+    
     // adds given ingredients to shopping items
     private func addIngredientShoppingItems(ingredients: [Ingredient]) {
         for ingredient in ingredients {

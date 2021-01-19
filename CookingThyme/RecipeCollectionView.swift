@@ -210,72 +210,84 @@ struct RecipeCollectionView: View {
                 .border(Color.white, width: 2)
                 
                 if collection.currentCategory != nil {
-                    List {
-                        ForEach(collection.currentCategory!.recipes) { recipe in
-                            Group {
-                                if isEditing {
-                                    Text("\(recipe.name)")
-                                        .deletable(isDeleting: true, onDelete: {
-                                            withAnimation {
-                                                collection.deleteRecipe(withId: recipe.id)
-                                            }
-                                        })
-                                }
-                                else {
-                                    NavigationLink(destination:
-                                                RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                                    .environmentObject(collection.currentCategory!)
-                                                    .environmentObject(collection)
-                                    ) {
+                    ZStack {
+                        VStack {
+                            ForEach(collection.currentCategory!.recipes) { recipe in
+                                Group {
+                                    if isEditing {
                                         Text("\(recipe.name)")
-                                            .fontWeight(.regular)
+                                            .deletable(isDeleting: true, onDelete: {
+                                                withAnimation {
+                                                    collection.deleteRecipe(withId: recipe.id)
+                                                }
+                                            })
+                                        .formItem()
+                                    }
+                                    else {
+                                        NavigationLink(destination:
+                                                    RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                        .environmentObject(collection.currentCategory!)
+                                                        .environmentObject(collection)
+                                        ) {
+                                            Text("\(recipe.name)")
+                                                .fontWeight(.regular)
+                                        }
+                                        .formItem(isNavLink: true)
+                                    }
+                                }
+                                .onDrag {
+                                    NSItemProvider(object: recipe.name as NSString)
+                                }
+                            }
+                            .onDelete { indexSet in
+                                indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                                    collection.deleteRecipe(withId: recipe.id)
+                                }
+                            }
+                            
+                            HStack {
+                            }
+                            .frame(height: 40)
+                            .padding(.bottom)
+                        }
+                        .formed()
+
+                        VStack {
+                            Spacer()
+                            
+                            HStack {
+                                Spacer()
+                                
+                                Button(action: {
+                                    createRecipe()
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.white)
+                                            .shadow(radius: 5)
+
+                                        Image(systemName: "plus")
                                     }
                                 }
                             }
-//                            .onDrag {
-//                                NSItemProvider(object: recipe as NSString)
-//                            }
                         }
-                        .onDelete { indexSet in
-                            indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
-                                collection.deleteRecipe(withId: recipe.id)
-                            }
-                        }
-                    }
-                    .padding(.top, 0)
-                }
-                
-                HStack(alignment: .center) {
-                    Spacer()
-
-                    Button(action: {
-                        createRecipe()
-                    }) {
-                        ZStack {
-                            Circle()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.white)
-                                .shadow(radius: 5)
-
-                            Image(systemName: "plus")
-                        }
-                    }
-                    .sheet(isPresented: $isCreatingRecipe, onDismiss: {
-                        if let currentCategory = collection.currentCategory {
-                            collection.setCurrentCategory(currentCategory)
-                        }
-                    }) {
-                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
-                            .environmentObject(RecipeVM(category: collection.currentCategory!))
-                            .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
+                        .padding(.horizontal, 10)
+                        .padding(.bottom)
+                        .zIndex(1)
                     }
                 }
-                .padding(.horizontal, 10)
-                .padding(.bottom)
-                .background(formBackgroundColor())
-                .zIndex(1)
             }
-            .listStyle(InsetGroupedListStyle())
+            .sheet(isPresented: $isCreatingRecipe, onDismiss: {
+                if let currentCategory = collection.currentCategory {
+                    collection.setCurrentCategory(currentCategory)
+                }
+            }) {
+                CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
+                    .environmentObject(RecipeVM(category: collection.currentCategory!))
+                    .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
+            }
+            .background(formBackgroundColor())
             .navigationBarTitle("\(collection.name)", displayMode: .inline)
             .navigationBarItems(trailing:
                 UIControls.EditButton(
@@ -295,17 +307,16 @@ struct RecipeCollectionView: View {
         }
     }
     
-    func moveRecipe(_ recipe: String, toCategory category: String) {
-        let val = recipe
-        print(val)
+    func moveRecipe(_ recipeName: String, toCategory category: RecipeCategoryVM) {
+        collection.moveRecipe(withName: recipeName, toCategoryId: category.id)
     }
     
-    private func drop(providers: [NSItemProvider], category: String) -> Bool {
+    private func drop(providers: [NSItemProvider], category: RecipeCategoryVM) -> Bool {
         if let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) }) {
             let _ = provider.loadObject(ofClass: String.self) { object, error in
-                if let value = object {
+                if let recipeName = object {
                     DispatchQueue.main.async {
-                        moveRecipe(value, toCategory: category)
+                        moveRecipe(recipeName, toCategory: category)
                     }
                 }
             }
@@ -353,9 +364,9 @@ struct RecipeCollectionView: View {
     }
 }
 
-struct RecipeCollectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeCollectionView()
-            .environmentObject(UserVM(username: "Becca"))
-    }
-}
+//struct RecipeCollectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecipeCollectionView()
+//            .environmentObject(UserVM(username: "Becca"))
+//    }
+//}
