@@ -35,6 +35,8 @@ struct RecipeCollectionView: View {
 
     @State private var cameraRollSheetPresented = false
     @State private var selectedImage: UIImage?
+    
+    @State private var droppableRecipe: Recipe?
             
     var body: some View {
         NavigationView {
@@ -117,7 +119,7 @@ struct RecipeCollectionView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.black)
                                 }
-                                .droppable(if: category.name != "All" && category.name != collection.currentCategory?.name, of: ["public.image", "public.text"], isTargeted: nil) { providers in
+                                .droppable(if: isDroppable(toCategory: category), of: ["public.image", "public.text"], isTargeted: nil) { providers in
                                     return drop(providers: providers, category: category)
                                 }
                                 .padding()
@@ -223,18 +225,19 @@ struct RecipeCollectionView: View {
                                     }
                                     else {
                                         NavigationLink(destination:
-                                                    RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                                        .environmentObject(collection.currentCategory!)
-                                                        .environmentObject(collection)
+                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                .environmentObject(collection.currentCategory!)
+                                                .environmentObject(collection)
                                         ) {
                                             Text("\(recipe.name)")
                                                 .fontWeight(.regular)
+                                                .formItem(isNavLink: true)
                                         }
-                                        .formItem(isNavLink: true)
                                     }
                                 }
                                 .onDrag {
-                                    NSItemProvider(object: recipe.name as NSString)
+                                    droppableRecipe = recipe
+                                    return NSItemProvider(object: recipe.name as NSString)
                                 }
                             }
                             .onDelete { indexSet in
@@ -304,6 +307,11 @@ struct RecipeCollectionView: View {
                 collection.refreshCurrrentCategory()
             }
         }
+    }
+    
+    // a recipe is droppable into a category that is not All and is not their current category
+    func isDroppable(toCategory category: RecipeCategoryVM) -> Bool {
+        return category.name != "All" && droppableRecipe?.recipeCategoryId != category.id
     }
     
     func moveRecipe(_ recipeName: String, toCategory category: RecipeCategoryVM) {

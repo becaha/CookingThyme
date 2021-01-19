@@ -16,10 +16,7 @@ struct Test: View {
             HStack {
                 ForEach(categories, id: \.self) { category in
                     Circle()
-                        .frame(width: 20, height: 20)
-                        .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
-                            return drop(providers: providers, category: category)
-                        }
+                        .frame(width: 40, height: 40)
                         .padding()
                 }
             }
@@ -28,41 +25,14 @@ struct Test: View {
                 ForEach(recipes, id: \.self) { recipe in
                     NavigationLink(destination: Text("Recipe")) {
                         Text("\(recipe)")
-                            .onDrag {
-                                NSItemProvider(object: recipe as NSString)
-                            }
+                            .formItem(isNavLink: true)
                     }
-                    .formItem(isNavLink: true)
-//                    .onDrag {
-//                        NSItemProvider(object: recipe as NSString)
-//                    }
                 }
             }
         }
 //        .padding()
         .foregroundColor(mainColor())
         .background(formBackgroundColor())
-    }
-    
-    func moveRecipe(_ recipe: String, toCategory category: String) {
-        let val = recipe
-        print(val)
-    }
-    
-    private func drop(providers: [NSItemProvider], category: String) -> Bool {
-        if let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) }) {
-            let _ = provider.loadObject(ofClass: String.self) { object, error in
-                if let value = object {
-                    DispatchQueue.main.async {
-                        moveRecipe(value, toCategory: category)
-                    }
-                }
-            }
-
-            return true
-        }
-
-        return false
     }
 }
 
