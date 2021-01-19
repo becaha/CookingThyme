@@ -260,11 +260,12 @@ struct RecipeCollectionView: View {
                                     ZStack {
                                         Circle()
                                             .frame(width: 25, height: 25)
-                                            .foregroundColor(mainColor())
+                                            .foregroundColor(.white)
+                                            .shadow(radius: 1)
 
                                         Image(systemName: "plus")
                                             .font(Font.subheadline.weight(.bold))
-                                            .foregroundColor(.white)
+                                            .foregroundColor(mainColor())
                                     }
                                     
                                     Text("New Recipe")
