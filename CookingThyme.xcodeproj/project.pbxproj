@@ -75,6 +75,7 @@
 		DB83F6B925B3865A0041DAA7 /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */; };
 		DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */; };
 		DB88CD1D25B75D0E00A7F32C /* Droppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD1C25B75D0E00A7F32C /* Droppable.swift */; };
+		DB88CD1F25B76A7800A7F32C /* RecipeDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD1E25B76A7800A7F32C /* RecipeDropDelegate.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
@@ -158,6 +159,7 @@
 		DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomForm.swift; sourceTree = "<group>"; };
 		DB88CD1C25B75D0E00A7F32C /* Droppable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Droppable.swift; sourceTree = "<group>"; };
+		DB88CD1E25B76A7800A7F32C /* RecipeDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDropDelegate.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
 				DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */,
 				DB88CD1C25B75D0E00A7F32C /* Droppable.swift */,
+				DB88CD1E25B76A7800A7F32C /* RecipeDropDelegate.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 				DBCDE79625A8EE8C003DC95F /* Keys.swift in Sources */,
 				DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */,
 				DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */,
+				DB88CD1F25B76A7800A7F32C /* RecipeDropDelegate.swift in Sources */,
 				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
 				DB49B55B2581E56B00808CC8 /* WebIngredient.swift in Sources */,
 				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,

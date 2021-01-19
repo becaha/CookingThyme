@@ -40,6 +40,8 @@ struct RecipeCollectionView: View {
     
     @State private var isBeingDragged: String = ""
     
+//    private var recipeDropDelegate RecipeDropDelegate
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -284,6 +286,7 @@ struct RecipeCollectionView: View {
                         .padding(.bottom)
                         .zIndex(1)
                     }
+//                    .onDrop(of: ["public.image", "public.text"], delegate: recipeDropDelegate)
 //                    .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
 //                        withAnimation {
 //                            resetDrag()
@@ -292,6 +295,7 @@ struct RecipeCollectionView: View {
 //                    }
                 }
             }
+            .onDrop(of: ["public.image", "public.text"], delegate: RecipeDropDelegate(onDrop: resetDrag))
             .sheet(isPresented: $isCreatingRecipe, onDismiss: {
                 if let currentCategory = collection.currentCategory {
                     collection.setCurrentCategory(currentCategory)
@@ -327,8 +331,10 @@ struct RecipeCollectionView: View {
     }
     
     func resetDrag() {
-        collection.refreshCurrrentCategory()
-        isBeingDragged = ""
+        withAnimation {
+            collection.refreshCurrrentCategory()
+            isBeingDragged = ""
+        }
     }
     
     private func drop(providers: [NSItemProvider], category: RecipeCategoryVM) -> Bool {
