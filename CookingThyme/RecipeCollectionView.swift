@@ -173,11 +173,12 @@ struct RecipeCollectionView: View {
                             }) {
                                 ZStack {
                                     Circle()
-                                        .frame(width: 40, height: 40)
+                                        .frame(width: 30, height: 30)
                                         .foregroundColor(.white)
-                                        .shadow(radius: 5)
+                                        .shadow(radius: 1)
 
                                     Image(systemName: "plus")
+                                        .font(Font.subheadline.weight(.bold))
                                 }
                             }
                         }
@@ -202,7 +203,7 @@ struct RecipeCollectionView: View {
                             .frame(width: 200, height: 60)
                         }
                     }
-                    .padding(.horizontal, 10)
+                    .padding()
                     .padding(.bottom)
                     .zIndex(1)
                 }
@@ -210,74 +211,71 @@ struct RecipeCollectionView: View {
                 .border(Color.white, width: 2)
                 
                 if collection.currentCategory != nil {
-                    ZStack {
-                        VStack {
-                            ForEach(collection.currentCategory!.recipes) { recipe in
-                                Group {
-                                    if isEditing {
+                    VStack {
+                        ForEach(collection.currentCategory!.recipes) { recipe in
+                            Group {
+                                if isEditing {
+                                    Text("\(recipe.name)")
+                                        .deletable(isDeleting: true, onDelete: {
+                                            withAnimation {
+                                                collection.deleteRecipe(withId: recipe.id)
+                                            }
+                                        })
+                                    .formItem()
+                                }
+                                else {
+                                    NavigationLink(destination:
+                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                            .environmentObject(collection.currentCategory!)
+                                            .environmentObject(collection)
+                                    ) {
                                         Text("\(recipe.name)")
-                                            .deletable(isDeleting: true, onDelete: {
-                                                withAnimation {
-                                                    collection.deleteRecipe(withId: recipe.id)
-                                                }
-                                            })
-                                        .formItem()
-                                    }
-                                    else {
-                                        NavigationLink(destination:
-                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                                .environmentObject(collection.currentCategory!)
-                                                .environmentObject(collection)
-                                        ) {
-                                            Text("\(recipe.name)")
-                                                .fontWeight(.regular)
-                                                .formItem(isNavLink: true)
-                                        }
+                                            .fontWeight(.regular)
+                                            .formItem(isNavLink: true)
                                     }
                                 }
-                                .onDrag {
-                                    droppableRecipe = recipe
-                                    return NSItemProvider(object: recipe.name as NSString)
-                                }
                             }
-                            .onDelete { indexSet in
-                                indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
-                                    collection.deleteRecipe(withId: recipe.id)
-                                }
+                            .onDrag {
+                                droppableRecipe = recipe
+                                return NSItemProvider(object: recipe.name as NSString)
                             }
-                            
-                            
-                            HStack {
-                            }
-                            .frame(height: 40)
-                            .padding(.bottom)
                         }
-                        .formed()
+                        .onDelete { indexSet in
+                            indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                                collection.deleteRecipe(withId: recipe.id)
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                    .formed()
 
-                        VStack {
-                            Spacer()
-                            
-                            HStack {
-                                Spacer()
-                                
-                                Button(action: {
-                                    createRecipe()
-                                }) {
+                    VStack {
+                        
+                        HStack {
+                            Button(action: {
+                                createRecipe()
+                            }) {
+                                HStack {
                                     ZStack {
                                         Circle()
-                                            .frame(width: 40, height: 40)
-                                            .foregroundColor(.white)
-                                            .shadow(radius: 5)
+                                            .frame(width: 25, height: 25)
+                                            .foregroundColor(mainColor())
 
                                         Image(systemName: "plus")
+                                            .font(Font.subheadline.weight(.bold))
+                                            .foregroundColor(.white)
                                     }
+                                    
+                                    Text("New Recipe")
+                                        .bold()
                                 }
                             }
+                            
+                            Spacer()
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.bottom)
-                        .zIndex(1)
                     }
+                    .padding()
                 }
             }
             .sheet(isPresented: $isCreatingRecipe, onDismiss: {

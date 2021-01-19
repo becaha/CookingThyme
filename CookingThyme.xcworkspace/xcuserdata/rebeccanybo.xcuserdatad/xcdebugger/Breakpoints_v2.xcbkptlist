@@ -840,8 +840,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "drop(providers:category:)"
             landmarkType = "7">
             <Locations>
@@ -904,8 +904,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "318"
-            endingLineNumber = "318"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
             landmarkName = "moveRecipe(_:toCategory:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1000,8 +1000,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
             landmarkName = "resetDrag()"
             landmarkType = "7">
          </BreakpointContent>

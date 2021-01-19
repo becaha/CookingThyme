@@ -22,15 +22,46 @@ struct Test: View {
             }
             
             VStack {
-                ForEach(recipes, id: \.self) { recipe in
+                ForEach((1...20).reversed(), id: \.self) { num in
                     NavigationLink(destination: Text("Recipe")) {
-                        Text("\(recipe)")
+                        Text("\(num)")
                             .formItem(isNavLink: true)
                     }
                 }
+                
+                Spacer()
             }
+            .formed()
+
+            VStack {
+                
+                HStack {
+                    Button(action: {
+//                        createRecipe()
+                    }) {
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(mainColor())
+
+                                Image(systemName: "plus")
+                                    .font(Font.subheadline.weight(.bold))
+//                                    .imageScale(.small)
+                                    .foregroundColor(.white)
+                            }
+                            
+                            Text("New Recipe")
+                                .bold()
+                        }
+                    }
+                    
+                    Spacer()
+                }
+            }
+            .padding([.horizontal, .bottom])
+            .padding(.top, 5)
         }
-//        .padding()
         .foregroundColor(mainColor())
         .background(formBackgroundColor())
     }
