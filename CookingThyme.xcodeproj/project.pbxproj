@@ -74,6 +74,7 @@
 		DB83F6B725B384EE0041DAA7 /* HTMLTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6B625B384EE0041DAA7 /* HTMLTranscriber.swift */; };
 		DB83F6B925B3865A0041DAA7 /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */; };
 		DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */; };
+		DB88CD1D25B75D0E00A7F32C /* Droppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD1C25B75D0E00A7F32C /* Droppable.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
@@ -156,6 +157,7 @@
 		DB83F6B625B384EE0041DAA7 /* HTMLTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLTranscriber.swift; sourceTree = "<group>"; };
 		DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomForm.swift; sourceTree = "<group>"; };
+		DB88CD1C25B75D0E00A7F32C /* Droppable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Droppable.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				DBCDE78725945661003DC95F /* FormTitle.swift */,
 				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
 				DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */,
+				DB88CD1C25B75D0E00A7F32C /* Droppable.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -604,6 +607,7 @@
 				DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */,
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
 				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,
+				DB88CD1D25B75D0E00A7F32C /* Droppable.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
 				DB83F6B725B384EE0041DAA7 /* HTMLTranscriber.swift in Sources */,
 				DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */,

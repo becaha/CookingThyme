@@ -38,6 +38,8 @@ struct RecipeCollectionView: View {
     @State private var cameraRollSheetPresented = false
     @State private var selectedImage: UIImage?
     
+    @State private var isBeingDragged: String = ""
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -119,7 +121,7 @@ struct RecipeCollectionView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.black)
                                 }
-                                .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+                                .droppable(if: category.name != "All" && category.name != collection.currentCategory?.name, of: ["public.image", "public.text"], isTargeted: nil) { providers in
                                     return drop(providers: providers, category: category)
                                 }
                                 .padding()
@@ -214,29 +216,34 @@ struct RecipeCollectionView: View {
                         VStack {
                             ForEach(collection.currentCategory!.recipes) { recipe in
                                 Group {
-                                    if isEditing {
-                                        Text("\(recipe.name)")
-                                            .deletable(isDeleting: true, onDelete: {
-                                                withAnimation {
-                                                    collection.deleteRecipe(withId: recipe.id)
-                                                }
-                                            })
-                                        .formItem()
-                                    }
-                                    else {
-                                        NavigationLink(destination:
-                                                    RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                                        .environmentObject(collection.currentCategory!)
-                                                        .environmentObject(collection)
-                                        ) {
+                                    if isBeingDragged != recipe.name {
+                                        if isEditing {
                                             Text("\(recipe.name)")
-                                                .fontWeight(.regular)
+                                                .deletable(isDeleting: true, onDelete: {
+                                                    withAnimation {
+                                                        collection.deleteRecipe(withId: recipe.id)
+                                                    }
+                                                })
+                                            .formItem()
                                         }
-                                        .formItem(isNavLink: true)
+                                        else {
+                                            NavigationLink(destination:
+                                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                            .environmentObject(collection.currentCategory!)
+                                                            .environmentObject(collection)
+                                            ) {
+                                                Text("\(recipe.name)")
+                                                    .fontWeight(.regular)
+                                            }
+                                            .formItem(isNavLink: true)
+                                        }
                                     }
                                 }
                                 .onDrag {
-                                    NSItemProvider(object: recipe.name as NSString)
+                                    withAnimation {
+                                        isBeingDragged = recipe.name
+                                    }
+                                    return NSItemProvider(object: recipe.name as NSString)
                                 }
                             }
                             .onDelete { indexSet in
@@ -244,6 +251,7 @@ struct RecipeCollectionView: View {
                                     collection.deleteRecipe(withId: recipe.id)
                                 }
                             }
+                            
                             
                             HStack {
                             }
@@ -276,6 +284,12 @@ struct RecipeCollectionView: View {
                         .padding(.bottom)
                         .zIndex(1)
                     }
+//                    .onDrop(of: ["public.image", "public.text"], isTargeted: nil) { providers, location in
+//                        withAnimation {
+//                            resetDrag()
+//                        }
+//                        return true
+//                    }
                 }
             }
             .sheet(isPresented: $isCreatingRecipe, onDismiss: {
@@ -309,6 +323,12 @@ struct RecipeCollectionView: View {
     
     func moveRecipe(_ recipeName: String, toCategory category: RecipeCategoryVM) {
         collection.moveRecipe(withName: recipeName, toCategoryId: category.id)
+        resetDrag()
+    }
+    
+    func resetDrag() {
+        collection.refreshCurrrentCategory()
+        isBeingDragged = ""
     }
     
     private func drop(providers: [NSItemProvider], category: RecipeCategoryVM) -> Bool {
