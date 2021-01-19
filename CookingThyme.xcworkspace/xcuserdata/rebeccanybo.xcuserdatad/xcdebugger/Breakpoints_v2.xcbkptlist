@@ -318,8 +318,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -477,8 +477,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -525,8 +525,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -588,8 +588,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -898,19 +898,19 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "424CFC43-5521-4246-8FE5-CBD267EE245C"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "341"
-            endingLineNumber = "341"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "drop(providers:category:)"
             landmarkType = "9">
             <Locations>
                <Location
-                  uuid = "424CFC43-5521-4246-8FE5-CBD267EE245C - 9358731799fee3f9"
+                  uuid = "424CFC43-5521-4246-8FE5-CBD267EE245C - 9358731799fee3d8"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -920,12 +920,12 @@
                   urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeCollectionView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "339"
-                  endingLineNumber = "339"
+                  startingLineNumber = "340"
+                  endingLineNumber = "340"
                   offsetFromSymbolStart = "64">
                </Location>
                <Location
-                  uuid = "424CFC43-5521-4246-8FE5-CBD267EE245C - 74d93ffc2ab444dd"
+                  uuid = "424CFC43-5521-4246-8FE5-CBD267EE245C - 74d93ffc2ab444fc"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -935,8 +935,8 @@
                   urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeCollectionView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "339"
-                  endingLineNumber = "339"
+                  startingLineNumber = "340"
+                  endingLineNumber = "340"
                   offsetFromSymbolStart = "26">
                </Location>
             </Locations>
@@ -968,58 +968,10 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "moveRecipe(_:toCategory:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3A5489E1-E9BC-475A-A993-07DA38AE033C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/RecipeCollectionView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "3A5489E1-E9BC-475A-A993-07DA38AE033C - 20a4fe8abc605423"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; __C.NSItemProvider in closure #1 (CookingThyme.Recipe) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onDrag(() -&gt; __C.NSItemProvider) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onDrop(of: Swift.Array&lt;Swift.String&gt;, isTargeted: Swift.Optional&lt;SwiftUI.Binding&lt;Swift.Bool&gt;&gt;, perform: (Swift.Array&lt;__C.NSItemProvider&gt;, __C.CGPoint) -&gt; Swift.Bool) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #2 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formed() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.zIndex(Swift.Double) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.border&lt;A where A1: SwiftUI.ShapeStyle&gt;(_: A1, width: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formed() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.zIndex(Swift.Double) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0 in CookingThyme.RecipeCollectionView.body.getter : some"
-                  moduleName = "CookingThyme"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeCollectionView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "243"
-                  endingLineNumber = "243"
-                  offsetFromSymbolStart = "1320">
-               </Location>
-               <Location
-                  uuid = "3A5489E1-E9BC-475A-A993-07DA38AE033C - 6384657ad5eb6c9e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 () -&gt; __C.NSItemProvider in closure #1 (CookingThyme.Recipe) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onDrag(() -&gt; __C.NSItemProvider) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onDrop(of: Swift.Array&lt;Swift.String&gt;, isTargeted: Swift.Optional&lt;SwiftUI.Binding&lt;Swift.Bool&gt;&gt;, perform: (Swift.Array&lt;__C.NSItemProvider&gt;, __C.CGPoint) -&gt; Swift.Bool) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0)&gt; in closure #2 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formed() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.zIndex(Swift.Double) -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.border&lt;A where A1: SwiftUI.ShapeStyle&gt;(_: A1, width: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, Swift.Optional&lt;SwiftUI.ZStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formed() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.zIndex(Swift.Double) -&gt; some&gt;&gt;.0)&gt;&gt;&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0 in CookingThyme.RecipeCollectionView.body.getter : some"
-                  moduleName = "CookingThyme"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeCollectionView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "244"
-                  endingLineNumber = "244"
-                  offsetFromSymbolStart = "37">
-               </Location>
-            </Locations>
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1106,16 +1058,16 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BF32BFDA-D4EB-461E-80F1-5FEB962D06C8"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
             landmarkName = "resetDrag()"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
