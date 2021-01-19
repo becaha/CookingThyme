@@ -8,33 +8,46 @@
 import SwiftUI
 
 struct Test: View {
-    var categories = ["a", "b", "c"]
+    var categories = ["a"]
     var recipes = ["ra", "rb", "rc"]
+    @State private var positionY: CGFloat = 0
+    @State private var frameY: CGFloat = 0
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 ForEach(categories, id: \.self) { category in
                     Circle()
                         .frame(width: 40, height: 40)
                         .padding()
                 }
+                
+                Text("\(positionY)")
+                
+                Text("\(frameY)")
             }
             
-            VStack {
-                ForEach((1...20).reversed(), id: \.self) { num in
-                    NavigationLink(destination: Text("Recipe")) {
-                        Text("\(num)")
-                            .formItem(isNavLink: true)
+            GeometryReader { frameGeometry in
+                VStack {
+                    ForEach((1...20).reversed(), id: \.self) { num in
+                        NavigationLink(destination: Text("Recipe")) {
+                            Text("\(num)")
+                                .formItem(isNavLink: true)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    GeometryReader { geometry -> Text in
+                        positionY = geometry.frame(in: .global).minY
+                        frameY = frameGeometry.frame(in: .global).maxY
+                        return Text("")
                     }
                 }
-                
-                Spacer()
+                .formed()
             }
-            .formed()
 
             VStack {
-                
                 HStack {
                     Button(action: {
 //                        createRecipe()
@@ -59,8 +72,12 @@ struct Test: View {
                     Spacer()
                 }
             }
-            .padding([.horizontal, .bottom])
-            .padding(.top, 5)
+            .padding()
+            .overlay(
+                Rectangle()
+                    .frame(width: nil, height: positionY <= frameY ? 0 : 1, alignment: .top)
+                    .foregroundColor(Color.gray),
+                alignment: .top)
         }
         .foregroundColor(mainColor())
         .background(formBackgroundColor())

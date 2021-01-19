@@ -37,6 +37,9 @@ struct RecipeCollectionView: View {
     @State private var selectedImage: UIImage?
     
     @State private var droppableRecipe: Recipe?
+    
+    @State private var scrollY: CGFloat = 0
+    @State private var frameY: CGFloat = 0
             
     var body: some View {
         NavigationView {
@@ -211,44 +214,52 @@ struct RecipeCollectionView: View {
                 .border(Color.white, width: 2)
                 
                 if collection.currentCategory != nil {
-                    VStack {
-                        ForEach(collection.currentCategory!.recipes) { recipe in
-                            Group {
-                                if isEditing {
-                                    Text("\(recipe.name)")
-                                        .deletable(isDeleting: true, onDelete: {
-                                            withAnimation {
-                                                collection.deleteRecipe(withId: recipe.id)
-                                            }
-                                        })
-                                    .formItem()
-                                }
-                                else {
-                                    NavigationLink(destination:
-                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
-                                            .environmentObject(collection.currentCategory!)
-                                            .environmentObject(collection)
-                                    ) {
+                    GeometryReader { frameGeometry in
+                        VStack {
+                            ForEach(collection.currentCategory!.recipes) { recipe in
+                                Group {
+                                    if isEditing {
                                         Text("\(recipe.name)")
-                                            .fontWeight(.regular)
-                                            .formItem(isNavLink: true)
+                                            .deletable(isDeleting: true, onDelete: {
+                                                withAnimation {
+                                                    collection.deleteRecipe(withId: recipe.id)
+                                                }
+                                            })
+                                        .formItem()
+                                    }
+                                    else {
+                                        NavigationLink(destination:
+                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!))
+                                                .environmentObject(collection.currentCategory!)
+                                                .environmentObject(collection)
+                                        ) {
+                                            Text("\(recipe.name)")
+                                                .fontWeight(.regular)
+                                                .formItem(isNavLink: true)
+                                        }
                                     }
                                 }
+                                .onDrag {
+                                    droppableRecipe = recipe
+                                    return NSItemProvider(object: recipe.name as NSString)
+                                }
                             }
-                            .onDrag {
-                                droppableRecipe = recipe
-                                return NSItemProvider(object: recipe.name as NSString)
+                            .onDelete { indexSet in
+                                indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                                    collection.deleteRecipe(withId: recipe.id)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            GeometryReader { geometry -> Text in
+                                scrollY = geometry.frame(in: .global).minY
+                                frameY = frameGeometry.frame(in: .global).maxY
+                                return Text("")
                             }
                         }
-                        .onDelete { indexSet in
-                            indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
-                                collection.deleteRecipe(withId: recipe.id)
-                            }
-                        }
-                        
-                        Spacer()
+                        .formed()
                     }
-                    .formed()
 
                     VStack {
                         
@@ -277,6 +288,11 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .padding()
+                    .overlay(
+                        Rectangle()
+                            .frame(width: nil, height: scrollY <= frameY ? 0 : 1, alignment: .top)
+                            .foregroundColor(borderColor()),
+                        alignment: .top)
                 }
             }
             .sheet(isPresented: $isCreatingRecipe, onDismiss: {
@@ -289,7 +305,7 @@ struct RecipeCollectionView: View {
                     .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
             }
             .background(formBackgroundColor())
-            .navigationBarTitle("\(collection.name)", displayMode: .inline)
+            .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
             .navigationBarItems(trailing:
                 UIControls.EditButton(
                     action: {

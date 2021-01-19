@@ -53,3 +53,10 @@ func formBorderColor() -> Color {
     }
     return Color(UIColor.gray)
 }
+
+func borderColor() -> Color {
+    if let uiColor = UIColor(named: "Border") {
+        return Color(uiColor)
+    }
+    return Color.gray
+}
