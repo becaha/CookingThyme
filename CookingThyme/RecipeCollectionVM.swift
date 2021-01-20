@@ -127,6 +127,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
+    func filterCurrentCategory(withSearch search: String) {
+        if let currentCategory = self.currentCategory {
+            currentCategory.filterRecipes(withSearch: search)
+            self.currentCategory = currentCategory
+        }
+    }
+    
     func setCurrentCategory(_ category: RecipeCategoryVM) {
         category.popullateCategory()
         currentCategory = category

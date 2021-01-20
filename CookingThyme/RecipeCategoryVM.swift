@@ -20,7 +20,13 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     var collection: RecipeCollectionVM
     @Published var category: RecipeCategory
-    @Published var recipes: [Recipe]
+    @Published var recipes: [Recipe] {
+        didSet {
+            filteredRecipes = recipes
+        }
+    }
+    @Published var filteredRecipes: [Recipe] = []
+    
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
 
@@ -48,6 +54,17 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // MARK: - Intents
+    
+    func filterRecipes(withSearch search: String) {
+        if search == "" {
+            self.filteredRecipes = self.recipes
+        }
+        else {
+            self.filteredRecipes = self.recipes.filter({ (recipe) -> Bool in
+                recipe.name.localizedCaseInsensitiveContains(search)
+            })
+        }
+    }
     
     // gets recipes of category from db
     func popullateRecipes() {

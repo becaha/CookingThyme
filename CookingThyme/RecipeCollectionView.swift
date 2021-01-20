@@ -58,6 +58,7 @@ struct RecipeCollectionView: View {
                                     ZStack {
                                         Button(action: {
                                             collection.setCurrentCategory(category)
+                                            search = ""
                                         }) {
                                             ZStack {
                                                 CircleImage(width: 60, height: 60)
@@ -225,14 +226,14 @@ struct RecipeCollectionView: View {
                             GeometryReader { geometry in
                                 HStack {
                                     TextField("Search", text: $search, onCommit: {
-                                        print("\(search)")
+                                        searchRecipes()
                                     })
                                     .font(Font.body.weight(.regular))
                                     .foregroundColor(.black)
                                     .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                                     
                                     Button(action: {
-                                        print("\(search)")
+                                        searchRecipes()
                                     }) {
                                         Image(systemName: "magnifyingglass")
                                             .font(Font.body.weight(.regular))
@@ -247,7 +248,11 @@ struct RecipeCollectionView: View {
                             .frame(height: 35)
                             .padding(.bottom)
                             
-                            ForEach(collection.currentCategory!.recipes) { recipe in
+                            if search != "" && collection.currentCategory!.filteredRecipes.count == 0 {
+                                Text("No recipes found.")
+                            }
+                            
+                            ForEach(collection.currentCategory!.filteredRecipes) { recipe in
                                 Group {
                                     if isEditing {
                                         Text("\(recipe.name)")
@@ -355,9 +360,13 @@ struct RecipeCollectionView: View {
         }
     }
     
+    func searchRecipes() {
+        withAnimation {
+            collection.filterCurrentCategory(withSearch: self.search)
+        }
+    }
+    
     func getScale(frameMinY: CGFloat, searchMinY: CGFloat) -> CGFloat {
-        self.frameMinY = frameMinY
-        self.searchMinY = searchMinY
         if frameMinY - searchMinY >= -5 && frameMinY - searchMinY <= 35 {
             return CGFloat(35 - (frameMinY - searchMinY + 5)) / 35.0
         }
@@ -365,8 +374,6 @@ struct RecipeCollectionView: View {
     }
     
     func getOpacity(frameMinY: CGFloat, searchMinY: CGFloat) -> Double {
-        self.frameMinY = frameMinY
-        self.searchMinY = searchMinY
         if frameMinY - searchMinY >= 0 && frameMinY - searchMinY <= 35 {
             return Double(35 - (3 * (frameMinY - searchMinY))) / 35.0
         }
