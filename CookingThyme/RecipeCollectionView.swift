@@ -38,8 +38,14 @@ struct RecipeCollectionView: View {
     
     @State private var droppableRecipe: Recipe?
     
-    @State private var scrollY: CGFloat = 0
-    @State private var frameY: CGFloat = 0
+    @State private var bottomScrollY: CGFloat = 0
+    @State private var topScrollY: CGFloat = 0
+    @State private var frameMinY: CGFloat = 0
+    @State private var frameMaxY: CGFloat = 0
+    
+    @State private var searchMinY: CGFloat = 0
+    
+    @State private var search: String = ""
             
     var body: some View {
         NavigationView {
@@ -215,7 +221,32 @@ struct RecipeCollectionView: View {
                 
                 if collection.currentCategory != nil {
                     GeometryReader { frameGeometry in
-                        VStack {
+                        VStack(spacing: 0) {
+                            GeometryReader { geometry in
+                                HStack {
+                                    TextField("Search", text: $search, onCommit: {
+                                        print("\(search)")
+                                    })
+                                    .font(Font.body.weight(.regular))
+                                    .foregroundColor(.black)
+                                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                                    
+                                    Button(action: {
+                                        print("\(search)")
+                                    }) {
+                                        Image(systemName: "magnifyingglass")
+                                            .font(Font.body.weight(.regular))
+                                            .foregroundColor(searchFontColor())
+                                            .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                                .formItem(isSearchBar: true)
+                                .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                            }
+                            .frame(height: 35)
+                            .padding(.bottom)
+                            
                             ForEach(collection.currentCategory!.recipes) { recipe in
                                 Group {
                                     if isEditing {
@@ -253,8 +284,8 @@ struct RecipeCollectionView: View {
                             Spacer()
                             
                             GeometryReader { geometry -> Text in
-                                scrollY = geometry.frame(in: .global).minY
-                                frameY = frameGeometry.frame(in: .global).maxY
+                                bottomScrollY = geometry.frame(in: .global).minY
+                                frameMaxY = frameGeometry.frame(in: .global).maxY
                                 return Text("")
                             }
                         }
@@ -290,7 +321,7 @@ struct RecipeCollectionView: View {
                     .padding()
                     .overlay(
                         Rectangle()
-                            .frame(width: nil, height: scrollY <= frameY ? 0 : 1, alignment: .top)
+                            .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
                             .foregroundColor(borderColor()),
                         alignment: .top)
                 }
@@ -322,6 +353,24 @@ struct RecipeCollectionView: View {
                 collection.refreshCurrrentCategory()
             }
         }
+    }
+    
+    func getScale(frameMinY: CGFloat, searchMinY: CGFloat) -> CGFloat {
+        self.frameMinY = frameMinY
+        self.searchMinY = searchMinY
+        if frameMinY - searchMinY >= -5 && frameMinY - searchMinY <= 35 {
+            return CGFloat(35 - (frameMinY - searchMinY + 5)) / 35.0
+        }
+        return 1
+    }
+    
+    func getOpacity(frameMinY: CGFloat, searchMinY: CGFloat) -> Double {
+        self.frameMinY = frameMinY
+        self.searchMinY = searchMinY
+        if frameMinY - searchMinY >= 0 && frameMinY - searchMinY <= 35 {
+            return Double(35 - (3 * (frameMinY - searchMinY))) / 35.0
+        }
+        return 1
     }
     
     // a recipe is droppable into a category that is not All and is not their current category

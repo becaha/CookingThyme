@@ -41,21 +41,27 @@ func mainUIColor() -> UIColor {
 }
 
 func formBackgroundColor() -> Color {
-    if let uiColor = UIColor(named: "FormBackground") {
-        return Color(uiColor)
-    }
-    return Color(UIColor.systemFill)
+    return getAssetColor(withName: "FormBackground")
 }
 
 func formBorderColor() -> Color {
-    if let uiColor = UIColor(named: "FormBorder") {
-        return Color(uiColor)
-    }
-    return Color(UIColor.gray)
+    return getAssetColor(withName: "FormBorder")
 }
 
 func borderColor() -> Color {
-    if let uiColor = UIColor(named: "Border") {
+    return getAssetColor(withName: "Border")
+}
+
+func searchBarColor() -> Color {
+    return getAssetColor(withName: "SearchBar")
+}
+
+func searchFontColor() -> Color {
+    return getAssetColor(withName: "SearchFont")
+}
+
+func getAssetColor(withName name: String) -> Color {
+    if let uiColor = UIColor(named: name) {
         return Color(uiColor)
     }
     return Color.gray

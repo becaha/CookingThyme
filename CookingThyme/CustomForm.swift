@@ -20,7 +20,7 @@ struct CustomForm: ViewModifier {
     
     func body(content: Content) -> some View {
         ScrollView(.vertical) {
-            VStack {
+            VStack(spacing: 0) {
                 content
                 
                 Spacer()
@@ -38,11 +38,11 @@ struct CustomForm_Previews: PreviewProvider {
             
             ZStack {
         
-                VStack {
+//                VStack(spacing: 0) {
                     ForEach((1...20).reversed(), id: \.self) {
                         Text("\($0)").formItem()
                     }
-                }
+//                }
                 .formed(backgroundColor: Color.gray)
                 
                 VStack {

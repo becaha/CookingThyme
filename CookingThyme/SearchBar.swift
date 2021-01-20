@@ -16,11 +16,15 @@ struct SearchBar: View {
             TextField("Search", text: $search, onCommit: {
                 onCommit(search)
             })
+            .font(Font.body.weight(.regular))
+            .foregroundColor(.black)
             
             Button(action: {
                 onCommit(search)
             }) {
                 Image(systemName: "magnifyingglass")
+                    .font(Font.body.weight(.regular))
+                    .foregroundColor(searchFontColor())
             }
             .buttonStyle(PlainButtonStyle())
         }

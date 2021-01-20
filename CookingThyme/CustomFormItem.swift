@@ -31,6 +31,9 @@ import SwiftUI
 struct CustomFormItem: ViewModifier {
     var backgroundColor: Color
     var isNavLink: Bool
+    var cornerRadius: CGFloat = 7
+    var height: CGFloat = 40
+    var isSearchBar: Bool = false
     
     init() {
         self.backgroundColor = Color.white
@@ -47,12 +50,21 @@ struct CustomFormItem: ViewModifier {
         self.isNavLink = isNavLink
     }
     
+    init(isSearchBar: Bool) {
+        self.backgroundColor = searchBarColor()
+        self.isNavLink = false
+        if isSearchBar {
+            self.height = 35
+            self.isSearchBar = true
+        }
+    }
+    
     func body(content: Content) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 7)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(formBorderColor())
             
-            RoundedRectangle(cornerRadius: 7)
+            RoundedRectangle(cornerRadius: cornerRadius)
                 .fill(backgroundColor)
             
             HStack {
@@ -67,10 +79,13 @@ struct CustomFormItem: ViewModifier {
                 }
             }
             .padding()
+            .frame(height: height)
+
         }
-        .frame(height: 40)
+        .frame(height: height)
         .padding(.horizontal)
-        .padding(.vertical, 5)
+        .padding(.vertical, 2)
+        .padding(isSearchBar ? .bottom : [])
     }
 }
 
@@ -78,12 +93,17 @@ struct CustomFormItem_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Divider()
+            
+            Text("Hi").formItem(isSearchBar: true)
 
             Text("Hi").formItem()
+
             
             Text("Hi").formItem()
+
         }
-//        .background(formBackgroundColor())
+        .background(formBackgroundColor())
+        .formed()
     }
 }
 
@@ -98,5 +118,9 @@ extension View {
     
     func formItem(isNavLink: Bool) -> some View {
         modifier(CustomFormItem(isNavLink: isNavLink))
+    }
+    
+    func formItem(isSearchBar: Bool) -> some View {
+        modifier(CustomFormItem(isSearchBar: isSearchBar))
     }
 }

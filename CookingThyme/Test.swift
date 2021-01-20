@@ -10,8 +10,10 @@ import SwiftUI
 struct Test: View {
     var categories = ["a"]
     var recipes = ["ra", "rb", "rc"]
-    @State private var positionY: CGFloat = 0
-    @State private var frameY: CGFloat = 0
+    @State private var scrollMinY: CGFloat = 0
+    @State private var frameMinY: CGFloat = 0
+    
+    @State private var search: String = ""
     
     var body: some View {
         VStack(spacing: 0) {
@@ -22,13 +24,42 @@ struct Test: View {
                         .padding()
                 }
                 
-                Text("\(positionY)")
+                Text("\(scrollMinY)")
                 
-                Text("\(frameY)")
+                Text("\(frameMinY)")
             }
             
+            Divider()
+                .foregroundColor(.blue)
+            
             GeometryReader { frameGeometry in
-                VStack {
+                VStack(spacing: 0) {
+                    GeometryReader { geometry in
+                        HStack {
+                            TextField("Search", text: $search, onCommit: {
+                                print("\(search)")
+                            })
+                            .font(Font.body.weight(.regular))
+                            .foregroundColor(.black)
+                            .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, scrollMinY: geometry.frame(in: .global).minY))
+                            
+                            Button(action: {
+                                print("\(search)")
+                            }) {
+                                Image(systemName: "magnifyingglass")
+                                    .font(Font.body.weight(.regular))
+                                    .foregroundColor(searchFontColor())
+                                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, scrollMinY: geometry.frame(in: .global).minY))
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        .formItem(isSearchBar: true)
+                        .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, scrollMinY: geometry.frame(in: .global).minY))
+                    }
+                    .frame(height: 35)
+                    .padding(.bottom)
+
+                    
                     ForEach((1...20).reversed(), id: \.self) { num in
                         NavigationLink(destination: Text("Recipe")) {
                             Text("\(num)")
@@ -37,14 +68,9 @@ struct Test: View {
                     }
                     
                     Spacer()
-                    
-                    GeometryReader { geometry -> Text in
-                        positionY = geometry.frame(in: .global).minY
-                        frameY = frameGeometry.frame(in: .global).maxY
-                        return Text("")
-                    }
                 }
                 .formed()
+                .padding(.top, 0)
             }
 
             VStack {
@@ -75,12 +101,32 @@ struct Test: View {
             .padding()
             .overlay(
                 Rectangle()
-                    .frame(width: nil, height: positionY <= frameY ? 0 : 1, alignment: .top)
+//                    .frame(width: nil, height: positionY <= frameY ? 0 : 1, alignment: .top)
                     .foregroundColor(Color.gray),
                 alignment: .top)
         }
         .foregroundColor(mainColor())
         .background(formBackgroundColor())
+    }
+    
+    // frame min y = 116
+    // search min y = 116 -> (116 - 35)  116 -> 81
+    func getScale(frameMinY: CGFloat, scrollMinY: CGFloat) -> CGFloat {
+        self.frameMinY = frameMinY
+        self.scrollMinY = scrollMinY
+        if frameMinY - scrollMinY >= -5 && frameMinY - scrollMinY <= 35 {
+            return CGFloat(35 - (frameMinY - scrollMinY + 5)) / 35.0
+        }
+        return 1
+    }
+    
+    func getOpacity(frameMinY: CGFloat, scrollMinY: CGFloat) -> Double {
+        self.frameMinY = frameMinY
+        self.scrollMinY = scrollMinY
+        if frameMinY - scrollMinY >= 0 && frameMinY - scrollMinY <= 35 {
+            return Double(35 - (3 * (frameMinY - scrollMinY))) / 35.0
+        }
+        return 1
     }
 }
 
