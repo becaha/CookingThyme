@@ -9,10 +9,44 @@ import SwiftUI
 
 struct Test: View {
     @State var isPresented = true
-    @State var urlString: String = "http://..."
+    @State var newDirection: String = ""
+    
+    var directions = ["mix", "drink"]
     
     var body: some View {
-        VStack {}
+        Form {
+            Section(header: Text("Directions")) {
+                List {
+                    HStack(alignment: .top, spacing: 20) {
+                        // edit
+                        Group {
+                            Text("\(20)")
+                            
+//                            TextEditor(text: $urlString)
+//                                .padding(.vertical, -7)
+                            
+                            TextField("\(directions[0])", text: $newDirection)
+
+                        }
+                        .padding(.vertical)
+                    }
+                    
+                    HStack(alignment: .top, spacing: 20) {
+                        // edit
+                        Group {
+                            Text("\(21)")
+                            
+//                            TextEditor(text: $urlString)
+//                                .padding(.vertical, -7)
+                            
+                            TextField("\(directions[1])", text: $newDirection)
+
+                        }
+                        .padding(.vertical)
+                    }
+                }
+            }
+        }
     }
 }
 

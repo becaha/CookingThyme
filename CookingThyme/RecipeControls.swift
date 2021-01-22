@@ -30,7 +30,6 @@ struct RecipeControls {
 //                else {
                     Group {
                         Text("\(index + 1)")
-                            .frame(width: 20, height: 20, alignment: .center)
 
                         Text("\(recipe.directions[index].direction)")
                     }

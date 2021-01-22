@@ -182,7 +182,6 @@ struct ReadRecipeView: View {
     func DirectionText(withIndex index: Int) -> some View {
         Group {
             Text("\(index + 1)")
-                .frame(width: 20, height: 20, alignment: .center)
 
             TextField("\(recipe.directions[index].direction)", text: $newDirection)
         }

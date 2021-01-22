@@ -9,6 +9,7 @@ import SwiftUI
 
 // TODO: serving size low num to high
 // TODO: have cursor go to next item in list after one is entered
+// TODO: should the delete button be centered or aligned with the direction number
 struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
@@ -338,7 +339,6 @@ struct EditRecipeView: View {
                     ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(index + 1)")
-                                .frame(width: 20, height: 20, alignment: .center)
                             
                             EditableDirection(index: index)
                                 .environmentObject(recipe)

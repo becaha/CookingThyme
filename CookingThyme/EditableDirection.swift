@@ -22,15 +22,9 @@ struct EditableDirection: View {
     }
     
     var body: some View {
-        TextField(getDirection(), text: getBinding())
+        TextEditor(text: getBinding())
             .autocapitalization(autocapitalization)
-    }
-    
-    func getDirection() -> String {
-        if index < recipe.tempDirections.count {
-            return recipe.tempDirections[index].direction
-        }
-        return ""
+            .padding(.vertical, -7)
     }
     
     func getBinding() -> Binding<String> {
