@@ -117,4 +117,16 @@ enum UnitOfMeasurement: CaseIterable {
         }
         return UnitOfMeasurement.unknown(unitString)
     }
+    
+    static func isUnknown(unitString: String) -> Bool {
+        for unit in UnitOfMeasurement.allCases {
+            if unitString.lowercased() == unit.getName().lowercased() ||
+                unitString.lowercased() == (unit.getName().lowercased() + "s") ||
+                unitString.lowercased() == (unit.getShorthand().lowercased() + "s") ||
+                unitString.lowercased() == unit.getShorthand().lowercased() {
+                return false
+            }
+        }
+        return true
+    }
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftyJSON
 
 class ImageTranscriber: ObservableObject {
-    @Published var recipeText: String?
+//    @Published var recipeText: String?
     
     func resizeImage(_ imageSize: CGSize, image: UIImage) -> Data {
         UIGraphicsBeginImageContext(imageSize)
@@ -35,7 +35,7 @@ class ImageTranscriber: ObservableObject {
         return nil
     }
 
-    func createTranscription(fromImage uiImage: UIImage) {
+    func createTranscription(fromImage uiImage: UIImage, setTranscription: @escaping (Transcription) -> Void) {
         guard let imageBase64 = base64EncodeImage(uiImage) else {return}
 
         var urlComponents = URLComponents()
@@ -115,7 +115,7 @@ class ImageTranscriber: ObservableObject {
                                     }
                                     transcription.annotations = annotations
                                     DispatchQueue.main.async {
-                                        self.setTranscription(transcription)
+                                        setTranscription(transcription)
                                     }
                                 }
                             }
@@ -127,10 +127,5 @@ class ImageTranscriber: ObservableObject {
             }
         }
         .resume()
-    }
-    
-    func setTranscription(_ transcription: Transcription) {
-        RecipeTranscriber.analyzeTranscription(transcription)
-        self.recipeText = transcription.annotations[0].description
     }
 }

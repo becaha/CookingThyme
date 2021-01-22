@@ -75,9 +75,11 @@
 		DB83F6B925B3865A0041DAA7 /* RecipeTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */; };
 		DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */; };
 		DB88CD1D25B75D0E00A7F32C /* Droppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD1C25B75D0E00A7F32C /* Droppable.swift */; };
+		DB88CD2325BA018300A7F32C /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD2225BA018300A7F32C /* Test.swift */; };
+		DB88CD2525BA08BE00A7F32C /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD2425BA08BE00A7F32C /* PasteButton.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
-		DBCDE781258D5F55003DC95F /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* Test.swift */; };
+		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
 		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
@@ -158,9 +160,11 @@
 		DB83F6B825B3865A0041DAA7 /* RecipeTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTranscriber.swift; sourceTree = "<group>"; };
 		DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomForm.swift; sourceTree = "<group>"; };
 		DB88CD1C25B75D0E00A7F32C /* Droppable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Droppable.swift; sourceTree = "<group>"; };
+		DB88CD2225BA018300A7F32C /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		DB88CD2425BA08BE00A7F32C /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
-		DBCDE780258D5F55003DC95F /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
 		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
@@ -251,7 +255,8 @@
 				DB49B5512581BA3200808CC8 /* RecipeCollection */,
 				DB49B520257ABF6C00808CC8 /* ViewHelpers */,
 				DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */,
-				DBCDE780258D5F55003DC95F /* Test.swift */,
+				DBCDE780258D5F55003DC95F /* SearchTest.swift */,
+				DB88CD2225BA018300A7F32C /* Test.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
 				DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */,
 				DB88CD1C25B75D0E00A7F32C /* Droppable.swift */,
+				DB88CD2425BA08BE00A7F32C /* PasteButton.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -575,6 +581,7 @@
 				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
 				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
+				DB88CD2525BA08BE00A7F32C /* PasteButton.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
@@ -598,10 +605,11 @@
 				DB49B52A257EEE5500808CC8 /* NavigationBarConfigurator.swift in Sources */,
 				DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */,
 				DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */,
+				DB88CD2325BA018300A7F32C /* Test.swift in Sources */,
 				DB83F6AC25AE438C0041DAA7 /* SigninView.swift in Sources */,
 				DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */,
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
-				DBCDE781258D5F55003DC95F /* Test.swift in Sources */,
+				DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */,

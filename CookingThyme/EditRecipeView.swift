@@ -39,26 +39,53 @@ struct EditRecipeView: View {
     @State private var importRecipePresented = false
     @State private var selectedImage: UIImage?
     
+    @State private var importFromURL = false
+    @State private var urlString: String = ""
+    
     @Binding var isImportingRecipe: Bool
         
     var body: some View {
         VStack {
-            EditableRecipe()
-        }
-        .onAppear {
-            setRecipe()
+            if importFromURL {
+                VStack {
+                    HStack {
+                        Text("Import from:")
+                        
+                        TextField("URL", text: $urlString, onCommit: {
+                            transcribeWeb()
+                        })
+                        
+                        Button(action: {
+                            transcribeWeb()
+                        }) {
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                    .formItem()
+                    
+                    Button(action: {
+                        withAnimation {
+                            importFromURL = false
+                        }
+                    }) {
+                        Text("Cancel Import")
+                    }
+                }
+                .formed()
+            }
+            else if recipe.isImportingFromURL {
+                UIControls.Loading()
+            }
+            else {
+                EditableRecipe()
+                    .onAppear {
+                        setRecipe()
+                    }
+            }
         }
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
             ImagePicker(image: self.$selectedImage)
         }
-        .actionSheet(isPresented: $importRecipePresented, content: {
-            ActionSheet(title: Text("Import recipe"), message: nil, buttons: [
-                .default(Text("From camera roll"), action: {
-                    cameraRollSheetPresented = true
-                }),
-                .cancel()
-            ])
-        })
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
@@ -74,12 +101,30 @@ struct EditRecipeView: View {
             ,
             trailing:
                 HStack {
-                    Button(action: {
-                        importRecipePresented = true
-                    }) {
+                    Menu {
+                        Text("Import Recipe")
+                        
+                        Button(action: {
+                            cameraRollSheetPresented = true
+                        }) {
+                            Text("From camera roll")
+                        }
+                        
+                        Button(action: {
+                            withAnimation {
+                                importFromURL = true
+                            }
+                        }) {
+                            Text("From URL")
+                        }
+                        
+                        Button(action: {}) {
+                            Text("Cancel")
+                        }
+                    } label: {
                         Image(systemName: "square.and.arrow.down")
+                            .padding(.trailing)
                     }
-                    .padding(.trailing)
                 
                     Button(action: {
                         saveRecipe()
@@ -92,6 +137,13 @@ struct EditRecipeView: View {
         )
     }
     
+    private func transcribeWeb() {
+        if urlString != "" {
+            recipe.transcribeRecipe(fromUrlString: urlString)
+            importFromURL = false
+        }
+    }
+    
     private func transcribeImage() {
         guard let inputImage = selectedImage else { return }
         recipe.transcribeRecipe(fromImage: inputImage)
@@ -101,6 +153,7 @@ struct EditRecipeView: View {
     private func setRecipe() {
         name = recipe.name
         servings = recipe.servings.toString()
+        recipe.popullateRecipeTemps()
     }
     
     private func saveRecipe() {
@@ -127,7 +180,7 @@ struct EditRecipeView: View {
             else {
                 recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, categoryId: recipe.categoryId)
             }
-            // have page shrink up into square and be brought to the recipe collection view showing the new recipe
+            // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
             withAnimation {
                 isEditingRecipe = false

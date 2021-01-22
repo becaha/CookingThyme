@@ -28,6 +28,7 @@ struct CustomForm: ViewModifier {
             .padding(.top)
         }
         .background(backgroundColor)
+        .edgesIgnoringSafeArea([.bottom])
     }
 }
 

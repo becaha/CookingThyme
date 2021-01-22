@@ -20,23 +20,18 @@ class RecipeVM: ObservableObject {
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     
-    @Published var transcriber = ImageTranscriber()
+    @Published var transcriber = RecipeTranscriber()
+    @Published var isImportingFromURL = false
+
     private var recipeTranscriberCancellable: AnyCancellable?
-    
+    private var recipeTextTranscriberCancellable: AnyCancellable?
+
     // MARK: - Init
     
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
         self.category = category
-        self.imageHandlerCancellable = self.imageHandler.objectWillChange
-            .sink { _ in
-                self.objectWillChange.send()
-            }
-        
-        self.recipeTranscriberCancellable = self.transcriber.$recipeText
-            .sink { (recipeText) in
-                self.recipeText = recipeText
-            }
+        setCancellables()
         
         popullateRecipe()
     }
@@ -45,12 +40,25 @@ class RecipeVM: ObservableObject {
         self.recipe = Recipe()
         self.category = category
         
+        setCancellables()
+    }
+    
+    func setCancellables() {
         self.imageHandlerCancellable = self.imageHandler.objectWillChange
             .sink { _ in
                 self.objectWillChange.send()
             }
         
-        self.recipeTranscriberCancellable = self.transcriber.$recipeText
+        self.recipeTranscriberCancellable = self.transcriber.$recipe
+            .sink { (recipe) in
+                if let recipe = recipe {
+                    self.recipe = recipe
+                    self.popullateRecipeTemps()
+                    self.isImportingFromURL = false
+                }
+            }
+        
+        self.recipeTextTranscriberCancellable = self.transcriber.$recipeText
             .sink { (recipeText) in
                 self.recipeText = recipeText
             }
@@ -95,13 +103,18 @@ class RecipeVM: ObservableObject {
             if let recipeWithIngredients = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
                 if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: recipe.id) {
                     recipe = recipeWithImages
-                    self.tempDirections = recipe.directions
-                    self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
-                    self.tempImages = recipe.images
-                    popullateImages()
+                    popullateRecipeTemps()
                 }
             }
         }
+    }
+    
+    func popullateRecipeTemps() {
+        let tempDirections = recipe.directions
+        self.tempDirections = tempDirections
+        self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
+        self.tempImages = recipe.images
+        popullateImages()
     }
     
     // sends images to image handler to prep for ui
@@ -193,22 +206,25 @@ class RecipeVM: ObservableObject {
     }
 
     
-    // TODO make more robust, servings is initialized to 0 but cannot be zero once created
+    // TODO make more robust, id is initialized to 0 but cannot be zero once created
     func isCreatingRecipe() -> Bool {
-        return recipe.servings == 0
+        return recipe.id == 0
     }
     
     // creates ingredient from given name, amount, unit in strings
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
-        let doubleAmount = Fraction.toDouble(fromString: amount)
-        let unit = Ingredient.makeUnit(fromUnit: unit)
-        return Ingredient(name: name, amount: doubleAmount, unitName: unit)
+        return Ingredient.makeIngredient(name: name, amount: amount, unit: unit)
     }
     
     // transcribe images to recipes
     
     func transcribeRecipe(fromImage image: UIImage) {
         transcriber.createTranscription(fromImage: image)
+    }
+    
+    func transcribeRecipe(fromUrlString urlString: String) {
+        self.isImportingFromURL = true
+        transcriber.createTranscription(fromUrlString: urlString)
     }
 }
 

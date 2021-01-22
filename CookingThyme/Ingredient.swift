@@ -89,6 +89,52 @@ struct Ingredient: Identifiable, Equatable {
         return temps
     }
     
+    // TODO:
+    // 1 1/2 cup flour
+    static func toIngredients(fromStrings ingredientStrings: [String]) -> [Ingredient] {
+        var ingredients = [Ingredient]()
+        for ingredientString in ingredientStrings {
+            var amount = ""
+            var unit: UnitOfMeasurement?
+            var name = ""
+            let words = ingredientString.components(separatedBy: " ")
+            for word in words {
+                if Int(word) != nil || (word.count == 1 && Character(word).isNumber) {
+                    if amount != "" {
+                        amount += " "
+                    }
+                    amount += word
+                    continue
+                }
+                else if unit == nil {
+                    if UnitOfMeasurement.isUnknown(unitString: word) {
+                        unit = UnitOfMeasurement.none
+                    }
+                    else {
+                        unit = Ingredient.makeUnit(fromUnit: word)
+                        continue
+                    }
+                }
+                if name != "" {
+                    name += " "
+                }
+                name += word
+            }
+            let doubleAmount = Fraction.toDouble(fromString: amount)
+            if let unit = unit {
+                ingredients.append(Ingredient(name: name, amount: doubleAmount, unitName: unit))
+            }
+        }
+        return ingredients
+    }
+    
+    // creates ingredient from given name, amount, unit in strings
+    static func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
+        let doubleAmount = Fraction.toDouble(fromString: amount)
+        let unit = Ingredient.makeUnit(fromUnit: unit)
+        return Ingredient(name: name, amount: doubleAmount, unitName: unit)
+    }
+    
     // turns ingredient into a one line string (1 cup apple juice)
     func toString() -> String {
         var string = ""
