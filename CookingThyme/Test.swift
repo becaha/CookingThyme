@@ -22,10 +22,11 @@ struct Test: View {
                         Group {
                             Text("\(20)")
                             
-//                            TextEditor(text: $urlString)
-//                                .padding(.vertical, -7)
+                            TextEditor(text: $newDirection)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.vertical, -7)
                             
-                            TextField("\(directions[0])", text: $newDirection)
+//                            TextField("\(directions[0])", text: $newDirection)
 
                         }
                         .padding(.vertical)
@@ -36,10 +37,9 @@ struct Test: View {
                         Group {
                             Text("\(21)")
                             
-//                            TextEditor(text: $urlString)
-//                                .padding(.vertical, -7)
-                            
-                            TextField("\(directions[1])", text: $newDirection)
+                            TextEditor(text: $newDirection)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.vertical, -7)
 
                         }
                         .padding(.vertical)

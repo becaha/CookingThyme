@@ -25,6 +25,7 @@ struct EditableDirection: View {
         TextEditor(text: getBinding())
             .autocapitalization(autocapitalization)
             .padding(.vertical, -7)
+            .fixedSize(horizontal: false, vertical: true)
     }
     
     func getBinding() -> Binding<String> {

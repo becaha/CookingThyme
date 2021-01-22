@@ -16,7 +16,7 @@ class RecipeVM: ObservableObject {
     @Published var tempIngredients: [TempIngredient] = []
     @Published var tempImages: [RecipeImage] = []
     @Published var recipeText: String?
-    
+        
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     

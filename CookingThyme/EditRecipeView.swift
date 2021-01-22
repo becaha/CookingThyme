@@ -25,15 +25,13 @@ struct EditRecipeView: View {
     @State private var ingredientsFieldMissing = false
     @State private var directionsFieldMissing = false
     @State private var servingsFieldMissing = false
-        
-    @State private var isEditingDirection = false
-    @State private var isEditingIngredient = false
-    
+            
     @State private var name: String = ""
     @State private var servings: String = ""
     @State private var ingredientAmount: String = ""
     @State private var ingredientUnit: String = ""
     @State private var ingredientName: String = ""
+    @State private var directionPlaceholder = ""
     @State private var direction: String = ""
     
     @State private var cameraRollSheetPresented = false
@@ -190,10 +188,10 @@ struct EditRecipeView: View {
     }
     
     private func addDirection() {
-        if direction != "" {
+        if direction != directionPlaceholder {
             newDirectionFieldMissing = false
             recipe.addTempDirection(direction)
-            direction = ""
+            direction = directionPlaceholder
         }
         else {
             newDirectionFieldMissing = true
@@ -304,9 +302,6 @@ struct EditRecipeView: View {
 
 
                             TextField("Name", text: $ingredientName,
-                                onEditingChanged: { (isEditing) in
-                                    self.isEditingIngredient = isEditing
-                                },
                                 onCommit: {
                                     withAnimation {
                                         addIngredient()
@@ -355,33 +350,42 @@ struct EditRecipeView: View {
                             recipe.removeTempDirection(at: index)
                         }
                     }
+                                        
                     VStack(alignment: .leading) {
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(recipe.tempDirections.count + 1)")
-                                .frame(width: 20, height: 20, alignment: .center)
 
-                            TextField("Direction", text: $direction, onEditingChanged: { (isEditing) in
-                                self.isEditingDirection = isEditing
-                            }, onCommit: {
+                            // choose between placeholder and seeing lines while editing
+//                            TextEditor(text: $direction)
+//                                .padding(.vertical, -7)
+//                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
+//                                .onTapGesture {
+//                                    if direction == directionPlaceholder {
+//                                        withAnimation {
+//                                            direction = ""
+//                                        }
+//                                    }
+//                                }
+                            
+                            TextField("Direction", text: $direction, onCommit: {
                                 withAnimation {
                                     addDirection()
                                 }
                             })
-                            
+
                             UIControls.AddButton(action: {
                                 withAnimation {
                                     addDirection()
                                 }
                             })
                         }
-                        
+
                         ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
                     }
                     .padding(.vertical)
                 }
                 .foregroundColor(.black)
             }
-
         }
     }
 }

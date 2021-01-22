@@ -19,7 +19,6 @@ struct ReadRecipeView: View {
     @State private var categoriesPresented = false
     
 //    @State private var directionIndicesCompleted = [Int]()
-    @State private var inEditMode = false
     @State private var newAmount: String = ""
     @State private var newUnit: String = ""
     @State private var newName: String = ""
@@ -189,30 +188,11 @@ struct ReadRecipeView: View {
     }
     
     @ViewBuilder func IngredientText(_ ingredient: Ingredient) -> some View {
-        if inEditMode {
-            HStack {
-                TextField("\(ingredient.getAmountString()) ", text: $newAmount)
-                
-                TextField("\(ingredient.unitName.getName()) ", text: $newUnit)
-
-                TextField("\(ingredient.name)", text: $newName)
-            }
-        }
-        else {
-            RecipeControls.ReadIngredientText(ingredient)
-        }
+        RecipeControls.ReadIngredientText(ingredient)
     }
     
     @ViewBuilder func Direction(withIndex index: Int) -> some View {
-        if inEditMode {
-            HStack(alignment: .top, spacing: 20) {
-                DirectionText(withIndex: index)
-            }
-            .foregroundColor(.black)
-        }
-        else {
-            RecipeControls.ReadDirection(withIndex: index, recipe: recipe.recipe)
-        }
+        RecipeControls.ReadDirection(withIndex: index, recipe: recipe.recipe)
     }
 }
 
