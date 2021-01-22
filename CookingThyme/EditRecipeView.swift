@@ -42,6 +42,8 @@ struct EditRecipeView: View {
     @State private var urlString: String = ""
     
     @Binding var isImportingRecipe: Bool
+    
+    @State private var presentRecipeText = false
         
     var body: some View {
         VStack {
@@ -53,22 +55,29 @@ struct EditRecipeView: View {
                         TextField("URL", text: $urlString, onCommit: {
                             transcribeWeb()
                         })
-                        
-                        Button(action: {
-                            transcribeWeb()
-                        }) {
-                            Image(systemName: "chevron.right")
-                        }
                     }
                     .formItem()
                     
-                    Button(action: {
-                        withAnimation {
-                            importFromURL = false
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                importFromURL = false
+                            }
+                        }) {
+                            Text("Cancel")
                         }
-                    }) {
-                        Text("Cancel Import")
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                transcribeWeb()
+                            }
+                        }) {
+                            Text("Import")
+                        }
                     }
+                    .padding()
                 }
                 .formed()
             }
@@ -99,30 +108,46 @@ struct EditRecipeView: View {
                 .foregroundColor(mainColor())
             ,
             trailing:
-                HStack {
-                    Menu {
-                        Text("Import Recipe")
-                        
+                HStack(spacing: 20) {
+                    // TODO: a side view that slides in insteead of a sheet on a sheet
+                    // tODO: popover to explain icon
+                    if recipe.recipeText != nil {
                         Button(action: {
-                            cameraRollSheetPresented = true
-                        }) {
-                            Text("From camera roll")
+                            presentRecipeText = true
+                        })
+                        {
+                            Image(systemName: "doc.plaintext")
                         }
-                        
-                        Button(action: {
-                            withAnimation {
-                                importFromURL = true
+                        .sheet(isPresented: $presentRecipeText) {
+                            RecipeTextView(isPresented: $presentRecipeText)
+                                .environmentObject(recipe)
+                        }
+                    }
+                    
+                    if recipe.isCreatingRecipe() {
+                        Menu {
+                            Text("Import Recipe")
+                            
+                            Button(action: {
+                                cameraRollSheetPresented = true
+                            }) {
+                                Text("From camera roll")
                             }
-                        }) {
-                            Text("From URL")
+                            
+                            Button(action: {
+                                withAnimation {
+                                    importFromURL = true
+                                }
+                            }) {
+                                Text("From URL")
+                            }
+                            
+                            Button(action: {}) {
+                                Text("Cancel")
+                            }
+                        } label: {
+                            Image(systemName: "square.and.arrow.down")
                         }
-                        
-                        Button(action: {}) {
-                            Text("Cancel")
-                        }
-                    } label: {
-                        Image(systemName: "square.and.arrow.down")
-                            .padding(.trailing)
                     }
                 
                     Button(action: {
@@ -231,14 +256,15 @@ struct EditRecipeView: View {
                 .multilineTextAlignment(.center)
                 .font(.system(size: 30, weight: .bold))
                 
-                ErrorMessage("Must have a name", isError: $nameFieldMissing)
+                ErrorMessage("Must have a name.", isError: $nameFieldMissing)
                     .padding(0)
             }
             .padding(.bottom, 0)
         }
         .padding()
-                        
+        
         Form {
+            // TODO take out of form
             Section(header: Text("Photos")) {
                 ImagesView()
                     .frame(minHeight: 200)

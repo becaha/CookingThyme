@@ -15,13 +15,14 @@ class RecipeTranscriber {
     private var htmlTranscriber = HTMLTranscriber()
     
     func createTranscription(fromUrlString urlString: String) {
-        htmlTranscriber.createTranscription(fromUrlString: urlString) { recipe in
-            self.setRecipe(recipe)
+        htmlTranscriber.createTranscription(fromUrlString: urlString) { recipe, recipeText in
+            self.setRecipe(recipe, withText: recipeText)
         }
     }
     
-    func setRecipe(_ recipe: Recipe) {
+    func setRecipe(_ recipe: Recipe, withText text: String) {
         self.recipe = recipe
+        self.recipeText = text
     }
 
     func createTranscription(fromImage uiImage: UIImage) {

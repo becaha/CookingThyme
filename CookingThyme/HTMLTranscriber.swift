@@ -9,7 +9,7 @@ import SwiftUI
 
 class HTMLTranscriber: ObservableObject {
     
-    func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe) -> Void) {
+    func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe, String) -> Void) {
         guard let url = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL")
             return
@@ -21,16 +21,17 @@ class HTMLTranscriber: ObservableObject {
             }
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
-                self.printHTML(recipeString)
+//                self.printHTML(recipeString)
                 let recipe = self.parseString(recipeString)
                 DispatchQueue.main.async {
-                    setRecipe(recipe)
+                    setRecipe(recipe, recipeString)
                 }
             }
         }
         .resume()
     }
     
+    // TODO: 1 and 1/2 cups (440 g)
     func parseString(_ recipeString: String) -> Recipe {
         enum CurrentPart {
             case serving
