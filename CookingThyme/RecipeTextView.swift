@@ -12,29 +12,15 @@ struct RecipeTextView: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if recipe.recipeText != nil {
-                    ScrollView {
-                        Text("\(recipe.recipeText!)")
-                    }
-                    .foregroundColor(.black)
+        VStack {
+            if recipe.recipeText != nil {
+                ScrollView {
+                    Text("\(recipe.recipeText!)")
                 }
+                .foregroundColor(.black)
             }
-            .padding()
-            .navigationBarTitle("", displayMode: .inline)
-            .navigationBarItems(
-                trailing:
-                    HStack {
-                        Button(action: {
-                            isPresented = false
-                        })
-                        {
-                            Text("Done")
-                        }
-                    }
-            )
         }
+        .padding()
     }
 }
 

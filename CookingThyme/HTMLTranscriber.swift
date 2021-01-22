@@ -31,7 +31,8 @@ class HTMLTranscriber: ObservableObject {
         .resume()
     }
     
-    // TODO: 1 and 1/2 cups (440 g)
+    // TODO: 1 and 1/2 cups (440 g) -> 1, nothing, and cups...
+    // TODO: 1/2 -> 12
     func parseString(_ recipeString: String) -> Recipe {
         enum CurrentPart {
             case serving
@@ -52,7 +53,7 @@ class HTMLTranscriber: ObservableObject {
             for line in lines {
                 let cleanLine = removeSymbols(line)
                 // look for new part of recipe
-                if cleanLine.localizedCaseInsensitiveContains("serving") {
+                if cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield") {
                     name = prevLine
                     currentPart = CurrentPart.serving
                 }

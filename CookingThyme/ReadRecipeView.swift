@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO change from form
+// TODO move all action sheets to menus
 // TODO deal with plural ingredient unitNames
 // TODO have title not sticky
 struct ReadRecipeView: View {

@@ -85,10 +85,15 @@ struct EditRecipeView: View {
                 UIControls.Loading()
             }
             else {
-                EditableRecipe()
-                    .onAppear {
-                        setRecipe()
-                    }
+                if presentRecipeText {
+                    RecipeTextView(isPresented: $presentRecipeText)
+                }
+                else {
+                    EditableRecipe()
+                        .onAppear {
+                            setRecipe()
+                        }
+                }
             }
         }
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
@@ -113,14 +118,17 @@ struct EditRecipeView: View {
                     // tODO: popover to explain icon
                     if recipe.recipeText != nil {
                         Button(action: {
-                            presentRecipeText = true
+                            withAnimation {
+                                presentRecipeText.toggle()
+                            }
                         })
                         {
-                            Image(systemName: "doc.plaintext")
-                        }
-                        .sheet(isPresented: $presentRecipeText) {
-                            RecipeTextView(isPresented: $presentRecipeText)
-                                .environmentObject(recipe)
+                            if presentRecipeText {
+                                Image(systemName: "doc.plaintext.fill")
+                            }
+                            else {
+                                Image(systemName: "doc.plaintext")
+                            }
                         }
                     }
                     

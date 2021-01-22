@@ -385,9 +385,9 @@
 			isa = PBXGroup;
 			children = (
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
+				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
 				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
-				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DBCDE776258AB261003DC95F /* ImportedRecipe.swift */,
 				DB88CD2A25BB64A500A7F32C /* RecipeTextView.swift */,
 			);
