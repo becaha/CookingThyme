@@ -38,19 +38,37 @@ struct ImagesView: View {
                                 ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                             }
                             else if isEditing {
-                                VStack(alignment: .center) {
-                                    VStack {
-                                        EditPhotoButton()
-                                            .padding(.bottom, 5)
-                                        
-                                        Text("Add Photo")
-                                            .font(.subheadline)
-                                            .padding(.top, 0)
+                                Button(action: {
+                                    editPhotoSheetPresented = true
+                                }) {
+                                    VStack(alignment: .center) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(Color.white)
+                                                
+                                            
+                                            VStack {
+                                                ZStack {
+                                                    Circle()
+                                                        .frame(width: 25, height: 25)
+                                                        .foregroundColor(.white)
+                                                        .shadow(radius: 1)
+
+                                                    Image(systemName: "plus")
+                                                        .font(Font.subheadline.weight(.bold))
+                                                        .foregroundColor(mainColor())
+                                                }
+                                                
+                                                Text("Add Photo")
+                                                    .bold()
+                                            }
+                                            .border(Color.black, width: 3.0, isDashed: true)
+                                        }
+                                        .frame(width: geometry.size.width/2)
                                     }
-                                    .border(Color.black, width: 3.0, isDashed: true)
-                                    .frame(width: geometry.size.width/2)
+                                    .background(formBackgroundColor())
+                                    .frame(width: geometry.size.width)
                                 }
-                                .frame(width: geometry.size.width)
                             }
                         }
                     }
@@ -62,28 +80,28 @@ struct ImagesView: View {
                             editPhotoSheetPresented = true
                         }
                         .padding(.top, 0)
-                        .actionSheet(isPresented: $editPhotoSheetPresented, content: {
-                            ActionSheet(title: Text("Add photo"), message: nil, buttons:
-                                [
-                                    .default(Text("Pick from camera roll"), action: {
-                                        cameraRollSheetPresented = true
-                                    }),
-                                    .default(Text("Paste"), action: {
-                                        presentPasteAlert = true
-                                        if UIPasteboard.general.url != nil {
-                                            confirmPaste = true
-                                        } else {
-                                            explainPaste = true
-                                        }
-                                    }),
-                                    .cancel()
-                                ])
-                        })
                     }
                 }
             }
         }
         .padding(.horizontal)
+        .actionSheet(isPresented: $editPhotoSheetPresented, content: {
+            ActionSheet(title: Text("Add photo"), message: nil, buttons:
+                [
+                    .default(Text("Pick from camera roll"), action: {
+                        cameraRollSheetPresented = true
+                    }),
+                    .default(Text("Paste"), action: {
+                        presentPasteAlert = true
+                        if UIPasteboard.general.url != nil {
+                            confirmPaste = true
+                        } else {
+                            explainPaste = true
+                        }
+                    }),
+                    .cancel()
+                ])
+        })
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
             ImagePicker(image: self.$selectedImage)
         }
@@ -109,59 +127,32 @@ struct ImagesView: View {
             recipe.addTempImage(uiImage: inputImage)
         }
     }
-    
-    @ViewBuilder
-    func EditPhotoButton() -> some View {
-        Button(action: {
-            editPhotoSheetPresented = true
-        }) {
-            Image(systemName: "plus") // or camera
-        }
-        .foregroundColor(mainColor())
-        .actionSheet(isPresented: $editPhotoSheetPresented, content: {
-            ActionSheet(title: Text("Add photo"), message: nil, buttons:
-                [
-                    .default(Text("Pick from camera roll"), action: {
-                        cameraRollSheetPresented = true
-                    }),
-                    .default(Text("Paste"), action: {
-                        presentPasteAlert = true
-                        if UIPasteboard.general.url != nil {
-                            confirmPaste = true
-                        } else {
-                            explainPaste = true
-                        }
-                    }),
-                    .cancel()
-                ])
-        })
-    }
 }
 
 struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
-        Form {
-            Section(header: Text("Photos")) {
-                ImagesView(isEditing: true)
-                    .environmentObject(RecipeVM(
-                        recipe: Recipe(
-                            name: "Water",
-                            ingredients: [
-                                Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.cup),
-                                Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.cup),
-                                Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.cup),
-                                Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.cup),
-                                Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
-                            ],
-                            directions: [
-                                Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),
-                                Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
-                                Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
-                            images: [RecipeImage](),
-                            servings: 1),
-                        category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
-                ))
-            }
+        HStack {
+        ImagesView(isEditing: true)
+            .environmentObject(RecipeVM(
+                recipe: Recipe(
+                    name: "Water",
+                    ingredients: [
+                        Ingredient(name: "water", amount: 1.05, unitName: UnitOfMeasurement.cup),
+                        Ingredient(name: "water", amount: 2.1, unitName: UnitOfMeasurement.cup),
+                        Ingredient(name: "water", amount: 1.3, unitName: UnitOfMeasurement.cup),
+                        Ingredient(name: "water", amount: 1.8, unitName: UnitOfMeasurement.cup),
+                        Ingredient(name: "water", amount: 1.95, unitName: UnitOfMeasurement.cup)
+                    ],
+                    directions: [
+                        Direction(step: 1, recipeId: 1, direction: "Fetch a pail of water from the wishing well in the land of the good queen Casandra"),
+                        Direction(step: 2, recipeId: 1, direction: "Bring back the pail of water making sure as to not spill a single drop of it"),
+                        Direction(step: 3, recipeId: 1, direction: "Pour yourself a glass of nice cold water")],
+                    images: [RecipeImage](),
+                    servings: 1),
+                category: RecipeCategoryVM(category: RecipeCategory(name: "All", recipeCollectionId: 1), collection: RecipeCollectionVM(collection: RecipeCollection(id: 0, name: "Becca")))
+        ))
         }
+        .background(Color.blue)
+        .foregroundColor(mainColor())
     }
 }
