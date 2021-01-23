@@ -7,105 +7,66 @@
 
 import SwiftUI
 
+// add photo
+//VStack(alignment: .center) {
+//    VStack {
+//        EditPhotoButton()
+//            .padding(.bottom, 5)
+//
+//        Text("Add Photo")
+//            .font(.subheadline)
+//            .padding(.top, 0)
+//    }
+//    .border(Color.black, width: 3.0, isDashed: true)
+//    .frame(width: geometry.size.width/2)
+//}
+//.frame(width: geometry.size.width)
+
 struct Test: View {
     var confirmAddIngredient = false
     
     var body: some View {
-        Form {
-            HStack {
-                Text("Recipe Name")
-                    .font(.system(size: 30, weight: .bold))
-                    .multilineTextAlignment(.center)
+        VStack(alignment: .center) {
+            VStack {
+                GeometryReader { geometry in
+                    HStack {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                Rectangle()
+                                    .frame(width: geometry.size.width/2, height: geometry.size.height, alignment: .center)
+                                    .clipped()
+                                    .border(Color.black, width: 3)
+                                        
+                                Rectangle()
+                                    .frame(width: geometry.size.width/2, height: geometry.size.height, alignment: .center)
+                                    .clipped()
+                                    .border(Color.black, width: 3)
+                            }
+                            .foregroundColor(Color.white)
+                            .frame(minWidth: geometry.size.width)
+                        }
+                    }
+                }
+                .frame(height: 150)
+
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 40, height: 40)
+                        .opacity(0.8)
+
+                    Circle()
+                        .stroke(Color.black)
+                        .frame(width: 40, height: 40)
+
+                    //TODO add button or camera button?
+                    Image(systemName: "plus")
+                }
+                
             }
             .padding()
-            
-            Text("Image")
-            
-            Section(header:
-                HStack {
-                    Text("Ingredients")
-                    
-                    Spacer()
-                    
-                    VStack {
-                        // should be changing servings but not in db
-//                        Picker(selection: $recipe.servings, label:
-//                                HStack {
-//                                    Text("Serving Size: \(recipe.servings)")
-//
-//                                    Image(systemName: "chevron.down")
-//                                }
-//                        )
-//                        {
-//                            ForEach(1..<101, id: \.self) { num in
-//                                Text("\(num.toString())").tag(num.toString())
-//                            }
-//                        }
-//                        .pickerStyle(MenuPickerStyle())
-                        Text("Servings Picker")
-                    }
-                },
-                    footer:
-                        Button(action: {
-                            
-                        }) {
-                            Text("Add Ingredients to Shopping List")
-                        }
-
-            ) {
-                List {
-                    ForEach(0..<3, id: \.self) { index in
-                        HStack {
-//                            if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
-//                                Image(systemName: "checkmark")
-//                                    .foregroundColor(mainColor())
-//                            }
-//                            else {
-                                UIControls.AddButton(action: {
-//                                    withAnimation {
-//                                        confirmAddIngredient = ingredient.id
-//                                    }
-                                })
-//                            }
-                            
-//                            IngredientText(ingredient)
-                            Text("Ingredient \(index)")
-                        }
-                        if confirmAddIngredient {
-                            HStack {
-                                Image(systemName: "cart.fill")
-                                
-                                Button("Add to Shopping List", action: {
-//                                    withAnimation {
-//                                        collection.addToShoppingList(ingredient)
-//                                        confirmAddIngredient = nil
-//                                        addedIngredients.append(ingredient.id)
-//                                    }
-                                })
-                            }
-                            .foregroundColor(mainColor())
-                        }
-                    }
-                }
-            }
-            
-            Section(header: Text("Directions")) {
-                // TODO make list collapsable so after a step is done, it collapses
-                List {
-                    ForEach(0..<3, id: \.self) { index in
-                        Text("\(index) Direction")
-                    }
-                }
-            }
         }
-        
-        VStack {
-            ForEach(0..<3, id: \.self) { index in
-                Text("\(index) Direction")
-                    .formItem()
-            }
-        }
-        .formed()
+        .padding(.horizontal)
     }
 }
 

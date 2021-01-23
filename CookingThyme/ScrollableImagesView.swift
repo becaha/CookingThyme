@@ -15,6 +15,8 @@ struct ScrollableImagesView: View {
     var width: CGFloat
     var height: CGFloat
     var isEditing: Bool
+    var borderWidth: CGFloat = 3
+    var widthOffset: CGFloat = 6
     
     init(uiImages: [UIImage], width: CGFloat, height: CGFloat, isEditing: Bool) {
         self.uiImages = uiImages
@@ -52,10 +54,10 @@ struct ScrollableImagesView: View {
                             }
                         
                             Image(uiImage: uiImages[index])
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index], in: CGSize(width: width/2, height: height)))
-                                .frame(width: width/2, height: height, alignment: .center)
+                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index], in: CGSize(width: width/2 - widthOffset, height: height)))
+                                .frame(width: width/2 - widthOffset, height: height, alignment: .center)
                                 .clipped()
-                                .border(Color.black, width: 3)
+                                .border(Color.black, width: borderWidth)
                         }
                     }
                 }

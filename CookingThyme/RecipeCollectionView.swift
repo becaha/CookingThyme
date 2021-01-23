@@ -300,24 +300,8 @@ struct RecipeCollectionView: View {
                     VStack {
                         
                         HStack {
-                            Button(action: {
+                            UIControls.AddButton(withLabel: "New Recipe") {
                                 createRecipe()
-                            }) {
-                                HStack {
-                                    ZStack {
-                                        Circle()
-                                            .frame(width: 25, height: 25)
-                                            .foregroundColor(.white)
-                                            .shadow(radius: 1)
-
-                                        Image(systemName: "plus")
-                                            .font(Font.subheadline.weight(.bold))
-                                            .foregroundColor(mainColor())
-                                    }
-                                    
-                                    Text("New Recipe")
-                                        .bold()
-                                }
                             }
                             
                             Spacer()

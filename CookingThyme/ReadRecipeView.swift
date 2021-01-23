@@ -37,16 +37,13 @@ struct ReadRecipeView: View {
     
     var body: some View {
         VStack {
+            Text("\(recipe.name)")
+                .recipeTitle()
+                .recipeTitleBorder()
+            
+            getImageView()
+            
             Form {
-                HStack {
-                    Text("\(recipe.name)")
-                        .font(.system(size: 30, weight: .bold))
-                        .multilineTextAlignment(.center)
-                }
-                .padding()
-                
-                getImageView()
-                
                 Section(header:
                     HStack {
                         Text("Ingredients")
@@ -173,9 +170,9 @@ struct ReadRecipeView: View {
     @ViewBuilder
     func getImageView() -> some View {
         if recipe.imageHandler.image != nil {
-            Section(header: Text("Photos")) {
+//            Section(header: Text("Photos")) {
                 ImagesView(isEditing: false)
-            }
+//            }
         }
     }
     

@@ -31,8 +31,7 @@ struct ImagesView: View {
                 UIControls.Loading()
             }
             else {
-                HStack {
-
+                VStack {
                     GeometryReader { geometry in
                         HStack {
                             if recipe.imageHandler.images.count > 0 {
@@ -55,27 +54,36 @@ struct ImagesView: View {
                             }
                         }
                     }
-                    
+                    .padding()
+                    .frame(height: 150)
+
                     if isEditing && recipe.imageHandler.images.count > 0 {
-                        ZStack {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 40, height: 40)
-                                .opacity(0.8)
-                            
-                            Circle()
-                                .stroke(Color.black)
-                                .frame(width: 40, height: 40)
-                            
-                            //TODO add button or camera button?
-                            EditPhotoButton()
+                        UIControls.AddButton(withLabel: "Add Photo") {
+                            editPhotoSheetPresented = true
                         }
+                        .padding(.top, 0)
+                        .actionSheet(isPresented: $editPhotoSheetPresented, content: {
+                            ActionSheet(title: Text("Add photo"), message: nil, buttons:
+                                [
+                                    .default(Text("Pick from camera roll"), action: {
+                                        cameraRollSheetPresented = true
+                                    }),
+                                    .default(Text("Paste"), action: {
+                                        presentPasteAlert = true
+                                        if UIPasteboard.general.url != nil {
+                                            confirmPaste = true
+                                        } else {
+                                            explainPaste = true
+                                        }
+                                    }),
+                                    .cancel()
+                                ])
+                        })
                     }
                 }
-                .padding()
             }
         }
-        .frame(height: 150)
+        .padding(.horizontal)
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
             ImagePicker(image: self.$selectedImage)
         }

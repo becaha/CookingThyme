@@ -96,9 +96,6 @@ struct EditRecipeView: View {
                 }
             }
         }
-        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
-            ImagePicker(image: self.$selectedImage)
-        }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
@@ -155,6 +152,9 @@ struct EditRecipeView: View {
                             }
                         } label: {
                             Image(systemName: "square.and.arrow.down")
+                        }
+                        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
+                            ImagePicker(image: self.$selectedImage)
                         }
                     }
                 
@@ -261,8 +261,7 @@ struct EditRecipeView: View {
                         }
                     }
                 })
-                .multilineTextAlignment(.center)
-                .font(.system(size: 30, weight: .bold))
+                .recipeTitle()
                 
                 ErrorMessage("Must have a name.", isError: $nameFieldMissing)
                     .padding(0)
@@ -271,12 +270,9 @@ struct EditRecipeView: View {
         }
         .padding()
         
+        ImagesView()
+        
         Form {
-            // TODO take out of form
-            Section(header: Text("Photos")) {
-                ImagesView()
-                    .frame(minHeight: 200)
-            }
             
             Section(header:
                 HStack {
