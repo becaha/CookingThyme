@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
+// TODO: everything on background threed
 class RecipeVM: ObservableObject {
     var category: RecipeCategoryVM
     @Published var recipe: Recipe
@@ -34,6 +35,7 @@ class RecipeVM: ObservableObject {
         setCancellables()
         
         popullateRecipe()
+        popullateImages()
     }
     
     init(category: RecipeCategoryVM) {
@@ -128,6 +130,7 @@ class RecipeVM: ObservableObject {
         }
     }
     
+    // TODO only update, no delete -> create and only update if something is changed
     // update recipe to given recipe parts
     func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, categoryId: Int) {
         category.deleteRecipe(withId: id)

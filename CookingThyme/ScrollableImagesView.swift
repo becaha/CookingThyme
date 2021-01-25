@@ -29,8 +29,18 @@ struct ScrollableImagesView: View {
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(0..<uiImages.count, id: \.self) { index in
-                    if index < uiImages.count, uiImages[index] != nil {
+                // uiImages.count
+                ForEach(0..<(recipe.imageHandler.imagesCount ?? 0), id: \.self) { index in
+                    if uiImages[index] == nil {
+                        VStack {
+                            Spacer()
+                            
+                            UIControls.Loading()
+
+                            Spacer()
+                        }
+                    }
+                    else if index < uiImages.count, uiImages[index] != nil {
                         ZStack {
                             if isEditing {
                                 Button(action: {

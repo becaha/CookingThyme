@@ -16,14 +16,13 @@ class ImageHandler: ObservableObject {
         didSet {
             if images.count == self.imagesCount {
                 self.loadingImages = false
-                self.imagesCount = nil
             }
         }
     }
     @Published var zoomScale: CGFloat = 1.0
     @Published var loadingImages: Bool = false
 
-    var imagesCount: Int?
+    @Published var imagesCount: Int?
     
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
@@ -51,8 +50,10 @@ class ImageHandler: ObservableObject {
             imagesCount = images.count
         }
         self.images = [Int: UIImage]()
-        for index in 0..<images.count {
-            setImage(images[index], at: index)
+        DispatchQueue.global(qos: .userInitiated).async {
+            for index in 0..<images.count {
+                self.setImage(images[index], at: index)
+            }
         }
     }
     
@@ -71,6 +72,9 @@ class ImageHandler: ObservableObject {
     
     // adds URL image to end of images
     func addImage(url: URL?) {
+        if let imagesCount = self.imagesCount {
+            self.imagesCount = imagesCount + 1
+        }
         let index = self.images.count
         addImage(url: url, at: index)
     }
@@ -83,28 +87,29 @@ class ImageHandler: ObservableObject {
     
     // adds UIImage to end of images
     func addImage(uiImage: UIImage) {
+        if let imagesCount = self.imagesCount {
+            self.imagesCount = imagesCount + 1
+        }
         let index = self.images.count
         addImage(uiImage: uiImage, at: index)
     }
     
     // adds UIImage at index
     private func addImage(uiImage: UIImage, at index: Int) {
-        self.image = uiImage
-        self.images[index] = uiImage
-//        self.images.append(uiImage)
+        DispatchQueue.main.async {
+            self.images[index] = uiImage
+        }
     }
     
     func removeImage(at index: Int) {
-        var count = self.images.count
+        if let imagesCount = self.imagesCount {
+            self.imagesCount = imagesCount - 1
+        }
         self.images[index] = nil
-        count = self.images.count
-        print(count)
-//        self.images.remove(at: index)
     }
     
     // sets image data for a imageURL
     private func setImageData(at index: Int) {
-        image = nil
         if let imageUrl = imageURL {
             fetchImageCancellable?.cancel()
             fetchImageCancellable = URLSession.shared
@@ -115,7 +120,6 @@ class ImageHandler: ObservableObject {
                 .sink(receiveValue: { (image) in
                     self.images[index] = image
                 })
-//                .assign(to: \ImageHandler.image, on: self)
         }
     }
     

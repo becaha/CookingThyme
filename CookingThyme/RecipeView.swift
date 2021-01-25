@@ -21,7 +21,6 @@ struct RecipeView: View {
             }
             else {
                 EditRecipeView(isEditingRecipe: self.$isEditingRecipe, isImportingRecipe: self.$isEditingRecipe)
-
             }
         }
         .background(formBackgroundColor())

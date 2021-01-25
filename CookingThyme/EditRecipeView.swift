@@ -98,9 +98,6 @@ struct EditRecipeView: View {
                 }
             }
         }
-        .onAppear {
-            recipe.popullateImages()
-        }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
