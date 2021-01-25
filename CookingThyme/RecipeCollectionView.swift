@@ -102,7 +102,7 @@ struct RecipeCollectionView: View {
                                                     
                                                     Button(action: {
                                                     }) {
-                                                        Label("Cancel", systemImage: "")
+                                                        Text("Cancel")
                                                     }
                                                 } label: {
                                                     Label("Edit Photo", systemImage: "camera")

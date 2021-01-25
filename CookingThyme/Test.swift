@@ -7,41 +7,6 @@
 
 import SwiftUI
 
-struct SearchBarTest: View {
-    @Binding var search: String
-    var isAutoSearch: Bool
-    var onCommit: (String) -> Void
-    
-//    @State var search: String = ""
-    
-    var body: some View {
-        let searchBinding = Binding<String>(get: {
-                    self.search
-                }, set: { updatedSearch in
-                    self.search = updatedSearch
-                    // do whatever you want here
-                    onCommit(updatedSearch)
-                })
-        
-        return HStack {
-            TextField("Search", text: isAutoSearch ? searchBinding: $search, onCommit: {
-                onCommit(search)
-            })
-            .font(Font.body.weight(.regular))
-            .foregroundColor(.black)
-            
-            Button(action: {
-                onCommit(search)
-            }) {
-                Image(systemName: "magnifyingglass")
-                    .font(Font.body.weight(.regular))
-                    .foregroundColor(searchFontColor())
-            }
-            .buttonStyle(PlainButtonStyle())
-        }
-    }
-}
-
 struct Test: View {
     var confirmAddIngredient = false
     @State var search = ""
@@ -49,16 +14,58 @@ struct Test: View {
     @State var commitedSearch = ""
     
     var body: some View {
-        VStack {
-            SearchBarTest(search: $search, isAutoSearch: true) { result in
-                onCommit(result)
+        Menu {
+            Text("Add Photo")
+            
+            Button(action: {
+//                cameraRollSheetPresented = true
+            }) {
+                Text("From camera roll")
             }
             
             Button(action: {
-                search = ""
+//                presentPasteAlert = true
+//                if UIPasteboard.general.url != nil {
+//                    confirmPaste = true
+//                } else {
+//                    explainPaste = true
+//                }
             }) {
-                Text("Clear \(commitCount)")
+                Label("Paste", systemImage: "doc.on.clipboard")
             }
+            
+            Button(action: {
+            }) {
+                Text("Cancel")
+            }
+        } label: {
+            VStack(alignment: .center) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.white)
+                        
+                    
+                    VStack {
+                        ZStack {
+                            Circle()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                                .shadow(radius: 1)
+
+                            Image(systemName: "plus")
+                                .font(Font.subheadline.weight(.bold))
+                                .foregroundColor(mainColor())
+                        }
+                        
+                        Text("Add Photo")
+                            .bold()
+                    }
+                    .border(Color.black, width: 3.0, isDashed: true)
+                }
+                .frame(width: 300)
+            }
+            .background(formBackgroundColor())
+            .frame(width: 300, height: 200)
         }
     }
         

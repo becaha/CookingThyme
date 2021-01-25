@@ -12,14 +12,6 @@ struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true
     
-    @State private var presentPasteAlert = false
-    @State private var confirmPaste = false
-    @State private var explainPaste = false
-
-    @State private var editPhotoSheetPresented = false
-    @State private var cameraRollSheetPresented = false
-    @State private var selectedImage: UIImage?
-    
     var body: some View {
         
         VStack(alignment: .center) {
@@ -30,93 +22,59 @@ struct ImagesView: View {
                             ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                         }
                         else if isEditing {
-                            Button(action: {
-                                editPhotoSheetPresented = true
-                            }) {
-                                VStack(alignment: .center) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.white)
-                                            
-                                        
-                                        VStack {
-                                            ZStack {
-                                                Circle()
-                                                    .frame(width: 25, height: 25)
-                                                    .foregroundColor(.white)
-                                                    .shadow(radius: 1)
+                            VStack(alignment: .center) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.white)
+                                    
+                                    VStack {
+                                        ZStack {
+                                            Circle()
+                                                .frame(width: 25, height: 25)
+                                                .foregroundColor(.white)
+                                                .shadow(radius: 1)
 
-                                                Image(systemName: "plus")
-                                                    .font(Font.subheadline.weight(.bold))
-                                                    .foregroundColor(mainColor())
-                                            }
-                                            
-                                            Text("Add Photo")
-                                                .bold()
+                                            Image(systemName: "plus")
+                                                .font(Font.subheadline.weight(.bold))
+                                                .foregroundColor(mainColor())
                                         }
-                                        .border(Color.black, width: 3.0, isDashed: true)
+                                        
+                                        Text("Add Photo")
+                                            .bold()
                                     }
-                                    .frame(width: geometry.size.width/2)
+                                    .border(Color.black, width: 3.0, isDashed: true)
                                 }
-                                .background(formBackgroundColor())
-                                .frame(width: geometry.size.width)
+                                .frame(width: geometry.size.width/2)
                             }
+                            .background(formBackgroundColor())
+                            .padding([.bottom, .horizontal])
+                            .frame(width: geometry.size.width, height: 150)
+                            .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                         }
                     }
                 }
-                .padding()
+                .padding(.bottom)
                 .frame(height: 150)
 
                 if isEditing && recipe.imageHandler.images.count > 0 {
-                    UIControls.AddButton(withLabel: "Add Photo") {
-                        editPhotoSheetPresented = true
-                    }
+                    UIControls.AddButton(withLabel: "Add Photo") {}
+                        .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                     .padding(.top, 0)
                 }
             }
         }
         .padding(.horizontal)
-        .actionSheet(isPresented: $editPhotoSheetPresented, content: {
-            ActionSheet(title: Text("Add photo"), message: nil, buttons:
-                [
-                    .default(Text("Pick from camera roll"), action: {
-                        cameraRollSheetPresented = true
-                    }),
-                    .default(Text("Paste"), action: {
-                        presentPasteAlert = true
-                        if UIPasteboard.general.url != nil {
-                            confirmPaste = true
-                        } else {
-                            explainPaste = true
-                        }
-                    }),
-                    .cancel()
-                ])
-        })
-        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-            ImagePicker(image: self.$selectedImage)
-        }
-        .alert(isPresented: $presentPasteAlert) {
-            if confirmPaste {
-                return Alert(title: Text("Add Image"),
-                      message: Text(""),
-                      primaryButton: .default(Text("Ok")) {
-                        recipe.addTempImage(url: UIPasteboard.general.url)
-                      },
-                      secondaryButton: .cancel())
-            }
-            return Alert(title: Text("Paste Image"),
-                  message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                  dismissButton: .default(Text("Ok")))
-        }
     }
     
     // loads image selected from camera roll
-    func loadImage() {
+    func loadImage(_ selectedImage: UIImage) {
         withAnimation {
-            guard let inputImage = selectedImage else { return }
-            recipe.addTempImage(uiImage: inputImage)
+            recipe.addTempImage(uiImage: selectedImage)
         }
+    }
+    
+    func paste() {
+        recipe.addTempImage(url: UIPasteboard.general.url)
     }
 }
 

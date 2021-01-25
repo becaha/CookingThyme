@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-// TODO: action sheet titles
+// TODO CURRENT: action sheets -> menus
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
