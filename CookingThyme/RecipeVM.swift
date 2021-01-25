@@ -113,7 +113,6 @@ class RecipeVM: ObservableObject {
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
-        popullateImages()
     }
     
     // sends images to image handler to prep for ui
@@ -179,7 +178,6 @@ class RecipeVM: ObservableObject {
             let image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: recipe.id)
             tempImages.append(image)
             imageHandler.addImage(url: url)
-            category.addImage(image, withURL: url)
         }
     }
     
@@ -194,14 +192,12 @@ class RecipeVM: ObservableObject {
         if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: recipe.id) {
             tempImages.append(image)
             imageHandler.addImage(uiImage: uiImage)
-            category.addImage(image, withUIImage: uiImage)
         }
     }
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
         imageHandler.removeImage(at: index)
-        category.removeImage(at: index)
     }
 
     

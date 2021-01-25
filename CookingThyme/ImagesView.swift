@@ -8,8 +8,6 @@
 import SwiftUI
 import Combine
 
-// TODO: index on delete is off, A B add photo C, save, A C B, edit, delete C -> A B, save, AC
-// switches the index from the scrolled images shown from the actual one in recipe
 // tODO: after adding imaage, done doesnt respond unless you click somewhere else first
 struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
@@ -23,67 +21,58 @@ struct ImagesView: View {
     @State private var cameraRollSheetPresented = false
     @State private var selectedImage: UIImage?
     
-    private var isLoading: Bool {
-        return recipe.imageHandler.loadingImages
-    }
-    
     var body: some View {
         
         VStack(alignment: .center) {
-            if isLoading {
-                UIControls.Loading()
-            }
-            else {
-                VStack {
-                    GeometryReader { geometry in
-                        HStack {
-                            if recipe.imageHandler.images.count > 0 {
-                                ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
-                            }
-                            else if isEditing {
-                                Button(action: {
-                                    editPhotoSheetPresented = true
-                                }) {
-                                    VStack(alignment: .center) {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .fill(Color.white)
-                                                
+            VStack {
+                GeometryReader { geometry in
+                    HStack {
+                        if recipe.imageHandler.images.count > 0 {
+                            ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
+                        }
+                        else if isEditing {
+                            Button(action: {
+                                editPhotoSheetPresented = true
+                            }) {
+                                VStack(alignment: .center) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.white)
                                             
-                                            VStack {
-                                                ZStack {
-                                                    Circle()
-                                                        .frame(width: 25, height: 25)
-                                                        .foregroundColor(.white)
-                                                        .shadow(radius: 1)
+                                        
+                                        VStack {
+                                            ZStack {
+                                                Circle()
+                                                    .frame(width: 25, height: 25)
+                                                    .foregroundColor(.white)
+                                                    .shadow(radius: 1)
 
-                                                    Image(systemName: "plus")
-                                                        .font(Font.subheadline.weight(.bold))
-                                                        .foregroundColor(mainColor())
-                                                }
-                                                
-                                                Text("Add Photo")
-                                                    .bold()
+                                                Image(systemName: "plus")
+                                                    .font(Font.subheadline.weight(.bold))
+                                                    .foregroundColor(mainColor())
                                             }
-                                            .border(Color.black, width: 3.0, isDashed: true)
+                                            
+                                            Text("Add Photo")
+                                                .bold()
                                         }
-                                        .frame(width: geometry.size.width/2)
+                                        .border(Color.black, width: 3.0, isDashed: true)
                                     }
-                                    .background(formBackgroundColor())
-                                    .frame(width: geometry.size.width)
+                                    .frame(width: geometry.size.width/2)
                                 }
+                                .background(formBackgroundColor())
+                                .frame(width: geometry.size.width)
                             }
                         }
                     }
-                    .padding()
-                    .frame(height: 150)
+                }
+                .padding()
+                .frame(height: 150)
 
-                    if isEditing && recipe.imageHandler.images.count > 0 {
-                        UIControls.AddButton(withLabel: "Add Photo") {
-                            editPhotoSheetPresented = true
-                        }
-                        .padding(.top, 0)
+                if isEditing && recipe.imageHandler.images.count > 0 {
+                    UIControls.AddButton(withLabel: "Add Photo") {
+                        editPhotoSheetPresented = true
                     }
+                    .padding(.top, 0)
                 }
             }
         }

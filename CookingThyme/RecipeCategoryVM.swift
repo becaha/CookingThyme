@@ -79,26 +79,12 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
+    // MARK: - Image
+    
     func popullateImage() {
         if let image = RecipeDB.shared.getImage(withCategoryId: id) {
             imageHandler.setImages([image])
         }
-    }
-    
-    // sets first image found in the recipes of the category as the category image
-    func setImage(_ image: RecipeImage, replace: Bool) {
-        if imageHandler.image == nil {
-            createImage(image)
-        }
-        else if replace == true {
-            RecipeDB.shared.deleteImage(withCategoryId: id)
-            createImage(image)
-        }
-    }
-    
-    func createImage(_ image: RecipeImage) {
-        RecipeDB.shared.createImage(image, withCategoryId: id)
-        popullateImage()
     }
     
     func setImage(url: URL?) {
@@ -109,7 +95,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             setImage(image, replace: true)
         }
     }
-    
+
     func setImage(uiImage: UIImage) {
         if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: 0) {
             var recipeImage = image
@@ -119,20 +105,36 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
-    func addImage(_ image: RecipeImage, withURL url: URL) {
-        setImage(image, replace: false)
-        imageHandler.addImage(url: url)
+    func createImage(_ image: RecipeImage) {
+        RecipeDB.shared.createImage(image, withCategoryId: id)
+        popullateImage()
     }
     
-    func addImage(_ image: RecipeImage, withUIImage uiImage: UIImage) {
-        setImage(image, replace: false)
-        imageHandler.addImage(uiImage: uiImage)
+    func removeImage() {
+        imageHandler.removeImage(at: 0)
+        RecipeDB.shared.deleteImage(withCategoryId: id)
     }
     
-    // TODO should remove image if it is the category image if was removed from recipe?
-    func removeImage(at index: Int) {
-//        imageHandler.removeImage(at: index)
+    // sets image in db
+    private func setImage(_ image: RecipeImage, replace: Bool) {
+        if imageHandler.image == nil {
+            createImage(image)
+        }
+        else if replace == true {
+            RecipeDB.shared.deleteImage(withCategoryId: id)
+            createImage(image)
+        }
     }
+    
+//    func addImage(_ image: RecipeImage, withURL url: URL) {
+//        setImage(image, replace: false)
+//        imageHandler.addImage(url: url)
+//    }
+//
+//    func addImage(_ image: RecipeImage, withUIImage uiImage: UIImage) {
+//        setImage(image, replace: false)
+//        imageHandler.addImage(uiImage: uiImage)
+//    }
     
     // gets category from db
     func refreshCategory() {

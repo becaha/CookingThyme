@@ -12,10 +12,19 @@ import Combine
 // handles URL and UI Images
 class ImageHandler: ObservableObject {
     @Published private(set) var image: UIImage?
-    @Published private(set) var images = [Int: UIImage]()
+    @Published private(set) var images = [Int: UIImage]() {
+        didSet {
+            if images.count == self.imagesCount {
+                self.loadingImages = false
+                self.imagesCount = nil
+            }
+        }
+    }
     @Published var zoomScale: CGFloat = 1.0
     @Published var loadingImages: Bool = false
 
+    var imagesCount: Int?
+    
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
     
@@ -39,12 +48,12 @@ class ImageHandler: ObservableObject {
     func setImages(_ images: [RecipeImage]) {
         if images.count > 0 {
             self.loadingImages = true
+            imagesCount = images.count
         }
         self.images = [Int: UIImage]()
         for index in 0..<images.count {
             setImage(images[index], at: index)
         }
-        self.loadingImages = false
     }
     
     // sets image for UI

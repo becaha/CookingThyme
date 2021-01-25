@@ -26,10 +26,10 @@ struct RecipeCollectionView: View {
     @State var deleteCategoryId: Int?
     
     @State private var isCreatingRecipe = false
-    
+        
     @State private var presentAlert = false
     
-    @State private var presentPasteAlert = false
+    @State private var photoEditAlert = false
     @State private var confirmPaste = false
     @State private var explainPaste = false
 
@@ -83,6 +83,7 @@ struct RecipeCollectionView: View {
 
                                                     Button(action: {
                                                         editCategory = category
+                                                        photoEditAlert = true
                                                         presentAlert = true
                                                         if UIPasteboard.general.url != nil {
                                                             confirmPaste = true
@@ -91,6 +92,19 @@ struct RecipeCollectionView: View {
                                                         }
                                                     }) {
                                                         Label("Paste", systemImage: "doc.on.clipboard")
+                                                    }
+                                                    
+                                                    Button(action: {
+                                                        editCategory = category
+                                                        photoEditAlert = true
+                                                        presentAlert = true
+                                                    }) {
+                                                        Label("Delete", systemImage: "trash")
+                                                    }
+                                                    
+                                                    Button(action: {
+                                                    }) {
+                                                        Label("Cancel", systemImage: "")
                                                     }
                                                 } label: {
                                                     Label("Edit Photo", systemImage: "camera")
@@ -101,7 +115,7 @@ struct RecipeCollectionView: View {
                                                     deleteCategoryAlert = true
                                                     presentAlert = true
                                                 }) {
-                                                    Label("Delete", systemImage: "trash")
+                                                    Label("Delete Category", systemImage: "trash")
                                                 }
                                                 
                                                 Button(action: {
@@ -132,6 +146,9 @@ struct RecipeCollectionView: View {
                                 .droppable(if: isDroppable(toCategory: category), of: ["public.image", "public.text"], isTargeted: nil) { providers in
                                     return drop(providers: providers, category: category)
                                 }
+                                .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
+                                    ImagePicker(image: self.$selectedImage)
+                                }
                                 .padding()
                                 .padding(.horizontal, 7)
                                 .environmentObject(category)
@@ -139,27 +156,38 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .padding(.trailing, 60)
-                    .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-                        ImagePicker(image: self.$selectedImage)
-                    }
                     .alert(isPresented: $presentAlert) {
-                        if confirmPaste {
-                            return Alert(title: Text("Add Image"),
-                                  message: Text(""),
-                                  primaryButton: .default(Text("Ok")) {
-                                    if let category = editCategory {
-                                        category.setImage(url: UIPasteboard.general.url)
+                        if photoEditAlert {
+                            if confirmPaste {
+                                return Alert(title: Text("Add Image"),
+                                      message: Text(""),
+                                      primaryButton: .default(Text("Ok")) {
+                                        if let category = editCategory {
+                                            category.setImage(url: UIPasteboard.general.url)
+                                            editCategory = nil
+                                        }
+                                      },
+                                      secondaryButton: .default(Text("Cancel")) {
                                         editCategory = nil
-                                    }
-                                  },
-                                  secondaryButton: .default(Text("Cancel")) {
-                                    editCategory = nil
-                                  })
-                        }
-                        if explainPaste {
-                            return Alert(title: Text("Paste Image"),
-                                  message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                                  dismissButton: .default(Text("Ok")))
+                                      })
+                            }
+                            if explainPaste {
+                                return Alert(title: Text("Paste Image"),
+                                      message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
+                                      dismissButton: .default(Text("Ok")))
+                            }
+                            return Alert(title: Text("Delete Image"),
+                                         message: Text("Are you sure you want to delete the image for this category?"),
+                                         primaryButton: .default(Text("Ok")) {
+                                           if let category = editCategory {
+                                            withAnimation {
+                                                category.removeImage()
+                                            }
+                                           }
+                                         },
+                                         secondaryButton: .default(Text("Cancel")) {
+                                           editCategory = nil
+                                         })
                         }
                         // deleteCategoryAlert
                         return Alert(title: Text("Delete Category"),
@@ -307,6 +335,15 @@ struct RecipeCollectionView: View {
                             Spacer()
                         }
                     }
+                    .sheet(isPresented: $isCreatingRecipe, onDismiss: {
+                        if let currentCategory = collection.currentCategory {
+                            collection.setCurrentCategory(currentCategory)
+                        }
+                    }) {
+                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
+                            .environmentObject(RecipeVM(category: collection.currentCategory!))
+                            .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
+                    }
                     .padding()
                     .overlay(
                         Rectangle()
@@ -314,15 +351,6 @@ struct RecipeCollectionView: View {
                             .foregroundColor(borderColor()),
                         alignment: .top)
                 }
-            }
-            .sheet(isPresented: $isCreatingRecipe, onDismiss: {
-                if let currentCategory = collection.currentCategory {
-                    collection.setCurrentCategory(currentCategory)
-                }
-            }) {
-                CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
-                    .environmentObject(RecipeVM(category: collection.currentCategory!))
-                    .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
             }
             .background(formBackgroundColor())
             .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)

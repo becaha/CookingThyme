@@ -116,6 +116,9 @@ struct ReadRecipeView: View {
                 }
             }
         }
+        .onAppear {
+            recipe.popullateImages()
+        }
         .sheet(isPresented: $categoriesPresented, content: {
             List{
                 ForEach(collection.categories, id: \.self) { category in

@@ -278,8 +278,8 @@
 			isa = PBXGroup;
 			children = (
 				DB49B4C22565E49F00808CC8 /* RecipeCollectionVM.swift */,
-				DB49B4C52565E49F00808CC8 /* RecipeVM.swift */,
 				DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */,
+				DB49B4C52565E49F00808CC8 /* RecipeVM.swift */,
 				DB49B5182579F1B300808CC8 /* ImageHandler.swift */,
 				DB49B53E258018C200808CC8 /* TimerHandler.swift */,
 				DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */,
