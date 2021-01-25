@@ -10,7 +10,6 @@ import SwiftUI
 // TODO: take care of switching before exiting sheet
 // TODO: no capitalization, keyboards
 // TODO: error when signed in user, restart sim, sign out, try to sign in
-// TODO: get it wrong once, is wrong forever
 struct SigninView: View {
     @EnvironmentObject var user: UserVM
     

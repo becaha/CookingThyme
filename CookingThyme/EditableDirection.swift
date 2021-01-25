@@ -8,7 +8,6 @@
 import SwiftUI
 import GRDB
 
-//TODO: have auto capitalization an option
 struct EditableDirection: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int

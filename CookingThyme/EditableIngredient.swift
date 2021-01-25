@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-//TODO: have auto capitalization an option
 struct EditableIngredient: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int

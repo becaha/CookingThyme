@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-// tODO: after adding imaage, done doesnt respond unless you click somewhere else first
 struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true

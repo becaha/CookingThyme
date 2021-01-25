@@ -8,9 +8,11 @@
 import SwiftUI
 
 // TODO: serving size low num to high
-// TODO: have cursor go to next item in list after one is entered
+// TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 // TODO: should the delete button be centered or aligned with the direction number
 struct EditRecipeView: View {
+    @Environment(\.presentationMode) var presentation
+
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
     @EnvironmentObject var recipe: RecipeVM

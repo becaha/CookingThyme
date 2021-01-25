@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-//TODO: have auto capitalization an option
 struct EditableText: View {
     var text: String = ""
     var isEditing: Bool
@@ -66,12 +65,12 @@ struct EditableText: View {
                     .fontWeight(isSelected ? .bold : .none)
                     .opacity(isEditing ? 0 : 1)
                     .onAppear {
-                        callOnChanged()
+                        callOnChanged(false)
                     }
             }
             else {
-                TextField(text, text: $editableText, onEditingChanged: { began in
-                    callOnChanged()
+                TextField(text, text: $editableText, onEditingChanged: { begin in
+                    callOnChanged(begin)
                 })
                 .autocapitalization(autocapitalization)
                 .opacity(isEditing ? 1 : 0)
@@ -83,7 +82,7 @@ struct EditableText: View {
         }
     }
 
-    func callOnChanged() {
+    func callOnChanged(_ begin: Bool) {
         if editableText != text {
             onChanged(editableText)
         }

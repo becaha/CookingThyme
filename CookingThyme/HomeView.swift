@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: on dismiss sign in sheet, come back to tab I was on
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var timer = TimerHandler()

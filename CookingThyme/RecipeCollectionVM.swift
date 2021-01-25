@@ -181,7 +181,7 @@ class RecipeCollectionVM: ObservableObject {
     // updates name of category
     func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {
         RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id)
-        popullateCategories()
+//        popullateCategories()
     }
     
     // deletes category from collection

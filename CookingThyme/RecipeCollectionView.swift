@@ -358,6 +358,10 @@ struct RecipeCollectionView: View {
                 UIControls.EditButton(
                     action: {
                         isEditing.toggle()
+                        if !isEditing {
+                            unfocusEditable()
+                            collection.popullateCategories()
+                        }
                     },
                     isEditing: isEditing)
             )
@@ -366,10 +370,19 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = false
                 }
             } : nil)
+            .simultaneousGesture(
+                TapGesture().onEnded { _ in
+                    unfocusEditable()
+                }
+            )
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
         }
+    }
+    
+    func unfocusEditable() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
     }
     
     func searchRecipes() {
