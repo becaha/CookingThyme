@@ -8,7 +8,6 @@
 import SwiftUI
 
 // TODO: measurement page to ask how many tbsp in an ounce
-// TODO: seaarch refine with every letter typed
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
@@ -252,30 +251,10 @@ struct RecipeCollectionView: View {
                         VStack(spacing: 0) {
                             GeometryReader { geometry in
                                 HStack {
-                                    let searchBinding = Binding<String>(get: {
-                                                self.search
-                                            }, set: { updatedSearch in
-                                                self.search = updatedSearch
-                                                // do whatever you want here
-                                                searchRecipes()
-                                            })
-                                    
-                                    TextField("Search", text: searchBinding, onCommit: {
-                                        searchRecipes()
-                                    })
-                                    .font(Font.body.weight(.regular))
-                                    .foregroundColor(.black)
-                                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
-                                    
-                                    Button(action: {
-                                        searchRecipes()
-                                    }) {
-                                        Image(systemName: "magnifyingglass")
-                                            .font(Font.body.weight(.regular))
-                                            .foregroundColor(searchFontColor())
-                                            .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                                    AutoSearchBar(search: $search) { result in
+                                        searchRecipes(result)
                                     }
-                                    .buttonStyle(PlainButtonStyle())
+                                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                                 }
                                 .formItem(isSearchBar: true)
                                 .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
@@ -283,7 +262,7 @@ struct RecipeCollectionView: View {
                             .frame(height: 35)
                             .padding(.bottom)
                             
-                            if search != "" && collection.currentCategory!.filteredRecipes.count == 0 {
+                            if collection.currentCategory!.filteredRecipes.count == 0 {
                                 Text("No recipes found.")
                             }
                             
@@ -392,9 +371,9 @@ struct RecipeCollectionView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
     }
     
-    func searchRecipes() {
+    func searchRecipes(_ search: String) {
         withAnimation {
-            collection.filterCurrentCategory(withSearch: self.search)
+            collection.filterCurrentCategory(withSearch: search)
         }
     }
     

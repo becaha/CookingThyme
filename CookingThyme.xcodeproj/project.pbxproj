@@ -83,6 +83,7 @@
 		DB88CD3325BB97B100A7F32C /* CustomFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */; };
 		DB88CD3525BBA49F00A7F32C /* RecipeTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3425BBA49F00A7F32C /* RecipeTitle.swift */; };
 		DB88CD3825BBAABD00A7F32C /* RecipeTitleBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */; };
+		DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
@@ -174,6 +175,7 @@
 		DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFormSection.swift; sourceTree = "<group>"; };
 		DB88CD3425BBA49F00A7F32C /* RecipeTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTitle.swift; sourceTree = "<group>"; };
 		DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTitleBorder.swift; sourceTree = "<group>"; };
+		DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSearchBar.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */,
 				DB49B54025801B4600808CC8 /* IsActive.swift */,
 				DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */,
+				DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */,
 				DB49B56A2582CEF400808CC8 /* SearchBar.swift */,
 				DBCDE78725945661003DC95F /* FormTitle.swift */,
 				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
@@ -672,6 +675,7 @@
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
 				DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */,
+				DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
 				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,

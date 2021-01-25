@@ -105,7 +105,6 @@ enum UnitOfMeasurement: CaseIterable {
         return [.cup, .pint, .quart, .gallon, .teaspoon, .tablespoon, .liter, .mililiter, .pound]
     }
     
-    // TODO unknown unit handling
     static func fromString(unitString: String) -> UnitOfMeasurement {
         for unit in UnitOfMeasurement.allCases {
             if unitString.lowercased() == unit.getName().lowercased() ||

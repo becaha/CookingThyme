@@ -51,17 +51,6 @@ class RecipeCollectionVM: ObservableObject {
         self.categories = currentCategories
     }
     
-    // gets collection from db
-    func refreshCollection() {
-        if let collection = RecipeDB.shared.getCollection(withId: collection.id) {
-            self.collection = collection
-            self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
-            sortShoppingList()
-            popullateCategories()
-            popullateImages()
-        }
-    }
-    
     // sorts shopping list by alphabetical order
     func sortShoppingList() {
         tempShoppingList = tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
@@ -155,7 +144,6 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // TODO: delete recipe from category vs last recipe
     func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
@@ -169,14 +157,6 @@ class RecipeCollectionVM: ObservableObject {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id)
         popullateCategories()
     }
-    
-//    func addRecipe(_ recipe: Recipe, toCategory category: String) {
-//        var categoryRecipes = recipeCollection[category]
-//        if categoryRecipes?.append(recipe) == nil {
-//            print("\(category) category doesn't exist. Recipe not added.")
-//            return
-//        }
-//    }
     
     // updates name of category
     func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {

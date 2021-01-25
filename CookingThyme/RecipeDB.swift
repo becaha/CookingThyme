@@ -42,7 +42,6 @@ class RecipeDB {
             
             if let documentDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
                 documentDirPath = documentDir
-                // TODO path modifying
                 dbPath = documentDir + "/" + Constant.fileName + "." + Constant.fileExtension
                 print(dbPath)
                 
@@ -502,27 +501,6 @@ class RecipeDB {
                                                     where \(RecipeCollection.Table.name) = ?
                                                     """,
                                                arguments: [username])
-                if let returnedRow = row {
-                    return RecipeCollection(row: returnedRow)
-                }
-                return nil
-            }
-            return collection
-        } catch {
-            return nil
-        }
-    }
-    
-    // TODO: deprecated
-    func getCollection(withId id: Int) -> RecipeCollection? {
-        do {
-            let collection = try dbQueue.read { db -> RecipeCollection? in
-                let row = try Row.fetchOne(db,
-                                               sql: """
-                                                    select * from \(RecipeCollection.Table.databaseTableName) \
-                                                    where \(RecipeCollection.Table.id) = ?
-                                                    """,
-                                               arguments: [id])
                 if let returnedRow = row {
                     return RecipeCollection(row: returnedRow)
                 }

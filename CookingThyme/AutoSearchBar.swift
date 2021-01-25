@@ -1,17 +1,15 @@
 //
-//  SearchBar.swift
+//  AutoSearchBar.swift
 //  CookingThyme
 //
-//  Created by Rebecca Nybo on 12/10/20.
+//  Created by Rebecca Nybo on 1/25/21.
 //
 
 import SwiftUI
 
-struct SearchBar: View {
-    var isAutoSearch: Bool
+struct AutoSearchBar: View {
+    @Binding var search: String
     var onCommit: (String) -> Void
-    
-    @State var search: String = ""
     
     var body: some View {
         let searchBinding = Binding<String>(get: {
@@ -23,7 +21,7 @@ struct SearchBar: View {
                 })
         
         return HStack {
-            TextField("Search", text: isAutoSearch ? searchBinding: $search, onCommit: {
+            TextField("Search", text: searchBinding, onCommit: {
                 onCommit(search)
             })
             .font(Font.body.weight(.regular))
@@ -40,3 +38,9 @@ struct SearchBar: View {
         }
     }
 }
+
+//struct AutoSearchBar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AutoSearchBar()
+//    }
+//}

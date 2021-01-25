@@ -23,7 +23,7 @@ struct RecipeSearch: View {
         NavigationView {
             Form {
                 Section {
-                    SearchBar { result in
+                    SearchBar(isAutoSearch: false)  { result in
                         hasSearched = true
                         recipeWebHandler.listRecipes(withQuery: result)
                     }
