@@ -9,7 +9,7 @@ import SwiftUI
 
 // for Web Recipe Images
 struct ReadImagesView: View {
-    var uiImages: [UIImage]
+    var uiImages: [Int: UIImage]
 
     var body: some View {
         VStack(alignment: .center) {
@@ -20,9 +20,9 @@ struct ReadImagesView: View {
                             ScrollView(.horizontal) {
                                 HStack {
                                     ForEach(0..<uiImages.count, id: \.self) { index in
-                                        if index < uiImages.count {
-                                            Image(uiImage: uiImages[index])
-                                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index], in: CGSize(width: geometry.size.width/2, height: geometry.size.height)))
+                                        if index < uiImages.count, uiImages[index] != nil {
+                                            Image(uiImage: uiImages[index]!)
+                                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: geometry.size.width/2, height: geometry.size.height)))
                                                 .frame(width: geometry.size.width/2, height: geometry.size.height, alignment: .center)
                                                 .clipped()
                                                 .border(Color.black, width: 3)

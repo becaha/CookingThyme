@@ -110,8 +110,7 @@ class RecipeVM: ObservableObject {
     }
     
     func popullateRecipeTemps() {
-        let tempDirections = recipe.directions
-        self.tempDirections = tempDirections
+        self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
         popullateImages()

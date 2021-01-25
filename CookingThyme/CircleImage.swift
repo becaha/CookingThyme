@@ -26,9 +26,9 @@ struct CircleImage: View {
                 Circle()
                     .foregroundColor(getCategoryColor())
                 
-                if category.imageHandler.images.count > 0 {
-                    Image(uiImage: category.imageHandler.images[0])
-                        .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0], in: CGSize(width: width, height: height)))
+                if category.imageHandler.images.count > 0, category.imageHandler.images[0] != nil {
+                    Image(uiImage: category.imageHandler.images[0]!)
+                        .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0]!, in: CGSize(width: width, height: height)))
                         .frame(width: width, height: height, alignment: .center)
                         .clipShape(Circle())
                         .opacity(opacity)

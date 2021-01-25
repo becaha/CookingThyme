@@ -8,6 +8,9 @@
 import SwiftUI
 import Combine
 
+// TODO: index on delete is off, A B add photo C, save, A C B, edit, delete C -> A B, save, AC
+// switches the index from the scrolled images shown from the actual one in recipe
+// tODO: after adding imaage, done doesnt respond unless you click somewhere else first
 struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true

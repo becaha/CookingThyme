@@ -93,7 +93,7 @@ class RecipeCollectionVM: ObservableObject {
     func popullateImages() {
         for category in categories {
             if let image = RecipeDB.shared.getImage(withCategoryId: category.id) {
-                imageHandler.setImage(image)
+                imageHandler.setImage(image, at: 0)
             }
         }
     }

@@ -11,14 +11,14 @@ import SwiftUI
 struct ScrollableImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     
-    var uiImages: [UIImage]
+    var uiImages: [Int: UIImage]
     var width: CGFloat
     var height: CGFloat
     var isEditing: Bool
     var borderWidth: CGFloat = 3
     var widthOffset: CGFloat = 6
     
-    init(uiImages: [UIImage], width: CGFloat, height: CGFloat, isEditing: Bool) {
+    init(uiImages: [Int: UIImage], width: CGFloat, height: CGFloat, isEditing: Bool) {
         self.uiImages = uiImages
         self.width = width
         self.height = height
@@ -29,7 +29,7 @@ struct ScrollableImagesView: View {
         ScrollView(.horizontal) {
             HStack {
                 ForEach(0..<uiImages.count, id: \.self) { index in
-                    if index < uiImages.count {
+                    if index < uiImages.count, uiImages[index] != nil {
                         ZStack {
                             if isEditing {
                                 Button(action: {
@@ -53,8 +53,8 @@ struct ScrollableImagesView: View {
                                 .zIndex(1)
                             }
                         
-                            Image(uiImage: uiImages[index])
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index], in: CGSize(width: width/2 - widthOffset, height: height)))
+                            Image(uiImage: uiImages[index]!)
+                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: width/2 - widthOffset, height: height)))
                                 .frame(width: width/2 - widthOffset, height: height, alignment: .center)
                                 .clipped()
                                 .border(Color.black, width: borderWidth)

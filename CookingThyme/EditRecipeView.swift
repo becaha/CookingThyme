@@ -185,9 +185,10 @@ struct EditRecipeView: View {
     private func setRecipe() {
         name = recipe.name
         servings = recipe.servings.toString()
-        recipe.popullateRecipeTemps()
+//        recipe.popullateRecipeTemps()
     }
     
+    // tODO: saave should be not on main thread
     private func saveRecipe() {
         servingsFieldMissing = false
         if name == "" {
@@ -210,6 +211,9 @@ struct EditRecipeView: View {
                 }
             }
             else {
+                withAnimation {
+                    isEditingRecipe = false
+                }
                 recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, categoryId: recipe.categoryId)
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe

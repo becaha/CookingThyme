@@ -169,7 +169,7 @@ struct ReadRecipeView: View {
     
     @ViewBuilder
     func getImageView() -> some View {
-        if recipe.imageHandler.image != nil {
+        if recipe.imageHandler.images.count > 0 {
 //            Section(header: Text("Photos")) {
                 ImagesView(isEditing: false)
 //            }

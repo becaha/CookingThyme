@@ -8,7 +8,7 @@
 import SwiftUI
 
 // TODO: measurement page to ask how many tbsp in an ounce
-
+// TODO: seaarch refine with every letter typed
 // TODO: if edit name of category and then its photo, will not update the photo
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
