@@ -9,7 +9,6 @@ import SwiftUI
 
 // TODO: measurement page to ask how many tbsp in an ounce
 // TODO: seaarch refine with every letter typed
-// TODO: if edit name of category and then its photo, will not update the photo
 struct RecipeCollectionView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     
@@ -253,7 +252,15 @@ struct RecipeCollectionView: View {
                         VStack(spacing: 0) {
                             GeometryReader { geometry in
                                 HStack {
-                                    TextField("Search", text: $search, onCommit: {
+                                    let searchBinding = Binding<String>(get: {
+                                                self.search
+                                            }, set: { updatedSearch in
+                                                self.search = updatedSearch
+                                                // do whatever you want here
+                                                searchRecipes()
+                                            })
+                                    
+                                    TextField("Search", text: searchBinding, onCommit: {
                                         searchRecipes()
                                     })
                                     .font(Font.body.weight(.regular))

@@ -10,10 +10,19 @@ import SwiftUI
 struct SearchBar: View {
     var onCommit: (String) -> Void
     @State var search: String = ""
+    var isAutoSearch = false
     
     var body: some View {
-        HStack {
-            TextField("Search", text: $search, onCommit: {
+        let searchBinding = Binding<String>(get: {
+                    self.search
+                }, set: { updatedSearch in
+                    self.search = updatedSearch
+                    // do whatever you want here
+                    onCommit(updatedSearch)
+                })
+        
+        return HStack {
+            TextField("Search", text: isAutoSearch ? searchBinding: $search, onCommit: {
                 onCommit(search)
             })
             .font(Font.body.weight(.regular))

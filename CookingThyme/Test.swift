@@ -9,52 +9,35 @@ import SwiftUI
 
 struct Test: View {
     var confirmAddIngredient = false
-    @State var testA = ""
-    @State var testB = ""
-    @State var a = 0
-    @State var aCommit = 0
-    @State var b = 0
-    @State var bCommit = 0
-
+    @State var search = ""
+    @State var commitCount = 0
+    @State var commitedSearch = ""
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                TextField("a", text: $testA, onEditingChanged: { begin in
-                    if begin {
-                        a += 1
-                    }
-                    else {
-                        aCommit += 1
-                    }
-                }, onCommit: {
-                    aCommit += 1
+        let searchBinding = Binding<String>(get: {
+                    self.search
+                }, set: { updatedSearch in
+                    self.search = updatedSearch
+                    // do whatever you want here
+                    onCommit(updatedSearch)
                 })
-                
-                TextField("b", text: $testB, onEditingChanged: { begin in
-                    b += 1
-                }, onCommit: {
-                    bCommit += 1
-                })
-                
-                Button(action: {
-                    bCommit = 5
-                }) {
-                    Text("click")
-                }
-                
-                Text("\(a)")
-                
-                Text("\(aCommit)")
+        
+        return HStack {
+            TextField("Search", text: searchBinding, onCommit: {
+                onCommit(search)
+            })
+            
+            Text("\(commitCount)")
+            
+            Text("\(commitedSearch)")
 
-                Text("\(b)")
-                
-                Text("\(bCommit)")
-
-            }
-            .padding(.horizontal)
         }
     }
+        
+        func onCommit(_ search: String) {
+            commitCount += 1
+            commitedSearch = search
+        }
 }
 
 struct Test_Previews: PreviewProvider {
