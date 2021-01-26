@@ -89,10 +89,9 @@ struct User {
     }
     
     // deletes current auth and user defaults and resets to blank user
-    mutating func signout() {
+    func signout() {
         RecipeDB.shared.deleteAuth(withUserId: id)
         setCurrentUsername(nil)
-        self = User()
     }
     
     func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {
@@ -115,7 +114,7 @@ struct User {
         }
     }
     
-    mutating func delete() {
+    func delete() {
         RecipeDB.shared.deleteUser(withId: id)
         signout()
     }

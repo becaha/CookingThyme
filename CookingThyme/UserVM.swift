@@ -132,8 +132,10 @@ class UserVM: ObservableObject {
     func isValidUser(username: String, password: String, email: String) -> Bool {
         self.signupErrors = []
         if username == "" {
-            // TODO: check if username is taken here
             self.signupErrors.append(InvalidSignup.username)
+        }
+        if RecipeDB.shared.getUser(withUsername: username) != nil {
+            self.signupErrors.append(InvalidSignup.usernameTaken)
         }
         if password == "" {
             self.signupErrors.append(InvalidSignup.password)
@@ -149,11 +151,17 @@ class UserVM: ObservableObject {
     }
     
     func signout() {
-        user.signout()
+        self.user = User()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.user.signout()
+        }
     }
     
     func delete() {
-        user.delete()
+        self.user = User()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.user.delete()
+        }
     }
 }
 
