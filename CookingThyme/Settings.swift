@@ -11,135 +11,106 @@ import SwiftUI
 struct Settings: View {
     @EnvironmentObject var user: UserVM
     
-    @Binding var isPresented: Bool
     @State var presentDeleteAlert = false
 
     @State var isEditing = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    if isPresented && !user.isSignedIn {
-                        Section {
-                            HStack {
-                                Spacer()
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        user.signinPresented = true
-                                        isPresented = true
-                                    }
-                                }) {
-                                    Text("Sign In")
-                                        .bold()
-                                }
-                                
-                                Spacer()
-                            }
-                        }
+        VStack {
+            List {
+                Section(header: Text("Account Details")) {
+                    HStack {
+                        Text("Username")
+                            .bold()
+
+                        Spacer()
+
+                        Text("\(user.username)")
+                            .fontWeight(.regular)
                     }
-                    else if isPresented {
-                        Section(header: Text("Account Details")) {
-                            HStack {
-                                Text("Username")
-                                    .bold()
-
-                                Spacer()
-
-                                Text("\(user.username)")
-                                    .fontWeight(.regular)
-                            }
-                            
-                            HStack {
-                                Text("Email")
-                                    .bold()
-                                
-                                Spacer()
-
-                                Text("\(user.email)")
-                                    .fontWeight(.regular)
-                            }
-                        }
+                    
+                    HStack {
+                        Text("Email")
+                            .bold()
                         
-                        Section {
-                            HStack {
-                                Spacer()
-                                
-                                Button(action: {
-                                    // TODO
-                                }) {
-                                    Text("Change Password")
-                                        .bold()
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                        
-                        Section {
-                            HStack {
-                                Spacer()
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        isPresented = false
-                                        user.signout()
-                                    }
-                                }) {
-                                    Text("Sign Out")
-                                        .bold()
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                        
-                        Section {
-                            HStack {
-                                Spacer()
-                                
-                                Button(action: {
-                                    // TODO
-                                    presentDeleteAlert = true
-                                }) {
-                                    Text("Delete Account")
-                                        .bold()
-                                        .foregroundColor(.red)
-                                }
-                                
-                                Spacer()
-                            }
-                        }
+                        Spacer()
+
+                        Text("\(user.email)")
+                            .fontWeight(.regular)
                     }
                 }
-                .listStyle(InsetGroupedListStyle())
-            }
-            .alert(isPresented: $presentDeleteAlert) {
-                Alert(title: Text("Confirm Delete Account"),
-                      primaryButton: .default(Text("Delete")) {
-                        withAnimation {
-                            isPresented = false
-                            user.delete()
+                
+                Section {
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            // TODO
+                        }) {
+                            Text("Change Password")
+                                .bold()
                         }
-                      },
-                      secondaryButton: .cancel()
-                )
-            }
-            .navigationBarTitle(Text("Settings"), displayMode: .inline)
-            .navigationBarItems(trailing:
-                Button(action: {
-                    isPresented = false
-                }) {
-                    Text("Done")
+                        
+                        Spacer()
+                    }
                 }
-    //            UIControls.EditButton(
-    //                action: {
-    //                    isEditing.toggle()
-    //                },
-    //                isEditing: isEditing)
+                
+                Section {
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                user.sheetPresented = false
+                                user.signout()
+                            }
+                        }) {
+                            Text("Sign Out")
+                                .bold()
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                
+                Section {
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                            // TODO
+                            presentDeleteAlert = true
+                        }) {
+                            Text("Delete Account")
+                                .bold()
+                                .foregroundColor(.red)
+                        }
+                        
+                        Spacer()
+                    }
+                }
+            }
+            .listStyle(InsetGroupedListStyle())
+        }
+        .alert(isPresented: $presentDeleteAlert) {
+            Alert(title: Text("Confirm Delete Account"),
+                  primaryButton: .default(Text("Delete")) {
+                    withAnimation {
+                        user.sheetPresented = false
+                        user.delete()
+                    }
+                  },
+                  secondaryButton: .cancel()
             )
         }
+        .navigationBarTitle(Text("Settings"), displayMode: .inline)
+//        .navigationBarItems(trailing:
+//            UIControls.EditButton(
+//                action: {
+//                    isEditing.toggle()
+//                },
+//                isEditing: isEditing)
+//        )
     }
 }
 

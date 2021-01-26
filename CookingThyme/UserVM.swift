@@ -109,7 +109,6 @@ class UserVM: ObservableObject {
         do {
             if isValidUser(username: username, password: password, email: email) {
                 if let user = try user.signup(username: username, password: password, email: email) {
-    //                self.userNotFound = false // do in UI
                     setAuthToken(withUserId: user.id)
                     user.createUserCollection()
                     setUserCollection()

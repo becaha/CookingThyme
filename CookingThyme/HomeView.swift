@@ -71,10 +71,8 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
-        .sheet(isPresented: $user.sheetPresented, onDismiss: {
-            user.signinPresented = false
-        }) {
-            HomeSheet(isPresented: $user.sheetPresented)
+        .sheet(isPresented: $user.sheetPresented) {
+            HomeSheet()
                 .environmentObject(user)
         }
         .alert(isPresented: $timer.timerAlert) {

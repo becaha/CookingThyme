@@ -10,18 +10,27 @@ import SwiftUI
 struct HomeSheet: View {
     @EnvironmentObject var user: UserVM
     
-    @Binding var isPresented: Bool
+    func sheetView() -> some View {
+        if !user.isSignedIn {
+            return SigninView().eraseToAnyView()
+        }
+        else {
+            return Settings().eraseToAnyView()
+        }
+    }
     
     var body: some View {
-        Group {
-            if user.signinPresented && isPresented {
-                SigninView(isPresented: $isPresented)
-            }
-            else {
-                Settings(isPresented: $isPresented)
-            }
+        NavigationView {
+            sheetView()
+            .environmentObject(user)
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(trailing:
+                Button(action: {
+                    user.sheetPresented = false
+                }) {
+                    Text("Done")
+                })
         }
-        .environmentObject(user)
     }
 }
 
@@ -30,3 +39,10 @@ struct HomeSheet: View {
 //        HomeSheet()
 //    }
 //}
+
+extension View {
+    func eraseToAnyView() -> AnyView {
+        AnyView(self)
+    }
+}
+

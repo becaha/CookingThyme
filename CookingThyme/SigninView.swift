@@ -12,16 +12,14 @@ import SwiftUI
 // TODO: error when signed in user, restart sim, sign out, try to sign in
 struct SigninView: View {
     @EnvironmentObject var user: UserVM
-    
-    @Binding var isPresented: Bool
-    
+        
     @State var email: String = ""
     @State var username: String = ""
     @State var password: String = ""
     @State var isSigningIn: Bool = true
     
     @State var signinErrorMessage = ""
-    @State var signupErrorMessage = ""
+    @State var signupErrorMessages = [String]()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -53,6 +51,7 @@ struct SigninView: View {
                     
                     Spacer()
                 }
+                .padding([.leading, .bottom])
                 
                 Button(action: {
                     signin()
@@ -98,14 +97,19 @@ struct SigninView: View {
                     .formItem()
                 }
 
-                HStack {
-                    Text("\(signupErrorMessage)")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(0)
+                VStack {
+                    ForEach(signupErrorMessages, id: \.self) { message in
+                        HStack {
+                            Text("\(message)")
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                                .padding(0)
 
-                    Spacer()
+                            Spacer()
+                        }
+                    }
                 }
+                .padding([.leading, .bottom])
 
                 Button(action: {
                     signup()
@@ -141,46 +145,52 @@ struct SigninView: View {
     }
     
     func reset() {
-        username = ""
-        password = ""
-        email = ""
-        signupErrorMessage = ""
-        signinErrorMessage = ""
+        withAnimation {
+            username = ""
+            password = ""
+            email = ""
+            signupErrorMessages = [String]()
+            signinErrorMessage = ""
+        }
     }
     
     func signin() {
         user.signin(username: username, password: password)
         if user.signinError {
-            signinErrorMessage = "Username or password incorrect."
+            withAnimation {
+                signinErrorMessage = "Username or password incorrect."
+            }
         }
         else {
             reset()
-            isPresented = false
+            user.sheetPresented = false
         }
     }
     
     func signup() {
         user.signup(username: username, password: password, email: email)
-        signupErrorMessage = ""
-        if user.signupErrors.count == 0 {
-            isPresented = false
-        }
-        
-        if user.signupErrors.contains(InvalidSignup.usernameTaken) {
-            signupErrorMessage += "Username already taken. "
-        }
-        if user.signupErrors.contains(InvalidSignup.emailTaken) {
-            signupErrorMessage += "Email already taken. "
-        }
-        
-        if user.signupErrors.contains(InvalidSignup.username) {
-            signupErrorMessage += "Invalid username. "
-        }
-        if user.signupErrors.contains(InvalidSignup.password) {
-            signupErrorMessage += "Invalid password. "
-        }
-        if user.signupErrors.contains(InvalidSignup.email) {
-            signupErrorMessage += "Invalid email."
+        withAnimation {
+            signupErrorMessages = [String]()
+            if user.signupErrors.count == 0 {
+                user.sheetPresented = false
+            }
+            
+            if user.signupErrors.contains(InvalidSignup.usernameTaken) {
+                signupErrorMessages.append("Username already taken.")
+            }
+            if user.signupErrors.contains(InvalidSignup.emailTaken) {
+                signupErrorMessages.append("Email already taken.")
+            }
+            
+            if user.signupErrors.contains(InvalidSignup.username) {
+                signupErrorMessages.append("Invalid username.")
+            }
+            if user.signupErrors.contains(InvalidSignup.password) {
+                signupErrorMessages.append("Invalid password.")
+            }
+            if user.signupErrors.contains(InvalidSignup.email) {
+                signupErrorMessages.append("Invalid email.")
+            }
         }
     }
 }
