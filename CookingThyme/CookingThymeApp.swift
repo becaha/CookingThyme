@@ -66,3 +66,7 @@ func getAssetColor(withName name: String) -> Color {
     }
     return Color.gray
 }
+
+func logo() -> Image {
+    return Image("LogoFont")
+}

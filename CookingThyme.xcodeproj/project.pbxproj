@@ -85,6 +85,7 @@
 		DB88CD3825BBAABD00A7F32C /* RecipeTitleBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */; };
 		DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */; };
 		DB88CD3C25BF779400A7F32C /* EditPhotoMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */; };
+		DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
@@ -178,6 +179,7 @@
 		DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTitleBorder.swift; sourceTree = "<group>"; };
 		DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSearchBar.swift; sourceTree = "<group>"; };
 		DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoMenu.swift; sourceTree = "<group>"; };
+		DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesSheet.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
@@ -262,7 +264,7 @@
 				DB83F6B525B0C7270041DAA7 /* Settings */,
 				DB83F6B425B0BA8D0041DAA7 /* Home */,
 				DB83F6B325B0BA7A0041DAA7 /* Signin */,
-				DB49B57025833F6B00808CC8 /* PublicRecipe */,
+				DB49B57025833F6B00808CC8 /* RecipeSearch */,
 				DB49B5572581BAED00808CC8 /* Editable */,
 				DB49B5562581BAC800808CC8 /* Images */,
 				DB49B5532581BA4600808CC8 /* ShoppingList */,
@@ -334,6 +336,7 @@
 				DB88CD2425BA08BE00A7F32C /* PasteButton.swift */,
 				DB88CD3025BB93FC00A7F32C /* CustomFormSectionItem.swift */,
 				DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */,
+				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -434,13 +437,13 @@
 			name = Editable;
 			sourceTree = "<group>";
 		};
-		DB49B57025833F6B00808CC8 /* PublicRecipe */ = {
+		DB49B57025833F6B00808CC8 /* RecipeSearch */ = {
 			isa = PBXGroup;
 			children = (
 				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
 				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
 			);
-			name = PublicRecipe;
+			name = RecipeSearch;
 			sourceTree = "<group>";
 		};
 		DB83F6B325B0BA7A0041DAA7 /* Signin */ = {
@@ -614,6 +617,7 @@
 				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB88CD2525BA08BE00A7F32C /* PasteButton.swift in Sources */,
+				DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,

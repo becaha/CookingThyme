@@ -24,23 +24,26 @@ struct SigninView: View {
     @State var signupErrorMessage = ""
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
+            
+            logo()
+                .padding(.bottom, 25)
             
             if isSigningIn {
                 Group {
                     TextField("Username", text: $username)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .formItem()
 
                     SecureField("Password", text: $password) {
                         signin()
                     }
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                        
+                    .formItem()
                 }
-                .formed()
                 
                 HStack {
                     Text("\(signinErrorMessage)")
@@ -54,11 +57,16 @@ struct SigninView: View {
                 Button(action: {
                     signin()
                 }) {
-                    Text("Sign In")
-                        .foregroundColor(.white)
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign In")
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                    }
                 }
-                .formed(backgroundColor: mainColor())
-                .padding(.top)
+                .formItem(backgroundColor: mainColor())
                 
                 Button(action: {
                     withAnimation {
@@ -68,44 +76,51 @@ struct SigninView: View {
                 }) {
                     Text("Sign Up")
                 }
-
             }
             else {
                 Group {
                     TextField("Username", text: $username)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
-                    
+                        .formItem()
+
                     TextField("Email", text: $email)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .keyboardType(.emailAddress)
-                    
+                        .formItem()
+
                     SecureField("Password", text: $password) {
                         signup()
                     }
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .formItem()
                 }
-                .formed()
-                
+
                 HStack {
                     Text("\(signupErrorMessage)")
                         .font(.footnote)
                         .foregroundColor(.red)
                         .padding(0)
-                    
+
                     Spacer()
                 }
-                    
+
                 Button(action: {
                     signup()
                 }) {
-                    Text("Sign Up")
-                        .foregroundColor(.white)
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign Up")
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                    }
                 }
-                .formed(backgroundColor: mainColor())
-                
+                .formItem(backgroundColor: mainColor())
+
                 Button(action: {
                     withAnimation {
                         isSigningIn = true

@@ -7,27 +7,6 @@
 
 import SwiftUI
 
-//struct CustomForm: View {
-//    var items: [View]
-//
-//    var body: some View {
-//        VStack {
-//            ForEach(0..<items.count) { index in
-//                items[index].formed()
-//            }
-//        }
-//        .background(Color.blue)
-//    }
-//}
-//
-//struct CustomForm_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VStack {
-//            Text("Hi").formed()
-//        }
-//    }
-//}
-
 struct CustomFormItem: ViewModifier {
     var backgroundColor: Color
     var isNavLink: Bool
@@ -96,7 +75,7 @@ struct CustomFormItem_Previews: PreviewProvider {
             
             Text("Hi").formItem(isSearchBar: true)
 
-            Text("Hi").formItem()
+            Text("Hi").formItem(backgroundColor: mainColor())
 
             
             Text("Hi").formItem()

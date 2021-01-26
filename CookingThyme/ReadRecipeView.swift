@@ -16,7 +16,6 @@ struct ReadRecipeView: View {
     @Binding var isEditingRecipe: Bool
     @EnvironmentObject var recipe: RecipeVM
     
-    @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
     
 //    @State private var directionIndicesCompleted = [Int]()
@@ -116,33 +115,16 @@ struct ReadRecipeView: View {
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            List{
-                ForEach(collection.categories, id: \.self) { category in
-                    Button(action: {
-                        recipe.moveRecipe(toCategoryId: category.id)
-                        categoriesPresented = false
-                    }) {
-                        Text("\(category.name)")
-                            .foregroundColor(.black)
-                    }
-                }
+            CategoriesSheet(actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
+                recipe.moveRecipe(toCategoryId: categoryId)
             }
-            .listStyle(InsetGroupedListStyle())
-        })
-        .actionSheet(isPresented: $actionSheetPresented, content: {
-            ActionSheet(title: Text("Move recipe"), message: nil, buttons:
-                [
-                    .default(Text("Move to category"), action: {
-                        categoriesPresented = true
-                    }),
-                    .cancel()
-                ])
+            .environmentObject(collection)
         })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
                 HStack {
                     Button(action: {
-                        actionSheetPresented = true
+                        categoriesPresented = true
                     })
                     {
                         Image(systemName: "square.and.arrow.up")

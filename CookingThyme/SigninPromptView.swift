@@ -28,6 +28,7 @@ struct SigninPromptView: View {
             
             Spacer()
         }
+        .foregroundColor(mainColor())
     }
 }
 

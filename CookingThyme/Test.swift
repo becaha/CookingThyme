@@ -8,71 +8,123 @@
 import SwiftUI
 
 struct Test: View {
-    var confirmAddIngredient = false
-    @State var search = ""
-    @State var commitCount = 0
-    @State var commitedSearch = ""
+    
+    @State var email: String = ""
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var isSigningIn: Bool = true
+    
+    @State var signinErrorMessage = ""
+    @State var signupErrorMessage = ""
     
     var body: some View {
-        Menu {
-            Text("Add Photo")
+        VStack {
+            Spacer()
             
-            Button(action: {
-//                cameraRollSheetPresented = true
-            }) {
-                Text("From camera roll")
-            }
-            
-            Button(action: {
-//                presentPasteAlert = true
-//                if UIPasteboard.general.url != nil {
-//                    confirmPaste = true
-//                } else {
-//                    explainPaste = true
-//                }
-            }) {
-                Label("Paste", systemImage: "doc.on.clipboard")
-            }
-            
-            Button(action: {
-            }) {
-                Text("Cancel")
-            }
-        } label: {
-            VStack(alignment: .center) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white)
-                        
-                    
-                    VStack {
-                        ZStack {
-                            Circle()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.white)
-                                .shadow(radius: 1)
+            if isSigningIn {
+                Group {
+                    TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .formItem()
 
-                            Image(systemName: "plus")
-                                .font(Font.subheadline.weight(.bold))
-                                .foregroundColor(mainColor())
-                        }
-                        
-                        Text("Add Photo")
-                            .bold()
+                    SecureField("Password", text: $password) {
+//                        signin()
                     }
-                    .border(Color.black, width: 3.0, isDashed: true)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .formItem()
                 }
-                .frame(width: 300)
+                
+                HStack {
+                    Text("\(signinErrorMessage)")
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .padding(0)
+                    
+                    Spacer()
+                }
+                
+                Button(action: {
+//                    signin()
+                }) {
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign In")
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                    }
+                }
+                .formItem(backgroundColor: mainColor())
+                
+                Button(action: {
+                    withAnimation {
+                        isSigningIn = false
+//                        reset()
+                    }
+                }) {
+                    Text("Sign Up")
+                }
             }
-            .background(formBackgroundColor())
-            .frame(width: 300, height: 200)
+            else {
+                Group {
+                    TextField("Username", text: $username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .formItem()
+
+                    TextField("Email", text: $email)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
+                        .formItem()
+
+                    SecureField("Password", text: $password) {
+//                        signup()
+                    }
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .formItem()
+                }
+
+                HStack {
+                    Text("\(signupErrorMessage)")
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .padding(0)
+
+                    Spacer()
+                }
+
+                Button(action: {
+//                    signup()
+                }) {
+                    Text("Sign Up")
+                        .foregroundColor(.white)
+                }
+                .formItem(backgroundColor: mainColor())
+
+                Button(action: {
+                    withAnimation {
+//                        isSigningIn = true
+//                        reset()
+                    }
+                }) {
+                    Text("Sign In")
+                }
+            }
+            
+            Spacer()
+            
         }
+        .padding()
+        .accentColor(mainColor())
+        .background(formBackgroundColor())
+        .ignoresSafeArea()
     }
         
-        func onCommit(_ search: String) {
-            commitCount += 1
-            commitedSearch = search
-        }
 }
 
 struct Test_Previews: PreviewProvider {

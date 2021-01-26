@@ -49,11 +49,13 @@ struct RecipeControls {
     }
     
     @ViewBuilder
-    static func AddIngredientsButton(collection: RecipeCollectionVM, recipe: Recipe, action: @escaping () -> Void) -> some View {
+    static func AddIngredientsButton(collection: RecipeCollectionVM?, recipe: Recipe, action: @escaping () -> Void) -> some View {
         VStack(alignment: .center) {
             Button(action: {
                 withAnimation {
-                    collection.addToShoppingList(fromRecipe: recipe)
+                    if let collection = collection {
+                        collection.addToShoppingList(fromRecipe: recipe)
+                    }
                     action()
                 }
             }) {

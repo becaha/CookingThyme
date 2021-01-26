@@ -9,18 +9,21 @@ import SwiftUI
 
 // TODO: make compatible with recipe
 // TODO: make sure serving size doesnt change actual recipe that gets saved
-// tODO: sign in vs sign out
+// tODO: popovers to explain disabled buttons
 struct PublicRecipeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var recipe: PublicRecipeVM
     
+    @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
     
     @State private var confirmAddIngredient: Int?
     @State private var addedIngredients = [Int]()
     @State private var addedAllIngredients = false
-
     
+    @State private var signinAlert = false
+    @State private var signinAlertMessage: String = ""
+
     private var isLoading: Bool {
         return recipe.isPopullating && !recipe.recipeNotFound
     }
@@ -78,21 +81,26 @@ struct PublicRecipeView: View {
                         },
                             footer:
                                 HStack {
-                                    if user.collection != nil {
-                                        RecipeControls.AddIngredientsButton(collection: user.collection!, recipe: recipe.recipe, action: addAllIngredients)
-                                    }
+                                    RecipeControls.AddIngredientsButton(collection: user.collection, recipe: recipe.recipe, action: addAllIngredients)
                                 }
                         ) {
                         List {
                             ForEach(recipe.ingredients) { ingredient in
                                 HStack {
-                                    if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {                                        Image(systemName: "checkmark")
+                                    if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
+                                        Image(systemName: "checkmark")
                                             .foregroundColor(mainColor())
                                     }
                                     else {
                                         UIControls.AddButton(action: {
                                             withAnimation {
-                                                confirmAddIngredient = ingredient.id
+                                                if user.isSignedIn {
+                                                    confirmAddIngredient = ingredient.id
+                                                }
+                                                else {
+                                                    signinAlert = true
+                                                    signinAlertMessage = "Sign in to add ingredients to shopping list."
+                                                }
                                             }
                                         })
                                     }
@@ -105,7 +113,7 @@ struct PublicRecipeView: View {
                                         
                                         Button("Add to Shopping List", action: {
                                             withAnimation {
-//                                                collection.addToShoppingList(ingredient)
+                                                user.collection!.addToShoppingList(ingredient)
                                                 confirmAddIngredient = nil
                                                 addedIngredients.append(ingredient.id)
                                             }
@@ -134,45 +142,47 @@ struct PublicRecipeView: View {
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            List{
-                ForEach(user.collection!.categories, id: \.self) { category in
-                    Button(action: {
-                        recipe.copyRecipe(toCategoryId: category.id)
-                        categoriesPresented = false
-                    }) {
-                        Text("\(category.name)")
-                            .foregroundColor(.black)
-                    }
-                }
+            CategoriesSheet(actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
+                recipe.copyRecipe(toCategoryId: categoryId)
             }
-            .listStyle(InsetGroupedListStyle())
+            .environmentObject(user.collection!)
+        })
+        .alert(isPresented: $signinAlert, content: {
+            Alert(title: Text("\(signinAlertMessage)"),
+                  primaryButton: .default(Text("Sign in")) {
+                    withAnimation {
+                         user.signinPresented = true
+                    }
+                  },
+                  secondaryButton: .cancel())
         })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
-                HStack {
-                    if user.collection != nil {
-                        Menu {
-                            Button(action: {
-                                categoriesPresented = true
-                            }) {
-                                Text("Save to Category")
-                            }
-                            
-                            Button(action: {}) {
-                                Text("Cancel")
-                            }
-                        } label: {
-                            Image(systemName: "square.and.arrow.up")
-                        }
-                        .padding(.trailing)
+                Button(action: {
+                    if user.isSignedIn {
+                        categoriesPresented = true
                     }
+                    else {
+                        signinAlert = true
+                        signinAlertMessage = "Sign in to add recipe to your collection."
+                    }
+                })
+                {
+                    Image(systemName: "square.and.arrow.up")
                 }
+                .padding(.trailing)
                 .disabled(isLoading || recipe.recipeNotFound)
         )
     }
     
     func addAllIngredients() {
-        self.addedAllIngredients = true
+        if user.isSignedIn {
+            self.addedAllIngredients = true
+        }
+        else {
+            signinAlert = true
+            signinAlertMessage = "Sign in to add ingredients to shopping list."
+        }
     }
     
 }
