@@ -7,13 +7,13 @@
 
 import SwiftUI
 
+// TODO: make compatible with recipe
 // TODO: make sure serving size doesnt change actual recipe that gets saved
-
+// tODO: sign in vs sign out
 struct PublicRecipeView: View {
-    @EnvironmentObject var collection: RecipeCollectionVM
+    @EnvironmentObject var user: UserVM
     @ObservedObject var recipe: PublicRecipeVM
     
-    @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
     
     @State private var confirmAddIngredient: Int?
@@ -77,7 +77,11 @@ struct PublicRecipeView: View {
                             }
                         },
                             footer:
-                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe, action: addAllIngredients)
+                                HStack {
+                                    if user.collection != nil {
+                                        RecipeControls.AddIngredientsButton(collection: user.collection!, recipe: recipe.recipe, action: addAllIngredients)
+                                    }
+                                }
                         ) {
                         List {
                             ForEach(recipe.ingredients) { ingredient in
@@ -101,7 +105,7 @@ struct PublicRecipeView: View {
                                         
                                         Button("Add to Shopping List", action: {
                                             withAnimation {
-                                                collection.addToShoppingList(ingredient)
+//                                                collection.addToShoppingList(ingredient)
                                                 confirmAddIngredient = nil
                                                 addedIngredients.append(ingredient.id)
                                             }
@@ -131,7 +135,7 @@ struct PublicRecipeView: View {
         }
         .sheet(isPresented: $categoriesPresented, content: {
             List{
-                ForEach(collection.categories, id: \.self) { category in
+                ForEach(user.collection!.categories, id: \.self) { category in
                     Button(action: {
                         recipe.copyRecipe(toCategoryId: category.id)
                         categoriesPresented = false
@@ -143,27 +147,25 @@ struct PublicRecipeView: View {
             }
             .listStyle(InsetGroupedListStyle())
         })
-        .actionSheet(isPresented: $actionSheetPresented, content: {
-            ActionSheet(title: Text("Save recipe to collection"),
-                message: nil, buttons:
-                [
-                    .default(Text("Save to category"), action: {
-                        categoriesPresented = true
-                    }),
-                    .cancel()
-                ]
-            )
-        })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
                 HStack {
-                    Button(action: {
-                        actionSheetPresented = true
-                    })
-                    {
-                        Image(systemName: "square.and.arrow.up")
+                    if user.collection != nil {
+                        Menu {
+                            Button(action: {
+                                categoriesPresented = true
+                            }) {
+                                Text("Save to Category")
+                            }
+                            
+                            Button(action: {}) {
+                                Text("Cancel")
+                            }
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .padding(.trailing)
                     }
-                    .padding(.trailing)
                 }
                 .disabled(isLoading || recipe.recipeNotFound)
         )

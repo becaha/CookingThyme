@@ -10,7 +10,6 @@ import SwiftUI
 struct RecipeSearch: View {
     @EnvironmentObject var user: UserVM
     
-    @EnvironmentObject var collection: RecipeCollectionVM
     @ObservedObject var recipeWebHandler = RecipesWebHandler()
     
     @State var hasSearched = false
