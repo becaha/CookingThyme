@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-// TODO CURRENT: change action sheets to sheets
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
@@ -37,29 +36,42 @@ class RecipeCollectionVM: ObservableObject {
         resetCurrentCategory()
     }
     
-    func sortCategories() {
-        var currentCategories = categories
-        currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
-            if a.name == "All" {
-                return true
-            }
-            if b.name == "All" {
-                return false
-            }
-            return a.name < b.name
-        })
-        self.categories = currentCategories
+    // MARK: Access
+    
+    var id: Int {
+        collection.id
     }
     
-    // sorts shopping list by alphabetical order
-    func sortShoppingList() {
-        tempShoppingList = tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
-            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
-                return true
-            }
-            return false
-        })
+    var name: String {
+        collection.name
     }
+    
+    var allCategory: RecipeCategoryVM? {
+        for category in categories {
+            if category.name == "All" {
+                return category
+            }
+        }
+        return nil
+    }
+    
+    func isAddable(recipe: Recipe?, toCategory category: RecipeCategoryVM) -> Bool {
+        return category.name != "All" && recipe?.recipeCategoryId != category.id
+    }
+    
+    func addableCategories(forRecipe recipe: Recipe) -> [RecipeCategoryVM] {
+        return self.categories.filter { (category) -> Bool in
+            isAddable(recipe: recipe, toCategory: category)
+        }
+    }
+    
+    func getCategory(withId id: Int) -> RecipeCategoryVM {
+        return self.categories.filter { (category) -> Bool in
+            category.id == id
+        }[0]
+    }
+    
+    // MARK: - Init Helpers
     
     // gets categories from db
     func popullateCategories() {
@@ -87,32 +99,29 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // MARK: Access
-    
-    var id: Int {
-        collection.id
-    }
-    
-    var name: String {
-        collection.name
-    }
-    
-    var allCategory: RecipeCategoryVM? {
-        for category in categories {
-            if category.name == "All" {
-                return category
+    func sortCategories() {
+        var currentCategories = categories
+        currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
+            if a.name == "All" {
+                return true
             }
-        }
-        return nil
+            if b.name == "All" {
+                return false
+            }
+            return a.name < b.name
+        })
+        self.categories = currentCategories
     }
     
-//    var categoryNames: [String] {
-//        var categoryNames = [String]()
-//        for category in categories {
-//            categoryNames.append(category.name)
-//        }
-//        return categoryNames.sorted()
-//    }
+    // sorts shopping list by alphabetical order
+    func sortShoppingList() {
+        tempShoppingList = tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
+            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
+                return true
+            }
+            return false
+        })
+    }
     
     // MARK: Intents
     

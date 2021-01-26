@@ -85,7 +85,6 @@
 		DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */; };
 		DB88CD3C25BF779400A7F32C /* EditPhotoMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */; };
 		DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */; };
-		DB88CD4425C0AC8300A7F32C /* HomeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4325C0AC8300A7F32C /* HomeSheet.swift */; };
 		DB88CD4625C0B47500A7F32C /* HomeSheetNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
@@ -180,7 +179,6 @@
 		DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSearchBar.swift; sourceTree = "<group>"; };
 		DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoMenu.swift; sourceTree = "<group>"; };
 		DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesSheet.swift; sourceTree = "<group>"; };
-		DB88CD4325C0AC8300A7F32C /* HomeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSheet.swift; sourceTree = "<group>"; };
 		DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSheetNavigator.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
@@ -338,7 +336,6 @@
 				DB88CD2425BA08BE00A7F32C /* PasteButton.swift */,
 				DB88CD3025BB93FC00A7F32C /* CustomFormSectionItem.swift */,
 				DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */,
-				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -407,6 +404,7 @@
 		DB49B5552581BA8300808CC8 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
+				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
@@ -461,7 +459,6 @@
 			isa = PBXGroup;
 			children = (
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
-				DB88CD4325C0AC8300A7F32C /* HomeSheet.swift */,
 				DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */,
 			);
 			name = Home;
@@ -684,7 +681,6 @@
 				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
-				DB88CD4425C0AC8300A7F32C /* HomeSheet.swift in Sources */,
 				DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */,
 				DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,

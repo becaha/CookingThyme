@@ -9,25 +9,52 @@ import SwiftUI
 
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
+    @EnvironmentObject var recipe: RecipeVM
+
     var actionWord: String
     @Binding var isPresented: Bool
     var onAction: (Int) -> Void
+    
+    @State private var selectedId: Int?
     
     var body: some View {
         NavigationView {
             VStack {
                 List {
                     ForEach(collection.categories, id: \.self) { category in
-                        Button(action: {
-                            onAction(category.id)
-                            isPresented = false
-                        }) {
-                            Text("\(category.name)")
-                                .foregroundColor(.black)
+                        if category.name != "All" {
+                            Button(action: {
+                                withAnimation {
+                                    selectedId = category.id
+                                }
+                                onAction(category.id)
+
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    isPresented = false
+                                }
+                            }) {
+                                HStack {
+                                    CircleImage()
+                                        .shadow(color: Color.gray, radius: 1)
+                                        .environmentObject(category)
+                                
+                                    Text("\(category.name)")
+                                        .foregroundColor(.black)
+                                    
+                                    Spacer()
+                                    
+                                    if selectedId == category.id {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
                         }
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
+            }
+            .onAppear {
+                selectedId = recipe.categoryId
             }
             .navigationBarTitle("\(actionWord) to Category", displayMode: .inline)
             .navigationBarItems(

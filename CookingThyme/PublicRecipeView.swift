@@ -14,7 +14,6 @@ struct PublicRecipeView: View {
     @EnvironmentObject var user: UserVM
     @ObservedObject var recipe: PublicRecipeVM
     
-    @State private var actionSheetPresented = false
     @State private var categoriesPresented = false
     
     @State private var confirmAddIngredient: Int?

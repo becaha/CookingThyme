@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: signin loading
 // TODO: error when signed in user, restart sim, sign out, try to sign in
 struct SigninView: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
@@ -159,7 +160,6 @@ struct SigninView: View {
         }
         else {
             sheetNavigator.showSheet = false
-            reset()
         }
     }
     

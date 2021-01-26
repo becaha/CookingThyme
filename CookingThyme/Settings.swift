@@ -16,6 +16,9 @@ struct Settings: View {
 
     @State var isEditing = false
     
+    @State var username = ""
+    @State var email = ""
+    
     var body: some View {
         VStack {
             List {
@@ -26,8 +29,11 @@ struct Settings: View {
 
                         Spacer()
 
-                        Text("\(user.username)")
+                        Text("\(username)")
                             .fontWeight(.regular)
+                            .onAppear {
+                                username = user.username
+                            }
                     }
                     
                     HStack {
@@ -36,8 +42,11 @@ struct Settings: View {
                         
                         Spacer()
 
-                        Text("\(user.email)")
+                        Text("\(email)")
                             .fontWeight(.regular)
+                            .onAppear {
+                                email = user.email
+                            }
                     }
                 }
                 
@@ -63,7 +72,10 @@ struct Settings: View {
                         Button(action: {
                             withAnimation {
                                 user.signout()
-                                sheetNavigator.showSheet = false
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    sheetNavigator.showSheet = false
+                                }
                             }
                         }) {
                             Text("Sign Out")

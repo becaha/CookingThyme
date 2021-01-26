@@ -118,6 +118,7 @@ struct ReadRecipeView: View {
             CategoriesSheet(actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
                 recipe.moveRecipe(toCategoryId: categoryId)
             }
+            .environmentObject(recipe)
             .environmentObject(collection)
         })
         .navigationBarTitle("", displayMode: .inline)

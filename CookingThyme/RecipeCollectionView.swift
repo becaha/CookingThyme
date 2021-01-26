@@ -58,14 +58,8 @@ struct RecipeCollectionView: View {
                                             collection.setCurrentCategory(category)
                                             search = ""
                                         }) {
-                                            ZStack {
-                                                CircleImage(width: 60, height: 60)
-                                                
-                                                Circle()
-                                                    .stroke(Color.white, lineWidth: 2)
-                                            }
-                                            .frame(width: 60, height: 60)
-                                            .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
+                                            CircleImage()
+                                                .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
                                         }
                                         .disabled(isEditing ? true : false)
                                         
@@ -393,7 +387,7 @@ struct RecipeCollectionView: View {
     
     // a recipe is droppable into a category that is not All and is not their current category
     func isDroppable(toCategory category: RecipeCategoryVM) -> Bool {
-        return category.name != "All" && droppableRecipe?.recipeCategoryId != category.id
+        return collection.isAddable(recipe: droppableRecipe, toCategory: category)
     }
     
     func moveRecipe(_ recipeName: String, toCategory category: RecipeCategoryVM) {
