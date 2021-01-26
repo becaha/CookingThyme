@@ -9,6 +9,7 @@ import SwiftUI
 
 // TODO: edit account settings like email
 struct Settings: View {
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
     @State var presentDeleteAlert = false
@@ -61,8 +62,8 @@ struct Settings: View {
                         
                         Button(action: {
                             withAnimation {
-                                user.sheetPresented = false
                                 user.signout()
+                                sheetNavigator.showSheet = false
                             }
                         }) {
                             Text("Sign Out")
@@ -78,7 +79,6 @@ struct Settings: View {
                         Spacer()
                         
                         Button(action: {
-                            // TODO
                             presentDeleteAlert = true
                         }) {
                             Text("Delete Account")
@@ -91,26 +91,20 @@ struct Settings: View {
                 }
             }
             .listStyle(InsetGroupedListStyle())
+
         }
         .alert(isPresented: $presentDeleteAlert) {
             Alert(title: Text("Confirm Delete Account"),
                   primaryButton: .default(Text("Delete")) {
                     withAnimation {
-                        user.sheetPresented = false
                         user.delete()
+                        sheetNavigator.showSheet = false
                     }
                   },
                   secondaryButton: .cancel()
             )
         }
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
-//        .navigationBarItems(trailing:
-//            UIControls.EditButton(
-//                action: {
-//                    isEditing.toggle()
-//                },
-//                isEditing: isEditing)
-//        )
     }
 }
 

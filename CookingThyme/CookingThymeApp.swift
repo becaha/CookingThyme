@@ -12,6 +12,8 @@ import SwiftUI
 @main
 struct CookingThymeApp: App {
     @ObservedObject var user = UserVM()
+    @ObservedObject var timer = TimerHandler()
+    @ObservedObject var sheetNavigator = SheetNavigator()
     
     init() {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(mainColor())
@@ -26,6 +28,8 @@ struct CookingThymeApp: App {
         WindowGroup {
             HomeView()
                 .environmentObject(user)
+                .environmentObject(sheetNavigator)
+                .environmentObject(timer)
         }
     }
 }

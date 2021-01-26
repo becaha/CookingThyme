@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SigninPromptView: View {
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
     var message: String
@@ -17,8 +18,8 @@ struct SigninPromptView: View {
             Spacer()
             
             Button(action: {
-                user.signinPresented = true
-                user.sheetPresented = true
+                sheetNavigator.showSheet = true
+                sheetNavigator.sheetDestination = .signin
             }) {
                 Text("Sign in")
                 

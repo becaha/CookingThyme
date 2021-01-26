@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-// TODO: take care of switching before exiting sheet
-// TODO: no capitalization, keyboards
 // TODO: error when signed in user, restart sim, sign out, try to sign in
 struct SigninView: View {
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
         
     @State var email: String = ""
@@ -20,6 +19,7 @@ struct SigninView: View {
     
     @State var signinErrorMessage = ""
     @State var signupErrorMessages = [String]()
+
     
     var body: some View {
         VStack(spacing: 0) {
@@ -145,25 +145,21 @@ struct SigninView: View {
     }
     
     func reset() {
-        withAnimation {
-            username = ""
-            password = ""
-            email = ""
-            signupErrorMessages = [String]()
-            signinErrorMessage = ""
-        }
+        username = ""
+        password = ""
+        email = ""
+        signupErrorMessages = [String]()
+        signinErrorMessage = ""
     }
     
     func signin() {
         user.signin(username: username, password: password)
         if user.signinError {
-            withAnimation {
-                signinErrorMessage = "Username or password incorrect."
-            }
+            signinErrorMessage = "Username or password incorrect."
         }
         else {
+            sheetNavigator.showSheet = false
             reset()
-            user.sheetPresented = false
         }
     }
     

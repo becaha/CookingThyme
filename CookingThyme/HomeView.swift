@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
-    @ObservedObject var timer = TimerHandler()
+    @EnvironmentObject var timer: TimerHandler
+    @EnvironmentObject var sheetNavigator: SheetNavigator
             
     var body: some View {
         NavigationView {
@@ -23,6 +24,7 @@ struct HomeView: View {
                 VStack {
                     if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a recipe book.")
+                            .environmentObject(sheetNavigator)
                     }
                     else if user.collection != nil {
                         RecipeCollectionView()
@@ -37,6 +39,7 @@ struct HomeView: View {
                 VStack {
                     if !user.isSignedIn {
                         SigninPromptView(message: "to start creating a shopping list.")
+                            .environmentObject(sheetNavigator)
                     }
                     else if user.collection != nil {
                         ShoppingListView()
@@ -60,7 +63,11 @@ struct HomeView: View {
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
             .navigationBarItems(trailing:
                 Button(action: {
-                    user.sheetPresented = true
+                    if user.isSignedIn {
+                        self.sheetNavigator.sheetDestination = .settings
+                    } else {
+                        self.sheetNavigator.sheetDestination = .signin
+                    }
                 }) {
                     Image(systemName: "gear")
                         .foregroundColor(.black)
@@ -71,8 +78,9 @@ struct HomeView: View {
                 nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
             })
         }
-        .sheet(isPresented: $user.sheetPresented) {
-            HomeSheet()
+        .sheet(isPresented: self.$sheetNavigator.showSheet) {
+            self.sheetNavigator.navView()
+                .environmentObject(sheetNavigator)
                 .environmentObject(user)
         }
         .alert(isPresented: $timer.timerAlert) {
