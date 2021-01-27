@@ -12,7 +12,7 @@ import SwiftUI
 struct RecipeControls {
     
     @ViewBuilder
-    static func ReadDirection(withIndex index: Int, recipe: Recipe) -> some View {
+    static func ReadDirection(withIndex index: Int, direction: String) -> some View {
 //        Button(action: {
 //            withAnimation {
 //                directionIndicesCompleted.toggleElement(index)
@@ -32,7 +32,7 @@ struct RecipeControls {
                     Group {
                         Text("\(index + 1)")
 
-                        Text("\(recipe.directions[index].direction)")
+                        Text("\(direction)")
                     }
                     .padding(.vertical)
 //                }
@@ -46,31 +46,5 @@ struct RecipeControls {
     @ViewBuilder
     static func ReadIngredientText(_ ingredient: Ingredient) -> some View {
         Text("\(ingredient.toString())")
-    }
-    
-    @ViewBuilder
-    static func AddIngredientsButton(collection: RecipeCollectionVM?, recipe: Recipe, action: @escaping () -> Void) -> some View {
-        VStack(alignment: .center) {
-            Button(action: {
-                withAnimation {
-                    if let collection = collection {
-                        collection.addToShoppingList(fromRecipe: recipe)
-                    }
-                    action()
-                }
-            }) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(Color(UIColor.tertiarySystemFill))
-                    
-                    HStack {
-                        Image(systemName: "cart.fill")
-                        
-                        Text("Add All to Shopping List")
-                            .padding(.vertical)
-                    }
-                }
-            }
-        }
     }
 }

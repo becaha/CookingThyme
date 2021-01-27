@@ -35,83 +35,50 @@ struct ReadRecipeView: View {
     
     var body: some View {
         VStack {
-            Text("\(recipe.name)")
-                .recipeTitle()
-                .recipeTitleBorder()
+            RecipeNameTitle(name: recipe.name)
             
             getImageView()
             
             Form {
                 Section(header:
-                    HStack {
-                        Text("Ingredients")
-                        
-                        Spacer()
-                        
-                        VStack {
-                            // should be changing servings but not in db
-                            Picker(selection: $recipe.servings, label:
-                                    HStack {
-                                        Text("Serving Size: \(recipe.servings)")
-                                
-                                        Image(systemName: "chevron.down")
+                    IngredientsHeader(servings: $recipe.servings),
+                        footer:
+                            HStack {
+                                VStack(alignment: .center) {
+                                    Button(action: {
+                                        withAnimation {
+                                            if addAllIngredients() {
+                                                addedAllIngredients = true
+                                            }
+                                            else {
+                                                addedAllIngredients = false
+                                            }
+                                        }
+                                    }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .fill(Color(UIColor.tertiarySystemFill))
+                                            
+                                            HStack {
+                                                Image(systemName: "cart.fill")
+                                                
+                                                Text("Add All to Shopping List")
+                                                    .padding(.vertical)
+                                            }
+                                        }
                                     }
-                            )
-                            {
-                                ForEach(1..<101, id: \.self) { num in
-                                    Text("\(num.toString())").tag(num.toString())
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle())
-                        }
-                    },
-                        footer:
-                            RecipeControls.AddIngredientsButton(collection: collection, recipe: recipe.recipe, action: addAllIngredients)
 
                 ) {
-                    List {
-                        ForEach(recipe.ingredients) { ingredient in
-                            HStack {
-                                if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(mainColor())
-                                }
-                                else {
-                                    UIControls.AddButton(action: {
-                                        withAnimation {
-                                            confirmAddIngredient = ingredient.id
-                                        }
-                                    })
-                                }
-                                
-                                IngredientText(ingredient)
-                            }
-                            if confirmAddIngredient == ingredient.id {
-                                HStack {
-                                    Image(systemName: "cart.fill")
-                                    
-                                    Button("Add to Shopping List", action: {
-                                        withAnimation {
-                                            collection.addToShoppingList(ingredient)
-                                            confirmAddIngredient = nil
-                                            addedIngredients.append(ingredient.id)
-                                        }
-                                    })
-                                }
-                                .foregroundColor(mainColor())
-                            }
-                        }
-                    }
+                    IngredientsList(ingredients: recipe.ingredients,
+                        addToShoppingList: { ingredient in
+                            collection.addToShoppingList(ingredient)
+                        },
+                        onNotSignedIn: {})
                 }
                 
-                Section(header: Text("Directions")) {
-                    // TODO make list collapsable so after a step is done, it collapses
-                    List {
-                        ForEach(0..<recipe.directions.count, id: \.self) { index in
-                            Direction(withIndex: index)
-                        }
-                    }
-                }
+                DirectionsList(directions: recipe.directions)
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
@@ -145,16 +112,15 @@ struct ReadRecipeView: View {
     }
     
     // add all ingredients to shopping list is true, change + to checks
-    func addAllIngredients() {
-        self.addedAllIngredients = true
+    func addAllIngredients() -> Bool {
+        collection.addToShoppingList(fromRecipe: recipe.recipe)
+        return true
     }
     
     @ViewBuilder
     func getImageView() -> some View {
         if recipe.imageHandler.images.count > 0 {
-//            Section(header: Text("Photos")) {
-                ImagesView(isEditing: false)
-//            }
+            ImagesView(isEditing: false)
         }
     }
     
@@ -173,7 +139,7 @@ struct ReadRecipeView: View {
     }
     
     @ViewBuilder func Direction(withIndex index: Int) -> some View {
-        RecipeControls.ReadDirection(withIndex: index, recipe: recipe.recipe)
+        RecipeControls.ReadDirection(withIndex: index, direction: recipe.directions[index].direction)
     }
 }
 

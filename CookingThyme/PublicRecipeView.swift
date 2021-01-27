@@ -30,13 +30,7 @@ struct PublicRecipeView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("\(recipe.name)")
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-            }
-            .padding()
-            
+            RecipeNameTitle(name: recipe.name)
             
             Form {
                 if isLoading {
@@ -52,87 +46,22 @@ struct PublicRecipeView: View {
                     }
                 }
                 else {
-                    Section(header: Text("Photos")) {
+                    if recipe.imageHandler.images.count > 0 {
                         ReadImagesView(uiImages: recipe.imageHandler.images)
                     }
                     
-                    Section(header:
-                        HStack {
-                            Text("Ingredients")
-                            
-                            Spacer()
-                            
-                            VStack {
-                                // should be changing servings but not in db
-                                Picker(selection: $recipe.servings, label:
-                                        HStack {
-                                            Text("Serving Size: \(recipe.servings)")
-                                    
-                                            Image(systemName: "chevron.down")
-                                        }
-                                )
-                                {
-                                    ForEach(1..<101, id: \.self) { num in
-                                        Text("\(num.toString())").tag(num.toString())
-                                    }
-                                }
-                                .pickerStyle(MenuPickerStyle())
-                            }
+                    IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
+                        addToShoppingList: { ingredient in
+                            user.collection!.addToShoppingList(ingredient)
                         },
-                            footer:
-                                HStack {
-                                    RecipeControls.AddIngredientsButton(collection: user.collection, recipe: recipe.recipe, action: addAllIngredients)
-                                }
-                        ) {
-                        List {
-                            ForEach(recipe.ingredients) { ingredient in
-                                HStack {
-                                    if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(mainColor())
-                                    }
-                                    else {
-                                        UIControls.AddButton(action: {
-                                            withAnimation {
-                                                if user.isSignedIn {
-                                                    confirmAddIngredient = ingredient.id
-                                                }
-                                                else {
-                                                    signinAlert = true
-                                                    signinAlertMessage = "Sign in to add ingredients to shopping list."
-                                                }
-                                            }
-                                        })
-                                    }
-                                    
-                                    RecipeControls.ReadIngredientText(ingredient)
-                                }
-                                if confirmAddIngredient == ingredient.id {
-                                    HStack {
-                                        Image(systemName: "cart.fill")
-                                        
-                                        Button("Add to Shopping List", action: {
-                                            withAnimation {
-                                                user.collection!.addToShoppingList(ingredient)
-                                                confirmAddIngredient = nil
-                                                addedIngredients.append(ingredient.id)
-                                            }
-                                        })
-                                    }
-                                    .foregroundColor(Color(UIColor.systemGray))
-                                }
-                            }
+                        addAllToShoppingList: addAllIngredients,
+                        onNotSignedIn: {
+                            signinAlert = true
+                            signinAlertMessage = "Sign in to add ingredients to shopping list."
                         }
-                    }
+                    )
                     
-                    Section(header: Text("Directions")) {
-                        // TODO make list collapsable so after a step is done, it collapses
-                        List {
-                            ForEach(0..<recipe.directions.count, id: \.self) { index in
-                                RecipeControls.ReadDirection(withIndex: index, recipe: recipe.recipe)
-                            }
-                        }
-                    }
+                    DirectionsList(directions: recipe.directions)
                 }
             }
         }
@@ -176,14 +105,18 @@ struct PublicRecipeView: View {
         )
     }
     
-    func addAllIngredients() {
+    func addAllIngredients() -> Bool {
         if user.isSignedIn {
-            self.addedAllIngredients = true
+            if user.collection != nil {
+                user.collection!.addToShoppingList(fromRecipe: recipe.recipe)
+                return true
+            }
         }
         else {
             signinAlert = true
             signinAlertMessage = "Sign in to add ingredients to shopping list."
         }
+        return false
     }
     
 }
