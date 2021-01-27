@@ -26,7 +26,7 @@ struct PublicRecipeView: View {
     }
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical) {
             RecipeNameTitle(name: recipe.name)
             
             VStack {
@@ -66,6 +66,7 @@ struct PublicRecipeView: View {
                 }
             }
         }
+        .background(formBackgroundColor())
         .onAppear {
             withAnimation {
                 recipe.popullateDetail()

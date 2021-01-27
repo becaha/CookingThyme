@@ -18,105 +18,83 @@ struct Test: View {
     @State var signupErrorMessage = ""
     
     var body: some View {
-        VStack {
-            Spacer()
+        ScrollView(.vertical) {
+            Text("Title")
             
-            if isSigningIn {
-                Group {
-                    TextField("Username", text: $username)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .formItem()
-
-                    SecureField("Password", text: $password) {
-//                        signin()
-                    }
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .formItem()
-                }
-                
+//            VStack(spacing: 0) {
+//                HStack {
+//                    Text("INGREDIENTS")
+//
+//                    Spacer()
+//                }
+//                .padding([.leading, .top])
+//                .padding(.bottom, 5)
+//
+//                VStack(spacing: 0) {
+//                    ForEach((1...20).reversed(), id: \.self) { num in
+//                        Text("\(num)")
+//                            .formSectionItem()
+//                    }
+//                }
+//                .formSection()
+//            }
+            
+            VStack(spacing: 0) {
                 HStack {
-                    Text("\(signinErrorMessage)")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(0)
+                    Text("directions")
+                        .textCase(.uppercase)
                     
                     Spacer()
                 }
-                
-                Button(action: {
-//                    signin()
-                }) {
-                    HStack {
-                        Spacer()
-                        
-                        Text("Sign In")
-                            .foregroundColor(.white)
-                        
-                        Spacer()
+                .padding([.leading, .top])
+                .padding(.bottom, 5)
+
+                ForEach((1...20).reversed(), id: \.self) { num in
+                    VStack(spacing: 0) {
+                    HStack(alignment: .top, spacing: 20) {
+                        Group {
+                            Text("\(num + 1)")
+
+                            Text("long long long text that will go through the next line")
+                        }
                     }
-                }
-                .formItem(backgroundColor: mainColor())
-                
-                Button(action: {
-                    withAnimation {
-                        isSigningIn = false
-//                        reset()
+                    .formSectionItem()
+
+                        
+                        HStack {
+                            Image(systemName: "cart.fill")
+
+                            Button("Add to Shopping List", action: {
+                                withAnimation {
+    //                                callAddToShoppingList(ingredient)
+                                }
+                            })
+                            
+                            Spacer()
+                        }
+//                        .padding(.horizontal)
+//                        .padding(.top, 5)
+                        .foregroundColor(mainColor())
+                        .formSectionItem(backgroundColor: formBorderColor())
                     }
-                }) {
-                    Text("Sign Up")
+                    .foregroundColor(.black)
+//                    .formSectionItem()
+                    
+//                    HStack {
+//                        Image(systemName: "cart.fill")
+//
+//                        Button("Add to Shopping List", action: {
+//                            withAnimation {
+////                                callAddToShoppingList(ingredient)
+//                            }
+//                        })
+//                    }
+//                    .padding()
+//                    .background(mainColor())
+                    
                 }
             }
-            else {
-                Group {
-                    TextField("Username", text: $username)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .formItem()
-
-                    TextField("Email", text: $email)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .keyboardType(.emailAddress)
-                        .formItem()
-
-                    SecureField("Password", text: $password) {
-//                        signup()
-                    }
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .formItem()
-                }
-
-                HStack {
-                    Text("\(signupErrorMessage)")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(0)
-
-                    Spacer()
-                }
-
-                Button(action: {
-//                    signup()
-                }) {
-                    Text("Sign Up")
-                        .foregroundColor(.white)
-                }
-                .formItem(backgroundColor: mainColor())
-
-                Button(action: {
-                    withAnimation {
-//                        isSigningIn = true
-//                        reset()
-                    }
-                }) {
-                    Text("Sign In")
-                }
-            }
-            
-            Spacer()
+            .formSection()
             
         }
         .padding()

@@ -15,7 +15,7 @@ struct RecipeView: View {
     @State private var isEditingRecipe = false
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical) {
             if !isEditingRecipe {
                 ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }

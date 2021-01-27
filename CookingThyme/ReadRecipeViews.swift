@@ -29,7 +29,7 @@ struct RecipeLists: View {
     var directions: [Direction]
     
     var body: some View {
-        Form {
+        VStack {
             IngredientsView(servings: $servings, ingredients: ingredients,
                 addToShoppingList: { ingredient in
                     addToShoppingList(ingredient)
@@ -58,100 +58,136 @@ struct IngredientsView: View {
     @State private var addedIngredients = [Int]()
 
     var body: some View {
-        Section(header:
-                    HStack {
-                        Text("Ingredients")
+        VStack(spacing: 0) {
+            HStack {
+                Text("Ingredients")
+                    .textCase(.uppercase)
+                    .font(.subheadline)
+                
+                Spacer()
+                
+                VStack {
+                    // should be changing servings but not in db
+                    Picker(selection: $servings, label:
+                            HStack {
+                                Text("Serving Size: \(servings)")
+                                    .textCase(.uppercase)
+                                    .font(.subheadline)
                         
-                        Spacer()
-                        
-                        VStack {
-                            // should be changing servings but not in db
-                            Picker(selection: $servings, label:
-                                    HStack {
-                                        Text("Serving Size: \(servings)")
-                                
-                                        Image(systemName: "chevron.down")
-                                    }
-                            )
-                            {
-                                ForEach(1..<101, id: \.self) { num in
-                                    Text("\(num.toString())").tag(num.toString())
-                                }
+                                Image(systemName: "chevron.down")
                             }
-                            .pickerStyle(MenuPickerStyle())
-                        }
-                    },
-                footer:
-                    HStack {
-                        VStack(alignment: .center) {
-                            Button(action: {
-                                withAnimation {
-                                    if addAllToShoppingList(ingredients.filter({ (ingredient) -> Bool in
-                                        !addedIngredients.contains(ingredient.id)
-                                    })) {
-                                        addedAllIngredients = true
-                                    }
-                                    else {
-                                        addedAllIngredients = false
-                                    }
-                                }
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .fill(Color(UIColor.tertiarySystemFill))
-                                    
-                                    HStack {
-                                        Image(systemName: "cart.fill")
-                                        
-                                        Text("Add All to Shopping List")
-                                            .padding(.vertical)
-                                    }
-                                }
-                            }
-                            .disabled(addedAllIngredients)
+                    )
+                    {
+                        ForEach(1..<101, id: \.self) { num in
+                            Text("\(num.toString())").tag(num.toString())
                         }
                     }
-        ) {
-            List {
+                    .pickerStyle(MenuPickerStyle())
+                }
+            }
+            .formHeader()
+            
+            VStack(spacing: 0) {
                 ForEach(ingredients) { ingredient in
-                    HStack {
-                        if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(mainColor())
-                        }
-                        else {
-                            UIControls.AddButton(action: {
-                                withAnimation {
-                                    if user.isSignedIn {
-                                        confirmAddIngredient = ingredient.id
-                                    }
-                                    else {
-                                        onNotSignedIn()
-                                    }
-                                }
-                            })
-                        }
-                        
-                        RecipeControls.ReadIngredientText(ingredient)
-                    }
-                    if confirmAddIngredient == ingredient.id {
+                    VStack(spacing: 0) {
                         HStack {
-                            Image(systemName: "cart.fill")
+                            if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(mainColor())
+                            }
+                            else {
+                                UIControls.AddButton(action: {
+                                    withAnimation {
+                                        if user.isSignedIn {
+                                            // for the first added ingredients, confirm
+                                            if addedIngredients.count == 0 {
+                                                confirmAddIngredient = ingredient.id
+                                            }
+                                            // for the rest, just add
+                                            else if addedIngredients.count > 0 {
+                                                callAddToShoppingList(ingredient)
+                                            }
+                                        }
+                                        else {
+                                            onNotSignedIn()
+                                        }
+                                    }
+                                })
+                            }
                             
-                            Button("Add to Shopping List", action: {
-                                withAnimation {
-                                    confirmAddIngredient = nil
-                                    addedIngredients.append(ingredient.id)
-                                    addToShoppingList(ingredient)
-                                }
-                            })
+                            RecipeControls.ReadIngredientText(ingredient)
                         }
-                        .foregroundColor(mainColor())
+                        .formSectionItem(isLastItem: ingredient.id == ingredients[ingredients.count - 1].id)
+                        if confirmAddIngredient == ingredient.id {
+
+                            HStack {
+                                Button(action: {
+                                    withAnimation {
+                                        callAddToShoppingList(ingredient)
+                                    }
+                                }) {
+                                    Image(systemName: "cart.fill.badge.plus")
+
+                                    Text("Add to Shopping List")
+                                }
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    withAnimation {
+                                        confirmAddIngredient = nil
+                                    }
+                                }) {
+                                    Image(systemName: "xmark.circle")
+                                }
+                            }
+                            .foregroundColor(formBackgroundColor())
+                            .formSectionItem(isLastItem: ingredient.id == ingredients[ingredients.count - 1].id, backgroundColor: mainColor())
+                        }
                     }
                 }
             }
-        
+            .formSection()
+            
+            HStack {
+                VStack(alignment: .center) {
+                    Button(action: {
+                        withAnimation {
+                            if addAllToShoppingList(ingredients.filter({ (ingredient) -> Bool in
+                                !addedIngredients.contains(ingredient.id)
+                            })) {
+                                addedAllIngredients = true
+                            }
+                            else {
+                                addedAllIngredients = false
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Spacer()
+                            
+                            Image(systemName: "cart.fill.badge.plus")
+                            
+                            Text("Add All to Shopping List")
+                                .padding(.vertical)
+                            
+                            Spacer()
+                        }
+                        .overlay(RoundedRectangle(cornerRadius: 5)
+                                    .fill(Color(UIColor.tertiarySystemFill)))
+                    }
+                    .disabled(addedAllIngredients)
+                }
+            }
+            .padding([.horizontal, .bottom])
+            .padding(.top, 5)
         }
+    }
+    
+    func callAddToShoppingList(_ ingredient: Ingredient) {
+        confirmAddIngredient = nil
+        addedIngredients.append(ingredient.id)
+        addToShoppingList(ingredient)
     }
 }
     
@@ -159,12 +195,38 @@ struct DirectionsList: View {
     var directions: [Direction]
     
     var body: some View {
-        Section(header: Text("Directions")) {
-            List {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Directions")
+                    .textCase(.uppercase)
+                    .font(.subheadline)
+                
+                Spacer()
+            }
+            .formHeader()
+
+            VStack(spacing: 0) {
                 ForEach(0..<directions.count, id: \.self) { index in
                     RecipeControls.ReadDirection(withIndex: index, direction: directions[index].direction)
+                        .formSectionItem(isLastItem: index == directions.count - 1)
                 }
             }
+            .formSection()
         }
+    }
+}
+
+struct FormHeader: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding([.horizontal, .top])
+            .padding(.bottom, 5)
+            .foregroundColor(Color.gray)
+    }
+}
+
+extension View {
+    func formHeader() -> some View {
+        modifier(FormHeader())
     }
 }

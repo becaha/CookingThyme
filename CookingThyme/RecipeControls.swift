@@ -34,7 +34,6 @@ struct RecipeControls {
 
                         Text("\(direction)")
                     }
-                    .padding(.vertical)
 //                }
             }
             .foregroundColor(.black)

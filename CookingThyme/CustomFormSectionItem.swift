@@ -8,7 +8,23 @@
 import SwiftUI
 
 struct CustomFormSectionItem: ViewModifier {
-    @State var thyme: String = ""
+    var isLastItem: Bool = false
+    var backgroundColor: Color = Color.white
+    
+    init() {}
+    
+    init(isLastItem: Bool) {
+        self.isLastItem = isLastItem
+    }
+    
+    init(isLastItem: Bool, backgroundColor: Color) {
+        self.isLastItem = isLastItem
+        self.backgroundColor = backgroundColor
+    }
+    
+    init(backgroundColor: Color) {
+        self.backgroundColor = backgroundColor
+    }
     
     func body(content: Content) -> some View {
         VStack(spacing: 0) {
@@ -18,20 +34,24 @@ struct CustomFormSectionItem: ViewModifier {
 
                 Spacer()
             }
+            .background(backgroundColor)
             
-            Divider()
+            if !isLastItem {
+                Divider()
+            }
         }
+        .padding(0)
     }
 }
 
 struct CustomFormSectionItem_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text("hi")
                 .formSectionItem()
             
             Text("so long it is ridoijdfosij couhow tlong this message actually is")
-                .formSectionItem()
+                .formSectionItem(isLastItem: true)
         }
         .formSection()
     }
@@ -40,5 +60,17 @@ struct CustomFormSectionItem_Previews: PreviewProvider {
 extension View {
     func formSectionItem() -> some View {
         modifier(CustomFormSectionItem())
+    }
+    
+    func formSectionItem(isLastItem: Bool) -> some View {
+        modifier(CustomFormSectionItem(isLastItem: isLastItem))
+    }
+    
+    func formSectionItem(backgroundColor: Color) -> some View {
+        modifier(CustomFormSectionItem(backgroundColor: backgroundColor))
+    }
+    
+    func formSectionItem(isLastItem: Bool, backgroundColor: Color) -> some View {
+        modifier(CustomFormSectionItem(isLastItem: isLastItem, backgroundColor: backgroundColor))
     }
 }

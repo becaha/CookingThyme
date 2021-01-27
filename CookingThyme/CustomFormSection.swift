@@ -11,7 +11,7 @@ struct CustomFormSection: ViewModifier {
     var backgroundColor: Color
     
     init() {
-        self.backgroundColor = formBackgroundColor()
+        self.backgroundColor = Color.white
     }
     
     init(backgroundColor: Color) {
@@ -19,25 +19,10 @@ struct CustomFormSection: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            ZStack {
-                RoundedRectangle(cornerRadius: 7)
-                    .stroke(formBorderColor())
-                
-                RoundedRectangle(cornerRadius: 7)
-                    .fill(backgroundColor)
-                
-                VStack {
-                    content
-                 
-//                    Spacer()
-                }
-                .padding()
-            }
-            .padding(.horizontal)
-            .frame(width: geometry.size.width)
-            .fixedSize()
-        }
+        content
+            .overlay(RoundedRectangle(cornerRadius: 7).stroke(formBorderColor()))
+            .background(RoundedRectangle(cornerRadius: 7).fill(Color.white))
+            .padding([.horizontal])
     }
 }
 
@@ -61,7 +46,15 @@ struct CustomFormSection_Previews: PreviewProvider {
                     .formSectionItem()
             }
             .formSection()
+            
+            Form {
+                Text("hi")
+                
+                Text("hi")
+            }
         }
+        .background(Color.blue)
+
     }
 }
 

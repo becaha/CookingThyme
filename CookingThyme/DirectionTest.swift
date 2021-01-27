@@ -14,57 +14,36 @@ struct DirectionTest: View {
     var directions = ["mix", "drink"]
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("INGREDIENTS")
-                
-                Spacer()
-            }
-            .padding([.leading, .top])
-            .padding(.bottom, 5)
+        NavigationView {
+            VStack {
+                Text("Title")
+                    .padding()
             
-            ZStack {
-                
-                RoundedRectangle(cornerRadius: 7)
-                    .foregroundColor(.white)
-            
-                VStack(spacing: 0) {
-                    HStack(alignment: .top, spacing: 20) {
-                        // edit
-                        Group {
-                            Text("\(20)")
+                List {
+                    Section {
+                        ForEach((1...20).reversed(), id: \.self) { num in
+                            Text("\(num)")
                             
-                            TextEditor(text: $newDirection)
-                                .fixedSize(horizontal: false, vertical: true)
-//                                .padding(.vertical, -7)
-                            
-    //                            TextField("\(directions[0])", text: $newDirection)
-
+                            HStack {
+                                Image(systemName: "cart.fill")
+                                
+                                Button("Add to Shopping List", action: {
+                                    withAnimation {
+        //                                confirmAddIngredient = nil
+        //                                addedIngredients.append(ingredient.id)
+        //                                addToShoppingList(ingredient)
+                                    }
+                                })
+                            }
+                            .foregroundColor(mainColor())
                         }
-                        .padding(.vertical)
                     }
                     
-                    Divider()
-                        .foregroundColor(formBorderColor())
-                    
-                    HStack(alignment: .top, spacing: 20) {
-                        // edit
-                        Group {
-                            Text("\(21)")
-                            
-                            TextEditor(text: $newDirection)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(.vertical, -7)
-
-                        }
-                        .padding(.vertical)
-                    }
                 }
-                .padding(.horizontal)
+                .moveDisabled(true)
             }
-            .padding([.horizontal, .bottom])
+            .navigationBarTitle("Recipes", displayMode: .inline)
         }
-        .formed()
     }
 }
 
