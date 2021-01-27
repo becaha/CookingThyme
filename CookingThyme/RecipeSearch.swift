@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RecipeSearch: View {
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
     @ObservedObject var recipeWebHandler = RecipesWebHandler()

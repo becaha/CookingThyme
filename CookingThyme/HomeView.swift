@@ -16,6 +16,7 @@ struct HomeView: View {
         NavigationView {
             TabView {
                 RecipeSearch()
+                    .environmentObject(sheetNavigator)
                     .tabItem {
                         Image(systemName: "magnifyingglass")
                         Text("Recipe Search")

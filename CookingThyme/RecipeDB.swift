@@ -615,12 +615,6 @@ class RecipeDB {
                     """,
                     arguments: [name, servings, recipeCategoryId, id])
 
-                let recipeId = db.lastInsertedRowID
-                
-                if recipeId != id {
-                    print("Error updating recipe")
-                }
-
                 return Recipe(id: id, name: name, servings: servings, recipeCategoryId: recipeCategoryId)
             }
             
@@ -713,12 +707,6 @@ class RecipeDB {
                     WHERE \(RecipeCategory.Table.id) = ?
                     """,
                     arguments: [name, recipeCollectionId, id])
-
-                let categoryId = db.lastInsertedRowID
-                
-                if categoryId != id {
-                    print("Error updating category")
-                }
                 
                 return
             }
@@ -743,11 +731,6 @@ class RecipeDB {
                     """,
                     arguments: [name, id])
 
-                let categoryId = db.lastInsertedRowID
-                
-                if categoryId != id {
-                    print("Error updating collection")
-                }
                 return
             }
             return
@@ -772,12 +755,6 @@ class RecipeDB {
                     """,
                     arguments: [userId, authToken, timestamp, id])
 
-                let authId = db.lastInsertedRowID
-                
-                if authId != id {
-                    print("Error updating auth")
-                }
-
                 return Auth(id: id, userId: userId, authToken: authToken, timestamp: timestamp)
             }
             
@@ -785,6 +762,30 @@ class RecipeDB {
         } catch {
             print("Error updating recipe")
             return nil
+        }
+    }
+    
+    func updateUser(withId id: Int, username: String, password: String, email: String) -> Bool {
+        do {
+            let success = try dbQueue.write{ (db: Database) -> Bool in
+                try db.execute(
+                    sql:
+                    """
+                    UPDATE \(User.Table.databaseTableName) \
+                    SET \(User.Table.password) = ?,
+                    \(User.Table.email) = ?, \
+                    \(User.Table.username) = ? \
+                    WHERE \(User.Table.id) = ?
+                    """,
+                    arguments: [password, email, username, id])
+
+                return true
+            }
+            
+            return success
+        } catch {
+            print("Error updating user")
+            return false
         }
     }
     

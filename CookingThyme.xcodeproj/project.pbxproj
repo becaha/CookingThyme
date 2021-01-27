@@ -86,6 +86,7 @@
 		DB88CD3C25BF779400A7F32C /* EditPhotoMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */; };
 		DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */; };
 		DB88CD4625C0B47500A7F32C /* HomeSheetNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */; };
+		DB88CD4825C0E2B000A7F32C /* ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
@@ -180,6 +181,7 @@
 		DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhotoMenu.swift; sourceTree = "<group>"; };
 		DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesSheet.swift; sourceTree = "<group>"; };
 		DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSheetNavigator.swift; sourceTree = "<group>"; };
+		DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePassword.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 			isa = PBXGroup;
 			children = (
 				DB83F6AF25AF92CE0041DAA7 /* Settings.swift */,
+				DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -691,6 +694,7 @@
 				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
 				DB88CD3525BBA49F00A7F32C /* RecipeTitle.swift in Sources */,
+				DB88CD4825C0E2B000A7F32C /* ChangePassword.swift in Sources */,
 				DB88CD3325BB97B100A7F32C /* CustomFormSection.swift in Sources */,
 				DB88CD4625C0B47500A7F32C /* HomeSheetNavigator.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,

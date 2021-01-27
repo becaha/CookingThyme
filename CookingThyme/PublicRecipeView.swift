@@ -11,6 +11,7 @@ import SwiftUI
 // TODO: make sure serving size doesnt change actual recipe that gets saved
 // tODO: popovers to explain disabled buttons
 struct PublicRecipeView: View {
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     @ObservedObject var recipe: PublicRecipeVM
     
@@ -150,7 +151,8 @@ struct PublicRecipeView: View {
             Alert(title: Text("\(signinAlertMessage)"),
                   primaryButton: .default(Text("Sign in")) {
                     withAnimation {
-                         user.signinPresented = true
+                        sheetNavigator.showSheet = true
+                        sheetNavigator.sheetDestination = .signin
                     }
                   },
                   secondaryButton: .cancel())

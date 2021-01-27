@@ -8,11 +8,9 @@
 import Foundation
 import Combine
 
-// TODO: get user to see if username is already taken before trying to create user
 class UserVM: ObservableObject {
     @Published var user: User
     @Published var authToken: String?
-    @Published var sheetPresented: Bool = false // TODO move
     @Published var signinPresented: Bool = false
     @Published var collection: RecipeCollectionVM?
     @Published var isSignedIn: Bool = false
@@ -20,9 +18,9 @@ class UserVM: ObservableObject {
     // errors
     @Published var signinError: Bool = false
     @Published var signupErrors = [InvalidSignup]()
+    @Published var changePasswordError: String = ""
     
     private var collectionCancellable: AnyCancellable?
-    private var signinPresentedCancellable: AnyCancellable?
     private var userCancellable: AnyCancellable?
 
     init() {
@@ -47,11 +45,6 @@ class UserVM: ObservableObject {
         self.collectionCancellable = self.collection?.objectWillChange
             .sink { _ in
                 self.objectWillChange.send()
-            }
-        
-        self.signinPresentedCancellable = self.$signinPresented
-            .sink { signinPresented in
-                self.sheetPresented = signinPresented
             }
         
         self.userCancellable = self.$user
@@ -136,7 +129,7 @@ class UserVM: ObservableObject {
         if RecipeDB.shared.getUser(withUsername: username) != nil {
             self.signupErrors.append(InvalidSignup.usernameTaken)
         }
-        if password == "" {
+        if isValidPassword(password) {
             self.signupErrors.append(InvalidSignup.password)
         }
         // TODO: confirm email
@@ -147,6 +140,10 @@ class UserVM: ObservableObject {
             return false
         }
         return true
+    }
+    
+    func isValidPassword(_ password: String) -> Bool {
+        return password != ""
     }
     
     func signout() {
@@ -160,6 +157,31 @@ class UserVM: ObservableObject {
         self.user = User()
         DispatchQueue.global(qos: .userInitiated).async {
             self.user.delete()
+        }
+    }
+    
+    // TODO change throws to be specific/exhaustive
+    func changePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
+        changePasswordError = ""
+        do {
+            if !isValidPassword(newPassword) {
+                changePasswordError = "Invalid password."
+            }
+            if newPassword != confirmPassword {
+                changePasswordError = "Passwords do not match."
+            }
+            if changePasswordError == "" {
+                try user.changePassword(oldPassword: oldPassword, newPassword: newPassword)
+            }
+        }
+        catch ChangePasswordError.incorrectOldPassword {
+            changePasswordError = "Incorrect password."
+        }
+        catch ChangePasswordError.badNewPassword {
+            changePasswordError = "Invalid password."
+        }
+        catch {
+            changePasswordError = "Error creating new password."
         }
     }
 }

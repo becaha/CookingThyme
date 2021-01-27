@@ -48,22 +48,28 @@ struct Settings: View {
                                 email = user.email
                             }
                     }
-                }
-                
-                Section {
-                    HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            // TODO
-                        }) {
-                            Text("Change Password")
-                                .bold()
-                        }
-                        
-                        Spacer()
+                    
+                    NavigationLink(destination:
+                            ChangePassword(
+                                  onSaveChanges: { oldPassword, newPassword, confirmPassword in
+                                    user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
+                                    return user.changePasswordError
+                              })
+                    ) {
+                        Text("Change Password")
+                            .bold()
                     }
                 }
+                
+//                Section {
+//                    NavigationLink("Change Password", destination:
+//                            ChangePassword(
+//                                  onSaveChanges: { oldPassword, newPassword, confirmPassword in
+//                                    user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
+//                                    return user.changePasswordError
+//                              })
+//                    )
+//                }
                 
                 Section {
                     HStack {

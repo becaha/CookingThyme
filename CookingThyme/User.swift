@@ -88,6 +88,17 @@ struct User {
         throw UserError.badSignup(taken: "")
     }
     
+    mutating func changePassword(oldPassword: String, newPassword: String) throws {
+        if isCorrectPassword(self, withPassword: oldPassword) {
+            if !RecipeDB.shared.updateUser(withId: id, username: username, password: newPassword, email: email) {
+                throw ChangePasswordError.badNewPassword
+            }
+            password = newPassword
+            return
+        }
+        throw ChangePasswordError.incorrectOldPassword
+    }
+    
     // deletes current auth and user defaults and resets to blank user
     func signout() {
         RecipeDB.shared.deleteAuth(withUserId: id)
@@ -123,4 +134,9 @@ struct User {
 enum UserError: Error {
     case badSignin
     case badSignup(taken: String)
+}
+
+enum ChangePasswordError: Error {
+    case incorrectOldPassword
+    case badNewPassword
 }
