@@ -223,6 +223,17 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
+				DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */,
+				DB88CD3025BB93FC00A7F32C /* CustomFormSectionItem.swift */,
+				DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */,
+			);
+			name = CustomFormModifiers;
+			sourceTree = "<group>";
+		};
 		DB49B49B2565E47300808CC8 = {
 			isa = PBXGroup;
 			children = (
@@ -321,6 +332,7 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
@@ -334,12 +346,8 @@
 				DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */,
 				DB49B56A2582CEF400808CC8 /* SearchBar.swift */,
 				DBCDE78725945661003DC95F /* FormTitle.swift */,
-				DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */,
-				DB83F6BA25B682CA0041DAA7 /* CustomForm.swift */,
 				DB88CD1C25B75D0E00A7F32C /* Droppable.swift */,
 				DB88CD2425BA08BE00A7F32C /* PasteButton.swift */,
-				DB88CD3025BB93FC00A7F32C /* CustomFormSectionItem.swift */,
-				DB88CD3225BB97B100A7F32C /* CustomFormSection.swift */,
 			);
 			name = ViewHelpers;
 			sourceTree = "<group>";
@@ -446,7 +454,6 @@
 			children = (
 				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
 				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
-				DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */,
 			);
 			name = RecipeSearch;
 			sourceTree = "<group>";
@@ -481,6 +488,7 @@
 		DB88CD3625BBA55A00A7F32C /* RecipeHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */,
 				DB88CD3425BBA49F00A7F32C /* RecipeTitle.swift */,
 				DB49B564258276C700808CC8 /* RecipeControls.swift */,
 				DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */,

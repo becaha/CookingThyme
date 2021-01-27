@@ -378,7 +378,7 @@ struct EditRecipeView: View {
                             withAnimation {
                                 recipe.removeTempDirection(at: index)
                             }
-                        })
+                        }, isCentered: false)
                         .padding(.vertical)
                     }
                     .onDelete { indexSet in

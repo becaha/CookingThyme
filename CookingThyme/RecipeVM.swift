@@ -142,6 +142,10 @@ class RecipeVM: ObservableObject {
     }
     
     func moveRecipe(toCategoryId categoryId: Int) {
+        RecipeVM.moveRecipe(self.recipe, toCategoryId: categoryId)
+    }
+    
+    static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: Int) {
         RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
     }
     

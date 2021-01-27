@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-// TODO: make compatible with recipe
-// TODO: make sure serving size doesnt change actual recipe that gets saved
-// tODO: popovers to explain disabled buttons
 struct PublicRecipeView: View {
+    @Environment(\.presentationMode) var presentation
+
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     @ObservedObject var recipe: PublicRecipeVM
@@ -19,6 +18,8 @@ struct PublicRecipeView: View {
     
     @State private var signinAlert = false
     @State private var signinAlertMessage: String = ""
+    
+    @State private var currentCategoryId: Int?
 
     private var isLoading: Bool {
         return recipe.isPopullating && !recipe.recipeNotFound
@@ -28,9 +29,11 @@ struct PublicRecipeView: View {
         VStack {
             RecipeNameTitle(name: recipe.name)
             
-            Form {
+            VStack {
                 if isLoading {
-                    Section(header: UIControls.Loading()) {}
+                    UIControls.Loading()
+                    
+                    Spacer()
                 }
                 else if recipe.recipeNotFound {
                     HStack {
@@ -40,26 +43,30 @@ struct PublicRecipeView: View {
 
                         Spacer()
                     }
+                    
+                    Spacer()
                 }
                 else {
                     if recipe.imageHandler.images.count > 0 {
                         ReadImagesView(uiImages: recipe.imageHandler.images)
                     }
                     
-                    IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
-                        addToShoppingList: { ingredient in
-                            user.collection!.addToShoppingList(ingredient)
-                        },
-                        addAllToShoppingList: { ingredients in
-                            addAllIngredients(ingredients)
-                        },
-                        onNotSignedIn: {
-                            signinAlert = true
-                            signinAlertMessage = "Sign in to add ingredients to shopping list."
-                        }
-                    )
-                    
-                    DirectionsList(directions: recipe.directions)
+                    Form {
+                        IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
+                            addToShoppingList: { ingredient in
+                                user.collection!.addToShoppingList(ingredient)
+                            },
+                            addAllToShoppingList: { ingredients in
+                                addAllIngredients(ingredients)
+                            },
+                            onNotSignedIn: {
+                                signinAlert = true
+                                signinAlertMessage = "Sign in to add ingredients to shopping list."
+                            }
+                        )
+                        
+                        DirectionsList(directions: recipe.directions)
+                    }
                 }
             }
         }
@@ -69,8 +76,15 @@ struct PublicRecipeView: View {
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            CategoriesSheet(currentCategoryId: nil, actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
-                recipe.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
+            CategoriesSheet(currentCategoryId: currentCategoryId, actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
+                if currentCategoryId == nil {
+                    recipe.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
+                }
+                else {
+                    RecipeVM.moveRecipe(recipe.recipe, toCategoryId: categoryId)
+                }
+                currentCategoryId = categoryId
+
             }
             .environmentObject(user.collection!)
         })
