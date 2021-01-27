@@ -51,22 +51,18 @@ struct PublicRecipeView: View {
                         ReadImagesView(uiImages: recipe.imageHandler.images)
                     }
                     
-                    Form {
-                        IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
-                            addToShoppingList: { ingredient in
-                                user.collection!.addToShoppingList(ingredient)
-                            },
-                            addAllToShoppingList: { ingredients in
-                                addAllIngredients(ingredients)
-                            },
-                            onNotSignedIn: {
-                                signinAlert = true
-                                signinAlertMessage = "Sign in to add ingredients to shopping list."
-                            }
-                        )
-                        
-                        DirectionsList(directions: recipe.directions)
-                    }
+                    RecipeLists(servings: $recipe.servings, ingredients: recipe.ingredients,
+                        addToShoppingList: { ingredient in
+                            user.collection!.addToShoppingList(ingredient)
+                        },
+                        addAllToShoppingList: { ingredients in
+                            addAllIngredients(ingredients)
+                        },
+                        onNotSignedIn: {
+                            signinAlert = true
+                            signinAlertMessage = "Sign in to add ingredients to shopping list."
+                        },
+                        directions: recipe.directions)
                 }
             }
         }

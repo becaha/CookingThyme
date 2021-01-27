@@ -17,6 +17,33 @@ struct RecipeNameTitle: View {
     }
 }
 
+struct RecipeLists: View {
+    @Binding var servings: Int
+    
+    @EnvironmentObject var user: UserVM
+    var ingredients: [Ingredient]
+    var addToShoppingList: (Ingredient) -> Void
+    var addAllToShoppingList: ([Ingredient]) -> Bool
+    var onNotSignedIn: () -> Void
+    
+    var directions: [Direction]
+    
+    var body: some View {
+        Form {
+            IngredientsView(servings: $servings, ingredients: ingredients,
+                addToShoppingList: { ingredient in
+                    addToShoppingList(ingredient)
+                },
+                addAllToShoppingList: { ingredients in
+                    addAllToShoppingList(ingredients)
+                },
+                onNotSignedIn: onNotSignedIn)
+            
+            DirectionsList(directions: directions)
+        }
+    }
+}
+
 struct IngredientsView: View {
     @Binding var servings: Int
     

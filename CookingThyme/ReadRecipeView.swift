@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO can cancel add to shpping list
 // TODO change from form
 // TODO deal with plural ingredient unitNames
 // TODO have title not sticky
@@ -33,19 +34,16 @@ struct ReadRecipeView: View {
             
             getImageView()
             
-            Form {
-                IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
-                    addToShoppingList: { ingredient in
-                        collection.addToShoppingList(ingredient)
-                    },
-                    addAllToShoppingList: { ingredients in
-                        addAllIngredients(ingredients)
-                    },
-                    onNotSignedIn: {}
-                )
-                
-                DirectionsList(directions: recipe.directions)
-            }
+            RecipeLists(servings: $recipe.servings, ingredients: recipe.ingredients,
+                        addToShoppingList: { ingredient in
+                            collection.addToShoppingList(ingredient)
+                        },
+                        addAllToShoppingList: { ingredients in
+                            addAllIngredients(ingredients)
+                        },
+                        onNotSignedIn: {},
+                        directions: recipe.directions
+            )
         }
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
