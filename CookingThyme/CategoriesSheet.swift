@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
-    @EnvironmentObject var recipe: RecipeVM
 
+    var currentCategoryId: Int?
     var actionWord: String
     @Binding var isPresented: Bool
     var onAction: (Int) -> Void
@@ -54,7 +54,9 @@ struct CategoriesSheet: View {
                 .listStyle(InsetGroupedListStyle())
             }
             .onAppear {
-                selectedId = recipe.categoryId
+                if let currentCategoryId = self.currentCategoryId {
+                    selectedId = currentCategoryId
+                }
             }
             .navigationBarTitle("\(actionWord) to Category", displayMode: .inline)
             .navigationBarItems(

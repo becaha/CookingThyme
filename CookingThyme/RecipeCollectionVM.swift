@@ -65,10 +65,14 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    func getCategory(withId id: Int) -> RecipeCategoryVM {
-        return self.categories.filter { (category) -> Bool in
+    func getCategory(withId id: Int) -> RecipeCategoryVM? {
+        let foundCategory = self.categories.filter { (category) -> Bool in
             category.id == id
-        }[0]
+        }
+        if foundCategory.count == 1 {
+            return foundCategory[0]
+        }
+        return nil
     }
     
     // MARK: - Init Helpers
@@ -230,10 +234,11 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // adds given ingredients to shopping items
-    private func addIngredientShoppingItems(ingredients: [Ingredient]) {
+    func addIngredientShoppingItems(ingredients: [Ingredient]) {
         for ingredient in ingredients {
             addIngredientShoppingItem(ingredient)
         }
+        saveShoppingList()
     }
     
     // adds given ingredient to shopping items
@@ -291,7 +296,6 @@ class RecipeCollectionVM: ObservableObject {
     // adds all ingredients of given recipe to shopping list
     func addToShoppingList(fromRecipe recipe: Recipe) {
         addIngredientShoppingItems(ingredients: recipe.ingredients)
-        saveShoppingList()
     }
     
     // adds ingredient to shopping list

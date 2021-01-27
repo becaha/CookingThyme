@@ -17,10 +17,6 @@ struct PublicRecipeView: View {
     
     @State private var categoriesPresented = false
     
-    @State private var confirmAddIngredient: Int?
-    @State private var addedIngredients = [Int]()
-    @State private var addedAllIngredients = false
-    
     @State private var signinAlert = false
     @State private var signinAlertMessage: String = ""
 
@@ -54,7 +50,9 @@ struct PublicRecipeView: View {
                         addToShoppingList: { ingredient in
                             user.collection!.addToShoppingList(ingredient)
                         },
-                        addAllToShoppingList: addAllIngredients,
+                        addAllToShoppingList: { ingredients in
+                            addAllIngredients(ingredients)
+                        },
                         onNotSignedIn: {
                             signinAlert = true
                             signinAlertMessage = "Sign in to add ingredients to shopping list."
@@ -71,8 +69,8 @@ struct PublicRecipeView: View {
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            CategoriesSheet(actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
-                recipe.copyRecipe(toCategoryId: categoryId)
+            CategoriesSheet(currentCategoryId: nil, actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
+                recipe.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
             }
             .environmentObject(user.collection!)
         })
@@ -105,10 +103,10 @@ struct PublicRecipeView: View {
         )
     }
     
-    func addAllIngredients() -> Bool {
+    func addAllIngredients(_ ingredients: [Ingredient]) -> Bool {
         if user.isSignedIn {
             if user.collection != nil {
-                user.collection!.addToShoppingList(fromRecipe: recipe.recipe)
+                user.collection!.addIngredientShoppingItems(ingredients: ingredients)
                 return true
             }
         }

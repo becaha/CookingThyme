@@ -27,12 +27,6 @@ struct ReadRecipeView: View {
     
     @State private var isCreatingRecipe = false
     
-    @State private var confirmAddIngredient: Int?
-    @State private var addedAllIngredients = false
-    @State private var addedIngredients = [Int]()
-
-
-    
     var body: some View {
         VStack {
             RecipeNameTitle(name: recipe.name)
@@ -40,52 +34,23 @@ struct ReadRecipeView: View {
             getImageView()
             
             Form {
-                Section(header:
-                    IngredientsHeader(servings: $recipe.servings),
-                        footer:
-                            HStack {
-                                VStack(alignment: .center) {
-                                    Button(action: {
-                                        withAnimation {
-                                            if addAllIngredients() {
-                                                addedAllIngredients = true
-                                            }
-                                            else {
-                                                addedAllIngredients = false
-                                            }
-                                        }
-                                    }) {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 5)
-                                                .fill(Color(UIColor.tertiarySystemFill))
-                                            
-                                            HStack {
-                                                Image(systemName: "cart.fill")
-                                                
-                                                Text("Add All to Shopping List")
-                                                    .padding(.vertical)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                ) {
-                    IngredientsList(ingredients: recipe.ingredients,
-                        addToShoppingList: { ingredient in
-                            collection.addToShoppingList(ingredient)
-                        },
-                        onNotSignedIn: {})
-                }
+                IngredientsView(servings: $recipe.servings, ingredients: recipe.ingredients,
+                    addToShoppingList: { ingredient in
+                        collection.addToShoppingList(ingredient)
+                    },
+                    addAllToShoppingList: { ingredients in
+                        addAllIngredients(ingredients)
+                    },
+                    onNotSignedIn: {}
+                )
                 
                 DirectionsList(directions: recipe.directions)
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            CategoriesSheet(actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
+            CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
                 recipe.moveRecipe(toCategoryId: categoryId)
             }
-            .environmentObject(recipe)
             .environmentObject(collection)
         })
         .navigationBarTitle("", displayMode: .inline)
@@ -112,8 +77,8 @@ struct ReadRecipeView: View {
     }
     
     // add all ingredients to shopping list is true, change + to checks
-    func addAllIngredients() -> Bool {
-        collection.addToShoppingList(fromRecipe: recipe.recipe)
+    func addAllIngredients(_ ingredients: [Ingredient]) -> Bool {
+        collection.addIngredientShoppingItems(ingredients: ingredients)
         return true
     }
     

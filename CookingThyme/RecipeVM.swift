@@ -145,12 +145,13 @@ class RecipeVM: ObservableObject {
         RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
     }
     
-    static func copy(recipe: Recipe, toCategoryId categoryId: Int) {
-        if let category = RecipeDB.shared.getCategory(withId: categoryId) {
+    static func copy(recipe: Recipe, toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {
+        if let category = collection.getCategory(withId: categoryId) {
             let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString())
             if recipe == nil {
                 print("error copying recipe")
             }
+            collection.refreshCurrrentCategory()
         }
     }
     

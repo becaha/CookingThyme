@@ -120,7 +120,7 @@ class PublicRecipeVM: ObservableObject {
     }
     
     // copies recipe to category of user's collection
-    func copyRecipe(toCategoryId categoryId: Int) {
-        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId)
+    func copyRecipe(toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {
+        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
     }
 }

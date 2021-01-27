@@ -442,19 +442,3 @@ extension Array where Element: Identifiable {
         }
     }
 }
-
-//struct EditRecipeView_Previews: PreviewProvider {
-//    @State var num = 0
-//    static var previews: some View {
-//        HStack {
-//            Text("hi")
-//
-//            Spacer()
-//
-//            UIControls.AddButton(action: {
-//                print("was called")
-//            })
-//                .padding(0)
-//        }
-//    }
-//}

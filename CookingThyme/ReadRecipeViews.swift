@@ -17,42 +17,13 @@ struct RecipeNameTitle: View {
     }
 }
 
-struct IngredientsHeader: View {
-    @Binding var servings: Int
-
-    var body: some View {
-        HStack {
-            Text("Ingredients")
-            
-            Spacer()
-            
-            VStack {
-                // should be changing servings but not in db
-                Picker(selection: $servings, label:
-                        HStack {
-                            Text("Serving Size: \(servings)")
-                    
-                            Image(systemName: "chevron.down")
-                        }
-                )
-                {
-                    ForEach(1..<101, id: \.self) { num in
-                        Text("\(num.toString())").tag(num.toString())
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-            }
-        }
-    }
-}
-
 struct IngredientsView: View {
     @Binding var servings: Int
     
     @EnvironmentObject var user: UserVM
     var ingredients: [Ingredient]
     var addToShoppingList: (Ingredient) -> Void
-    var addAllToShoppingList: () -> Bool
+    var addAllToShoppingList: ([Ingredient]) -> Bool
     var onNotSignedIn: () -> Void
     
     @State private var confirmAddIngredient: Int?
@@ -88,7 +59,9 @@ struct IngredientsView: View {
                         VStack(alignment: .center) {
                             Button(action: {
                                 withAnimation {
-                                    if addAllToShoppingList() {
+                                    if addAllToShoppingList(ingredients.filter({ (ingredient) -> Bool in
+                                        !addedIngredients.contains(ingredient.id)
+                                    })) {
                                         addedAllIngredients = true
                                     }
                                     else {
@@ -108,6 +81,7 @@ struct IngredientsView: View {
                                     }
                                 }
                             }
+                            .disabled(addedAllIngredients)
                         }
                     }
         ) {
@@ -150,58 +124,6 @@ struct IngredientsView: View {
                 }
             }
         
-        }
-    }
-}
-    
-struct IngredientsList: View {
-    @EnvironmentObject var user: UserVM
-    var ingredients: [Ingredient]
-    var addToShoppingList: (Ingredient) -> Void
-    var onNotSignedIn: () -> Void
-    
-    @State private var confirmAddIngredient: Int?
-    @State private var addedAllIngredients = false
-    @State private var addedIngredients = [Int]()
-
-    var body: some View {
-        List {
-            ForEach(ingredients) { ingredient in
-                HStack {
-                    if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(mainColor())
-                    }
-                    else {
-                        UIControls.AddButton(action: {
-                            withAnimation {
-                                if user.isSignedIn {
-                                    confirmAddIngredient = ingredient.id
-                                }
-                                else {
-                                    onNotSignedIn()
-                                }
-                            }
-                        })
-                    }
-                    
-                    RecipeControls.ReadIngredientText(ingredient)
-                }
-                if confirmAddIngredient == ingredient.id {
-                    HStack {
-                        Image(systemName: "cart.fill")
-                        
-                        Button("Add to Shopping List", action: {
-                            withAnimation {
-                                confirmAddIngredient = nil
-                                addedIngredients.append(ingredient.id)
-                                addToShoppingList(ingredient)
-                            }
-                        })
-                    }
-                    .foregroundColor(mainColor())
-                }
-            }
         }
     }
 }
