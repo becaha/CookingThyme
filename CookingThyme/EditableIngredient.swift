@@ -24,12 +24,15 @@ struct EditableIngredient: View {
             TextField(getAmount(), text: getAmountBinding())
                 .keyboardType(.numbersAndPunctuation)
                 .autocapitalization(autocapitalization)
+                .fixedSize()
             
             TextField(getUnit(), text: getUnitBinding())
                 .autocapitalization(autocapitalization)
+                .fixedSize()
             
             TextField(getName(), text: getNameBinding())
                 .autocapitalization(autocapitalization)
+                .fixedSize()
         }
     }
     

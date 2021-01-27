@@ -30,10 +30,6 @@ struct Deletable: ViewModifier {
         HStack {
             if isDeleting {
                 VStack {
-                    if isCentered {
-                        Spacer()
-                    }
-                    
                     Button(action: onDelete) {
                         Image(systemName: "minus.circle.fill")
                             .frame(width: 20, height: 20, alignment: .center)
@@ -41,7 +37,9 @@ struct Deletable: ViewModifier {
                     }
                     .buttonStyle(PlainButtonStyle())
                     
-                    Spacer()
+                    if !isCentered {
+                        Spacer()
+                    }
                 }
             }
             content
@@ -51,8 +49,15 @@ struct Deletable: ViewModifier {
 
 struct Deletable_Previews: PreviewProvider {
     static var previews: some View {
-        Text("Long long text thaat porbably goies on two different lines. wow it is centered. Maybe we don't wnat that sometimes.")
-            .deletable(isDeleting: true, onDelete: {print("delete")})
+        VStack(spacing: 0) {
+            HStack {
+                Text("Long long text thaat porbably goies on two different lines. wow it is centered. Maybe we don't wnat that sometimes.")
+            }
+            .deletable(isDeleting: true, onDelete: {print("delete")}
+            )
+            .formSectionItem()
+        }
+        .background(Color.blue)
     }
 }
 

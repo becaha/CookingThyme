@@ -258,31 +258,32 @@ struct EditRecipeView: View {
     
     @ViewBuilder
     func EditableRecipe() -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
-                    if name != "" {
-                        withAnimation {
-                            nameFieldMissing = false
+        VStack(spacing: 0) {
+            HStack {
+                VStack(alignment: .leading) {
+                    TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
+                        if name != "" {
+                            withAnimation {
+                                nameFieldMissing = false
+                            }
                         }
-                    }
-                })
-                .recipeTitle()
-                
-                ErrorMessage("Must have a name.", isError: $nameFieldMissing)
-                    .padding(0)
+                    })
+                    .recipeTitle()
+                    
+                    ErrorMessage("Must have a name.", isError: $nameFieldMissing)
+                        .padding(0)
+                }
+                .padding(.bottom, 0)
             }
-            .padding(.bottom, 0)
-        }
-        .padding()
-        
-        ImagesView()
-        
-        Form {
+            .formHeader()
             
-            Section(header:
+            ImagesView()
+            
+            VStack(spacing: 0) {
                 HStack {
                     Text("Ingredients")
+                        .textCase(.uppercase)
+                        .font(.subheadline)
                     
                     Spacer()
                     
@@ -291,6 +292,9 @@ struct EditRecipeView: View {
                         Picker(selection: $servings, label:
                                 HStack {
                                     Text("Serving Size: \(servings)")
+                                        .textCase(.uppercase)
+                                        .font(.subheadline)
+                                        .fixedSize()
                             
                                     Image(systemName: "chevron.down")
                                 }
@@ -302,16 +306,10 @@ struct EditRecipeView: View {
                         }
                         .pickerStyle(MenuPickerStyle())
                     }
-                },
-                footer:
-                    VStack(alignment: .leading) {
-                        ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
+                }
+                .formHeader()
                         
-                        ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
-                    }
-                    
-            ) {
-                List {
+                VStack(spacing: 0) {
                     ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
                         HStack {
                             EditableIngredient(index: index)
@@ -322,20 +320,23 @@ struct EditRecipeView: View {
                                 recipe.removeTempIngredient(at: index)
                             }
                         })
+                        .formSectionItem()
                     }
                     .onDelete { indexSet in
                         indexSet.map{ $0 }.forEach { index in
                             recipe.removeTempIngredient(at: index)
                         }
                     }
+                    
                     VStack(alignment: .leading) {
                         HStack {
                             TextField("Amount ", text: $ingredientAmount)
                                 .keyboardType(.numbersAndPunctuation)
-                                
+                                .fixedSize()
+
                             TextField("Unit ", text: $ingredientUnit)
                                 .autocapitalization(.none)
-
+                                .fixedSize()
 
                             TextField("Name", text: $ingredientName,
                                 onCommit: {
@@ -351,22 +352,32 @@ struct EditRecipeView: View {
                                 }
                             })
                         }
-                        
+                        .formSectionItem()
+                            
                         ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
                     }
                 }
-            }
+                .formSection()
             
-            Section(header: Text("Directions"),
-                    footer:
-                        VStack {
-                            Group {
-                                ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
-                            }
-                        }
-            ) {
-                // TODO make list collapsable so after a step is done, it collapses
-                List {
+                VStack(alignment: .leading) {
+                    ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
+                    
+                    ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
+                }
+                .formFooter()
+            }
+        
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Directions")
+                        .textCase(.uppercase)
+                        .font(.subheadline)
+                    
+                    Spacer()
+                }
+                .formHeader()
+                
+                VStack(spacing: 0) {
                     ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
                         HStack(alignment: .top, spacing: 20) {
                             Text("\(index + 1)")
@@ -379,7 +390,7 @@ struct EditRecipeView: View {
                                 recipe.removeTempDirection(at: index)
                             }
                         }, isCentered: false)
-                        .padding(.vertical)
+                        .formSectionItem()
                     }
                     .onDelete { indexSet in
                         indexSet.map{ $0 }.forEach { index in
@@ -392,16 +403,16 @@ struct EditRecipeView: View {
                             Text("\(recipe.tempDirections.count + 1)")
 
                             // choose between placeholder and seeing lines while editing
-//                            TextEditor(text: $direction)
-//                                .padding(.vertical, -7)
-//                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
-//                                .onTapGesture {
-//                                    if direction == directionPlaceholder {
-//                                        withAnimation {
-//                                            direction = ""
-//                                        }
-//                                    }
-//                                }
+        //                            TextEditor(text: $direction)
+        //                                .padding(.vertical, -7)
+        //                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
+        //                                .onTapGesture {
+        //                                    if direction == directionPlaceholder {
+        //                                        withAnimation {
+        //                                            direction = ""
+        //                                        }
+        //                                    }
+        //                                }
                             
                             TextField("Direction", text: $direction, onCommit: {
                                 withAnimation {
@@ -415,12 +426,20 @@ struct EditRecipeView: View {
                                 }
                             })
                         }
-
-                        ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
+                        .formSectionItem()
                     }
-                    .padding(.vertical)
+                    
+                    ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
                 }
-                .foregroundColor(.black)
+                .formSection()
+            
+                
+                VStack {
+                    Group {
+                        ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
+                    }
+                }
+                .formFooter()
             }
         }
     }

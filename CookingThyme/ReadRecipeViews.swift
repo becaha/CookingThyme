@@ -230,3 +230,18 @@ extension View {
         modifier(FormHeader())
     }
 }
+
+struct FormFooter: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding([.horizontal, .bottom])
+            .padding(.top, 5)
+            .foregroundColor(Color.gray)
+    }
+}
+
+extension View {
+    func formFooter() -> some View {
+        modifier(FormFooter())
+    }
+}

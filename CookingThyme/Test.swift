@@ -48,53 +48,61 @@ struct Test: View {
                 }
                 .padding([.leading, .top])
                 .padding(.bottom, 5)
-
-                ForEach((1...20).reversed(), id: \.self) { num in
-                    VStack(spacing: 0) {
-                    HStack(alignment: .top, spacing: 20) {
-                        Group {
-                            Text("\(num + 1)")
-
-                            Text("long long long text that will go through the next line")
+                
+                VStack(spacing: 0) {
+                    ForEach((1...2).reversed(), id: \.self) { index in
+                        HStack {
+                            TextField("1 1/2", text: $username)
+                                .keyboardType(.numbersAndPunctuation)
+                                .fixedSize()
+                            
+                            TextField("cup", text: $email)
+                                .fixedSize()
+                            
+                            TextField("flour", text: $password)
+                        }
+                        .deletable(isDeleting: true, onDelete: {
+                            withAnimation {
+    //                            recipe.removeTempIngredient(at: index)
+                            }
+                        })
+                        .formSectionItem()
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map{ $0 }.forEach { index in
+//                            recipe.removeTempIngredient(at: index)
                         }
                     }
-                    .formSectionItem()
-
-                        
+                    
+                    VStack(alignment: .leading) {
                         HStack {
-                            Image(systemName: "cart.fill")
+                            TextField("Amount ", text: $username)
+                                .keyboardType(.numbersAndPunctuation)
+                                .fixedSize()
+                                
+                            TextField("Unit ", text: $email)
+                                .autocapitalization(.none)
+                                .fixedSize()
 
-                            Button("Add to Shopping List", action: {
+                            TextField("Name", text: $password,
+                                onCommit: {
+                                    withAnimation {
+//                                        addIngredient()
+                                    }
+                                })
+                                .autocapitalization(.none)
+                            
+                            UIControls.AddButton(action: {
                                 withAnimation {
-    //                                callAddToShoppingList(ingredient)
+//                                    addIngredient()
                                 }
                             })
-                            
-                            Spacer()
                         }
-//                        .padding(.horizontal)
-//                        .padding(.top, 5)
-                        .foregroundColor(mainColor())
-                        .formSectionItem(backgroundColor: formBorderColor())
+                        .formSectionItem()
                     }
-                    .foregroundColor(.black)
-//                    .formSectionItem()
-                    
-//                    HStack {
-//                        Image(systemName: "cart.fill")
-//
-//                        Button("Add to Shopping List", action: {
-//                            withAnimation {
-////                                callAddToShoppingList(ingredient)
-//                            }
-//                        })
-//                    }
-//                    .padding()
-//                    .background(mainColor())
-                    
                 }
+                .formSection()
             }
-            .formSection()
             
         }
         .padding()
