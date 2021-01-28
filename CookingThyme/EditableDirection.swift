@@ -20,23 +20,19 @@ struct EditableDirection: View {
         self.autocapitalization = .sentences
     }
     
+    @State private var height: CGFloat = .zero
+
     var body: some View {
         ZStack {
-            HStack {
-                
-                TextEditor(text: getBinding())
-                    .autocapitalization(autocapitalization)
-            }
-            
-            HStack {
-                
+            HStack(spacing: 0) {
                 Text(getDirection())
                     .opacity(0)
                     .fixedSize(horizontal: false, vertical: true)
-                    .padding([.horizontal, .bottom], 8)
-                
-                Spacer()
+                    .padding(.all, 8)
             }
+            
+            TextEditor(text: getBinding())
+                .autocapitalization(autocapitalization)
         }
     }
     

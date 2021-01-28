@@ -20,53 +20,17 @@ struct EditableIngredient: View {
     }
     
     var body: some View {
-        HStack {
-//            ZStack {
-//                TextEditor(text: getIngredientBinding())
-//                    .autocapitalization(autocapitalization)
-//                    .overlay(
-//                        Text(getIngredient())
-//                            .background(Color.blue)
-//                            .multilineTextAlignment(.leading)
-//                    )
-                
+        ZStack {
+            HStack(spacing: 0) {
                 Text(getIngredient())
+                    .opacity(0)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.all, 8)
-
-                    
+            }
             
-            Spacer()
-                
-//                VStack {
-//                    HStack {
-//                        Text(getIngredient())
-//                            .background(Color.blue)
-//                            .multilineTextAlignment(.leading)
-//                        //                    .opacity(0)
-//
-//                        Spacer()
-//                    }
-//                }
-//            }
-            
-//            TextField(getAmount(), text: getAmountBinding())
-//                .keyboardType(.numbersAndPunctuation)
-//                .autocapitalization(autocapitalization)
-//                .fixedSize()
-//            
-//            TextField(getUnit(), text: getUnitBinding())
-//                .autocapitalization(autocapitalization)
-//                .fixedSize()
-//            
-//            TextField(getName(), text: getNameBinding())
-//                .autocapitalization(autocapitalization)
-//                .fixedSize()
-        }
-        .overlay(
             TextEditor(text: getIngredientBinding())
                 .autocapitalization(autocapitalization)
-        )
+        }
     }
     
     func getIngredient() -> String {
