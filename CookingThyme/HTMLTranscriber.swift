@@ -45,6 +45,7 @@ class HTMLTranscriber: ObservableObject {
         var servings = 0
         var ingredientStrings = [String]()
         var directionStrings = [String]()
+        var hasStepNumbers = false
         let sections = recipeString.components(separatedBy: "\n\n")
         for section in sections {
             var prevLine = ""
@@ -86,7 +87,34 @@ class HTMLTranscriber: ObservableObject {
                 }
                 
                 if currentPart == CurrentPart.direction {
-                    directionStrings.append(cleanLine)
+                    var direction = cleanLine
+                    var step: Int?
+                    var stepString = ""
+                    for char in direction {
+                        if char.isNumber {
+                            stepString.append(char)
+                        }
+                        else {
+                            break
+                        }
+                    }
+                    // if direction includes a step number
+                    if stepString.count  > 0 {
+                        step = Int(String(stepString))
+                        // remove number from direction
+                        direction = String(direction[direction.index(direction.startIndex, offsetBy: stepString.count)...])
+                        // found first direction
+                        if step == 1 {
+                            hasStepNumbers = true
+                            directionStrings = [String]()
+                        }
+                        
+                        directionStrings.append(direction)
+                    }
+                    // don't add a line that has no step number if the directions have step numbers
+                    if !hasStepNumbers {
+                        directionStrings.append(direction)
+                    }
                 }
                 
                 if cleanLine != "" {
@@ -126,3 +154,8 @@ class HTMLTranscriber: ObservableObject {
     }
 }
 
+extension String {
+    func charAt(index: Int) -> Character {
+        self[self.index(self.startIndex, offsetBy: index)]
+    }
+}

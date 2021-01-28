@@ -15,15 +15,19 @@ struct CreateRecipeView: View {
     
     var body: some View {
         NavigationView {
-            if !isImportingRecipe {
-                VStack {
-                    EditRecipeView(isEditingRecipe: $isCreatingRecipe, isCreatingRecipe: true, isImportingRecipe: $isImportingRecipe)
+            VStack {
+                if !isImportingRecipe {
+                    VStack {
+                        EditRecipeView(isEditingRecipe: $isCreatingRecipe, isCreatingRecipe: true, isImportingRecipe: $isImportingRecipe)
+                    }
+                    .navigationBarTitle("", displayMode: .inline)
                 }
-                .navigationBarTitle("", displayMode: .inline)
+                else {
+                    ImportedRecipe(isCreatingRecipe: $isCreatingRecipe)
+                }
             }
-            else {
-                ImportedRecipe(isCreatingRecipe: $isCreatingRecipe)
-            }
+            .background(formBackgroundColor())
+            .edgesIgnoringSafeArea(.bottom)
         }
     }
 }

@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-// TODO: serving size low num to high
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
-// TODO: align number and delete button with text (editable direction)
 // tODO: no scroll in edtiable ingredient/direction
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentation
@@ -30,7 +28,7 @@ struct EditRecipeView: View {
     @State private var servingsFieldMissing = false
             
     @State private var name: String = ""
-    @State private var servings: String = ""
+    @State private var servings: String = "100"
     @State private var ingredientAmount: String = ""
     @State private var ingredientUnit: String = ""
     @State private var ingredientName: String = ""
@@ -49,7 +47,7 @@ struct EditRecipeView: View {
     @State private var presentRecipeText = false
         
     var body: some View {
-        VStack {
+        ScrollView(.vertical) {
             if importFromURL {
                 VStack {
                     HStack {
@@ -81,11 +79,14 @@ struct EditRecipeView: View {
                         }
                     }
                     .padding()
+                    
+//                    Spacer()
                 }
                 .formed()
             }
             else if recipe.isImportingFromURL {
                 UIControls.Loading()
+                    .padding()
             }
             else {
                 if presentRecipeText {
@@ -99,6 +100,7 @@ struct EditRecipeView: View {
                 }
             }
         }
+        .background(formBackgroundColor())
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
@@ -295,7 +297,6 @@ struct EditRecipeView: View {
                                     Text("Serving Size: \(servings)")
                                         .textCase(.uppercase)
                                         .font(.subheadline)
-                                        .fixedSize()
                             
                                     Image(systemName: "chevron.down")
                                 }

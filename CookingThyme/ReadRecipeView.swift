@@ -29,7 +29,7 @@ struct ReadRecipeView: View {
     @State private var isCreatingRecipe = false
     
     var body: some View {
-        VStack {
+        ScrollView(.vertical) {
             RecipeNameTitle(name: recipe.name)
             
             getImageView()
@@ -45,6 +45,7 @@ struct ReadRecipeView: View {
                         directions: recipe.directions
             )
         }
+        .background(formBackgroundColor())
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
                 recipe.moveRecipe(toCategoryId: categoryId)

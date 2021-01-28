@@ -20,27 +20,38 @@ struct Test: View {
     @State var signupErrorMessage = ""
     
     var body: some View {
-        VStack {
-//            ZStack {
-            HStack(spacing: 0) {
-                    Text(username)
-                        .font(.body)
-                        .opacity(0.8)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.all, 8)
-
-//                    Spacer()
+        ScrollView(.vertical) {
+            VStack(spacing: 0) {
+                Text("\(password)")
+                
+                VStack(spacing: 0) {
+                    HStack {
+                        ZStack {
+                            HStack(spacing: 0) {
+                                Text(username)
+                                    .opacity(0)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.all, 8)
+                            }
+                            
+                            TextEditor(text: $username)
+                                .gesture(DragGesture()
+                                .onEnded { value in
+                                    password = "ended"
+                                })
+                        }
+                    }
+                    .deletable(isDeleting: true, onDelete: {
+                        withAnimation {
+        //                    recipe.removeTempIngredient(at: index)
+                        }
+                    })
+                    .formSectionItem()
                 }
-//            .overlay(Rectangle().stroke())
-    //            .fixedSize(horizontal: false, vertical: true)
-    //            .padding(.all, 8)
-                
-                
-                TextEditor(text: $username)
-//                    .overlay(Rectangle().stroke())
-
-//            }
-        }.padding()
+                .formSection()
+            }
+        }
+        
     }
         
 }

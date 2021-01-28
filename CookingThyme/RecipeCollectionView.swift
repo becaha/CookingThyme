@@ -255,11 +255,11 @@ struct RecipeCollectionView: View {
                             }
                             .frame(height: 35)
                             .padding(.bottom)
-                            
+
                             if collection.currentCategory!.filteredRecipes.count == 0 {
                                 Text("No recipes found.")
                             }
-                            
+
                             ForEach(collection.currentCategory!.filteredRecipes) { recipe in
                                 Group {
                                     if isEditing {
@@ -293,9 +293,9 @@ struct RecipeCollectionView: View {
                                     collection.deleteRecipe(withId: recipe.id)
                                 }
                             }
-                            
+
                             Spacer()
-                            
+
                             GeometryReader { geometry -> Text in
                                 bottomScrollY = geometry.frame(in: .global).minY
                                 frameMaxY = frameGeometry.frame(in: .global).maxY
@@ -305,8 +305,8 @@ struct RecipeCollectionView: View {
                         .formed()
                     }
 
+                    // TODO: when signout, then signin this is clickable above its actual button but not on the button itself
                     VStack {
-                        
                         HStack {
                             UIControls.AddButton(withLabel: "New Recipe") {
                                 createRecipe()
@@ -315,6 +315,13 @@ struct RecipeCollectionView: View {
                             Spacer()
                         }
                     }
+                    .padding()
+                    .overlay(
+                        Rectangle()
+                            .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
+                            .foregroundColor(borderColor()),
+                        alignment: .top
+                    )
                     .sheet(isPresented: $isCreatingRecipe, onDismiss: {
                         if let currentCategory = collection.currentCategory {
                             collection.setCurrentCategory(currentCategory)
@@ -324,12 +331,6 @@ struct RecipeCollectionView: View {
                             .environmentObject(RecipeVM(category: collection.currentCategory!))
                             .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
                     }
-                    .padding()
-                    .overlay(
-                        Rectangle()
-                            .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
-                            .foregroundColor(borderColor()),
-                        alignment: .top)
                 }
             }
             .background(formBackgroundColor())

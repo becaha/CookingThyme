@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-// TODO: cannot add ingredients twice
+// TODO: shopping items have 0 amount
+// TODO: shopping list check all
 struct ShoppingListView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 

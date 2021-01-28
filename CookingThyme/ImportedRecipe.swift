@@ -14,15 +14,17 @@ struct ImportedRecipe: View {
     var body: some View {
         VStack {
             if recipe.recipeText != nil {
-                ScrollView {
+                ScrollView(.vertical) {
                     Text("\(recipe.recipeText!)")
                 }
                 .foregroundColor(.black)
             }
             else {
                 UIControls.Loading()
+                    .padding()
             }
         }
+        .background(formBackgroundColor())
         .navigationBarItems(
             leading:
                 Button(action: {

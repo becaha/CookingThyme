@@ -15,7 +15,7 @@ struct RecipeView: View {
     @State private var isEditingRecipe = false
     
     var body: some View {
-        ScrollView(.vertical) {
+        VStack {
             if !isEditingRecipe {
                 ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }
@@ -23,7 +23,6 @@ struct RecipeView: View {
                 EditRecipeView(isEditingRecipe: self.$isEditingRecipe, isImportingRecipe: self.$isEditingRecipe)
             }
         }
-        .background(formBackgroundColor())
         .environmentObject(recipe)
     }
 }
