@@ -86,24 +86,6 @@ struct ReadRecipeView: View {
             ImagesView(isEditing: false)
         }
     }
-    
-    @ViewBuilder
-    func DirectionText(withIndex index: Int) -> some View {
-        Group {
-            Text("\(index + 1)")
-
-            TextField("\(recipe.directions[index].direction)", text: $newDirection)
-        }
-        .padding(.vertical)
-    }
-    
-    @ViewBuilder func IngredientText(_ ingredient: Ingredient) -> some View {
-        RecipeControls.ReadIngredientText(ingredient)
-    }
-    
-    @ViewBuilder func Direction(withIndex index: Int) -> some View {
-        RecipeControls.ReadDirection(withIndex: index, direction: recipe.directions[index].direction)
-    }
 }
 
 extension Array where Element: Equatable {

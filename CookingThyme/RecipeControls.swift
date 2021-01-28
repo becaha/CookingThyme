@@ -45,5 +45,6 @@ struct RecipeControls {
     @ViewBuilder
     static func ReadIngredientText(_ ingredient: Ingredient) -> some View {
         Text("\(ingredient.toString())")
+            .fixedSize(horizontal: false, vertical: true)
     }
 }

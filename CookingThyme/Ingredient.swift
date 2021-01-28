@@ -74,19 +74,26 @@ struct Ingredient: Identifiable, Equatable {
     static func toIngredients(_ temps: [TempIngredient]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for temp in temps {
-            let ingredient = Ingredient(name: temp.name, amount: Fraction.toDouble(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
-            ingredients.append(ingredient)
+            ingredients.append(Ingredient.toIngredient(temp))
         }
         return ingredients
+    }
+    
+    static func toIngredient(_ temp: TempIngredient) -> Ingredient {
+        Ingredient(name: temp.name, amount: Fraction.toDouble(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
     }
     
     // takes ingredients and turns into temp ingredients for use in edit recipe
     static func toTempIngredients(_ ingredients: [Ingredient]) -> [TempIngredient] {
         var temps = [TempIngredient]()
         for ingredient in ingredients {
-            temps.append(TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id))
+            temps.append(Ingredient.toTempIngredient(ingredient))
         }
         return temps
+    }
+    
+    static func toTempIngredient(_ ingredient: Ingredient) -> TempIngredient {
+        TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id)
     }
     
     // TODO:
@@ -94,38 +101,41 @@ struct Ingredient: Identifiable, Equatable {
     static func toIngredients(fromStrings ingredientStrings: [String]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for ingredientString in ingredientStrings {
-            var amount = ""
-            var unit: UnitOfMeasurement?
-            var name = ""
-            let words = ingredientString.components(separatedBy: " ")
-            for word in words {
-                if Int(word) != nil || (word.count == 1 && Character(word).isNumber) {
-                    if amount != "" {
-                        amount += " "
-                    }
-                    amount += word
-                    continue
-                }
-                else if unit == nil {
-                    if UnitOfMeasurement.isUnknown(unitString: word) {
-                        unit = UnitOfMeasurement.none
-                    }
-                    else {
-                        unit = Ingredient.makeUnit(fromUnit: word)
-                        continue
-                    }
-                }
-                if name != "" {
-                    name += " "
-                }
-                name += word
-            }
-            let doubleAmount = Fraction.toDouble(fromString: amount)
-            if let unit = unit {
-                ingredients.append(Ingredient(name: name, amount: doubleAmount, unitName: unit))
-            }
+            ingredients.append(Ingredient.toIngredient(fromString: ingredientString))
         }
         return ingredients
+    }
+    
+    static func toIngredient(fromString ingredientString: String) -> Ingredient {
+        var amount = ""
+        var unit: UnitOfMeasurement?
+        var name = ""
+        let words = ingredientString.components(separatedBy: " ")
+        for word in words {
+            if Int(word) != nil || (word.count == 1 && Character(word).isNumber) {
+                if amount != "" {
+                    amount += " "
+                }
+                amount += word
+                continue
+            }
+            else if unit == nil {
+                if UnitOfMeasurement.isUnknown(unitString: word) {
+                    unit = UnitOfMeasurement.none
+                }
+                else {
+                    unit = Ingredient.makeUnit(fromUnit: word)
+                    continue
+                }
+            }
+            if name != "" {
+                name += " "
+            }
+            name += word
+        }
+        let doubleAmount = Fraction.toDouble(fromString: amount)
+        // unit is always made
+        return Ingredient(name: name, amount: doubleAmount, unitName: unit!)
     }
     
     // creates ingredient from given name, amount, unit in strings
@@ -159,12 +169,28 @@ struct TempIngredient {
     var recipeId: Int
     var id: Int?
     
+    var ingredientString: String
+    
     init(name: String, amount: String, unitName: String, recipeId: Int, id: Int?) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
         self.recipeId = recipeId
         self.id = id
+        
+        self.ingredientString = ""
+        self.ingredientString = self.toString()
+    }
+    
+    func toString() -> String {
+        Ingredient.toIngredient(self).toString()
+    }
+    
+    mutating func setIngredientParts() {
+        let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
+        self.name = ingredient.name
+        self.amount = ingredient.getAmountString()
+        self.unitName = ingredient.unitName.getName()
     }
 }
 

@@ -168,6 +168,9 @@ struct SigninView: View {
         withAnimation {
             signupErrorMessages = [String]()
             
+            if user.signupErrors.count == 0 {
+                sheetNavigator.showSheet = false
+            }
             if user.signupErrors.contains(InvalidSignup.usernameTaken) {
                 signupErrorMessages.append("Username already taken.")
             }

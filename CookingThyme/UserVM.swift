@@ -129,7 +129,7 @@ class UserVM: ObservableObject {
         if RecipeDB.shared.getUser(withUsername: username) != nil {
             self.signupErrors.append(InvalidSignup.usernameTaken)
         }
-        if isValidPassword(password) {
+        if !isValidPassword(password) {
             self.signupErrors.append(InvalidSignup.password)
         }
         // TODO: confirm email
@@ -147,16 +147,18 @@ class UserVM: ObservableObject {
     }
     
     func signout() {
+        let id = user.id
         self.user = User()
         DispatchQueue.global(qos: .userInitiated).async {
-            self.user.signout()
+            User.signout(id)
         }
     }
     
     func delete() {
+        let id = user.id
         self.user = User()
         DispatchQueue.global(qos: .userInitiated).async {
-            self.user.delete()
+            User.delete(id)
         }
     }
     

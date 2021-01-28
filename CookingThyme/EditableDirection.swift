@@ -21,10 +21,23 @@ struct EditableDirection: View {
     }
     
     var body: some View {
-        TextEditor(text: getBinding())
-            .autocapitalization(autocapitalization)
-            .padding(.vertical, -7)
-            .fixedSize(horizontal: false, vertical: true)
+        ZStack {
+            HStack {
+                
+                TextEditor(text: getBinding())
+                    .autocapitalization(autocapitalization)
+            }
+            
+            HStack {
+                
+                Text(getDirection())
+                    .opacity(0)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding([.horizontal, .bottom], 8)
+                
+                Spacer()
+            }
+        }
     }
     
     func getBinding() -> Binding<String> {
@@ -32,6 +45,13 @@ struct EditableDirection: View {
             return $recipe.tempDirections[index].direction
         }
         return $dummyBinding
+    }
+    
+    func getDirection() -> String {
+        if index < recipe.tempDirections.count {
+            return recipe.tempDirections[index].direction
+        }
+        return ""
     }
 }
 

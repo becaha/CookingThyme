@@ -21,19 +21,66 @@ struct EditableIngredient: View {
     
     var body: some View {
         HStack {
-            TextField(getAmount(), text: getAmountBinding())
-                .keyboardType(.numbersAndPunctuation)
-                .autocapitalization(autocapitalization)
-                .fixedSize()
+//            ZStack {
+//                TextEditor(text: getIngredientBinding())
+//                    .autocapitalization(autocapitalization)
+//                    .overlay(
+//                        Text(getIngredient())
+//                            .background(Color.blue)
+//                            .multilineTextAlignment(.leading)
+//                    )
+                
+                Text(getIngredient())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.all, 8)
+
+                    
             
-            TextField(getUnit(), text: getUnitBinding())
-                .autocapitalization(autocapitalization)
-                .fixedSize()
+            Spacer()
+                
+//                VStack {
+//                    HStack {
+//                        Text(getIngredient())
+//                            .background(Color.blue)
+//                            .multilineTextAlignment(.leading)
+//                        //                    .opacity(0)
+//
+//                        Spacer()
+//                    }
+//                }
+//            }
             
-            TextField(getName(), text: getNameBinding())
-                .autocapitalization(autocapitalization)
-                .fixedSize()
+//            TextField(getAmount(), text: getAmountBinding())
+//                .keyboardType(.numbersAndPunctuation)
+//                .autocapitalization(autocapitalization)
+//                .fixedSize()
+//            
+//            TextField(getUnit(), text: getUnitBinding())
+//                .autocapitalization(autocapitalization)
+//                .fixedSize()
+//            
+//            TextField(getName(), text: getNameBinding())
+//                .autocapitalization(autocapitalization)
+//                .fixedSize()
         }
+        .overlay(
+            TextEditor(text: getIngredientBinding())
+                .autocapitalization(autocapitalization)
+        )
+    }
+    
+    func getIngredient() -> String {
+        if index < recipe.tempIngredients.count {
+            return recipe.tempIngredients[index].ingredientString
+        }
+        return ""
+    }
+    
+    func getIngredientBinding() -> Binding<String> {
+        if index < recipe.tempIngredients.count {
+            return $recipe.tempIngredients[index].ingredientString
+        }
+        return $dummyBinding
     }
     
     func getAmount() -> String {

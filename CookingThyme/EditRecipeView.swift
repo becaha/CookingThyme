@@ -379,7 +379,7 @@ struct EditRecipeView: View {
                 
                 VStack(spacing: 0) {
                     ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
-                        HStack(alignment: .top, spacing: 20) {
+                        HStack(alignment: .center, spacing: 20) {
                             Text("\(index + 1)")
                             
                             EditableDirection(index: index)
@@ -389,7 +389,7 @@ struct EditRecipeView: View {
                             withAnimation {
                                 recipe.removeTempDirection(at: index)
                             }
-                        }, isCentered: false)
+                        })
                         .formSectionItem()
                     }
                     .onDelete { indexSet in
@@ -403,16 +403,16 @@ struct EditRecipeView: View {
                             Text("\(recipe.tempDirections.count + 1)")
 
                             // choose between placeholder and seeing lines while editing
-        //                            TextEditor(text: $direction)
-        //                                .padding(.vertical, -7)
-        //                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
-        //                                .onTapGesture {
-        //                                    if direction == directionPlaceholder {
-        //                                        withAnimation {
-        //                                            direction = ""
-        //                                        }
-        //                                    }
-        //                                }
+//                            TextEditor(text: $direction)
+////                                .padding(.vertical, -7)
+//                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
+//                                .onTapGesture {
+//                                    if direction == directionPlaceholder {
+//                                        withAnimation {
+//                                            direction = ""
+//                                        }
+//                                    }
+//                                }
                             
                             TextField("Direction", text: $direction, onCommit: {
                                 withAnimation {

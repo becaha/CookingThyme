@@ -54,7 +54,7 @@ struct User {
     }
     
     // saves current username to user defaults to keep user logged in
-    func setCurrentUsername(_ username: String?) {
+    static func setCurrentUsername(_ username: String?) {
         UserDefaults.standard.set(username, forKey: User.userKey)
     }
     
@@ -64,12 +64,12 @@ struct User {
         if let user = RecipeDB.shared.getUser(withUsername: username) {
             if isCorrectPassword(user, withPassword: password) {
                 self = user
-                setCurrentUsername(user.username)
+                User.setCurrentUsername(user.username)
                 return user
             }
         }
         // resets current user due to failed sign in attempt
-        setCurrentUsername(nil)
+        User.setCurrentUsername(nil)
         throw UserError.badSignin
     }
     
@@ -99,12 +99,6 @@ struct User {
         throw ChangePasswordError.incorrectOldPassword
     }
     
-    // deletes current auth and user defaults and resets to blank user
-    func signout() {
-        RecipeDB.shared.deleteAuth(withUserId: id)
-        setCurrentUsername(nil)
-    }
-    
     func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {
         if user.password == password {
             return true
@@ -125,9 +119,15 @@ struct User {
         }
     }
     
-    func delete() {
-        RecipeDB.shared.deleteUser(withId: id)
-        signout()
+    // deletes current auth and user defaults and resets to blank user
+    static func signout(_ userId: Int) {
+        RecipeDB.shared.deleteAuth(withUserId: userId)
+        User.setCurrentUsername(nil)
+    }
+    
+    static func delete(_ userId: Int) {
+        RecipeDB.shared.deleteUser(withId: userId)
+        signout(userId)
     }
 }
 
