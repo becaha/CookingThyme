@@ -20,26 +20,16 @@ struct EditableDirection: View {
         self.autocapitalization = .sentences
     }
     
-    @State private var height: CGFloat = .zero
-
     var body: some View {
         ZStack {
             HStack(spacing: 0) {
                 Text(getDirection())
-                    .opacity(0)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.all, 8)
             }
             
             TextEditor(text: getBinding())
                 .autocapitalization(autocapitalization)
-//                .onChange(of: getDirection()) { value in
-//                    if value == "\n" {
-//                        withAnimation {
-//                            addDirection()
-//                        }
-//                    }
-//                }
         }
     }
     

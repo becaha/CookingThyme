@@ -64,6 +64,10 @@ func searchFontColor() -> Color {
     return getAssetColor(withName: "SearchFont")
 }
 
+func placeholderFontColor() -> Color {
+    return getAssetColor(withName: "Placeholder")
+}
+
 func getAssetColor(withName name: String) -> Color {
     if let uiColor = UIColor(named: name) {
         return Color(uiColor)

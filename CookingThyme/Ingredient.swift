@@ -80,7 +80,9 @@ struct Ingredient: Identifiable, Equatable {
     }
     
     static func toIngredient(_ temp: TempIngredient) -> Ingredient {
-        Ingredient(name: temp.name, amount: Fraction.toDouble(fromString: temp.amount), unitName: makeUnit(fromUnit: temp.unitName))
+        var setTemp = temp
+        setTemp.setIngredientParts()
+        return Ingredient(name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName))
     }
     
     // takes ingredients and turns into temp ingredients for use in edit recipe
@@ -132,6 +134,9 @@ struct Ingredient: Identifiable, Equatable {
                 name += " "
             }
             name += word
+        }
+        if unit == nil {
+            unit = UnitOfMeasurement.none
         }
         let doubleAmount = Fraction.toDouble(fromString: amount)
         // unit is always made
@@ -198,10 +203,12 @@ struct TempIngredient {
     }
     
     mutating func setIngredientParts() {
-        let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
-        self.name = ingredient.name
-        self.amount = ingredient.getAmountString()
-        self.unitName = ingredient.unitName.getName()
+        if ingredientString != "" {
+            let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
+            self.name = ingredient.name
+            self.amount = ingredient.getAmountString()
+            self.unitName = ingredient.unitName.getName()
+        }
     }
 }
 

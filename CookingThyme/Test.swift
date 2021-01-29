@@ -20,38 +20,57 @@ struct Test: View {
     @State var signupErrorMessage = ""
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 0) {
-                Text("\(password)")
+        VStack {
+            HStack(alignment: .center) {
+                Text("1")
                 
-                VStack(spacing: 0) {
-                    HStack {
-                        ZStack {
-                            HStack(spacing: 0) {
-                                Text(username)
-                                    .opacity(0)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .padding(.all, 8)
-                            }
-                            
-                            TextEditor(text: $username)
-                                .gesture(DragGesture()
-                                .onEnded { value in
-                                    password = "ended"
-                                })
-                        }
+                ZStack {
+                    HStack(spacing: 0) {
+                        Text(username)
+                            .opacity(0)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.all, 8)
                     }
-                    .deletable(isDeleting: true, onDelete: {
-                        withAnimation {
-        //                    recipe.removeTempIngredient(at: index)
-                        }
-                    })
-                    .formSectionItem()
+
+                    TextEditor(text: $username)
+                    
                 }
-                .formSection()
             }
+            .formSectionItem()
+            
+            HStack(alignment: .center, spacing: 20) {
+                Text("1")
+                
+                ZStack {
+                    HStack(spacing: 0) {
+                        Text(username)
+                            .opacity(0)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.all, 8)
+                    }
+
+                    TextEditor(text: $username)
+                }
+            }
+            .formSectionItem()
+            
+            HStack(alignment: .center, spacing: 20) {
+                Text("1")
+                
+                ZStack {
+                    HStack(spacing: 0) {
+                        Text(username)
+                            .opacity(0)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.all, 8)
+                    }
+
+                    TextEditor(text: $username)
+                }
+            }
+            .formSectionItem()
         }
-        
+        .formSection()
     }
         
 }

@@ -29,6 +29,7 @@ struct EditRecipeView: View {
             
     @State private var name: String = ""
     @State private var servings: String = "100"
+    @State private var ingredientPlaceholder = ""
     @State private var ingredient: String = ""
     @State private var directionPlaceholder = ""
     @State private var direction: String = ""
@@ -160,8 +161,8 @@ struct EditRecipeView: View {
                     }
                 
                     Button(action: {
-                        unfocusEditable()
                         saveRecipe()
+                        unfocusEditable()
                     })
                     {
                         Text("Done")
@@ -192,6 +193,12 @@ struct EditRecipeView: View {
     
     // tODO: saave should be not on main thread
     private func saveRecipe() {
+        recipe.tempIngredients = recipe.tempIngredients.filter { (ingredient) -> Bool in
+            ingredient.ingredientString != ""
+        }
+        recipe.tempDirections = recipe.tempDirections.filter { (direction) -> Bool in
+            direction.direction != ""
+        }
         servingsFieldMissing = false
         if name == "" {
             nameFieldMissing = true
@@ -244,7 +251,7 @@ struct EditRecipeView: View {
         if ingredient != "" {
             newIngredientFieldMissing = false
             recipe.addTempIngredient(ingredient)
-            ingredient = ""
+            ingredient = ingredientPlaceholder
         }
         else {
             newIngredientFieldMissing = true
@@ -334,7 +341,6 @@ struct EditRecipeView: View {
                             ZStack {
                                 HStack(spacing: 0) {
                                     Text(ingredient)
-                                        .opacity(0)
                                         .fixedSize(horizontal: false, vertical: true)
                                         .padding(.all, 8)
                                 }
@@ -410,7 +416,6 @@ struct EditRecipeView: View {
                             ZStack {
                                 HStack(spacing: 0) {
                                     Text(direction)
-                                        .opacity(0)
                                         .fixedSize(horizontal: false, vertical: true)
                                         .padding(.all, 8)
                                 }
