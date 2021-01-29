@@ -9,6 +9,7 @@ import SwiftUI
 
 // TODO: shopping items have 0 amount
 // TODO: shopping list check all
+// TODO: no adding blank items
 struct ShoppingListView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 

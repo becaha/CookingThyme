@@ -79,8 +79,6 @@ struct EditRecipeView: View {
                         }
                     }
                     .padding()
-                    
-//                    Spacer()
                 }
                 .formed()
             }
@@ -164,6 +162,7 @@ struct EditRecipeView: View {
                     }
                 
                     Button(action: {
+                        unfocusEditable()
                         saveRecipe()
                     })
                     {
@@ -259,6 +258,10 @@ struct EditRecipeView: View {
         }
     }
     
+    func unfocusEditable() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+    }
+    
     @ViewBuilder
     func EditableRecipe() -> some View {
         VStack(spacing: 0) {
@@ -273,7 +276,7 @@ struct EditRecipeView: View {
                     })
                     .recipeTitle()
                     
-                    ErrorMessage("Must have a name.", isError: $nameFieldMissing)
+                    ErrorMessage("Must have a name.", isError: $nameFieldMissing, isCentered: true)
                         .padding(0)
                 }
                 .padding(.bottom, 0)
@@ -332,6 +335,17 @@ struct EditRecipeView: View {
                     
                     VStack(alignment: .leading) {
                         HStack {
+//                            ZStack {
+//                                HStack(spacing: 0) {
+//                                    Text(getIngredient())
+//                                        .opacity(0)
+//                                        .fixedSize(horizontal: false, vertical: true)
+//                                        .padding(.all, 8)
+//                                }
+//                                
+//                                TextEditor(text: getIngredientBinding())
+//                                    .autocapitalization(autocapitalization)
+//                            }
                             TextField("Amount ", text: $ingredientAmount)
                                 .keyboardType(.numbersAndPunctuation)
                                 .fixedSize()
@@ -355,13 +369,13 @@ struct EditRecipeView: View {
                             })
                         }
                         .formSectionItem()
-                            
-                        ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
                     }
                 }
                 .formSection()
             
                 VStack(alignment: .leading) {
+                    ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
+
                     ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
                     
                     ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
@@ -430,14 +444,14 @@ struct EditRecipeView: View {
                         }
                         .formSectionItem()
                     }
-                    
-                    ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
                 }
                 .formSection()
             
                 
                 VStack {
                     Group {
+                        ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
+
                         ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
                     }
                 }
