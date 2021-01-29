@@ -70,7 +70,7 @@ struct IngredientsView: View {
                     // should be changing servings but not in db
                     Picker(selection: $servings, label:
                             HStack {
-                                Text("Serving Size: \(servings)")
+                                Text("Serving Size: \(servings) ")
                                     .textCase(.uppercase)
                                     .font(.subheadline)
                         

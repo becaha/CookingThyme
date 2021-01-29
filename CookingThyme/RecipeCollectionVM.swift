@@ -187,6 +187,23 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
+    func getRecipe(withName name: String) -> Recipe? {
+        if let currentCategory = self.currentCategory {
+            for recipe in currentCategory.recipes {
+                if recipe.name == name {
+                    return recipe
+                }
+            }
+        }
+        return nil
+    }
+    
+    func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
+        if let recipe = getRecipe(withName: name) {
+            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
+        }
+    }
+    
     // MARK: - Shopping List
     // the shopping list belongs to the collection
     
@@ -215,23 +232,6 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // MARK: - Intents
-    
-    func getRecipe(withName name: String) -> Recipe? {
-        if let currentCategory = self.currentCategory {
-            for recipe in currentCategory.recipes {
-                if recipe.name == name {
-                    return recipe
-                }
-            }
-        }
-        return nil
-    }
-    
-    func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
-        if let recipe = getRecipe(withName: name) {
-            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
-        }
-    }
     
     // adds given ingredients to shopping items
     func addIngredientShoppingItems(ingredients: [Ingredient]) {
@@ -268,13 +268,29 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // removes all completed shopping items
-    func removeCompletedShoppingItems() {
+    func removeShoppingItems(completed: Bool) {
         for item in tempShoppingList {
-            if item.completed {
+            if item.completed == completed {
                 if let index = tempShoppingList.indexOf(element: item) {
                     removeTempShoppingItem(at: index)
                 }
             }
+        }
+        saveShoppingList()
+    }
+    
+    func removeAllShoppingItems() {
+        for item in tempShoppingList {
+            if let index = tempShoppingList.indexOf(element: item) {
+                removeTempShoppingItem(at: index)
+            }
+        }
+        saveShoppingList()
+    }
+    
+    func completeAllShoppingItems(_ complete: Bool = true) {
+        for index in 0..<tempShoppingList.count {
+            tempShoppingList[index].completed = complete
         }
         saveShoppingList()
     }
