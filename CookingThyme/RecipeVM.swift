@@ -169,6 +169,10 @@ class RecipeVM: ObservableObject {
         tempDirections.remove(at: index)
     }
     
+    func addTempIngredient(_ ingredientString: String) {
+        tempIngredients.append(TempIngredient(ingredientString: ingredientString, recipeId: recipe.id, id: nil))
+    }
+    
     func addTempIngredient(name: String, amount: String, unit: String) {
         tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
     }

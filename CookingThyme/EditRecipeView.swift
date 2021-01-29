@@ -29,9 +29,7 @@ struct EditRecipeView: View {
             
     @State private var name: String = ""
     @State private var servings: String = "100"
-    @State private var ingredientAmount: String = ""
-    @State private var ingredientUnit: String = ""
-    @State private var ingredientName: String = ""
+    @State private var ingredient: String = ""
     @State private var directionPlaceholder = ""
     @State private var direction: String = ""
     
@@ -243,12 +241,10 @@ struct EditRecipeView: View {
     }
     
     private func addIngredient() {
-        if ingredientName != "" || ingredientAmount != "" || ingredientUnit != "" {
+        if ingredient != "" {
             newIngredientFieldMissing = false
-            recipe.addTempIngredient(name: ingredientName, amount: ingredientAmount, unit: ingredientUnit)
-            ingredientName = ""
-            ingredientAmount = ""
-            ingredientUnit = ""
+            recipe.addTempIngredient(ingredient)
+            ingredient = ""
         }
         else {
             newIngredientFieldMissing = true
@@ -335,32 +331,17 @@ struct EditRecipeView: View {
                     
                     VStack(alignment: .leading) {
                         HStack {
-//                            ZStack {
-//                                HStack(spacing: 0) {
-//                                    Text(getIngredient())
-//                                        .opacity(0)
-//                                        .fixedSize(horizontal: false, vertical: true)
-//                                        .padding(.all, 8)
-//                                }
-//                                
-//                                TextEditor(text: getIngredientBinding())
-//                                    .autocapitalization(autocapitalization)
-//                            }
-                            TextField("Amount ", text: $ingredientAmount)
-                                .keyboardType(.numbersAndPunctuation)
-                                .fixedSize()
+                            ZStack {
+                                HStack(spacing: 0) {
+                                    Text(ingredient)
+                                        .opacity(0)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.all, 8)
+                                }
 
-                            TextField("Unit ", text: $ingredientUnit)
-                                .autocapitalization(.none)
-                                .fixedSize()
-
-                            TextField("Name", text: $ingredientName,
-                                onCommit: {
-                                    withAnimation {
-                                        addIngredient()
-                                    }
-                                })
-                                .autocapitalization(.none)
+                                TextEditor(text: $ingredient)
+                            }
+                            .autocapitalization(.none)
                             
                             UIControls.AddButton(action: {
                                 withAnimation {

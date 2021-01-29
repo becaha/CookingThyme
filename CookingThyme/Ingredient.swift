@@ -182,6 +182,17 @@ struct TempIngredient {
         self.ingredientString = self.toString()
     }
     
+    init(ingredientString: String, recipeId: Int, id: Int?) {
+        self.ingredientString = ingredientString
+        self.recipeId = recipeId
+        self.id = id
+        
+        self.name = ""
+        self.amount = ""
+        self.unitName = ""
+        self.setIngredientParts()
+    }
+    
     func toString() -> String {
         Ingredient.toIngredient(self).toString()
     }
