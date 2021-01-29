@@ -33,6 +33,13 @@ struct EditableDirection: View {
             
             TextEditor(text: getBinding())
                 .autocapitalization(autocapitalization)
+//                .onChange(of: getDirection()) { value in
+//                    if value == "\n" {
+//                        withAnimation {
+//                            addDirection()
+//                        }
+//                    }
+//                }
         }
     }
     

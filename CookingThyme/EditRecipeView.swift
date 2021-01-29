@@ -340,6 +340,14 @@ struct EditRecipeView: View {
                                 }
 
                                 TextEditor(text: $ingredient)
+                                    .onChange(of: ingredient) { value in
+                                        if value.hasSuffix("\n") {
+                                            ingredient.removeLast(1)
+                                            withAnimation {
+                                                addIngredient()
+                                            }
+                                        }
+                                    }
                             }
                             .autocapitalization(.none)
                             
@@ -396,26 +404,28 @@ struct EditRecipeView: View {
                     }
                                         
                     VStack(alignment: .leading) {
-                        HStack(alignment: .top, spacing: 20) {
+                        HStack(alignment: .center, spacing: 20) {
                             Text("\(recipe.tempDirections.count + 1)")
-
-                            // choose between placeholder and seeing lines while editing
-//                            TextEditor(text: $direction)
-////                                .padding(.vertical, -7)
-//                                .foregroundColor(direction == directionPlaceholder ? Color.gray : Color.black)
-//                                .onTapGesture {
-//                                    if direction == directionPlaceholder {
-//                                        withAnimation {
-//                                            direction = ""
-//                                        }
-//                                    }
-//                                }
                             
-                            TextField("Direction", text: $direction, onCommit: {
-                                withAnimation {
-                                    addDirection()
+                            ZStack {
+                                HStack(spacing: 0) {
+                                    Text(direction)
+                                        .opacity(0)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.all, 8)
                                 }
-                            })
+
+                                TextEditor(text: $direction)
+                                    .onChange(of: direction) { value in
+                                        if value.hasSuffix("\n") {
+                                            direction.removeLast(1)
+                                            withAnimation {
+                                                addDirection()
+                                            }
+                                        }
+                                    }
+                            }
+                            .autocapitalization(.none)
 
                             UIControls.AddButton(action: {
                                 withAnimation {

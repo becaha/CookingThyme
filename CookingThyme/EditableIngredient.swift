@@ -46,47 +46,5 @@ struct EditableIngredient: View {
         }
         return $dummyBinding
     }
-    
-    func getAmount() -> String {
-        if index < recipe.tempIngredients.count {
-            return recipe.tempIngredients[index].amount
-        }
-        return ""
-    }
-    
-    func getAmountBinding() -> Binding<String> {
-        if index < recipe.tempIngredients.count {
-            return $recipe.tempIngredients[index].amount
-        }
-        return $dummyBinding
-    }
-    
-    func getUnit() -> String {
-        if index < recipe.tempIngredients.count {
-            return recipe.tempIngredients[index].unitName
-        }
-        return ""
-    }
-
-    func getUnitBinding() -> Binding<String> {
-        if index < recipe.tempIngredients.count {
-            return $recipe.tempIngredients[index].unitName
-        }
-        return $dummyBinding
-    }
-
-    func getName() -> String {
-        if index < recipe.tempIngredients.count {
-            return recipe.tempIngredients[index].name
-        }
-        return ""
-    }
-
-    func getNameBinding() -> Binding<String> {
-        if index < recipe.tempIngredients.count {
-            return $recipe.tempIngredients[index].name
-        }
-        return $dummyBinding
-    }
 }
 

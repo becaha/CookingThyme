@@ -398,8 +398,8 @@
             filePath = "CookingThyme/EditableDirection.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "getBinding()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1698,6 +1698,22 @@
             endingLineNumber = "21"
             landmarkName = "fieldMissing"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1E6BA589-A12B-4BD5-82DD-3CABDE72C819"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditRecipeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
+            landmarkName = "EditableRecipe()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
