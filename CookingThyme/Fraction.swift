@@ -88,7 +88,7 @@ struct Fraction {
         }
     }
     
-    // gets fraction pieces from string "1/2" -> 1, 2
+    // gets fraction pieces from string "1/2" and symbol "½" -> 1, 2
     static func getFractionPieces(_ fraction: String) -> [String] {
         let pieces = fraction.components(separatedBy: "/")
         if pieces.count == 1 {

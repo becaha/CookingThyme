@@ -130,7 +130,7 @@ class RecipeVM: ObservableObject {
         }
     }
     
-    // TODO only update, no delete -> create and only update if something is changed
+    // TODO 3 only update, no delete -> create and only update if something is changed
     // update recipe to given recipe parts
     func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, categoryId: Int) {
         category.deleteRecipe(withId: id)
@@ -178,7 +178,9 @@ class RecipeVM: ObservableObject {
     }
     
     func removeTempIngredient(at index: Int) {
+        var ings = tempIngredients
         tempIngredients.remove(at: index)
+        ings = tempIngredients
     }
     
     static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: Int) -> RecipeImage {

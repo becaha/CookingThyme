@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+//TODO: if no categories
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 

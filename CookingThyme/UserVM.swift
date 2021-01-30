@@ -132,7 +132,7 @@ class UserVM: ObservableObject {
         if !isValidPassword(password) {
             self.signupErrors.append(InvalidSignup.password)
         }
-        // TODO: confirm email
+        // TODO 3: confirm email
         if email == "" || !email.contains("@") || !email.contains(".") {
             self.signupErrors.append(InvalidSignup.email)
         }

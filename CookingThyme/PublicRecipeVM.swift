@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-// todo make integrateable with a parent recipeVM or never have a separate public recipe object
 // recipe that comes from the Tasty API
 class PublicRecipeVM: ObservableObject {
     @Published var publicRecipe: WebRecipe

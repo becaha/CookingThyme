@@ -118,6 +118,8 @@ struct EditRecipeView: View {
                     if recipe.recipeText != nil {
                         Button(action: {
                             withAnimation {
+                                // save stuff
+                                unfocusEditable()
                                 presentRecipeText.toggle()
                             }
                         })

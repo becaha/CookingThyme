@@ -10,7 +10,7 @@ import SwiftUI
 // TODO can cancel add to shpping list
 // TODO change from form
 // TODO deal with plural ingredient unitNames
-// TODO have title not sticky
+// todo: recipe errors more visible
 struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM

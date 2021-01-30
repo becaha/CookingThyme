@@ -600,9 +600,9 @@ class RecipeDB {
     
     // MARK: - Update
     
-    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) -> Recipe? {
+    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) {
         do {
-            let recipe = try dbQueue.write{ (db: Database) -> Recipe in
+            try dbQueue.write{ (db: Database) in
 
                 try db.execute(
                     sql:
@@ -614,14 +614,9 @@ class RecipeDB {
                     WHERE \(Recipe.Table.id) = ?
                     """,
                     arguments: [name, servings, recipeCategoryId, id])
-
-                return Recipe(id: id, name: name, servings: servings, recipeCategoryId: recipeCategoryId)
             }
-            
-            return recipe
         } catch {
             print("Error updating recipe")
-            return nil
         }
     }
     

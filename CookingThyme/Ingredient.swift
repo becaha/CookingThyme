@@ -98,8 +98,6 @@ struct Ingredient: Identifiable, Equatable {
         TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id)
     }
     
-    // TODO:
-    // 1 1/2 cup flour
     static func toIngredients(fromStrings ingredientStrings: [String]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for ingredientString in ingredientStrings {
@@ -108,32 +106,94 @@ struct Ingredient: Identifiable, Equatable {
         return ingredients
     }
     
+    enum CurrentPart {
+        case amount
+        case unit
+        case name
+    }
+    
+    // TODO: 1 1/2 cup flour
     static func toIngredient(fromString ingredientString: String) -> Ingredient {
         var amount = ""
+        var unitName = ""
         var unit: UnitOfMeasurement?
         var name = ""
-        let words = ingredientString.components(separatedBy: " ")
+        var currentPart = CurrentPart.amount
+        let words = ingredientString.components(separatedBy: .whitespaces)
         for word in words {
-            if Int(word) != nil || (word.count == 1 && Character(word).isNumber) {
-                if amount != "" {
-                    amount += " "
+            //(word.count == 1 && Character(word).isNumber)
+            if currentPart == CurrentPart.amount {
+                // number
+                if Int(word) != nil {
+                    currentPart = CurrentPart.amount
+                    if amount != "" {
+                        amount += " "
+                    }
+                    amount += word
+                    continue
                 }
-                amount += word
-                continue
+                // fraction
+                else if Fraction.getFractionPieces(word).count != 0 {
+                    let pieces = Fraction.getFractionPieces(word)
+                    if amount != "" {
+                        amount += " "
+                    }
+                    amount += "\(pieces[0])/\(pieces[1])"
+                    continue
+                }
+                // 1 and 1/2
+                else if word == "and" {
+                    amount += " "
+                    continue
+                }
+                // 1½
+                else {
+                    for char in word {
+                        // 1 or ½
+                        if char.isNumber {
+                            if amount != "" {
+                                amount += " "
+                            }
+                            amount += String(char)
+                        }
+                        else if Fraction.getFractionPieces(String(char)).count != 0 {
+                            let pieces = Fraction.getFractionPieces(String(char))
+                            if amount != "" {
+                                amount += " "
+                            }
+                            amount += "\(pieces[0])/\(pieces[1])"
+                        }
+                        else {
+                            currentPart = CurrentPart.unit
+                            break
+                        }
+                    }
+                }
             }
-            else if unit == nil {
-                if UnitOfMeasurement.isUnknown(unitString: word) {
-                    unit = UnitOfMeasurement.none
+            if currentPart == CurrentPart.unit {
+                unitName += word.lowercased()
+                if UnitOfMeasurement.isUnknown(unitString: unitName) {
+                    // units with two words
+                    if unitName == "fluid" || unitName == "fl" {
+                        continue
+                    }
+                    else {
+                        unit = UnitOfMeasurement.none
+                        currentPart = CurrentPart.name
+                    }
                 }
                 else {
-                    unit = Ingredient.makeUnit(fromUnit: word)
+                    unit = Ingredient.makeUnit(fromUnit: unitName)
+                    currentPart = CurrentPart.name
                     continue
                 }
             }
-            if name != "" {
-                name += " "
+            if currentPart == CurrentPart.name {
+                if name != "" {
+                    name += " "
+                }
+                name += word
             }
-            name += word
         }
         if unit == nil {
             unit = UnitOfMeasurement.none

@@ -21,7 +21,6 @@ class HTMLTranscriber: ObservableObject {
             }
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
-//                self.printHTML(recipeString)
                 let recipe = self.parseString(recipeString)
                 DispatchQueue.main.async {
                     setRecipe(recipe, recipeString)
@@ -32,7 +31,6 @@ class HTMLTranscriber: ObservableObject {
     }
     
     // TODO: 1 and 1/2 cups (440 g) -> 1, nothing, and cups...
-    // TODO: 1/2 -> 12
     func parseString(_ recipeString: String) -> Recipe {
         enum CurrentPart {
             case serving
@@ -53,18 +51,19 @@ class HTMLTranscriber: ObservableObject {
             let lines = section.components(separatedBy: "\n")
             for line in lines {
                 let cleanLine = removeSymbols(line)
+                let cleanLineHeader = removeAll(line)
                 // look for new part of recipe
-                if cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield") {
-                    name = prevLine
+                if currentPart != CurrentPart.ingredient && currentPart != CurrentPart.direction && servings == 0 && (cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield")) {
+//                    name = prevLine
                     currentPart = CurrentPart.serving
                 }
-                if cleanLine.lowercased() == "ingredients" {
+                if cleanLineHeader.lowercased() == "ingredients" {
                     currentPart = CurrentPart.ingredient
                     // TODO: take the last section
                     ingredientStrings = []
                     continue
                 }
-                if cleanLine.lowercased() == "directions" || cleanLine.lowercased() == "instructions" {
+                if cleanLineHeader.lowercased() == "directions" || cleanLineHeader.lowercased() == "instructions" || cleanLineHeader.lowercased() == "method" || cleanLineHeader.lowercased() == "steps" {
                     currentPart = CurrentPart.direction
                     // TODO: take the last section
                     directionStrings = []
@@ -87,12 +86,26 @@ class HTMLTranscriber: ObservableObject {
                 }
                 
                 if currentPart == CurrentPart.direction {
-                    var direction = cleanLine
+                    // directions wants punctuation
+                    var direction = removeFormat(line)
                     var step: Int?
                     var stepString = ""
+                    for word in direction.components(separatedBy: .whitespaces) {
+                        if word.lowercased().localizedCaseInsensitiveContains("step") {
+                            // remove word and space after
+                            direction.removeFirst(word.count + 1)
+                        }
+                        else {
+                            break
+                        }
+                    }
                     for char in direction {
                         if char.isNumber {
                             stepString.append(char)
+                        }
+                        // 1. 1: 1-
+                        else if char.isSymbol {
+                            break
                         }
                         else {
                             break
@@ -121,6 +134,10 @@ class HTMLTranscriber: ObservableObject {
                     prevLine = cleanLine
                 }
             }
+            // end of a section, if we have the recipe, stop parsing
+            if ingredientStrings.count > 0 && directionStrings.count > 0 {
+                break
+            }
         }
         let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: 0)
         let ingredients = Ingredient.toIngredients(fromStrings: ingredientStrings)
@@ -133,6 +150,29 @@ class HTMLTranscriber: ObservableObject {
         var cleanLine = ""
         for char in line {
             if char.isLetter || char.isNumber || char == " " {
+                cleanLine.append(char)
+            }
+        }
+        return cleanLine
+    }
+    
+    // "\t", "\u{xxxx}"
+    func removeAll(_ line: String) -> String {
+        var cleanLine = ""
+        for char in line {
+            if char.isLetter || char.isNumber {
+                cleanLine.append(char)
+            }
+        }
+        return cleanLine
+    }
+    
+    // remove weird punctuation, keep (: - ( ) )
+    // removes "\t" but not " "
+    func removeFormat(_ line: String) -> String {
+        var cleanLine = ""
+        for char in line {
+            if !char.isWhitespace || char == " " {
                 cleanLine.append(char)
             }
         }
