@@ -910,8 +910,8 @@
             filePath = "CookingThyme/RecipeDB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "900"
-            endingLineNumber = "900"
+            startingLineNumber = "901"
+            endingLineNumber = "901"
             landmarkName = "deleteImage(withCategoryId:)"
             landmarkType = "7">
             <Locations>
@@ -1246,8 +1246,8 @@
             filePath = "CookingThyme/User.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "signin(username:password:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1440,7 +1440,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "770"
             endingLineNumber = "770"
-            landmarkName = "updateUser(withId:username:password:email:)"
+            landmarkName = "updateUser(withId:username:salt:hashedPassword:email:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1534,8 +1534,8 @@
             filePath = "CookingThyme/RecipeDB.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1005"
-            endingLineNumber = "1005"
+            startingLineNumber = "1006"
+            endingLineNumber = "1006"
             landmarkName = "deleteUser(withId:)"
             landmarkType = "7">
             <Locations>
@@ -1841,6 +1841,38 @@
             startingLineNumber = "350"
             endingLineNumber = "350"
             landmarkName = "EditableRecipe()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5EB04C60-D764-4AAA-905B-460BC0923A69"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/User.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "hashPassword(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "153058E9-6502-4B97-8ABF-F28B67529C0C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/User.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "isCorrectPassword(_:withPassword:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -264,22 +264,22 @@ class RecipeDB {
             return
         }
     }
-    
-    func createUser(username: String, password: String, email: String) throws -> User? {
+
+    func createUser(username: String, salt: String, hashedPassword: String, email: String) throws -> User? {
         do {
             let user = try dbQueue.write{ (db: Database) -> User in
 
                 try db.execute(
                     sql:
                     """
-                    INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.password), \(User.Table.email)) \
-                    VALUES (?, ?, ?)
+                    INSERT INTO \(User.Table.databaseTableName) (\(User.Table.username), \(User.Table.salt), \(User.Table.hashedPassword), \(User.Table.email)) \
+                    VALUES (?, ?, ?, ?)
                     """,
-                    arguments: [username, password, email])
+                    arguments: [username, salt, hashedPassword, email])
 
                 let userId = db.lastInsertedRowID
 
-                return User(id: Int(userId), username: username, password: password, email: email)
+                return User(id: Int(userId), username: username, salt: salt, hashedPassword: hashedPassword, email: email)
             }
             
             return user
@@ -765,19 +765,20 @@ class RecipeDB {
         }
     }
     
-    func updateUser(withId id: Int, username: String, password: String, email: String) -> Bool {
+    func updateUser(withId id: Int, username: String, salt: String, hashedPassword: String, email: String) -> Bool {
         do {
             let success = try dbQueue.write{ (db: Database) -> Bool in
                 try db.execute(
                     sql:
                     """
                     UPDATE \(User.Table.databaseTableName) \
-                    SET \(User.Table.password) = ?,
+                    SET \(User.Table.hashedPassword) = ?,
+                    \(User.Table.salt) = ?, \
                     \(User.Table.email) = ?, \
                     \(User.Table.username) = ? \
                     WHERE \(User.Table.id) = ?
                     """,
-                    arguments: [password, email, username, id])
+                    arguments: [hashedPassword, salt, email, username, id])
 
                 return true
             }

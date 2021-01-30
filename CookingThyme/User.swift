@@ -7,8 +7,8 @@
 
 import Foundation
 import GRDB
+import CryptoKit
 
-// TODO: password encryption https://cocoapods.org/pods/CryptoSwift
 struct User {
     static let userKey = "CookingThymeCurrentUser"
 
@@ -16,32 +16,37 @@ struct User {
         static let databaseTableName = "User"
         static let id = "Id"
         static let username = "Username"
-        static let password = "Password"
+        static let salt = "Salt"
+        static let hashedPassword = "HashedPassword"
         static let email = "Email"
     }
     
     var id: Int
     var username: String
-    var password: String
+    var salt: String
+    var hashedPassword: String
     var email: String
     
     init() {
         self.id = 0
         self.username = ""
-        self.password = ""
+        self.salt = ""
+        self.hashedPassword = ""
         self.email = ""
     }
     
-    init(id: Int, username: String, password: String, email: String) {
+    init(id: Int, username: String, salt: String, hashedPassword: String, email: String) {
         self.id = id
         self.username = username
-        self.password = password
+        self.salt = salt
+        self.hashedPassword = hashedPassword
         self.email = email
     }
     
-    init(username: String, password: String, email: String) {
+    init(username: String, salt: String, hashedPassword: String, email: String) {
         self.username = username
-        self.password = password
+        self.salt = salt
+        self.hashedPassword = hashedPassword
         self.email = email
         self.id = 0
     }
@@ -49,7 +54,8 @@ struct User {
     init(row: Row) {
         self.id = row[Table.id]
         self.username = row[Table.username]
-        self.password = row[Table.password]
+        self.salt = row[Table.salt]
+        self.hashedPassword = row[Table.hashedPassword]
         self.email = row[Table.email]
     }
     
@@ -57,7 +63,6 @@ struct User {
     static func setCurrentUsername(_ username: String?) {
         UserDefaults.standard.set(username, forKey: User.userKey)
     }
-    
     
     // gets user of user if the password is correct
     mutating func signin(username: String, password: String) throws -> User? {
@@ -75,8 +80,10 @@ struct User {
     
     mutating func signup(username: String, password: String, email: String) throws -> User? {
         do {
-            if let user = try RecipeDB.shared.createUser(username: username, password: password, email: email) {
-                return try signin(username: user.username, password: user.password)
+            let salt = UUID().uuidString
+            let hashedPassword = hashPassword(password, withSalt: salt)
+            if let user = try RecipeDB.shared.createUser(username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
+                return try signin(username: user.username, password: password)
             }
         }
         catch CreateUserError.usernameTaken {
@@ -90,17 +97,40 @@ struct User {
     
     mutating func changePassword(oldPassword: String, newPassword: String) throws {
         if isCorrectPassword(self, withPassword: oldPassword) {
-            if !RecipeDB.shared.updateUser(withId: id, username: username, password: newPassword, email: email) {
+            let hashedPassword = hashPassword(newPassword, withSalt: self.salt)
+            if !RecipeDB.shared.updateUser(withId: id, username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
                 throw ChangePasswordError.badNewPassword
             }
-            password = newPassword
+            self.hashedPassword = hashedPassword
             return
         }
         throw ChangePasswordError.incorrectOldPassword
     }
+
+    func hashPassword(_ password: String, withSalt salt: String) -> String {
+        var passwordString = password
+        passwordString.append(salt)
+
+        let inputData = Data(passwordString.utf8)
+
+        let hashed = SHA256.hash(data: inputData)
+        
+        return hashed.compactMap { String(format: "%02x", $0) }.joined()
+    }
+    
+    func hashPassword(_ password: String) -> String {
+        var passwordString = password
+        passwordString.append(self.salt)
+
+        let inputData = Data(passwordString.utf8)
+
+        let hashed = SHA256.hash(data: inputData)
+        
+        return hashed.compactMap { String(format: "%02x", $0) }.joined()
+    }
     
     func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {
-        if user.password == password {
+        if user.hashedPassword == hashPassword(password, withSalt: user.salt) {
             return true
         }
         return false
