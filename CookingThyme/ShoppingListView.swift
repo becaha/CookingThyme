@@ -33,49 +33,6 @@ struct ShoppingListView: View {
                     .foregroundColor(mainColor())
                 }
             }
-            
-//            Section(header:
-//                VStack {
-//                    HStack {
-//                        Button(action: {
-//                            completeAll.toggle()
-//                            if completeAll {
-//                                collection.completeAllShoppingItems()
-//                            }
-//                            else {
-//                                collection.completeAllShoppingItems(false)
-//                            }
-//                        }) {
-//                            ZStack {
-//                                Circle()
-//                                    .fill(mainColor())
-//                                    .frame(width: 20, height: 20)
-//                                    .opacity(completeAll ? 1: 0)
-//
-//                                Circle()
-//                                    .stroke(mainColor(), lineWidth: 3)
-//                                    .frame(width: 20, height: 20)
-//                            }
-//
-//                            Text(completeAll ? "Uncheck All" : "Check All")
-//                        }
-//
-//                        Spacer()
-//
-//                        Button(action: {
-//                            collection.removeAllShoppingItems()
-//                        }) {
-//                            Text("Delete All")
-//
-//                            Image(systemName: "trash")
-//                                .imageScale(.large)
-//                        }
-//                    }
-//                    .foregroundColor(mainColor())
-//
-//                    Divider()
-//                }
-//            ) {}
 
             if collection.notCompletedItems.count > 0 {
                 Section {
@@ -103,8 +60,7 @@ struct ShoppingListView: View {
                                 .padding(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 7)
-                                        .fill(mainColor())
-                                        .opacity(0.5)
+                                        .fill(Color(UIColor.tertiarySystemFill))
                                 )
                         }
 
@@ -117,8 +73,7 @@ struct ShoppingListView: View {
                                 .padding(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 7)
-                                        .fill(mainColor())
-                                        .opacity(0.5)
+                                        .fill(Color(UIColor.tertiarySystemFill))
                                 )
                         }
                     }
