@@ -15,7 +15,6 @@ struct EditRecipeView: View {
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
     @EnvironmentObject var recipe: RecipeVM
-    var isCreatingRecipe: Bool = false
             
     private var fieldMissing: Bool {
         return nameFieldMissing || newIngredientFieldMissing || newDirectionFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
@@ -41,7 +40,7 @@ struct EditRecipeView: View {
     @State private var importFromURL = false
     @State private var urlString: String = ""
     
-    @Binding var isImportingRecipe: Bool
+    @State var isImportingRecipe: Bool = false
     
     @State private var presentRecipeText = false
         

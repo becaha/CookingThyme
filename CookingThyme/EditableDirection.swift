@@ -24,6 +24,7 @@ struct EditableDirection: View {
         ZStack {
             HStack(spacing: 0) {
                 Text(getDirection())
+                    .opacity(0)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.all, 8)
             }

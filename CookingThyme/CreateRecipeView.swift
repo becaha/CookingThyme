@@ -16,15 +16,18 @@ struct CreateRecipeView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if !isImportingRecipe {
                     VStack {
-                        EditRecipeView(isEditingRecipe: $isCreatingRecipe, isCreatingRecipe: true, isImportingRecipe: $isImportingRecipe)
+//                        VStack {
+//                            if !isEditingRecipe {
+//                                ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
+//                            }
+//                            else {
+//                                EditRecipeView(isEditingRecipe: self.$isEditingRecipe, isImportingRecipe: self.$isEditingRecipe)
+//                            }
+//                        }
+                        EditRecipeView(isEditingRecipe: $isCreatingRecipe)
                     }
                     .navigationBarTitle("", displayMode: .inline)
-                }
-                else {
-                    ImportedRecipe(isCreatingRecipe: $isCreatingRecipe)
-                }
             }
             .background(formBackgroundColor())
             .edgesIgnoringSafeArea(.bottom)

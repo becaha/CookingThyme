@@ -270,8 +270,8 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "setCancellables()"
             landmarkType = "7">
          </BreakpointContent>
@@ -286,26 +286,10 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "setCancellables()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "237803A4-FE6A-4412-9C10-6CD39F7B0B11"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/EditRecipeView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "body"
-            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -350,9 +334,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "popullateRecipeTemps()"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "popullateImages()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -366,8 +350,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "218"
-            endingLineNumber = "218"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "saveRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,8 +366,8 @@
             filePath = "CookingThyme/EditableDirection.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "getBinding()"
             landmarkType = "7">
          </BreakpointContent>
@@ -414,8 +398,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
             landmarkName = "addDirection()"
             landmarkType = "7">
          </BreakpointContent>
@@ -446,8 +430,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "saveRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -456,7 +440,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5E1C673F-DB76-457B-A3CE-8BEFBAA49BFD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -478,9 +462,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "addTempImage(url:)"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
+            landmarkName = "toRecipeImage(fromUIImage:withRecipeId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -542,9 +526,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "addTempImage(url:)"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "toRecipeImage(fromUIImage:withRecipeId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -750,8 +734,8 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "setCancellables()"
             landmarkType = "7">
          </BreakpointContent>
@@ -814,9 +798,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "popullateImages()"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "refreshRecipe()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -830,8 +814,8 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "popullateRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -846,8 +830,8 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "setCancellables()"
             landmarkType = "7">
          </BreakpointContent>
@@ -862,9 +846,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "popullateRecipe()"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "popullateRecipeTemps()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1038,8 +1022,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "357"
+            endingLineNumber = "357"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1054,8 +1038,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "unfocusEditable()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1166,8 +1150,8 @@
             filePath = "CookingThyme/ReadRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1582,8 +1566,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1598,8 +1582,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "433"
-            endingLineNumber = "433"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "createRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1614,8 +1598,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
+            startingLineNumber = "369"
+            endingLineNumber = "369"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1630,8 +1614,8 @@
             filePath = "CookingThyme/RecipeCollectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "364"
+            endingLineNumber = "364"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -1646,8 +1630,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1662,8 +1646,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
             landmarkName = "fieldMissing"
             landmarkType = "24">
          </BreakpointContent>
@@ -1678,8 +1662,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "427"
-            endingLineNumber = "427"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1694,8 +1678,8 @@
             filePath = "CookingThyme/EditableIngredient.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "getIngredientBinding()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1742,10 +1726,10 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
-            landmarkName = "updateRecipe(withId:name:tempIngredients:directions:images:servings:categoryId:)"
-            landmarkType = "7">
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "RecipeVM"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1790,8 +1774,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2046,9 +2030,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "popullateRecipeTemps()"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "popullateImages()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2062,41 +2046,9 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
-            landmarkName = "removeTempIngredient(at:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "93405F79-EF4C-43A9-A6B0-318E42D5B073"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/RecipeVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
-            landmarkName = "removeTempIngredient(at:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "164C21D0-464F-4836-8987-27DB479260DB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/RecipeVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
-            landmarkName = "removeTempIngredient(at:)"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "toRecipeImage(fromURL:withRecipeId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2104,14 +2056,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "08274953-26B6-4266-B611-A018DB13FDFE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2120,14 +2072,174 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "238CA29D-A3F5-4FDE-ABE2-C21AA4F19C40"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
+            landmarkName = "EditableRecipe()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A0DC2311-082F-4755-A0E8-1FF4A76A73BB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditRecipeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
+            landmarkName = "EditableRecipe()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7683EBCE-816A-44CC-8D06-9B789B1E541B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditableIngredient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "getIngredient()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A0E34F6C-A8A2-45EE-9D22-74A3A7A77C11"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditableIngredient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "getIngredient()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "656B9D4A-230D-4ACB-AE41-400BD2516B9E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "setRecipe(_:withText:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2122F73-88EE-48D5-82B4-FE49CF67AA42"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditRecipeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "08AF76CF-46EC-4F09-8A48-854471FB98A1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "RecipeVM"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D0B3E123-3591-4D52-A0A1-75047E71D405"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditableIngredient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "getIngredientBinding()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "02ADBC45-4FF7-4BAD-B99F-DF2DA9D5478A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
+            landmarkName = "toRecipeImage(fromURL:withRecipeId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7889A4C4-EE95-4541-B9FC-8068BB1A557C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditableIngredient.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EF245F11-7AB6-4B2E-A403-B02C88A33705"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditRecipeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
