@@ -29,7 +29,6 @@
 		DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F02568B96100808CC8 /* RecipeCollection.swift */; };
 		DB49B4F3256CBC8F00808CC8 /* recipe.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */; };
 		DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */; };
-		DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */; };
 		DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */; };
 		DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FA256E015000808CC8 /* EditableText.swift */; };
 		DB49B4FF256F488200808CC8 /* Deletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4FE256F488200808CC8 /* Deletable.swift */; };
@@ -89,7 +88,6 @@
 		DB88CD4825C0E2B000A7F32C /* ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */; };
 		DB88CD4A25C1225E00A7F32C /* ReadRecipeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
-		DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE776258AB261003DC95F /* ImportedRecipe.swift */; };
 		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
 		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
@@ -125,7 +123,6 @@
 		DB49B4F02568B96100808CC8 /* RecipeCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCollection.swift; sourceTree = "<group>"; };
 		DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = recipe.sqlite; sourceTree = "<group>"; };
 		DB49B4F4256DC74100808CC8 /* RecipeCategoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryVM.swift; sourceTree = "<group>"; };
-		DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 		DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRecipeView.swift; sourceTree = "<group>"; };
 		DB49B4FA256E015000808CC8 /* EditableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableText.swift; sourceTree = "<group>"; };
 		DB49B4FE256F488200808CC8 /* Deletable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deletable.swift; sourceTree = "<group>"; };
@@ -185,7 +182,6 @@
 		DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePassword.swift; sourceTree = "<group>"; };
 		DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRecipeViews.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
-		DBCDE776258AB261003DC95F /* ImportedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportedRecipe.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
 		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
@@ -420,8 +416,6 @@
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
-				DB49B4F6256DCE4C00808CC8 /* CreateRecipeView.swift */,
-				DBCDE776258AB261003DC95F /* ImportedRecipe.swift */,
 				DB88CD2A25BB64A500A7F32C /* RecipeTextView.swift */,
 			);
 			name = Recipe;
@@ -672,8 +666,6 @@
 				DB83F6B725B384EE0041DAA7 /* HTMLTranscriber.swift in Sources */,
 				DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */,
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
-				DB49B4F7256DCE4C00808CC8 /* CreateRecipeView.swift in Sources */,
-				DBCDE777258AB261003DC95F /* ImportedRecipe.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
 				DB83F6A425AE15400041DAA7 /* User.swift in Sources */,

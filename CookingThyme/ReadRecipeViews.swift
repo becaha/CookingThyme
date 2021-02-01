@@ -17,8 +17,6 @@ struct RecipeNameTitle: View {
     }
 }
 
-// TODO: servings cant edit until push edit and then done
-// TODO: create servings has ...
 struct RecipeLists: View {
     @Binding var servings: Int
     

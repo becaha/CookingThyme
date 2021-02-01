@@ -304,46 +304,29 @@ struct RecipeCollectionView: View {
                         }
                         .formed()
                     }
-                    // TODO: when signout, then signin this is clickable above its actual button but not on the button itself
+                    
                     VStack {
                         HStack {
                             NavigationLink(destination:
                                             RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
-                                           
-//                                CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
-//                                    .environmentObject(RecipeVM(category: collection.currentCategory!))
-//                                    .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
                             ) {
                                 Text("New Recipe")
                                     .fontWeight(.regular)
                                     .formItem(isNavLink: true)
                             }
-//
-//                            UIControls.AddButton(withLabel: "New Recipe") {
-//                                createRecipe()
-//                            }
                             
                             Spacer()
                         }
                     }
-//                    .padding()
+                    .padding(.vertical)
                     .overlay(
                         Rectangle()
                             .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
                             .foregroundColor(borderColor()),
                         alignment: .top
                     )
-                    .sheet(isPresented: $isCreatingRecipe, onDismiss: {
-                        if let currentCategory = collection.currentCategory {
-                            collection.setCurrentCategory(currentCategory)
-                        }
-                    }) {
-                        CreateRecipeView(isCreatingRecipe: self.$isCreatingRecipe)
-                            .environmentObject(RecipeVM(category: collection.currentCategory!))
-                            .environmentObject(RecipeCategoryVM(category: collection.currentCategory!.category, collection: collection))
-                    }
                 }
             }
             .background(formBackgroundColor())

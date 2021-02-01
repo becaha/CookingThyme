@@ -8,7 +8,6 @@
 import SwiftUI
 
 // TODO can cancel add to shpping list
-// TODO change from form
 // TODO deal with plural ingredient unitNames
 // todo: recipe errors more visible
 struct ReadRecipeView: View {
@@ -44,10 +43,6 @@ struct ReadRecipeView: View {
                         onNotSignedIn: {},
                         directions: recipe.directions
             )
-        }
-        .onAppear {
-            let recipeA = recipe.recipe
-            print(recipeA)
         }
         .background(formBackgroundColor())
         .sheet(isPresented: $categoriesPresented, content: {
