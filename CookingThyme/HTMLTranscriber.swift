@@ -76,15 +76,7 @@ class HTMLTranscriber: ObservableObject {
         return title
     }
     
-    func parseLines(fromTabbedString recipeString: String) -> [String] {
-        let lines = recipeString.components(separatedBy: "\t")
-        for line in lines {
-            
-        }
-        return lines
-    }
-    
-    // TODO: 1 and 1/2 cups (440 g) -> 1, nothing, and cups...
+    // TODO: 1 1/2 cups (440 g), ignoring the stuff in parenthesis, just part of the name, no change with serving size
     func parseRecipe(_ recipeString: String, withName name: String) -> Recipe {
         enum CurrentPart {
             case serving
@@ -99,29 +91,24 @@ class HTMLTranscriber: ObservableObject {
         var hasStepNumbers = false
         let sections = recipeString.components(separatedBy: "\n\n")
         for section in sections {
-            var prevLine = ""
             var currentPart = CurrentPart.none
-            var lines = section.components(separatedBy: "\n")
-            if lines.count == 1 && sections.count == 1 {
-                lines = parseLines(fromTabbedString: lines[0])
-            }
+            let lines = section.components(separatedBy: "\n")
             for line in lines {
-                let cleanLine = removeSymbols(line)
+                let cleanLine = removeFormat(line)
                 let cleanLineHeader = removeAll(line)
                 // look for new part of recipe
                 if currentPart != CurrentPart.ingredient && currentPart != CurrentPart.direction && servings == 0 && (cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield")) {
-//                    name = prevLine
                     currentPart = CurrentPart.serving
                 }
                 if cleanLineHeader.lowercased() == "ingredients" {
                     currentPart = CurrentPart.ingredient
-                    // TODO: take the last section
+                    // takes the last section
                     ingredientStrings = []
                     continue
                 }
                 if cleanLineHeader.lowercased() == "directions" || cleanLineHeader.lowercased() == "instructions" || cleanLineHeader.lowercased() == "method" || cleanLineHeader.lowercased() == "steps" {
                     currentPart = CurrentPart.direction
-                    // TODO: take the last section
+                    // takes the last section
                     directionStrings = []
                     continue
                 }
@@ -142,8 +129,7 @@ class HTMLTranscriber: ObservableObject {
                 }
                 
                 if currentPart == CurrentPart.direction {
-                    // directions wants punctuation
-                    var direction = removeFormat(line)
+                    var direction = cleanLine
                     var step: Int?
                     var stepString = ""
                     for word in direction.components(separatedBy: .whitespaces) {
@@ -185,10 +171,6 @@ class HTMLTranscriber: ObservableObject {
                         directionStrings.append(direction)
                     }
                 }
-                
-                if cleanLine != "" {
-                    prevLine = cleanLine
-                }
             }
             // end of a section, if we have the recipe, stop parsing
             if ingredientStrings.count > 0 && directionStrings.count > 0 {
@@ -223,7 +205,7 @@ class HTMLTranscriber: ObservableObject {
         return cleanLine
     }
     
-    // remove weird punctuation, keep (: - ( ) )
+    // remove puncutation at beginning like bullet point
     // removes "\t" but not " "
     func removeFormat(_ line: String) -> String {
         var cleanLine = ""

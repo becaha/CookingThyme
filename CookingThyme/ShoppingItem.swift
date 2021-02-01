@@ -58,7 +58,7 @@ struct ShoppingItem: Identifiable {
     // converts shopping item to one line string (1 cup apple juice)
     func toString() -> String {
         var string = ""
-        if let amountDouble = self.amount {
+        if let amountDouble = self.amount, amountDouble != 0 {
             string += Fraction.toString(fromDouble: amountDouble) + " "
         }
         if self.unitName.getName() != "" {

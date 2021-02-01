@@ -8,7 +8,6 @@
 import SwiftUI
 
 
-//TODO: if no categories
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 
@@ -22,6 +21,17 @@ struct CategoriesSheet: View {
     var body: some View {
         NavigationView {
             VStack {
+                if collection.categories.count == 1, collection.categories[0].name == "All" {
+                    HStack {
+                        Spacer()
+                        
+                        Text("No Categories Found.")
+                        
+                        Spacer()
+                    }
+                    .padding()
+                }
+                
                 List {
                     ForEach(collection.categories, id: \.self) { category in
                         if category.name != "All" {
@@ -55,6 +65,7 @@ struct CategoriesSheet: View {
                 }
                 .listStyle(InsetGroupedListStyle())
             }
+            .background(formBackgroundColor())
             .onAppear {
                 if let currentCategoryId = self.currentCategoryId {
                     selectedId = currentCategoryId

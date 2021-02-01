@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: shopping items have 0 amount
 struct ShoppingListView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 

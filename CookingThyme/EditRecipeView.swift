@@ -18,6 +18,16 @@ struct EditRecipeView: View {
     private var fieldMissing: Bool {
         return nameFieldMissing || newIngredientFieldMissing || newDirectionFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
     }
+    
+    @State var presentErrorAlert = false
+    
+    var nameFieldMissingMessage = "Must have a name."
+    var newIngredientFieldMissingMessage = "Must fill in an ingredient slot."
+    var newDirectionFieldMissingMessage = "Must fill in a direction."
+    var ingredientsFieldMissingMessage = "Must have at least one ingredient."
+    var directionsFieldMissingMessage = "Must have at least one direction."
+    var servingsFieldMissingMessage = "Must have a serving size."
+    
     @State private var nameFieldMissing = false
     @State private var newIngredientFieldMissing = false
     @State private var newDirectionFieldMissing = false
@@ -116,8 +126,6 @@ struct EditRecipeView: View {
             ,
             trailing:
                 HStack(spacing: 20) {
-                    // TODO: a side view that slides in insteead of a sheet on a sheet
-                    // tODO: popover to explain icon
                     if recipe.recipeText != nil {
                         Button(action: {
                             withAnimation {
@@ -160,10 +168,12 @@ struct EditRecipeView: View {
                         } label: {
                             Image(systemName: "square.and.arrow.down")
                         }
+                        .disabled(recipe.isImportingFromURL)
                         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
                             ImagePicker(image: self.$selectedImage)
                         }
                     }
+            
                 
                     Button(action: {
                         saveRecipe()
@@ -238,6 +248,9 @@ struct EditRecipeView: View {
                 isEditingRecipe = false
             }
         }
+        else {
+            presentErrorAlert = true
+        }
     }
     
     private func addDirection() {
@@ -286,7 +299,7 @@ struct EditRecipeView: View {
                     })
                     .recipeTitle()
                     
-                    ErrorMessage("Must have a name.", isError: $nameFieldMissing, isCentered: true)
+                    ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
                         .padding(0)
                 }
                 .padding(.bottom, 0)
@@ -304,15 +317,15 @@ struct EditRecipeView: View {
                     Spacer()
                     
                     VStack {
-                        // TODO make serving size look like you need to choose it
                         Picker(selection: $servings, label:
                                 HStack {
-                                    Text("Serving Size: \(servings)")
+                                    Text("Servings: \(servings)")
                                         .textCase(.uppercase)
                                         .font(.subheadline)
                             
                                     Image(systemName: "chevron.down")
                                 }
+                                .foregroundColor(servingsFieldMissing && servings == "0" ? .red : Color.gray)
                         )
                         {
                             ForEach(1..<101, id: \.self) { num in
@@ -376,11 +389,9 @@ struct EditRecipeView: View {
                 .formSection()
             
                 VStack(alignment: .leading) {
-                    ErrorMessage("Must fill in an ingredient slot", isError: $newIngredientFieldMissing)
+                    ErrorMessage("\(newIngredientFieldMissingMessage)", isError: $newIngredientFieldMissing)
 
-                    ErrorMessage("Must have at least one ingredient", isError: $ingredientsFieldMissing)
-                    
-                    ErrorMessage("Must have a serving size", isError: $servingsFieldMissing)
+                    ErrorMessage("\(ingredientsFieldMissingMessage)", isError: $ingredientsFieldMissing)
                 }
                 .formFooter()
             }
@@ -453,14 +464,42 @@ struct EditRecipeView: View {
                 
                 VStack {
                     Group {
-                        ErrorMessage("Must fill in a direction", isError: $newDirectionFieldMissing)
+                        ErrorMessage("\(newDirectionFieldMissingMessage)", isError: $newDirectionFieldMissing)
 
-                        ErrorMessage("Must have at least one direction", isError: $directionsFieldMissing)
+                        ErrorMessage("\(directionsFieldMissingMessage)", isError: $directionsFieldMissing)
                     }
                 }
                 .formFooter()
             }
         }
+        .alert(isPresented: $presentErrorAlert) {
+            Alert(title: Text("Save Failed"),
+                  message: Text("\(getErrorMessages())")
+            )
+        }
+    }
+    
+    func getErrorMessages() -> String {
+        var errorMessage = ""
+        if nameFieldMissing {
+            errorMessage.append(nameFieldMissingMessage)
+        }
+        if newIngredientFieldMissing {
+            errorMessage.append(newIngredientFieldMissingMessage)
+        }
+        if newDirectionFieldMissing {
+            errorMessage.append(newDirectionFieldMissingMessage)
+        }
+        if ingredientsFieldMissing {
+            errorMessage.append(ingredientsFieldMissingMessage)
+        }
+        if directionsFieldMissing {
+            errorMessage.append(directionsFieldMissingMessage)
+        }
+        if servingsFieldMissing {
+            errorMessage.append(servingsFieldMissingMessage)
+        }
+        return errorMessage.replacingOccurrences(of: ".", with: ". ")
     }
 }
 

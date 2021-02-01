@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// TODO can cancel add to shpping list
-// TODO deal with plural ingredient unitNames
-// todo: recipe errors more visible
 struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
@@ -44,6 +41,7 @@ struct ReadRecipeView: View {
                         directions: recipe.directions
             )
         }
+        
         .background(formBackgroundColor())
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in

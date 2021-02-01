@@ -18,6 +18,8 @@ struct RecipeTextView: View {
         VStack {
             if recipe.recipeText != nil {
                 ScrollView {
+                    Text("Recipe Text")
+                    
                     Text("\(recipe.recipeText!)")
                 }
                 .foregroundColor(.black)

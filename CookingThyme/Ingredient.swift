@@ -112,7 +112,6 @@ struct Ingredient: Identifiable, Equatable {
         case name
     }
     
-    // TODO: 1 1/2 cup flour
     static func toIngredient(fromString ingredientString: String) -> Ingredient {
         var amount = ""
         var unitName = ""
@@ -121,7 +120,6 @@ struct Ingredient: Identifiable, Equatable {
         var currentPart = CurrentPart.amount
         let words = ingredientString.components(separatedBy: .whitespaces)
         for word in words {
-            //(word.count == 1 && Character(word).isNumber)
             if currentPart == CurrentPart.amount {
                 // number
                 if Int(word) != nil {
@@ -218,7 +216,7 @@ struct Ingredient: Identifiable, Equatable {
             string += amountString + " "
         }
         if self.unitName.getName() != "" {
-            string += self.unitName.getName() + " "
+            string += self.unitName.getName(plural: self.amount > 1) + " "
         }
         string += self.name
         return string
@@ -267,7 +265,7 @@ struct TempIngredient {
             let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
             self.name = ingredient.name
             self.amount = ingredient.getAmountString()
-            self.unitName = ingredient.unitName.getName()
+            self.unitName = ingredient.unitName.getName(plural: ingredient.amount > 1)
         }
     }
 }

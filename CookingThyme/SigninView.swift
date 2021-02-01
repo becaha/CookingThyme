@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: signin loading
-// TODO: error when signed in user, restart sim, sign out, try to sign in
 struct SigninView: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
@@ -16,130 +14,150 @@ struct SigninView: View {
     @State var email: String = ""
     @State var username: String = ""
     @State var password: String = ""
-    @State var isSigningIn: Bool = true
+    @State var isSignIn: Bool = true
     
     @State var signinErrorMessage = ""
     @State var signupErrorMessages = [String]()
-
     
+    @State var isSigningIn = false
+
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            
-            logo()
-                .padding(.bottom, 25)
-            
+        ZStack {
             if isSigningIn {
-                Group {
-                    TextField("Username", text: $username)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .formItem()
-
-                    SecureField("Password", text: $password) {
-                        signin()
-                    }
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .formItem()
-                }
-                
-                HStack {
-                    Text("\(signinErrorMessage)")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(0)
-                    
-                    Spacer()
-                }
-                .padding([.leading, .bottom])
-                
-                Button(action: {
-                    signin()
-                }) {
-                    HStack {
-                        Spacer()
-                        
-                        Text("Sign In")
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                    }
-                }
-                .formItem(backgroundColor: mainColor())
-                
-                Button(action: {
-                    withAnimation {
-                        isSigningIn = false
-                        reset()
-                    }
-                }) {
-                    Text("Sign Up")
-                }
+                UIControls.Loading()
             }
-            else {
-                Group {
-                    TextField("Username", text: $username)
+            
+            VStack(spacing: 0) {
+                Spacer()
+                
+                logo()
+                    .padding(.bottom, 25)
+                
+                if isSignIn {
+                    Group {
+                        TextField("Username", text: $username)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .formItem()
+
+                        SecureField("Password", text: $password) {
+                            withAnimation {
+                                isSigningIn = true
+                                signin()
+                            }
+                        }
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .formItem()
-
-                    TextField("Email", text: $email)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .keyboardType(.emailAddress)
-                        .formItem()
-
-                    SecureField("Password", text: $password) {
-                        signup()
                     }
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .formItem()
-                }
-
-                VStack {
-                    ForEach(signupErrorMessages, id: \.self) { message in
+                    
+                    HStack {
+                        Text("\(signinErrorMessage)")
+                            .font(.footnote)
+                            .foregroundColor(.red)
+                            .padding(0)
+                        
+                        Spacer()
+                    }
+                    .padding([.leading, .bottom])
+                    
+                    Button(action: {
+                        withAnimation {
+                            isSigningIn = true
+                            signin()
+                        }
+                    }) {
                         HStack {
-                            Text("\(message)")
-                                .font(.footnote)
-                                .foregroundColor(.red)
-                                .padding(0)
-
+                            Spacer()
+                            
+                            Text("Sign In")
+                                .foregroundColor(.white)
+                            
                             Spacer()
                         }
                     }
-                }
-                .padding([.leading, .bottom])
-
-                Button(action: {
-                    signup()
-                }) {
-                    HStack {
-                        Spacer()
-                        
+                    .formItem(backgroundColor: mainColor())
+                    
+                    Button(action: {
+                        withAnimation {
+                            isSignIn = false
+                            reset()
+                        }
+                    }) {
                         Text("Sign Up")
-                            .foregroundColor(.white)
-                        
-                        Spacer()
                     }
                 }
-                .formItem(backgroundColor: mainColor())
+                else {
+                    Group {
+                        TextField("Username", text: $username)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .formItem()
 
-                Button(action: {
-                    withAnimation {
-                        isSigningIn = true
-                        reset()
+                        TextField("Email", text: $email)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .keyboardType(.emailAddress)
+                            .formItem()
+
+                        SecureField("Password", text: $password) {
+                            withAnimation {
+                                isSigningIn = true
+                                signup()
+                            }
+                        }
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .formItem()
                     }
-                }) {
-                    Text("Sign In")
+
+                    VStack {
+                        ForEach(signupErrorMessages, id: \.self) { message in
+                            HStack {
+                                Text("\(message)")
+                                    .font(.footnote)
+                                    .foregroundColor(.red)
+                                    .padding(0)
+
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding([.leading, .bottom])
+
+                    Button(action: {
+                        withAnimation {
+                            isSigningIn = true
+                            signup()
+                        }
+                    }) {
+                        HStack {
+                            Spacer()
+                            
+                            Text("Sign Up")
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                        }
+                    }
+                    .formItem(backgroundColor: mainColor())
+
+                    Button(action: {
+                        withAnimation {
+                            isSignIn = true
+                            reset()
+                        }
+                    }) {
+                        Text("Sign In")
+                    }
                 }
+                
+                Spacer()
+                
             }
-            
-            Spacer()
-            
+            .padding()
+            .opacity(isSigningIn ? 0.5 : 1)
         }
-        .padding()
         .accentColor(mainColor())
         .background(formBackgroundColor())
         .ignoresSafeArea()
@@ -156,6 +174,7 @@ struct SigninView: View {
     func signin() {
         user.signin(username: username, password: password)
         if user.signinError {
+            isSigningIn = false
             signinErrorMessage = "Username or password incorrect."
         }
         else {
@@ -170,6 +189,9 @@ struct SigninView: View {
             
             if user.signupErrors.count == 0 {
                 sheetNavigator.showSheet = false
+            }
+            else {
+                isSigningIn = false
             }
             if user.signupErrors.contains(InvalidSignup.usernameTaken) {
                 signupErrorMessages.append("Username already taken.")
