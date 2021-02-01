@@ -61,16 +61,6 @@ struct Settings: View {
                     }
                 }
                 
-//                Section {
-//                    NavigationLink("Change Password", destination:
-//                            ChangePassword(
-//                                  onSaveChanges: { oldPassword, newPassword, confirmPassword in
-//                                    user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
-//                                    return user.changePasswordError
-//                              })
-//                    )
-//                }
-                
                 Section {
                     HStack {
                         Spacer()

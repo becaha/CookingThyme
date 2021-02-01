@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: delish.com recipes are in divs not lists so they don't get found
 class HTMLTranscriber: ObservableObject {
     
     func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe, String) -> Void) {

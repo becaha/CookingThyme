@@ -312,15 +312,13 @@ struct RecipeCollectionView: View {
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
                             ) {
-                                Text("New Recipe")
-                                    .fontWeight(.regular)
-                                    .formItem(isNavLink: true)
+                                UIControls.AddView(withLabel: "New Recipe")
                             }
                             
                             Spacer()
                         }
                     }
-                    .padding(.vertical)
+                    .padding()
                     .overlay(
                         Rectangle()
                             .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
