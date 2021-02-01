@@ -122,6 +122,11 @@ class RecipeVM: ObservableObject {
         imageHandler.setImages(tempImages)
     }
     
+    func setRecipe(_ recipe: Recipe) {
+        self.recipe = recipe
+        popullateRecipe()
+    }
+    
     // gets recipe from db
     func refreshRecipe() {
         if let recipe = RecipeDB.shared.getRecipe(byId: recipe.id) {

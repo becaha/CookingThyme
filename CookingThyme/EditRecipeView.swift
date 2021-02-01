@@ -10,7 +10,7 @@ import SwiftUI
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 // tODO: no scroll in edtiable ingredient/direction
 struct EditRecipeView: View {
-    @Environment(\.presentationMode) var presentation
+    @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
@@ -102,7 +102,12 @@ struct EditRecipeView: View {
             leading:
                 Button(action: {
                     withAnimation {
-                        isEditingRecipe = false
+                        if recipe.isCreatingRecipe() {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                        else {
+                            isEditingRecipe = false
+                        }
                     }
                 }) {
                     Text("Cancel")
@@ -215,8 +220,10 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                let createdRecipe = category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings)
-                if createdRecipe == nil {
+                if let createdRecipe = category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings) {
+                    recipe.setRecipe(createdRecipe)
+                }
+                else {
                     print("error")
                 }
             }

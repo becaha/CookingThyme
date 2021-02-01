@@ -45,6 +45,10 @@ struct ReadRecipeView: View {
                         directions: recipe.directions
             )
         }
+        .onAppear {
+            let recipeA = recipe.recipe
+            print(recipeA)
+        }
         .background(formBackgroundColor())
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
