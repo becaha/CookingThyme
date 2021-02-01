@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: error handling on import bad or blank url
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -46,7 +47,6 @@ struct EditRecipeView: View {
     @State private var importRecipePresented = false
     @State private var selectedImage: UIImage?
     
-    @State private var importFromURL = false
     @State private var urlString: String = ""
     
     @State var isImportingRecipe: Bool = false
@@ -55,8 +55,12 @@ struct EditRecipeView: View {
         
     var body: some View {
         ScrollView(.vertical) {
-            if importFromURL {
-                VStack {
+            if recipe.isImportingFromURL && !recipe.invalidURL {
+                UIControls.Loading()
+                    .padding()
+            }
+            else if recipe.importFromURL {
+                VStack(spacing: 0) {
                     HStack {
                         Text("Import from:")
                         
@@ -67,9 +71,14 @@ struct EditRecipeView: View {
                     .formItem()
                     
                     HStack {
+                        ErrorMessage("Invalid URL", isError: $recipe.invalidURL)
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack {
                         Button(action: {
                             withAnimation {
-                                importFromURL = false
+                                recipe.importFromURL = false
                             }
                         }) {
                             Text("Cancel")
@@ -88,10 +97,6 @@ struct EditRecipeView: View {
                     .padding()
                 }
                 .formed()
-            }
-            else if recipe.isImportingFromURL {
-                UIControls.Loading()
-                    .padding()
             }
             else {
                 if presentRecipeText {
@@ -156,7 +161,7 @@ struct EditRecipeView: View {
                             
                             Button(action: {
                                 withAnimation {
-                                    importFromURL = true
+                                    recipe.importFromURL = true
                                 }
                             }) {
                                 Text("From URL")
@@ -189,8 +194,11 @@ struct EditRecipeView: View {
     
     private func transcribeWeb() {
         if urlString != "" {
+            recipe.invalidURL = false
             recipe.transcribeRecipe(fromUrlString: urlString)
-            importFromURL = false
+        }
+        else {
+            recipe.invalidURL = true
         }
     }
     
@@ -201,9 +209,10 @@ struct EditRecipeView: View {
     }
     
     private func setRecipe() {
-        name = recipe.name
-        servings = recipe.servings.toString()
-//        recipe.popullateRecipeTemps()
+        if name == "" {
+            name = recipe.name
+            servings = recipe.servings.toString()
+        }
     }
     
     // tODO: saave should be not on main thread

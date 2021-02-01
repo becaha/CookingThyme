@@ -20,7 +20,7 @@ class RecipeTranscriber {
         }
     }
     
-    func setRecipe(_ recipe: Recipe, withText text: String) {
+    func setRecipe(_ recipe: Recipe?, withText text: String?) {
         self.recipe = recipe
         self.recipeText = text
     }

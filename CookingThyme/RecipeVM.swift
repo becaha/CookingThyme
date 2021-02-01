@@ -22,7 +22,9 @@ class RecipeVM: ObservableObject {
     private var imageHandlerCancellable: AnyCancellable?
     
     @Published var transcriber = RecipeTranscriber()
+    @Published var importFromURL = false
     @Published var isImportingFromURL = false
+    @Published var invalidURL = false
 
     private var recipeTranscriberCancellable: AnyCancellable?
     private var recipeTextTranscriberCancellable: AnyCancellable?
@@ -54,9 +56,14 @@ class RecipeVM: ObservableObject {
         self.recipeTranscriberCancellable = self.transcriber.$recipe
             .sink { (recipe) in
                 if let recipe = recipe {
+                    self.importFromURL = false
+                    self.invalidURL = false
                     self.recipe = recipe
                     self.popullateRecipeTemps()
                     self.isImportingFromURL = false
+                }
+                else if self.isImportingFromURL {
+                    self.invalidURL = true
                 }
             }
         
@@ -183,9 +190,7 @@ class RecipeVM: ObservableObject {
     }
     
     func removeTempIngredient(at index: Int) {
-        var ings = tempIngredients
         tempIngredients.remove(at: index)
-        ings = tempIngredients
     }
     
     static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: Int) -> RecipeImage {

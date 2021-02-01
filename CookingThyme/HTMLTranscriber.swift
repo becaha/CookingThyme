@@ -7,17 +7,23 @@
 
 import SwiftUI
 
+// TODO: store urls -> recipe
 // TODO: delish.com recipes are in divs not lists so they don't get found
 class HTMLTranscriber: ObservableObject {
+    var recipesStore = [String: Recipe]()
     
-    func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe, String) -> Void) {
+    func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe?, String?) -> Void) {
         guard let url = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL")
+            setRecipe(nil, nil)
             return
         }
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
                 print("No data in response: \(error?.localizedDescription ?? "Unknown error").")
+                DispatchQueue.main.async {
+                    setRecipe(nil, nil)
+                }
                 return
             }
             
@@ -37,6 +43,7 @@ class HTMLTranscriber: ObservableObject {
         .resume()
     }
     
+    // TODO: symbols in html like &numbers &#039
     func getTitle(fromHtml html: String) -> String {
         var cleanString = ""
         var inTag = false
@@ -132,6 +139,7 @@ class HTMLTranscriber: ObservableObject {
                     var direction = cleanLine
                     var step: Int?
                     var stepString = ""
+                    var stepPunctuation = ""
                     for word in direction.components(separatedBy: .whitespaces) {
                         if word.lowercased().localizedCaseInsensitiveContains("step") {
                             // remove word and space after
@@ -146,7 +154,8 @@ class HTMLTranscriber: ObservableObject {
                             stepString.append(char)
                         }
                         // 1. 1: 1-
-                        else if char.isSymbol {
+                        else if stepString.count > 0 && char.isPunctuation {
+                            stepPunctuation.append(char)
                             break
                         }
                         else {
@@ -157,7 +166,7 @@ class HTMLTranscriber: ObservableObject {
                     if stepString.count  > 0 {
                         step = Int(String(stepString))
                         // remove number from direction
-                        direction = String(direction[direction.index(direction.startIndex, offsetBy: stepString.count)...])
+                        direction = String(direction[direction.index(direction.startIndex, offsetBy: stepString.count + stepPunctuation.count)...])
                         // found first direction
                         if step == 1 {
                             hasStepNumbers = true
