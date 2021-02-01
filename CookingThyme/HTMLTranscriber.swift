@@ -20,8 +20,14 @@ class HTMLTranscriber: ObservableObject {
                 return
             }
             
+            var name = ""
+            if let contents = try? String(contentsOf: url) {
+                name = self.getTitle(fromHtml: contents)
+            }
+            
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
-                let recipe = self.parseString(recipeString)
+//                self.printHTML(recipeString)
+                let recipe = self.parseRecipe(recipeString, withName: name)
                 DispatchQueue.main.async {
                     setRecipe(recipe, recipeString)
                 }
@@ -30,8 +36,55 @@ class HTMLTranscriber: ObservableObject {
         .resume()
     }
     
+    func getTitle(fromHtml html: String) -> String {
+        var cleanString = ""
+        var inTag = false
+        var currentTag = ""
+        var title = ""
+        var isTitle = false
+        for char in html {
+            if char == "<" {
+                inTag = true
+                currentTag = ""
+                continue
+            }
+            else if char == ">" {
+                if currentTag.lowercased() == "title" && title == "" {
+                    isTitle = true
+                }
+                else {
+                    if isTitle {
+                        return title
+                    }
+                    isTitle = false
+                }
+                inTag = false
+                continue
+            }
+            
+            if inTag {
+                currentTag.append(char)
+            }
+            else {
+                if isTitle {
+                    title.append(char)
+                }
+                cleanString.append(char)
+            }
+        }
+        return title
+    }
+    
+    func parseLines(fromTabbedString recipeString: String) -> [String] {
+        let lines = recipeString.components(separatedBy: "\t")
+        for line in lines {
+            
+        }
+        return lines
+    }
+    
     // TODO: 1 and 1/2 cups (440 g) -> 1, nothing, and cups...
-    func parseString(_ recipeString: String) -> Recipe {
+    func parseRecipe(_ recipeString: String, withName name: String) -> Recipe {
         enum CurrentPart {
             case serving
             case ingredient
@@ -39,7 +92,6 @@ class HTMLTranscriber: ObservableObject {
             case none
         }
 
-        var name = ""
         var servings = 0
         var ingredientStrings = [String]()
         var directionStrings = [String]()
@@ -48,7 +100,10 @@ class HTMLTranscriber: ObservableObject {
         for section in sections {
             var prevLine = ""
             var currentPart = CurrentPart.none
-            let lines = section.components(separatedBy: "\n")
+            var lines = section.components(separatedBy: "\n")
+            if lines.count == 1 && sections.count == 1 {
+                lines = parseLines(fromTabbedString: lines[0])
+            }
             for line in lines {
                 let cleanLine = removeSymbols(line)
                 let cleanLineHeader = removeAll(line)
@@ -172,9 +227,12 @@ class HTMLTranscriber: ObservableObject {
     func removeFormat(_ line: String) -> String {
         var cleanLine = ""
         for char in line {
-            if !char.isWhitespace || char == " " {
+            if !char.isWhitespace || char == " " || char.isPunctuation {
                 cleanLine.append(char)
             }
+        }
+        if cleanLine.count > 0, cleanLine.charAt(index: 0).isPunctuation {
+            cleanLine = String(cleanLine[cleanLine.index(cleanLine.startIndex, offsetBy: 1)...])
         }
         return cleanLine
     }
