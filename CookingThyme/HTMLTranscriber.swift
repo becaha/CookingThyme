@@ -223,7 +223,7 @@ class HTMLTranscriber: ObservableObject {
                 cleanLine.append(char)
             }
         }
-        if cleanLine.count > 0, cleanLine.charAt(index: 0).isPunctuation {
+        if cleanLine.count > 0, cleanLine.charAt(index: 0).isPunctuation || cleanLine.charAt(index: 0).isSymbol {
             cleanLine = String(cleanLine[cleanLine.index(cleanLine.startIndex, offsetBy: 1)...])
         }
         return cleanLine

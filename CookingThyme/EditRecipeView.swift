@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: error handling on import bad or blank url
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -54,10 +53,12 @@ struct EditRecipeView: View {
     @State private var presentRecipeText = false
         
     var body: some View {
-        ScrollView(.vertical) {
+        VStack {
             if recipe.isImportingFromURL && !recipe.invalidURL {
                 UIControls.Loading()
                     .padding()
+                
+                Spacer()
             }
             else if recipe.importFromURL {
                 VStack(spacing: 0) {
@@ -67,6 +68,7 @@ struct EditRecipeView: View {
                         TextField("URL", text: $urlString, onCommit: {
                             transcribeWeb()
                         })
+                        .foregroundColor(nil)
                     }
                     .formItem()
                     
@@ -100,7 +102,7 @@ struct EditRecipeView: View {
             }
             else {
                 if presentRecipeText {
-                    RecipeTextView(isPresented: $presentRecipeText)
+                    RecipeTextView()
                 }
                 else {
                     EditableRecipe()
@@ -296,195 +298,197 @@ struct EditRecipeView: View {
     
     @ViewBuilder
     func EditableRecipe() -> some View {
-        VStack(spacing: 0) {
-            HStack {
-                VStack(alignment: .leading) {
-                    TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
-                        if name != "" {
-                            withAnimation {
-                                nameFieldMissing = false
-                            }
-                        }
-                    })
-                    .recipeTitle()
-                    
-                    ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
-                        .padding(0)
-                }
-                .padding(.bottom, 0)
-            }
-            .formHeader()
-            
-            ImagesView()
-            
+        ScrollView(.vertical) {
             VStack(spacing: 0) {
                 HStack {
-                    Text("Ingredients")
-                        .textCase(.uppercase)
-                        .font(.subheadline)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Picker(selection: $servings, label:
-                                HStack {
-                                    Text("Servings: \(servings)")
-                                        .textCase(.uppercase)
-                                        .font(.subheadline)
-                            
-                                    Image(systemName: "chevron.down")
+                    VStack(alignment: .leading) {
+                        TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
+                            if name != "" {
+                                withAnimation {
+                                    nameFieldMissing = false
                                 }
-                                .foregroundColor(servingsFieldMissing && servings == "0" ? .red : Color.gray)
-                        )
-                        {
-                            ForEach(1..<101, id: \.self) { num in
-                                Text("\(num.toString())").tag(num.toString())
                             }
-                        }
-                        .pickerStyle(MenuPickerStyle())
+                        })
+                        .recipeTitle()
+                        
+                        ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
+                            .padding(0)
                     }
+                    .padding(.bottom, 0)
                 }
                 .formHeader()
-                        
+                
+                ImagesView()
+                
                 VStack(spacing: 0) {
-                    ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
-                        HStack {
-                            EditableIngredient(index: index)
-                                .environmentObject(recipe)
+                    HStack {
+                        Text("Ingredients")
+                            .textCase(.uppercase)
+                            .font(.subheadline)
+                        
+                        Spacer()
+                        
+                        VStack {
+                            Picker(selection: $servings, label:
+                                    HStack {
+                                        Text("Servings: \(servings)")
+                                            .textCase(.uppercase)
+                                            .font(.subheadline)
+                                
+                                        Image(systemName: "chevron.down")
+                                    }
+                                    .foregroundColor(servingsFieldMissing && servings == "0" ? .red : Color.gray)
+                            )
+                            {
+                                ForEach(1..<101, id: \.self) { num in
+                                    Text("\(num.toString())").tag(num.toString())
+                                }
+                            }
+                            .pickerStyle(MenuPickerStyle())
                         }
-                        .deletable(isDeleting: true, onDelete: {
-                            withAnimation {
+                    }
+                    .formHeader()
+                            
+                    VStack(spacing: 0) {
+                        ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
+                            HStack {
+                                EditableIngredient(index: index)
+                                    .environmentObject(recipe)
+                            }
+                            .deletable(isDeleting: true, onDelete: {
+                                withAnimation {
+                                    recipe.removeTempIngredient(at: index)
+                                }
+                            })
+                            .formSectionItem()
+                        }
+                        .onDelete { indexSet in
+                            indexSet.map{ $0 }.forEach { index in
                                 recipe.removeTempIngredient(at: index)
                             }
-                        })
-                        .formSectionItem()
-                    }
-                    .onDelete { indexSet in
-                        indexSet.map{ $0 }.forEach { index in
-                            recipe.removeTempIngredient(at: index)
                         }
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            ZStack {
-                                HStack(spacing: 0) {
-                                    Text(ingredient)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .padding(.all, 8)
-                                }
+                        
+                        VStack(alignment: .leading) {
+                            HStack {
+                                ZStack {
+                                    HStack(spacing: 0) {
+                                        Text(ingredient)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .padding(.all, 8)
+                                    }
 
-                                TextEditor(text: $ingredient)
-                                    .onChange(of: ingredient) { value in
-                                        if value.hasSuffix("\n") {
-                                            ingredient.removeLast(1)
-                                            withAnimation {
-                                                addIngredient()
+                                    TextEditor(text: $ingredient)
+                                        .onChange(of: ingredient) { value in
+                                            if value.hasSuffix("\n") {
+                                                ingredient.removeLast(1)
+                                                withAnimation {
+                                                    addIngredient()
+                                                }
                                             }
                                         }
+                                }
+                                .autocapitalization(.none)
+                                
+                                UIControls.AddButton(action: {
+                                    withAnimation {
+                                        addIngredient()
                                     }
+                                })
                             }
-                            .autocapitalization(.none)
-                            
-                            UIControls.AddButton(action: {
+                            .formSectionItem()
+                        }
+                    }
+                    .formSection()
+                
+                    VStack(alignment: .leading) {
+                        ErrorMessage("\(newIngredientFieldMissingMessage)", isError: $newIngredientFieldMissing)
+
+                        ErrorMessage("\(ingredientsFieldMissingMessage)", isError: $ingredientsFieldMissing)
+                    }
+                    .formFooter()
+                }
+            
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Directions")
+                            .textCase(.uppercase)
+                            .font(.subheadline)
+                        
+                        Spacer()
+                    }
+                    .formHeader()
+                    
+                    VStack(spacing: 0) {
+                        ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
+                            HStack(alignment: .center, spacing: 20) {
+                                Text("\(index + 1)")
+                                
+                                EditableDirection(index: index)
+                                    .environmentObject(recipe)
+                            }
+                            .deletable(isDeleting: true, onDelete: {
                                 withAnimation {
-                                    addIngredient()
+                                    recipe.removeTempDirection(at: index)
                                 }
                             })
+                            .formSectionItem()
                         }
-                        .formSectionItem()
-                    }
-                }
-                .formSection()
-            
-                VStack(alignment: .leading) {
-                    ErrorMessage("\(newIngredientFieldMissingMessage)", isError: $newIngredientFieldMissing)
-
-                    ErrorMessage("\(ingredientsFieldMissingMessage)", isError: $ingredientsFieldMissing)
-                }
-                .formFooter()
-            }
-        
-            VStack(spacing: 0) {
-                HStack {
-                    Text("Directions")
-                        .textCase(.uppercase)
-                        .font(.subheadline)
-                    
-                    Spacer()
-                }
-                .formHeader()
-                
-                VStack(spacing: 0) {
-                    ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
-                        HStack(alignment: .center, spacing: 20) {
-                            Text("\(index + 1)")
-                            
-                            EditableDirection(index: index)
-                                .environmentObject(recipe)
-                        }
-                        .deletable(isDeleting: true, onDelete: {
-                            withAnimation {
+                        .onDelete { indexSet in
+                            indexSet.map{ $0 }.forEach { index in
                                 recipe.removeTempDirection(at: index)
                             }
-                        })
-                        .formSectionItem()
-                    }
-                    .onDelete { indexSet in
-                        indexSet.map{ $0 }.forEach { index in
-                            recipe.removeTempDirection(at: index)
                         }
-                    }
-                                        
-                    VStack(alignment: .leading) {
-                        HStack(alignment: .center, spacing: 20) {
-                            Text("\(recipe.tempDirections.count + 1)")
-                            
-                            ZStack {
-                                HStack(spacing: 0) {
-                                    Text(direction)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .padding(.all, 8)
-                                }
+                                            
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .center, spacing: 20) {
+                                Text("\(recipe.tempDirections.count + 1)")
+                                
+                                ZStack {
+                                    HStack(spacing: 0) {
+                                        Text(direction)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .padding(.all, 8)
+                                    }
 
-                                TextEditor(text: $direction)
-                                    .onChange(of: direction) { value in
-                                        if value.hasSuffix("\n") {
-                                            direction.removeLast(1)
-                                            withAnimation {
-                                                addDirection()
+                                    TextEditor(text: $direction)
+                                        .onChange(of: direction) { value in
+                                            if value.hasSuffix("\n") {
+                                                direction.removeLast(1)
+                                                withAnimation {
+                                                    addDirection()
+                                                }
                                             }
                                         }
-                                    }
-                            }
-                            .autocapitalization(.none)
-
-                            UIControls.AddButton(action: {
-                                withAnimation {
-                                    addDirection()
                                 }
-                            })
-                        }
-                        .formSectionItem()
-                    }
-                }
-                .formSection()
-            
-                
-                VStack {
-                    Group {
-                        ErrorMessage("\(newDirectionFieldMissingMessage)", isError: $newDirectionFieldMissing)
+                                .autocapitalization(.none)
 
-                        ErrorMessage("\(directionsFieldMissingMessage)", isError: $directionsFieldMissing)
+                                UIControls.AddButton(action: {
+                                    withAnimation {
+                                        addDirection()
+                                    }
+                                })
+                            }
+                            .formSectionItem()
+                        }
                     }
+                    .formSection()
+                
+                    
+                    VStack {
+                        Group {
+                            ErrorMessage("\(newDirectionFieldMissingMessage)", isError: $newDirectionFieldMissing)
+
+                            ErrorMessage("\(directionsFieldMissingMessage)", isError: $directionsFieldMissing)
+                        }
+                    }
+                    .formFooter()
                 }
-                .formFooter()
             }
-        }
-        .alert(isPresented: $presentErrorAlert) {
-            Alert(title: Text("Save Failed"),
-                  message: Text("\(getErrorMessages())")
-            )
+            .alert(isPresented: $presentErrorAlert) {
+                Alert(title: Text("Save Failed"),
+                      message: Text("\(getErrorMessages())")
+                )
+            }
         }
     }
     

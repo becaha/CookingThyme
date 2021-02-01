@@ -62,6 +62,8 @@
 		DB49B56725827ADA00808CC8 /* PublicRecipeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */; };
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
+		DB6EFA8525C8978C0060B2B4 /* SelectableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8425C8978C0060B2B4 /* SelectableText.swift */; };
+		DB6EFA8725C89F440060B2B4 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8625C89F440060B2B4 /* TextView.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -156,6 +158,8 @@
 		DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeVM.swift; sourceTree = "<group>"; };
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
+		DB6EFA8425C8978C0060B2B4 /* SelectableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableText.swift; sourceTree = "<group>"; };
+		DB6EFA8625C89F440060B2B4 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -328,6 +332,8 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB6EFA8625C89F440060B2B4 /* TextView.swift */,
+				DB6EFA8425C8978C0060B2B4 /* SelectableText.swift */,
 				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
@@ -697,8 +703,10 @@
 				DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */,
 				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
 				DB49B4F12568B96100808CC8 /* RecipeCollection.swift in Sources */,
+				DB6EFA8525C8978C0060B2B4 /* SelectableText.swift in Sources */,
 				DB88CD3525BBA49F00A7F32C /* RecipeTitle.swift in Sources */,
 				DB88CD4825C0E2B000A7F32C /* ChangePassword.swift in Sources */,
+				DB6EFA8725C89F440060B2B4 /* TextView.swift in Sources */,
 				DB88CD3325BB97B100A7F32C /* CustomFormSection.swift in Sources */,
 				DB88CD4625C0B47500A7F32C /* HomeSheetNavigator.swift in Sources */,
 				DB49B53F258018C200808CC8 /* TimerHandler.swift in Sources */,

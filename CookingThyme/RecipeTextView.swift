@@ -8,23 +8,28 @@
 import SwiftUI
 
 // TODO: keep plaace as switch from rercipe text to recipe
-// TODO: scripture app lik
-// TODO: text iss selectable and copiable
+// TODO: scripture app like
+// TODO: make recipe text look cute, rounded corners
 struct RecipeTextView: View {
     @EnvironmentObject var recipe: RecipeVM
-    @Binding var isPresented: Bool
+    
+    @State var recipeText: String = "ok this iis a test"
+    @State var test = "test"
 
     var body: some View {
         VStack {
             if recipe.recipeText != nil {
-                ScrollView {
                     Text("Recipe Text")
-                    
-                    Text("\(recipe.recipeText!)")
-                }
-                .foregroundColor(.black)
+                                        
+                    TextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
             }
         }
+        .onAppear {
+            if let text = recipe.recipeText {
+                recipeText = text
+            }
+        }
+        .foregroundColor(.black)
         .padding()
     }
 }

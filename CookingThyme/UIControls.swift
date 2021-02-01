@@ -55,6 +55,7 @@ struct UIControls {
         }
     }
     
+    // TODO: cute loading https://medium.com/better-programming/create-an-awesome-loading-state-using-swiftui-9815ff6abb80
     @ViewBuilder
     static func Loading() -> some View {
         HStack {
