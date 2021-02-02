@@ -11,18 +11,11 @@ struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @EnvironmentObject var timer: TimerHandler
     @EnvironmentObject var sheetNavigator: SheetNavigator
-    
-    @State var text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntesting text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text testing text what if it iis so long that it goes out of the screen then what will happen to my testy text"
             
     var body: some View {
         NavigationView {
             TabView {
-//                RecipeSearch()
-                VStack {
-                    Text("hi")
-                    
-                    TextView(text: $text, isEditable: false, textStyle: UIFont.TextStyle.body)
-                }
+                RecipeSearch()
                     .environmentObject(sheetNavigator)
                     .tabItem {
                         Image(systemName: "magnifyingglass")

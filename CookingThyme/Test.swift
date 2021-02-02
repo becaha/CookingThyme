@@ -19,58 +19,82 @@ struct Test: View {
     @State var signinErrorMessage = ""
     @State var signupErrorMessage = ""
     
+    var list = ["at as teh one has multililne efforts to make it into a full two lines instead of one","b", "c", "D", "e"]
+    
+    @State var editItemIndex: Int?
+    @State var editItemLocation: CGPoint?
+    
     var body: some View {
-        VStack {
-            HStack(alignment: .center) {
-                Text("1")
+        NavigationView {
+            
+            ZStack {
+                GeometryReader { geometry in
                 
-                ZStack {
-                    HStack(spacing: 0) {
-                        Text(username)
-                            .opacity(0)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.all, 8)
-                    }
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach (0..<list.count, id: \.self) { index in
+//                                    GeometryReader { geometryItem in
+                                        HStack {
+                                            Image(systemName: "circle")
+                                                .resizable()
+                                                .frame(width: 20, height: 20)
 
-                    TextEditor(text: $username)
+                                            Text("\(list[index])")
+                                        }
+                                        .formSectionItem()
+                                        .onTapGesture(count: 1, perform: {
+                                            editItemIndex = index
+//                                                        editItemLocation = CGPoint(x: geometryItem.frame(in: .global).midX, y: geometryItem.frame(in: .global).minY)
+                                        })
+//                                    }
+                             }
+                             .onDelete { indexSet in // (4)
+                                // The rest of this function will be added later
+                             }
+
+                        }
+                        .formSection()
+                    }
+                    .navigationBarTitle("Tasks")
+                    .background(formBackgroundColor())
+                    .opacity(editItemIndex != nil ? 0.5 : 1)
+                    .disabled(editItemIndex != nil)
                     
-                }
-            }
-            .formSectionItem()
-            
-            HStack(alignment: .center, spacing: 20) {
-                Text("1")
-                
-                ZStack {
-                    HStack(spacing: 0) {
-                        Text(username)
-                            .opacity(0)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.all, 8)
-                    }
+                    
+                    if editItemIndex != nil {
+                        VStack {
+                            Spacer()
+                            
+                            HStack {
+                                TextEditor(text: $username)
+                            }
+                            
+                            Spacer()
+                        }
+                        .frame(maxHeight: 200)
+                        .padding()
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 7)
+                                .stroke(Color.black)
+                        )
+                        .padding()
 
-                    TextEditor(text: $username)
-                }
-            }
-            .formSectionItem()
-            
-            HStack(alignment: .center, spacing: 20) {
-                Text("1")
-                
-                ZStack {
-                    HStack(spacing: 0) {
-                        Text(username)
-                            .opacity(0)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.all, 8)
                     }
-
-                    TextEditor(text: $username)
                 }
             }
-            .formSectionItem()
         }
-        .formSection()
+        .gesture(editItemIndex != nil ? TapGesture(count: 1).onEnded {
+            withAnimation {
+                editItemLocation = nil
+                editItemIndex = nil            }
+        } : nil)
+//        .onTapGesture(count: 1, perform: {
+//            withAnimation {
+//                editItemLocation = nil
+//                editItemIndex = nil
+//            }
+//        })
     }
         
 }

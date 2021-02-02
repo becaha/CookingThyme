@@ -21,7 +21,7 @@ struct RecipeTextView: View {
             if recipe.recipeText != nil {
                     Text("Recipe Text")
                                         
-                    TextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
+                    SelectableTextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
             }
         }
         .onAppear {
