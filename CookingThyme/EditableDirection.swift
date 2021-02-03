@@ -11,67 +11,13 @@ import GRDB
 struct EditableDirection: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int
-    @Binding var editingIndex: Int?
 
     var autocapitalization: UITextAutocapitalizationType = .sentences
     @State private var dummyBinding: String = ""
     
     var body: some View {
-//        ZStack {
-//            HStack {
-//                RecipeControls.ReadDirection(direction: getDirection())
-//                    .padding()
-//
-//                Spacer()
-//            }
-//            .opacity(editingIndex != index ? 1 : 0)
-//
-//            if editingIndex == index {
-//                VStack {
-//                    Spacer()
-//
-////                    TextField(getDirection(), text: getDirectionBinding())
-//                    EditableTextView(textBinding: getDirectionBinding(), isFirstResponder: true)
-//                        .onChange(of: getDirection()) { value in
-//                            if value.hasSuffix("\n") {
-//                                commitDirection()
-//                                withAnimation {
-//                                    // unfocus
-//                                    unfocusEditable()
-//                                    editingIndex = nil
-//                                }
-//                            }
-//                        }
-//
-//                    Spacer()
-//                }
-//                .padding(.horizontal)
-//            }
-//        }
-//        .simultaneousGesture(
-//            TapGesture(count: 1).onEnded { _ in
-//                unfocusEditable()
-//                editingIndex = index
-//            }
-//        )
-        
-        ZStack {
-            HStack(spacing: 0) {
-                Text(getDirection())
-                    .opacity(0)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.all, 8)
-            }
-
-            TextEditor(text: getDirectionBinding())
-                .autocapitalization(autocapitalization)
-        }
-    }
-    
-    func commitDirection() {
-        if index < recipe.tempDirections.count {
-            recipe.tempDirections[index].direction.removeLast(1)
-        }
+        TextField(getDirection(), text: getDirectionBinding())
+            .font(.body)
     }
     
     func getDirectionBinding() -> Binding<String> {

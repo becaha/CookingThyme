@@ -30,6 +30,7 @@ struct FocusableTextField: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<FocusableTextField>) -> UITextField {
         let textField = UITextField(frame: .zero)
         textField.delegate = context.coordinator
+//        textField.layoutMargins.
         return textField
     }
 

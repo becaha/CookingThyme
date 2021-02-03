@@ -51,11 +51,6 @@ struct EditRecipeView: View {
     @State var isImportingRecipe: Bool = false
     
     @State private var presentRecipeText = false
-    
-    
-    @State private var editingIngredientIndex: Int?
-    @State private var editingDirectionIndex: Int?
-
         
     var body: some View {
         VStack {
@@ -357,7 +352,7 @@ struct EditRecipeView: View {
                     VStack(spacing: 0) {
                         ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
                             HStack {
-                                EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
+                                EditableIngredient(index: index)
                                     .environmentObject(recipe)
                             }
                             .deletable(isDeleting: true, onDelete: {
@@ -365,7 +360,7 @@ struct EditRecipeView: View {
                                     recipe.removeTempIngredient(at: index)
                                 }
                             })
-                            .formSectionItem(padding: false)
+                            .formSectionItem()
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
@@ -375,57 +370,14 @@ struct EditRecipeView: View {
                         
                         VStack(alignment: .leading) {
                             HStack {
-                                ZStack {
-                                    HStack {
-                                        RecipeControls.ReadIngredientText(ingredient)
-                                            .padding()
-
-                                        Spacer()
-                                    }
-                                    .opacity(0)
-                                    
-                                    VStack {
-                                        Spacer()
-
-                                        EditableTextView(textBinding: $ingredient, isFirstResponder: false)
-                                            .onChange(of: ingredient) { value in
-                                                if value.hasSuffix("\n") {
-                                                    ingredient.removeLast(1)
-                                                    withAnimation {
-                                                        // unfocus
-                                                        unfocusEditable()
-                                                        addIngredient()
-                                                    }
-                                                }
-                                            }
-
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal)
-                                }
-//                                .simultaneousGesture(
-//                                    TapGesture(count: 1).onEnded { _ in
-//                                        unfocusEditable()
-//                                    }
-//                                )
-//                                ZStack {
-//                                    HStack(spacing: 0) {
-//                                        Text(ingredient)
-//                                            .fixedSize(horizontal: false, vertical: true)
-//                                            .padding(.all, 8)
-//                                    }
-//
-//                                    TextEditor(text: $ingredient)
-//                                        .onChange(of: ingredient) { value in
-//                                            if value.hasSuffix("\n") {
-//                                                ingredient.removeLast(1)
-//                                                withAnimation {
-//                                                    addIngredient()
-//                                                }
-//                                            }
-//                                        }
-//                                }
-                                .autocapitalization(.none)
+                                TextField("New Ingredient", text: $ingredient,
+                                    onCommit: {
+                                          withAnimation {
+                                              addIngredient()
+                                          }
+                                    })
+                                    .font(.body)
+                                    .autocapitalization(.none)
                                 
                                 UIControls.AddButton(action: {
                                     withAnimation {
@@ -433,7 +385,7 @@ struct EditRecipeView: View {
                                     }
                                 })
                             }
-                            .formSectionItem()
+                            .formSectionItem(isLastItem: true)
                         }
                     }
                     .formSection()
@@ -461,7 +413,7 @@ struct EditRecipeView: View {
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(index + 1)")
                                 
-                                EditableDirection(index: index, editingIndex: $editingDirectionIndex)
+                                EditableDirection(index: index)
                                     .environmentObject(recipe)
                             }
                             .deletable(isDeleting: true, onDelete: {
@@ -481,24 +433,14 @@ struct EditRecipeView: View {
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(recipe.tempDirections.count + 1)")
                                 
-                                ZStack {
-                                    HStack(spacing: 0) {
-                                        Text(direction)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding(.all, 8)
-                                    }
-
-                                    TextEditor(text: $direction)
-                                        .onChange(of: direction) { value in
-                                            if value.hasSuffix("\n") {
-                                                direction.removeLast(1)
-                                                withAnimation {
-                                                    addDirection()
-                                                }
-                                            }
-                                        }
-                                }
-                                .autocapitalization(.none)
+                                TextField("New Direction", text: $direction,
+                                    onCommit: {
+                                          withAnimation {
+                                              addDirection()
+                                          }
+                                    })
+                                    .font(.body)
+                                    .autocapitalization(.none)
 
                                 UIControls.AddButton(action: {
                                     withAnimation {
@@ -506,7 +448,7 @@ struct EditRecipeView: View {
                                     }
                                 })
                             }
-                            .formSectionItem()
+                            .formSectionItem(isLastItem: true)
                         }
                     }
                     .formSection()
@@ -522,12 +464,6 @@ struct EditRecipeView: View {
                     .formFooter()
                 }
             }
-            .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil ? TapGesture(count: 1).onEnded {
-                withAnimation {
-                    editingIngredientIndex = nil
-                    editingDirectionIndex = nil
-                }
-            } : nil)
             .alert(isPresented: $presentErrorAlert) {
                 Alert(title: Text("Save Failed"),
                       message: Text("\(getErrorMessages())")
