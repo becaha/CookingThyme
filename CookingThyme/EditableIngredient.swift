@@ -46,17 +46,7 @@ struct EditableIngredient: View {
                 .padding(.horizontal)
             }
         }
-        .simultaneousGesture(
-            TapGesture(count: 1).onEnded { _ in
-                unfocusEditable()
-                editingIndex = index
-            }
-        )
     }
-    
-//    func unfocusEditable() {
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-//    }
     
     func commitIngredient() {
         if index < recipe.tempIngredients.count {

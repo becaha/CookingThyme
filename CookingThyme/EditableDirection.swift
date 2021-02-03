@@ -11,14 +11,52 @@ import GRDB
 struct EditableDirection: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int
+    @Binding var editingIndex: Int?
 
     var autocapitalization: UITextAutocapitalizationType = .sentences
     @State private var dummyBinding: String = ""
     
     var body: some View {
-        TextField(getDirection(), text: getDirectionBinding())
-            .font(.body)
+        ZStack {
+            HStack {
+                RecipeControls.ReadIngredientText(getDirection())
+                    .padding()
+
+                Spacer()
+            }
+            .opacity(editingIndex != index ? 1 : 0)
+
+            if editingIndex == index {
+                VStack {
+                    Spacer()
+                    
+                    EditableTextView(textBinding: getDirectionBinding(), isFirstResponder: true)
+                        .onChange(of: getDirection()) { value in
+                            if value.hasSuffix("\n") {
+                                commitDirection()
+                                withAnimation {
+                                    // unfocus
+                                    unfocusEditable()
+                                    editingIndex = nil
+                                }
+                            }
+                        }
+ 
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
+        }
+//        TextField(getDirection(), text: getDirectionBinding())
+//            .font(.body)
     }
+    
+    func commitDirection() {
+        if index < recipe.tempDirections.count {
+            recipe.tempDirections[index].direction.removeLast(1)
+        }
+    }
+    
     
     func getDirectionBinding() -> Binding<String> {
         if index < recipe.tempDirections.count {

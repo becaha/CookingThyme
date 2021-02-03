@@ -302,8 +302,8 @@
             filePath = "CookingThyme/EditableDirection.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "getDirectionBinding()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2305,6 +2305,22 @@
             startingLineNumber = "65"
             endingLineNumber = "65"
             landmarkName = "updateUIView(_:context:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EE773DFE-D16C-4675-A031-03E086F6F6A8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/EditRecipeView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
+            landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

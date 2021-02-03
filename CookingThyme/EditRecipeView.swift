@@ -366,6 +366,12 @@ struct EditRecipeView: View {
                                 }
                             })
                             .formSectionItem(padding: false)
+                            .simultaneousGesture(
+                                TapGesture(count: 1).onEnded { _ in
+                                    unfocusEditable()
+                                    editingIngredientIndex = index
+                                }
+                            )
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
@@ -439,7 +445,7 @@ struct EditRecipeView: View {
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(index + 1)")
                                 
-                                EditableDirection(index: index)
+                                EditableDirection(index: index, editingIndex: $editingDirectionIndex)
                                     .environmentObject(recipe)
                             }
                             .deletable(isDeleting: true, onDelete: {
@@ -447,7 +453,13 @@ struct EditRecipeView: View {
                                     recipe.removeTempDirection(at: index)
                                 }
                             })
-                            .formSectionItem()
+                            .formSectionItem(padding: false)
+                            .simultaneousGesture(
+                                TapGesture(count: 1).onEnded { _ in
+                                    unfocusEditable()
+                                    editingIngredientIndex = index
+                                }
+                            )
                         }
                         .onDelete { indexSet in
                             indexSet.map{ $0 }.forEach { index in
@@ -459,24 +471,6 @@ struct EditRecipeView: View {
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(recipe.tempDirections.count + 1)")
                                 
-//                                ZStack {
-//                                    HStack(spacing: 0) {
-//                                        Text(direction)
-//                                            .fixedSize(horizontal: false, vertical: true)
-//                                            .padding(.all, 8)
-//                                    }
-//
-//                                    TextEditor(text: $direction)
-//                                        .onChange(of: direction) { value in
-//                                            if value.hasSuffix("\n") {
-//                                                direction.removeLast(1)
-//                                                withAnimation {
-//                                                    addDirection()
-//                                                }
-//                                            }
-//                                        }
-//                                }
-//                                .autocapitalization(.none)
                                 ZStack {
                                     HStack(spacing: 0) {
                                         RecipeControls.ReadDirection(direction: direction)
@@ -513,7 +507,7 @@ struct EditRecipeView: View {
                                     }
                                 })
                             }
-                            .formSectionItem()
+                            .formSectionItem(padding: false)
                         }
                     }
                     .formSection()
