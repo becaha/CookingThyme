@@ -39,7 +39,7 @@ struct EditRecipeView: View {
     @State private var servings: String = "100"
     @State private var ingredientPlaceholder = "New Ingredient"
     @State private var ingredient: String = ""
-    @State private var directionPlaceholder = ""
+    @State private var directionPlaceholder = "New Direction"
     @State private var direction: String = ""
     
     @State private var cameraRollSheetPresented = false
@@ -459,22 +459,51 @@ struct EditRecipeView: View {
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(recipe.tempDirections.count + 1)")
                                 
+//                                ZStack {
+//                                    HStack(spacing: 0) {
+//                                        Text(direction)
+//                                            .fixedSize(horizontal: false, vertical: true)
+//                                            .padding(.all, 8)
+//                                    }
+//
+//                                    TextEditor(text: $direction)
+//                                        .onChange(of: direction) { value in
+//                                            if value.hasSuffix("\n") {
+//                                                direction.removeLast(1)
+//                                                withAnimation {
+//                                                    addDirection()
+//                                                }
+//                                            }
+//                                        }
+//                                }
+//                                .autocapitalization(.none)
                                 ZStack {
                                     HStack(spacing: 0) {
-                                        Text(direction)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding(.all, 8)
-                                    }
+                                        RecipeControls.ReadDirection(direction: direction)
+                                            .padding()
 
-                                    TextEditor(text: $direction)
-                                        .onChange(of: direction) { value in
-                                            if value.hasSuffix("\n") {
-                                                direction.removeLast(1)
-                                                withAnimation {
-                                                    addDirection()
+                                        Spacer()
+                                    }
+                                    .opacity(0)
+                                    
+                                    VStack {
+                                        Spacer()
+
+                                        PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
+                                            .onChange(of: direction) { value in
+                                                if value.hasSuffix("\n") {
+                                                    direction.removeLast(1)
+                                                    withAnimation {
+                                                        // unfocus
+                                                        unfocusEditable()
+                                                        addDirection()
+                                                    }
                                                 }
                                             }
-                                        }
+
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal)
                                 }
                                 .autocapitalization(.none)
 

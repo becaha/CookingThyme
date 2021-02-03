@@ -33,8 +33,10 @@ struct PlaceholderTextView: UIViewRepresentable {
             }
         }
         
+        // on user end, set back to placeholder
         func textViewDidEndEditing(_ textView: UITextView) {
             textView.textColor = UIColor.lightGray
+            textView.text = placeholderText
         }
 
     }
@@ -49,8 +51,8 @@ struct PlaceholderTextView: UIViewRepresentable {
         textView.delegate = context.coordinator
         textView.isEditable = true
         
-//        textView.text = placeholderText
-//        textView.textColor = UIColor.lightGray
+        textView.text = placeholderText
+        textView.textColor = UIColor.lightGray
 
         return textView
     }
@@ -60,12 +62,8 @@ struct PlaceholderTextView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-        if textBinding != "" {
+        if uiView.text != placeholderText  {
             uiView.text = textBinding
-        }
-        else {
-            uiView.text = placeholderText
-            uiView.textColor = UIColor.lightGray
         }
 
         if isFirstResponder && !context.coordinator.didBecomeFirstResponder  {
