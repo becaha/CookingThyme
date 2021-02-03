@@ -65,6 +65,7 @@
 		DB6EFA8525C8978C0060B2B4 /* EditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */; };
 		DB6EFA8725C89F440060B2B4 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */; };
 		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
+		DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -162,6 +163,7 @@
 		DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
+		DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 			isa = PBXGroup;
 			children = (
 				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
+				DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */,
 				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
 				DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */,
 				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
@@ -633,6 +636,7 @@
 				DB49B4D62565E49F00808CC8 /* RecipeVM.swift in Sources */,
 				DB88CD4A25C1225E00A7F32C /* ReadRecipeViews.swift in Sources */,
 				DB49B51F257ABF5800808CC8 /* Border.swift in Sources */,
+				DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */,
 				DB49B4EF2568B8EB00808CC8 /* RecipeCategory.swift in Sources */,
 				DB88CD2525BA08BE00A7F32C /* PasteButton.swift in Sources */,
 				DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */,

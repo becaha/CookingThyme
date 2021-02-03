@@ -21,7 +21,6 @@ struct EditableTextView: UIViewRepresentable {
         func textViewDidChange(_ textView: UITextView) {
             self.text.wrappedValue = textView.text
         }
-
     }
  
     @Binding var textBinding: String
@@ -51,26 +50,6 @@ struct EditableTextView: UIViewRepresentable {
         }
     }
 }
-
-func attributedString(for string: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: string)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 4
-        let range = NSMakeRange(0, (string as NSString).length)
-        attributedString.addAttribute(.font, value: Font.system(size: 24, weight: .regular), range: range)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
-        return attributedString
-}
-
-extension NSAttributedString {
-    func height(containerWidth: CGFloat) -> CGFloat {
-        let rect = self.boundingRect(with: CGSize.init(width: containerWidth, height: CGFloat.greatestFiniteMagnitude),
-            options: [.usesLineFragmentOrigin, .usesFontLeading],
-            context: nil)
-        return ceil(rect.size.height)
-    }
-}
-
 
 struct TestView: View {
     
