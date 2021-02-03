@@ -457,7 +457,7 @@ struct EditRecipeView: View {
                             .simultaneousGesture(
                                 TapGesture(count: 1).onEnded { _ in
                                     unfocusEditable()
-                                    editingIngredientIndex = index
+                                    editingDirectionIndex = index
                                 }
                             )
                         }
