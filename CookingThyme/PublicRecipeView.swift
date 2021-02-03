@@ -66,7 +66,7 @@ struct PublicRecipeView: View {
                 }
             }
         }
-        .background(formBackgroundColor())
+        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .onAppear {
             withAnimation {
                 recipe.popullateDetail()
