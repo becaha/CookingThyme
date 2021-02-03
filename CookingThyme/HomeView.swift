@@ -13,72 +13,70 @@ struct HomeView: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
             
     var body: some View {
-        NavigationView {
-            TabView {
-                RecipeSearch()
-                    .environmentObject(sheetNavigator)
-                    .tabItem {
-                        Image(systemName: "magnifyingglass")
-                        Text("Recipe Search")
-                    }
-                
-                VStack {
-                    if !user.isSignedIn {
-                        SigninPromptView(message: "to start creating a recipe book.")
-                            .environmentObject(sheetNavigator)
-                    }
-                    else if user.collection != nil {
-                        RecipeCollectionView()
-                            .environmentObject(user.collection!)
-                    }
-                }
+        TabView {
+            RecipeSearch()
+                .environmentObject(sheetNavigator)
                 .tabItem {
-                    Image(systemName: "book.fill")
-                    Text("Recipe Book")
+                    Image(systemName: "magnifyingglass")
+                    Text("Recipe Search")
                 }
-                
-                VStack {
-                    if !user.isSignedIn {
-                        SigninPromptView(message: "to start creating a shopping list.")
-                            .environmentObject(sheetNavigator)
-                    }
-                    else if user.collection != nil {
-                        ShoppingListView()
-                            .environmentObject(user.collection!)
-                    }
+            
+            VStack {
+                if !user.isSignedIn {
+                    SigninPromptView(message: "to start creating a recipe book.")
+                        .environmentObject(sheetNavigator)
                 }
-                .tabItem {
-                    Image(systemName: "cart.fill")
-                    Text("Shopping List")
+                else if user.collection != nil {
+                    RecipeCollectionView()
+                        .environmentObject(user.collection!)
                 }
-                
-                TimerView()
-                    .tabItem {
-                        Image(systemName: "timer")
-                        Text("Timer")
-                    }
-                
             }
-            .font(.headline)
-            .accentColor(mainColor())
-            .navigationBarTitle("Cooking Thyme", displayMode: .inline)
-            .navigationBarItems(trailing:
-                Button(action: {
-                    if user.isSignedIn {
-                        self.sheetNavigator.sheetDestination = .settings
-                    } else {
-                        self.sheetNavigator.sheetDestination = .signin
-                    }
-                }) {
-                    Image(systemName: "gear")
-                        .foregroundColor(.black)
+            .tabItem {
+                Image(systemName: "book.fill")
+                Text("Recipe Book")
+            }
+
+            VStack {
+                if !user.isSignedIn {
+                    SigninPromptView(message: "to start creating a shopping list.")
+                        .environmentObject(sheetNavigator)
                 }
-            )
-            .background(NavigationBarConfigurator { nc in
-                nc.navigationBar.barTintColor = mainUIColor()
-                nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
-            })
+                else if user.collection != nil {
+                    ShoppingListView()
+                        .environmentObject(user.collection!)
+                }
+            }
+            .tabItem {
+                Image(systemName: "cart.fill")
+                Text("Shopping List")
+            }
+
+            TimerView()
+                .tabItem {
+                    Image(systemName: "timer")
+                    Text("Timer")
+                }
+            
         }
+        .font(.headline)
+        .accentColor(mainColor())
+        .navigationBarTitle("Cooking Thyme", displayMode: .inline)
+        .navigationBarItems(trailing:
+            Button(action: {
+                if user.isSignedIn {
+                    self.sheetNavigator.sheetDestination = .settings
+                } else {
+                    self.sheetNavigator.sheetDestination = .signin
+                }
+            }) {
+                Image(systemName: "gear")
+                    .foregroundColor(.black)
+            }
+        )
+        .background(NavigationBarConfigurator { nc in
+            nc.navigationBar.barTintColor = mainUIColor()
+            nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
+        })
         .sheet(isPresented: self.$sheetNavigator.showSheet) {
             self.sheetNavigator.navView()
                 .environmentObject(sheetNavigator)

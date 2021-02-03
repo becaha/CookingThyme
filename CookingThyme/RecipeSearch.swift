@@ -20,61 +20,59 @@ struct RecipeSearch: View {
     }
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    SearchBar(isAutoSearch: false)  { result in
-                        hasSearched = true
-                        recipeWebHandler.listRecipes(withQuery: result)
+        Form {
+            Section {
+                SearchBar(isAutoSearch: false)  { result in
+                    hasSearched = true
+                    recipeWebHandler.listRecipes(withQuery: result)
+                }
+            }
+            
+            if recipeWebHandler.recipeList.count == 0 && !isLoading && hasSearched {
+                Section(header:
+                    HStack {
+                        Spacer()
+                        
+                        Text("No Results")
+                        
+                        Spacer()
+                    }
+                ) {}
+            }
+            
+            if recipeWebHandler.recipeList.count > 0 {
+                List {
+                    ForEach(recipeWebHandler.recipeList) { recipe in
+                        NavigationLink ("\(recipe.name)", destination:
+                            PublicRecipeView(recipe: PublicRecipeVM(publicRecipe: recipe))
+                        )
                     }
                 }
                 
-                if recipeWebHandler.recipeList.count == 0 && !isLoading && hasSearched {
-                    Section(header:
-                        HStack {
-                            Spacer()
-                            
-                            Text("No Results")
-                            
-                            Spacer()
-                        }
-                    ) {}
-                }
-                
-                if recipeWebHandler.recipeList.count > 0 {
-                    List {
-                        ForEach(recipeWebHandler.recipeList) { recipe in
-                            NavigationLink ("\(recipe.name)", destination:
-                                PublicRecipeView(recipe: PublicRecipeVM(publicRecipe: recipe))
-                            )
-                        }
-                    }
-                    
-                    if !isLoading && recipeWebHandler.isMore {
-                        Section {
-                            Button(action: {
-                                withAnimation {
-                                    recipeWebHandler.listMoreRecipes()
-                                }
-                            }) {
-                                HStack {
-                                    Spacer()
-                                    
-                                    Text("More")
-                                    
-                                    Spacer()
-                                }
+                if !isLoading && recipeWebHandler.isMore {
+                    Section {
+                        Button(action: {
+                            withAnimation {
+                                recipeWebHandler.listMoreRecipes()
+                            }
+                        }) {
+                            HStack {
+                                Spacer()
+                                
+                                Text("More")
+                                
+                                Spacer()
                             }
                         }
                     }
                 }
-                    
-                if isLoading {
-                    Section(header: UIControls.Loading()) {}
-                }
             }
-            .navigationBarHidden(true)
+                
+            if isLoading {
+                Section(header: UIControls.Loading()) {}
+            }
         }
+        .navigationBarHidden(true)
     }
 }
 

@@ -9,6 +9,14 @@ import SwiftUI
 
 // TODO flashes when stopped on other screen and you go to timer
 struct TimerView: View {
+    // portrait or landscape
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    var isLandscape: Bool {
+        return horizontalSizeClass == .regular && verticalSizeClass == .compact
+    }
+    
     @EnvironmentObject var timer: TimerHandler
     
     @State private var hours: Int = 0
@@ -19,24 +27,41 @@ struct TimerView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack {
+            HStack {
+                Spacer()
+                
                 VStack {
+                    Spacer()
+                    
                     if timer.isSetting {
-                        SetTimer(width: geometry.size.width/9)
+                        SetTimer(width: geometry.size.width, height: geometry.size.height)
                     }
                     else {
-                        Countdown()
+                        if isLandscape {
+                            CountdownLandscape(width: geometry.size.width, height: geometry.size.height)
+                        }
+                        else {
+                            Countdown(width: geometry.size.width, height: geometry.size.height)
+                        }
                     }
+                    
+                    Spacer()
                 }
-                .position(x: geometry.size.width/2, y: geometry.size.height/2)
+                
+                Spacer()
+                
             }
+            .background(formBackgroundColor())
+            .ignoresSafeArea()
         }
     }
     
-    // countdown view of the timer when timer is set and started
     @ViewBuilder
-    func Countdown() -> some View {
-        VStack {
+    func CountdownLandscape(width: CGFloat, height: CGFloat) -> some View {
+        HStack {
+            Spacer()
+                .frame(width: width / 5)
+            
             ZStack {
                 Group {
                     if !timer.isPaused {
@@ -50,28 +75,27 @@ struct TimerView: View {
                     }
                 }
                 .foregroundColor(mainColor())
-                .frame(width: 350, height: 350)
                 .padding()
                 
                 Text("\(timer.timeRemainingString)")
-                    .font(.system(size: 80))
+                    .font(.system(size: height / 8))
             }
             
             Spacer()
-                .frame(height: 70)
+                .frame(width: width / 10)
             
-            HStack {
+            VStack {
                 Spacer()
 
-                TimerButton("Cancel", action : {
+                TimerButton("Cancel", width: width, height: height, action : {
                     withAnimation {
                         timer.cancel()
                     }
                 })
                 
-                Spacer()
+//                Spacer()
                 
-                TimerButton(timer.isPaused && !timer.timerAlert ? "Resume" : "Pause", action : {
+                TimerButton(timer.isPaused && !timer.timerAlert ? "Resume" : "Pause", width: width, height: height, action : {
                     timer.pause()
                 })
                 .transition(.scale(scale: 1))
@@ -79,6 +103,60 @@ struct TimerView: View {
                 Spacer()
             }
 
+            Spacer()
+                .frame(width: width / 8)
+        }
+    }
+    
+    
+    // countdown view of the timer when timer is set and started
+    @ViewBuilder
+    func Countdown(width: CGFloat, height: CGFloat) -> some View {
+        VStack {
+            Spacer()
+                .frame(height: height / 5)
+            
+            ZStack {
+                Group {
+                    if !timer.isPaused {
+                        AnimatableCircleStroke(startAngle: angle(for: 0), endAngle: angle(for: -animatedTimeRemaining), clockwise: true)
+                            .onAppear() {
+                                startTimeAnimation()
+                            }
+                    }
+                    else {
+                        AnimatableCircleStroke(startAngle: angle(for: 0), endAngle: angle(for: -timer.timeRemainingRatio), clockwise: true)
+                    }
+                }
+                .foregroundColor(mainColor())
+                .frame(width: width * 0.8)
+                .padding()
+                
+                Text("\(timer.timeRemainingString)")
+                    .font(.system(size: width / 6))
+            }
+            
+            HStack {
+                Spacer()
+
+                TimerButton("Cancel", width: width, height: height, action : {
+                    withAnimation {
+                        timer.cancel()
+                    }
+                })
+                
+                Spacer()
+                
+                TimerButton(timer.isPaused && !timer.timerAlert ? "Resume" : "Pause", width: width, height: height, action : {
+                    timer.pause()
+                })
+                .transition(.scale(scale: 1))
+                
+                Spacer()
+            }
+
+            Spacer()
+                .frame(height: height / 5)
         }
     }
     
@@ -97,8 +175,10 @@ struct TimerView: View {
     
     // timer set view, set hours, min, sec
     @ViewBuilder
-    func SetTimer(width: CGFloat) -> some View {
+    func SetTimer(width: CGFloat, height: CGFloat) -> some View {
         VStack {
+            Spacer()
+            
             ZStack {
                 HStack(spacing: 0) {
                     HStack(spacing: 0) {
@@ -108,7 +188,7 @@ struct TimerView: View {
                                 Text("\(num)").tag(num)
                             }
                         }
-                        .frame(width: width)
+                        .frame(width: width / 9)
                         
                         Text("hours")
                     }
@@ -121,7 +201,7 @@ struct TimerView: View {
                                 Text("\(num)").tag(num)
                             }
                         }
-                        .frame(width: width)
+                        .frame(width: width / 9)
                         
                         Text("min")
                     }
@@ -135,7 +215,7 @@ struct TimerView: View {
                                 Text("\(num)").tag(num)
                             }
                         }
-                        .frame(width: width)
+                        .frame(width: width / 9)
                         
                         Text("sec")
                     }
@@ -144,28 +224,34 @@ struct TimerView: View {
                 .padding()
             }
             .padding()
-            
-            TimerButton("Start", action: {
+            TimerButton("Start", width: width, height: height, action: {
                 withAnimation {
                     timer.setTimer(h: hours, m: minutes, s: seconds)
                 }
             })
             .disabled(hours == 0 && minutes == 0 && seconds == 0)
+            
+            Spacer()
         }
     }
     
     // style for timer buttons
     @ViewBuilder
-    func TimerButton(_ text: String, action: @escaping () -> Void) -> some View {
+    func TimerButton(_ text: String, width: CGFloat, height: CGFloat, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(formBackgroundColor())
-                    .frame(width: 100, height: 55)
+                    .stroke(formBorderColor())
+                    .shadow(color: formBorderColor(), radius: 1)
                 
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundColor(Color(UIColor.tertiarySystemFill))
+
+
                 Text("\(text)")
             }
         }
+        .frame(width: width / 4, height: isLandscape ? height / 7 : height / 13)
     }
     
 }

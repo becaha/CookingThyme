@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: get change from read to edit perfect with padding
 struct EditableIngredient: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int

@@ -47,8 +47,6 @@ struct EditableDirection: View {
                 .padding(.horizontal)
             }
         }
-//        TextField(getDirection(), text: getDirectionBinding())
-//            .font(.body)
     }
     
     func commitDirection() {
