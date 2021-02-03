@@ -9,6 +9,14 @@ import SwiftUI
 
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
+    // portrait or landscape
+    @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    var isLandscape: Bool {
+        return horizontalSizeClass == .regular && verticalSizeClass == .compact
+    }
+    
     @EnvironmentObject var collection: RecipeCollectionVM
     
     @State private var isEditing = false
@@ -47,287 +55,15 @@ struct RecipeCollectionView: View {
             
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                ZStack {
-                    ScrollView(.horizontal) {
-                        HStack {
-                            ForEach(collection.categories, id: \.self) { category in
-                                VStack {
-                                    ZStack {
-                                        Button(action: {
-                                            collection.setCurrentCategory(category)
-                                            search = ""
-                                        }) {
-                                            CircleImage()
-                                                .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
-                                        }
-                                        .disabled(isEditing ? true : false)
-                                        
-                                        if isEditing {
-                                            Menu {
-                                                Menu {
-                                                    Button(action: {
-                                                        editCategory = category
-                                                        cameraRollSheetPresented = true
-                                                    }) {
-                                                        Label("Pick from camera roll", systemImage: "photo.on.rectangle")
-                                                    }
-
-                                                    Button(action: {
-                                                        editCategory = category
-                                                        photoEditAlert = true
-                                                        presentAlert = true
-                                                        if UIPasteboard.general.url != nil {
-                                                            confirmPaste = true
-                                                        } else {
-                                                            explainPaste = true
-                                                        }
-                                                    }) {
-                                                        Label("Paste", systemImage: "doc.on.clipboard")
-                                                    }
-                                                    
-                                                    Button(action: {
-                                                        editCategory = category
-                                                        photoEditAlert = true
-                                                        presentAlert = true
-                                                    }) {
-                                                        Label("Delete", systemImage: "trash")
-                                                    }
-                                                    
-                                                    Button(action: {
-                                                    }) {
-                                                        Text("Cancel")
-                                                    }
-                                                } label: {
-                                                    Label("Edit Photo", systemImage: "camera")
-                                                }
-                                                
-                                                Button(action: {
-                                                    deleteCategoryId = category.id
-                                                    deleteCategoryAlert = true
-                                                    presentAlert = true
-                                                }) {
-                                                    Label("Delete Category", systemImage: "trash")
-                                                }
-                                                
-                                                Button(action: {
-                                                }) {
-                                                    Label("Cancel", systemImage: "")
-                                                }
-                                            } label: {
-                                                ZStack {
-                                                    Circle()
-                                                        .fill(Color.white)
-                                                        .frame(width: 30, height: 30)
-                                                        .opacity(0.8)
-
-                                                    Image(systemName: "pencil")
-                                                        .foregroundColor(.black)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                    EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
-                                        // without this, the image will update, it causes an early refresh
-                                        collection.updateCategory(forCategoryId: category.id, toName: name)
-                                    })
-                                    .font(.subheadline)
-                                    .foregroundColor(.black)
-                                }
-                                .droppable(if: isDroppable(toCategory: category), of: ["public.image", "public.text"], isTargeted: nil) { providers in
-                                    return drop(providers: providers, category: category)
-                                }
-                                .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-                                    ImagePicker(image: self.$selectedImage)
-                                }
-                                .padding()
-                                .padding(.horizontal, 7)
-                                .environmentObject(category)
-                            }
-                        }
-                    }
-                    .padding(.trailing, 60)
-                    .alert(isPresented: $presentAlert) {
-                        if photoEditAlert {
-                            if confirmPaste {
-                                return Alert(title: Text("Add Image"),
-                                      message: Text(""),
-                                      primaryButton: .default(Text("Ok")) {
-                                        if let category = editCategory {
-                                            category.setImage(url: UIPasteboard.general.url)
-                                            editCategory = nil
-                                        }
-                                      },
-                                      secondaryButton: .default(Text("Cancel")) {
-                                        editCategory = nil
-                                      })
-                            }
-                            if explainPaste {
-                                return Alert(title: Text("Paste Image"),
-                                      message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                                      dismissButton: .default(Text("Ok")))
-                            }
-                            return Alert(title: Text("Delete Image"),
-                                         message: Text("Are you sure you want to delete the image for this category?"),
-                                         primaryButton: .default(Text("Ok")) {
-                                           if let category = editCategory {
-                                            withAnimation {
-                                                category.removeImage()
-                                            }
-                                           }
-                                         },
-                                         secondaryButton: .default(Text("Cancel")) {
-                                           editCategory = nil
-                                         })
-                        }
-                        // deleteCategoryAlert
-                        return Alert(title: Text("Delete Category"),
-                              message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
-                              primaryButton: .default(Text("Ok")) {
-                                if let deleteCategoryId = self.deleteCategoryId {
-                                    collection.deleteCategory(withId: deleteCategoryId)
-                                }
-                              },
-                              secondaryButton: .cancel())
-                    }
-                    
-                    HStack(alignment: .center) {
-                        Spacer()
-                        
-                        if !addCategoryExpanded {
-                            Button(action: {
-                                withAnimation {
-                                    addCategoryExpanded = true
-                                }
-                            }) {
-                                ZStack {
-                                    Circle()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.white)
-                                        .shadow(radius: 1)
-
-                                    Image(systemName: "plus")
-                                        .font(Font.subheadline.weight(.bold))
-                                }
-                            }
-                        }
-                        else {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.white)
-                                    .shadow(radius: 10)
-
-                                HStack {
-                                    TextField("New Category", text: $newCategory, onCommit: {
-                                        addCategory()
-                                    })
-
-                                    Spacer()
-
-                                    UIControls.AddButton(action: addCategory, isPlain: false)
-                                }
-                                .padding()
-                            }
-                            .onTapGesture(count: 1, perform: {})
-                            .frame(width: 200, height: 60)
-                        }
-                    }
-                    .padding()
-                    .padding(.bottom)
-                    .zIndex(1)
+            Group {
+                if isLandscape {
+                    CollectionViewLandscape()
                 }
-                .background(formBackgroundColor())
-                .border(Color.white, width: 2)
-                
-                if collection.currentCategory != nil {
-                    GeometryReader { frameGeometry in
-                        VStack(spacing: 0) {
-                            GeometryReader { geometry in
-                                HStack {
-                                    AutoSearchBar(search: $search) { result in
-                                        searchRecipes(result)
-                                    }
-                                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
-                                }
-                                .formItem(isSearchBar: true)
-                                .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
-                            }
-                            .frame(height: 35)
-                            .padding(.bottom)
-
-                            if collection.currentCategory!.filteredRecipes.count == 0 {
-                                Text("No recipes found.")
-                            }
-
-                            ForEach(collection.currentCategory!.filteredRecipes) { recipe in
-                                Group {
-                                    if isEditing {
-                                        Text("\(recipe.name)")
-                                            .deletable(isDeleting: true, onDelete: {
-                                                withAnimation {
-                                                    collection.deleteRecipe(withId: recipe.id)
-                                                }
-                                            })
-                                        .formItem()
-                                    }
-                                    else {
-                                        NavigationLink(destination:
-                                                        RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!), isEditingRecipe: false)
-                                                .environmentObject(collection.currentCategory!)
-                                                .environmentObject(collection)
-                                        ) {
-                                            Text("\(recipe.name)")
-                                                .fontWeight(.regular)
-                                                .formItem(isNavLink: true)
-                                        }
-                                    }
-                                }
-                                .onDrag {
-                                    droppableRecipe = recipe
-                                    return NSItemProvider(object: recipe.name as NSString)
-                                }
-                            }
-                            .onDelete { indexSet in
-                                indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
-                                    collection.deleteRecipe(withId: recipe.id)
-                                }
-                            }
-
-                            Spacer()
-
-                            GeometryReader { geometry -> Text in
-                                bottomScrollY = geometry.frame(in: .global).minY
-                                frameMaxY = frameGeometry.frame(in: .global).maxY
-                                return Text("")
-                            }
-                        }
-                        .formed()
-                    }
-                    
-                    VStack {
-                        HStack {
-                            NavigationLink(destination:
-                                            RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
-                                    .environmentObject(collection.currentCategory!)
-                                    .environmentObject(collection)
-                            ) {
-                                UIControls.AddView(withLabel: "New Recipe")
-                            }
-                            
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    .overlay(
-                        Rectangle()
-                            .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
-                            .foregroundColor(borderColor()),
-                        alignment: .top
-                    )
+                else {
+                    CollectionView()
                 }
             }
-            .background(formBackgroundColor())
+            .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
             .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
             .navigationBarItems(trailing:
                 UIControls.EditButton(
@@ -354,11 +90,393 @@ struct RecipeCollectionView: View {
                 collection.refreshCurrrentCategory()
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
-//    func unfocusEditable() {
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-//    }
+    @ViewBuilder
+    func CollectionView() -> some View {
+        VStack(spacing: 0) {
+            CategoriesView()
+            
+            CurrentCategoryView()
+            
+            AddNewRecipeView()
+        }
+    }
+    
+    @ViewBuilder
+    func CollectionViewLandscape() -> some View {
+        HStack(spacing: 0) {
+            CategoriesView()
+            
+            VStack(spacing: 0) {
+                CurrentCategoryView()
+                
+                AddNewRecipeView()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func CurrentCategoryView() -> some View {
+        if collection.currentCategory != nil {
+            GeometryReader { frameGeometry in
+                VStack(spacing: 0) {
+                    GeometryReader { geometry in
+                        HStack {
+                            AutoSearchBar(search: $search) { result in
+                                searchRecipes(result)
+                            }
+                            .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                        }
+                        .formItem(isSearchBar: true)
+                        .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                    }
+                    .frame(height: 35)
+                    .padding(.bottom)
+
+                    if collection.currentCategory!.filteredRecipes.count == 0 {
+                        Text("No recipes found.")
+                    }
+
+                    ForEach(collection.currentCategory!.filteredRecipes) { recipe in
+                        Group {
+                            if isEditing {
+                                Text("\(recipe.name)")
+                                    .deletable(isDeleting: true, onDelete: {
+                                        withAnimation {
+                                            collection.deleteRecipe(withId: recipe.id)
+                                        }
+                                    })
+                                .formItem()
+                            }
+                            else {
+                                NavigationLink(destination:
+                                                RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!), isEditingRecipe: false)
+                                        .environmentObject(collection.currentCategory!)
+                                        .environmentObject(collection)
+                                ) {
+                                    Text("\(recipe.name)")
+                                        .fontWeight(.regular)
+                                        .formItem(isNavLink: true)
+                                }
+                            }
+                        }
+                        .onDrag {
+                            droppableRecipe = recipe
+                            return NSItemProvider(object: recipe.name as NSString)
+                        }
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                            collection.deleteRecipe(withId: recipe.id)
+                        }
+                    }
+
+                    Spacer()
+
+                    GeometryReader { geometry -> Text in
+                        bottomScrollY = geometry.frame(in: .global).minY
+                        frameMaxY = frameGeometry.frame(in: .global).maxY
+                        return Text("")
+                    }
+                }
+                .formed()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func AddNewRecipeView() -> some View {
+        VStack {
+            HStack {
+                if isLandscape {
+                    Spacer()
+                }
+                
+                NavigationLink(destination:
+                                RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
+                        .environmentObject(collection.currentCategory!)
+                        .environmentObject(collection)
+                ) {
+                    UIControls.AddView(withLabel: "New Recipe")
+                }
+                
+                if !isLandscape {
+                    Spacer()
+                }
+            }
+        }
+        .padding()
+        .overlay(
+            Rectangle()
+                .frame(width: nil, height: bottomScrollY <= frameMaxY ? 0 : 1, alignment: .top)
+                .foregroundColor(borderColor()),
+            alignment: .top
+        )
+    }
+    
+    @ViewBuilder
+    func CategoryCircleView(_ category: RecipeCategoryVM) -> some View {
+        ZStack {
+            Button(action: {
+                collection.setCurrentCategory(category)
+                search = ""
+            }) {
+                CircleImage()
+                    .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
+            }
+            .disabled(isEditing ? true : false)
+            
+            CategoryEditMenu(category)
+        }
+    }
+    
+    @ViewBuilder
+    func CategoryView(_ category: RecipeCategoryVM) -> some View {
+        VStack {
+            CategoryCircleView(category)
+            
+            EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
+                // without this, the image will update, it causes an early refresh
+                collection.updateCategory(forCategoryId: category.id, toName: name)
+            })
+            .font(.subheadline)
+            .foregroundColor(.black)
+        }
+        .droppable(if: isDroppable(toCategory: category), of: ["public.image", "public.text"], isTargeted: nil) { providers in
+            return drop(providers: providers, category: category)
+        }
+        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
+            ImagePicker(image: self.$selectedImage)
+        }
+        .padding()
+        .padding(.horizontal, 7)
+        .environmentObject(category)
+    }
+    
+    @ViewBuilder
+    func CategoriesScroll() -> some View {
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(collection.categories, id: \.self) { category in
+                    CategoryView(category)
+                }
+            }
+        }
+        .padding(.trailing, 60) // leaves space for add category button
+    }
+    
+    @ViewBuilder
+    func CategoriesScrollLandscape() -> some View {
+        ScrollView(.vertical) {
+            VStack(spacing: 0) {
+                ForEach(collection.categories, id: \.self) { category in
+                    CategoryView(category)
+                }
+            }
+        }
+        .padding(.bottom, 60) // leaves space for add category button
+    }
+
+    @ViewBuilder
+    func CategoriesView() -> some View {
+        ZStack {
+            Group {
+                if isLandscape {
+                    CategoriesScrollLandscape()
+                }
+                else {
+                    CategoriesScroll()
+                }
+            }
+            .alert(isPresented: $presentAlert) {
+                if photoEditAlert {
+                    if confirmPaste {
+                        return Alert(title: Text("Add Image"),
+                              message: Text(""),
+                              primaryButton: .default(Text("Ok")) {
+                                if let category = editCategory {
+                                    category.setImage(url: UIPasteboard.general.url)
+                                    editCategory = nil
+                                }
+                              },
+                              secondaryButton: .default(Text("Cancel")) {
+                                editCategory = nil
+                              })
+                    }
+                    if explainPaste {
+                        return Alert(title: Text("Paste Image"),
+                              message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
+                              dismissButton: .default(Text("Ok")))
+                    }
+                    return Alert(title: Text("Delete Image"),
+                                 message: Text("Are you sure you want to delete the image for this category?"),
+                                 primaryButton: .default(Text("Ok")) {
+                                   if let category = editCategory {
+                                    withAnimation {
+                                        category.removeImage()
+                                    }
+                                   }
+                                 },
+                                 secondaryButton: .default(Text("Cancel")) {
+                                   editCategory = nil
+                                 })
+                }
+                // deleteCategoryAlert
+                return Alert(title: Text("Delete Category"),
+                      message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
+                      primaryButton: .default(Text("Ok")) {
+                        if let deleteCategoryId = self.deleteCategoryId {
+                            collection.deleteCategory(withId: deleteCategoryId)
+                        }
+                      },
+                      secondaryButton: .cancel())
+            }
+            
+            if isLandscape {
+                AddCategoryViewLandscape()
+            }
+            else {
+                AddCategoryView()
+            }
+        }
+        .background(formBackgroundColor())
+        
+        Divider()
+    }
+    
+    @ViewBuilder
+    func AddCategoryView() -> some View {
+        HStack(alignment: .center) {
+            Spacer()
+            
+            AddCategoryButton()
+        }
+        .padding()
+        .padding(.bottom)
+        .zIndex(1)
+    }
+    
+    @ViewBuilder
+    func AddCategoryViewLandscape() -> some View {
+        VStack(alignment: .center) {
+            Spacer()
+            
+            AddCategoryButton()
+        }
+        .padding()
+        .zIndex(1)
+    }
+    
+    
+    @ViewBuilder
+    func AddCategoryButton() -> some View {
+        if !addCategoryExpanded {
+            Button(action: {
+                withAnimation {
+                    addCategoryExpanded = true
+                }
+            }) {
+                ZStack {
+                    Circle()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.white)
+                        .shadow(radius: 1)
+
+                    Image(systemName: "plus")
+                        .font(Font.subheadline.weight(.bold))
+                }
+            }
+        }
+        else {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.white)
+                    .shadow(radius: 10)
+
+                HStack {
+                    TextField("New Category", text: $newCategory, onCommit: {
+                        addCategory()
+                    })
+
+                    Spacer()
+
+                    UIControls.AddButton(action: addCategory, isPlain: false)
+                }
+                .padding()
+            }
+            .onTapGesture(count: 1, perform: {})
+            .frame(width: 200, height: 30)
+        }
+    }
+    
+    @ViewBuilder
+    func CategoryEditMenu(_ category: RecipeCategoryVM) -> some View {
+        if isEditing {
+            Menu {
+                Menu {
+                    Button(action: {
+                        editCategory = category
+                        cameraRollSheetPresented = true
+                    }) {
+                        Label("Pick from camera roll", systemImage: "photo.on.rectangle")
+                    }
+
+                    Button(action: {
+                        editCategory = category
+                        photoEditAlert = true
+                        presentAlert = true
+                        if UIPasteboard.general.url != nil {
+                            confirmPaste = true
+                        } else {
+                            explainPaste = true
+                        }
+                    }) {
+                        Label("Paste", systemImage: "doc.on.clipboard")
+                    }
+                    
+                    Button(action: {
+                        editCategory = category
+                        photoEditAlert = true
+                        presentAlert = true
+                    }) {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    
+                    Button(action: {
+                    }) {
+                        Text("Cancel")
+                    }
+                } label: {
+                    Label("Edit Photo", systemImage: "camera")
+                }
+                
+                Button(action: {
+                    deleteCategoryId = category.id
+                    deleteCategoryAlert = true
+                    presentAlert = true
+                }) {
+                    Label("Delete Category", systemImage: "trash")
+                }
+                
+                Button(action: {
+                }) {
+                    Label("Cancel", systemImage: "")
+                }
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 30, height: 30)
+                        .opacity(0.8)
+
+                    Image(systemName: "pencil")
+                        .foregroundColor(.black)
+                }
+            }
+        }
+    }
     
     func searchRecipes(_ search: String) {
         withAnimation {

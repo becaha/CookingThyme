@@ -159,8 +159,7 @@ struct SigninView: View {
             .opacity(isSigningIn ? 0.5 : 1)
         }
         .accentColor(mainColor())
-        .background(formBackgroundColor())
-        .ignoresSafeArea()
+        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
     }
     
     func reset() {

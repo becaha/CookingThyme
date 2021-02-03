@@ -51,8 +51,7 @@ struct TimerView: View {
                 Spacer()
                 
             }
-            .background(formBackgroundColor())
-            .ignoresSafeArea()
+            .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         }
     }
     

@@ -76,6 +76,7 @@ struct RecipeSearch: View {
             }
             .navigationBarHidden(true)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
