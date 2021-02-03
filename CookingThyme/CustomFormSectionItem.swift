@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomFormSectionItem: ViewModifier {
     var isLastItem: Bool = false
     var backgroundColor: Color = Color.white
+    var padding: Bool = true
     
     init() {}
     
@@ -26,11 +27,21 @@ struct CustomFormSectionItem: ViewModifier {
         self.backgroundColor = backgroundColor
     }
     
+    init(padding: Bool) {
+        self.padding = padding
+    }
+    
     func body(content: Content) -> some View {
         VStack(spacing: 0) {
             HStack {
-                content
-                    .padding()
+                if padding {
+                    content
+                        .padding()
+                }
+                else {
+                    content
+                        .padding(.horizontal)
+                }
 
                 Spacer()
             }
@@ -48,6 +59,8 @@ struct CustomFormSectionItem_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 0) {
             Text("hi")
+                .padding()
+                .background(Color.blue)
                 .formSectionItem()
             
             Text("so long it is ridoijdfosij couhow tlong this message actually is")
@@ -60,6 +73,10 @@ struct CustomFormSectionItem_Previews: PreviewProvider {
 extension View {
     func formSectionItem() -> some View {
         modifier(CustomFormSectionItem())
+    }
+    
+    func formSectionItem(padding: Bool) -> some View {
+        modifier(CustomFormSectionItem(padding: padding))
     }
     
     func formSectionItem(isLastItem: Bool) -> some View {

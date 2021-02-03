@@ -10,26 +10,57 @@ import SwiftUI
 struct EditableIngredient: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int
-    var autocapitalization: UITextAutocapitalizationType
-
-    @State private var dummyBinding: String = ""
+    @Binding var editingIndex: Int?
     
-    init(index: Int) {
-        self.index = index
-        self.autocapitalization = .none
-    }
+    var autocapitalization: UITextAutocapitalizationType = .none
+    @State private var dummyBinding: String = ""
     
     var body: some View {
         ZStack {
-            HStack(spacing: 0) {
-                Text(getIngredient())
-                    .opacity(0)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.all, 8)
+            HStack {
+                RecipeControls.ReadIngredientText(getIngredient())
+                    .padding()
+
+                Spacer()
             }
-            
-            TextEditor(text: getIngredientBinding())
-                .autocapitalization(autocapitalization)
+            .opacity(editingIndex != index ? 1 : 0)
+
+            if editingIndex == index {
+                VStack {
+                    Spacer()
+                    
+                    EditableTextView(textBinding: getIngredientBinding(), isFirstResponder: true)
+                        .onChange(of: getIngredient()) { value in
+                            if value.hasSuffix("\n") {
+                                commitIngredient()
+                                withAnimation {
+                                    // unfocus
+                                    unfocusEditable()
+                                    editingIndex = nil
+                                }
+                            }
+                        }
+ 
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
+        }
+        .simultaneousGesture(
+            TapGesture(count: 1).onEnded { _ in
+                unfocusEditable()
+                editingIndex = index
+            }
+        )
+    }
+    
+//    func unfocusEditable() {
+//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+//    }
+    
+    func commitIngredient() {
+        if index < recipe.tempIngredients.count {
+            recipe.tempIngredients[index].ingredientString.removeLast(1)
         }
     }
     

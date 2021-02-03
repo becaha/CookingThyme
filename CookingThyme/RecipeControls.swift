@@ -33,6 +33,7 @@ struct RecipeControls {
                         Text("\(index + 1)")
 
                         Text("\(direction)")
+                            .font(.body)
                     }
 //                }
             }
@@ -40,11 +41,25 @@ struct RecipeControls {
 //        }
     }
     
+    @ViewBuilder
+    static func ReadDirection(direction: String) -> some View {
+        Text("\(direction)")
+            .font(.body)
+    }
+    
     // on click to edit an ingredient, this will be added to that ingredient, off click will save that to
     // temporary changed ingredients
     @ViewBuilder
     static func ReadIngredientText(_ ingredient: Ingredient) -> some View {
         Text("\(ingredient.toString())")
+            .font(.body)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    @ViewBuilder
+    static func ReadIngredientText(_ ingredientString: String) -> some View {
+        Text("\(ingredientString)")
+            .font(.body)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

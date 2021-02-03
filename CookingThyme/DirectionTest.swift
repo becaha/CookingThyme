@@ -11,37 +11,30 @@ struct DirectionTest: View {
     @State var isPresented = true
     @State var newDirection: String = "this is a verrrrrrrrrry long sentenece for sure double lines"
     
+    var list = ["a", "b"]
     var directions = ["mix", "drink"]
+    
+    @State var text = "one lineer"
     
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Title")
-                    .padding()
-            
-                List {
-                    Section {
-                        ForEach((1...20).reversed(), id: \.self) { num in
-                            Text("\(num)")
-                            
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        ForEach (0..<list.count, id: \.self) { index in
                             HStack {
-                                Image(systemName: "cart.fill")
-                                
-                                Button("Add to Shopping List", action: {
-                                    withAnimation {
-        //                                confirmAddIngredient = nil
-        //                                addedIngredients.append(ingredient.id)
-        //                                addToShoppingList(ingredient)
-                                    }
-                                })
+//                                EditableTextView(textBinding: $text)
                             }
-                            .foregroundColor(mainColor())
-                        }
+                            .formSectionItem()
+                         }
+                         .onDelete { indexSet in // (4)
+                            // The rest of this function will be added later
+                         }
                     }
-                    
+                    .formSection()
                 }
-                .moveDisabled(true)
             }
+            .background(formBackgroundColor())
             .navigationBarTitle("Recipes", displayMode: .inline)
         }
     }

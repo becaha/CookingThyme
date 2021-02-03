@@ -356,9 +356,9 @@ struct RecipeCollectionView: View {
         }
     }
     
-    func unfocusEditable() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-    }
+//    func unfocusEditable() {
+//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+//    }
     
     func searchRecipes(_ search: String) {
         withAnimation {

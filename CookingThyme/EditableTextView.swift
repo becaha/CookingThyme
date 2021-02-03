@@ -8,51 +8,46 @@
 import SwiftUI
  
 struct EditableTextView: UIViewRepresentable {
- 
-    @Binding var textBinding: String
-    var text: String
-//    var textStyle: UIFont.TextStyle
- 
-    func makeUIView(context: Context) -> UITextView {
-        let textView = UITextView()
- 
-        textView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-        textView.autocapitalizationType = .sentences
-        textView.isSelectable = true
-        textView.isUserInteractionEnabled = true
-        textView.delegate = context.coordinator
-        textView.isEditable = true
-        
-        textView.isScrollEnabled = false
-        
-        return textView
-    }
- 
-    func updateUIView(_ uiView: UITextView, context: Context) {
-        uiView.text = text
-        uiView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-//        var newFrame = uiView.frame
-//        let width = newFrame.size.width
-//        let newSize = uiView.sizeThatFits(CGSize(width: width,
-//                                                           height: CGFloat.greatestFiniteMagnitude))
-//        newFrame.size = CGSize(width: width, height: newSize.height)
-//        uiView.frame = newFrame
-
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator($textBinding)
-    }
-     
+    
     class Coordinator: NSObject, UITextViewDelegate {
+
         var text: Binding<String>
-     
+        var didBecomeFirstResponder = false
+
         init(_ text: Binding<String>) {
             self.text = text
         }
-     
+
         func textViewDidChange(_ textView: UITextView) {
             self.text.wrappedValue = textView.text
+        }
+
+    }
+ 
+    @Binding var textBinding: String
+    var isFirstResponder: Bool = false
+//    var text: String
+//    var textStyle: UIFont.TextStyle
+    
+    func makeUIView(context: Context) -> UITextView {
+        let textView = UITextView(frame: .zero)
+        textView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        textView.delegate = context.coordinator
+        textView.isEditable = true
+
+        return textView
+    }
+
+    func makeCoordinator() -> EditableTextView.Coordinator {
+        return Coordinator($textBinding)
+    }
+
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        uiView.text = textBinding
+
+        if isFirstResponder && !context.coordinator.didBecomeFirstResponder  {
+            uiView.becomeFirstResponder()
+            context.coordinator.didBecomeFirstResponder = true
         }
     }
 }
@@ -92,7 +87,7 @@ struct TestView: View {
                 
                 ForEach((1...11).reversed(), id: \.self) { _ in
                     HStack {
-                        EditableTextView(textBinding: $text, text: text)
+//                        EditableTextView(textBinding: $text)
                     }
     //                .formSectionItem()
                 }

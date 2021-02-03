@@ -64,6 +64,7 @@
 		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
 		DB6EFA8525C8978C0060B2B4 /* EditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */; };
 		DB6EFA8725C89F440060B2B4 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */; };
+		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -160,6 +161,7 @@
 		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
 		DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableTextView.swift; sourceTree = "<group>"; };
+		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 			children = (
 				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
 				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
+				DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */,
 				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
@@ -673,6 +676,7 @@
 				DB49B5492581A66200808CC8 /* RecipesWebHandler.swift in Sources */,
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
+				DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,
 				DB83F6A425AE15400041DAA7 /* User.swift in Sources */,
 				DB88CD3825BBAABD00A7F32C /* RecipeTitleBorder.swift in Sources */,

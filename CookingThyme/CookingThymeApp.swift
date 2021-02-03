@@ -34,6 +34,10 @@ struct CookingThymeApp: App {
     }
 }
 
+func unfocusEditable() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+}
+
 // MARK: - ASSETS
 
 func mainColor() -> Color {
