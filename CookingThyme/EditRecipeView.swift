@@ -264,9 +264,6 @@ struct EditRecipeView: View {
                 }
             }
             else {
-                withAnimation {
-                    isEditingRecipe = false
-                }
                 recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, categoryId: recipe.categoryId)
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
@@ -307,10 +304,6 @@ struct EditRecipeView: View {
             ingredientsFieldMissing = false
         }
     }
-    
-//    func unfocusEditable() {
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
-//    }
     
     @ViewBuilder
     func EditableRecipe() -> some View {

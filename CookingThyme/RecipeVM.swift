@@ -146,14 +146,11 @@ class RecipeVM: ObservableObject {
         }
     }
     
-    // TODO 3 only update, no delete -> create and only update if something is changed
-    // update recipe to given recipe parts
     func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, categoryId: Int) {
-        category.deleteRecipe(withId: id)
-        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: categoryId, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
-            self.recipe = recipe
+        if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
             refreshRecipe()
         }
+        
         category.refreshCategory()
     }
     
@@ -162,7 +159,9 @@ class RecipeVM: ObservableObject {
     }
     
     static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: Int) {
-        RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
+        if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId) {
+            print("error moving recipe")
+        }
     }
     
     static func copy(recipe: Recipe, toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {

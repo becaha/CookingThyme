@@ -17,6 +17,7 @@ struct RecipeNameTitle: View {
     }
 }
 
+// TODO: add all should be disabled if all have been added
 struct RecipeLists: View {
     @EnvironmentObject var recipe: RecipeVM
     

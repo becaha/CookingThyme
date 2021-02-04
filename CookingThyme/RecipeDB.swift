@@ -600,7 +600,7 @@ class RecipeDB {
     
     // MARK: - Update
     
-    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) {
+    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) -> Bool {
         do {
             try dbQueue.write{ (db: Database) in
 
@@ -615,8 +615,10 @@ class RecipeDB {
                     """,
                     arguments: [name, servings, recipeCategoryId, id])
             }
+            return true
         } catch {
             print("Error updating recipe")
+            return false
         }
     }
     
@@ -636,21 +638,16 @@ class RecipeDB {
         }
     }
     
-    func updateDirections(withRecipeId recipeId: Int, directions: [Direction]) {
+    func updateDirections(withRecipeId recipeId: Int, directions: [Direction]) -> Bool {
         do {
             for direction in directions {
-                if direction.temp {
-                    try createDirection(direction, withRecipeId: recipeId)
-                }
-                else {
-                    try updateDirection(direction)
-                }
+                try updateDirection(direction)
             }
             
-            return
+            return true
         } catch {
             print("Error updating directions")
-            return
+            return false
         }
     }
     
@@ -671,21 +668,44 @@ class RecipeDB {
         }
     }
     
-    func updateIngredients(forRecipeId recipeId: Int, ingredients: [Ingredient]) {
+    func updateIngredients(withRecipeId recipeId: Int, ingredients: [Ingredient]) -> Bool {
         do {
             for ingredient in ingredients {
-                if ingredient.temp {
-                    try createIngredient(ingredient, withRecipeId: recipeId)
-                }
-                else {
-                    try updateIngredient(ingredient, withRecipeId: recipeId)
-                }
+                try updateIngredient(ingredient, withRecipeId: recipeId)
             }
 
-            return
+            return true
         } catch {
             print("Error updating ingredients")
+            return false
+        }
+    }
+    
+    func updateImage(_ image: RecipeImage, withRecipeId recipeId: Int) throws {
+        try dbQueue.write{ (db: Database) in
+            try db.execute(
+                sql:
+                """
+                UPDATE \(RecipeImage.Table.databaseTableName) \
+                SET \(RecipeImage.Table.type) = ?, \
+                \(RecipeImage.Table.data) = ? \
+                WHERE \(RecipeImage.Table.recipeId) = ?
+                """,
+                arguments: [image.type.rawValue, image.data, recipeId])
             return
+        }
+    }
+    
+    func updateImages(withRecipeId recipeId: Int, images: [RecipeImage]) -> Bool {
+        do {
+            for image in images {
+                try updateImage(image, withRecipeId: recipeId)
+            }
+
+            return true
+        } catch {
+            print("Error updating images")
+            return false
         }
     }
     

@@ -150,6 +150,23 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // creates recipe given temp ingredients
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Bool {
+        let ingredients = Ingredient.toIngredients(tempIngredients)
+        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
+    }
+    
+    // creates recipe given ingredients
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Bool {
+        if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), recipeCategoryId: categoryId),
+            RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions),
+            RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients),
+            RecipeDB.shared.updateImages(withRecipeId: id, images: images) {
+            return true
+        }
+        return false
+    }
+    
+    // creates recipe given temp ingredients
     static func createRecipe(forCategoryId categoryId: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
@@ -167,7 +184,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         return createdRecipe
     }
     
-    // creates recipe with given parts
+    // creates recipe with given parts, called by actually creating new recipe
     func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
         if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
