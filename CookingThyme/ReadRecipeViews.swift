@@ -44,6 +44,7 @@ struct RecipeLists: View {
     }
 }
 
+// TODO: servings doesnt change in landscape
 struct IngredientsView: View {
     @Binding var servings: Int
     

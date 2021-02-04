@@ -236,6 +236,7 @@ struct RecipeCollectionView: View {
         }
     }
     
+    // TODO: categories with long name
     @ViewBuilder
     func CategoryView(_ category: RecipeCategoryVM) -> some View {
         VStack {
@@ -245,6 +246,7 @@ struct RecipeCollectionView: View {
                 // without this, the image will update, it causes an early refresh
                 collection.updateCategory(forCategoryId: category.id, toName: name)
             })
+            .multilineTextAlignment(.center)
             .font(.subheadline)
             .foregroundColor(.black)
         }
@@ -252,7 +254,13 @@ struct RecipeCollectionView: View {
             return drop(providers: providers, category: category)
         }
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: loadImage) {
-            ImagePicker(image: self.$selectedImage)
+            ZStack {
+                NavigationView {
+                }
+                .background(Color.white.edgesIgnoringSafeArea(.all))
+                
+                ImagePicker(image: self.$selectedImage)
+            }
         }
         .padding()
         .padding(.horizontal, 7)
@@ -304,16 +312,20 @@ struct RecipeCollectionView: View {
                                 if let category = editCategory {
                                     category.setImage(url: UIPasteboard.general.url)
                                     editCategory = nil
+                                    confirmPaste = false
                                 }
                               },
                               secondaryButton: .default(Text("Cancel")) {
                                 editCategory = nil
+                                confirmPaste = false
                               })
                     }
                     if explainPaste {
                         return Alert(title: Text("Paste Image"),
                               message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
-                              dismissButton: .default(Text("Ok")))
+                              dismissButton: .default(Text("Ok")) {
+                                explainPaste = false
+                              })
                     }
                     return Alert(title: Text("Delete Image"),
                                  message: Text("Are you sure you want to delete the image for this category?"),
@@ -414,6 +426,7 @@ struct RecipeCollectionView: View {
                 .padding()
             }
             .onTapGesture(count: 1, perform: {})
+            .padding(.leading)
             .frame(width: 200, height: 30)
         }
     }

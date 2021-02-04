@@ -117,7 +117,7 @@ struct EditRecipeView: View {
                 }
             }
         }
-        .background(formBackgroundColor())
+        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading:
@@ -182,7 +182,13 @@ struct EditRecipeView: View {
                         }
                         .disabled(recipe.isImportingFromURL)
                         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
-                            ImagePicker(image: self.$selectedImage)
+                            ZStack {
+                                NavigationView {
+                                }
+                                .background(Color.white.edgesIgnoringSafeArea(.all))
+                                
+                                ImagePicker(image: self.$selectedImage)
+                            }
                         }
                     }
             
@@ -193,6 +199,11 @@ struct EditRecipeView: View {
                     })
                     {
                         Text("Done")
+                    }
+                    .alert(isPresented: $presentErrorAlert) {
+                        Alert(title: Text("Save Failed"),
+                              message: Text("\(getErrorMessages())")
+                        )
                     }
                 }
                 .foregroundColor(mainColor())
@@ -529,11 +540,6 @@ struct EditRecipeView: View {
                     editingDirectionIndex = nil
                 }
             } : nil)
-            .alert(isPresented: $presentErrorAlert) {
-                Alert(title: Text("Save Failed"),
-                      message: Text("\(getErrorMessages())")
-                )
-            }
         }
     }
     

@@ -41,8 +41,7 @@ struct ReadRecipeView: View {
                         directions: recipe.directions
             )
         }
-        
-        .background(formBackgroundColor())
+        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
                 recipe.moveRecipe(toCategoryId: categoryId)

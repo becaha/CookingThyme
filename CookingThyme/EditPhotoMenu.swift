@@ -47,7 +47,13 @@ struct EditPhotoMenu: ViewModifier {
             content
         }
         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: setImage) {
-            ImagePicker(image: self.$selectedImage)
+            ZStack {
+                NavigationView {
+                }
+                .background(Color.white.edgesIgnoringSafeArea(.all))
+                
+                ImagePicker(image: self.$selectedImage)
+            }
         }
         .alert(isPresented: $presentPasteAlert) {
             if confirmPaste {

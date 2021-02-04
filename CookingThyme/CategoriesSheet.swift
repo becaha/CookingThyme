@@ -65,7 +65,7 @@ struct CategoriesSheet: View {
                 }
                 .listStyle(InsetGroupedListStyle())
             }
-            .background(formBackgroundColor())
+            .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
             .onAppear {
                 if let currentCategoryId = self.currentCategoryId {
                     selectedId = currentCategoryId

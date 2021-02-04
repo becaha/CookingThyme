@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: image in recipe in landscape
+// TODO: image loading
 // TODO: in edit mode allow drag ordering of the images
 // TODO: make images scrollable by left/right arrows
 struct ScrollableImagesView: View {
