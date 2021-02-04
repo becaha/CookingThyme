@@ -17,7 +17,6 @@ struct RecipeNameTitle: View {
     }
 }
 
-// TODO: add all should be disabled if all have been added
 struct RecipeLists: View {
     @EnvironmentObject var recipe: RecipeVM
     
@@ -124,6 +123,9 @@ struct IngredientsView: View {
                                 Button(action: {
                                     withAnimation {
                                         callAddToShoppingList(ingredient)
+                                        if addedIngredients.count == ingredients.count {
+                                            addedAllIngredients = true
+                                        }
                                     }
                                 }) {
                                     Image(systemName: "cart.fill.badge.plus")
