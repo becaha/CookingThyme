@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: changing servings doees not change ingredient amounts at first read recipe
 struct ReadRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM

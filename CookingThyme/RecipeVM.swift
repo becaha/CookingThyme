@@ -26,7 +26,7 @@ class RecipeVM: ObservableObject {
     @Published var isImportingFromURL = false
     @Published var invalidURL = false
     
-    @Published var recipesWebHandler = RecipeSearchApiHandler()
+    @Published var recipesWebHandler = RecipeSearchHandler()
     @Published var isPopullating = true
     @Published var recipeNotFound = false
     

@@ -7,7 +7,8 @@
 
 import Foundation
 
-class RecipeSearchApiHandler: ObservableObject {
+// search recipes with spoonacular api
+class RecipeSearchHandler: ObservableObject {
     @Published var recipeList = [Recipe]()
     @Published var recipeDetail: Recipe?
     @Published var recipeDetailError = false

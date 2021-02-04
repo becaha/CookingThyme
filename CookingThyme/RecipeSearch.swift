@@ -12,7 +12,7 @@ struct RecipeSearch: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
-    @ObservedObject var recipeWebHandler = RecipeSearchApiHandler()
+    @ObservedObject var recipeWebHandler = RecipeSearchHandler()
     
     @State var hasSearched = false
         
