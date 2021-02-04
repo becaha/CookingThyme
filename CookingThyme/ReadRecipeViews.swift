@@ -123,9 +123,6 @@ struct IngredientsView: View {
                                 Button(action: {
                                     withAnimation {
                                         callAddToShoppingList(ingredient)
-                                        if addedIngredients.count == ingredients.count {
-                                            addedAllIngredients = true
-                                        }
                                     }
                                 }) {
                                     Image(systemName: "cart.fill.badge.plus")
@@ -190,6 +187,9 @@ struct IngredientsView: View {
         confirmAddIngredient = nil
         addedIngredients.append(ingredient.id)
         addToShoppingList(ingredient)
+        if addedIngredients.count == ingredients.count {
+            addedAllIngredients = true
+        }
     }
 }
     
