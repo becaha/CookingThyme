@@ -11,7 +11,7 @@ import SwiftUI
 
 // TODO: everything on background threed
 class RecipeVM: ObservableObject {
-    var category: RecipeCategoryVM
+    var category: RecipeCategoryVM?
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
     @Published var tempIngredients: [TempIngredient] = []
@@ -26,6 +26,14 @@ class RecipeVM: ObservableObject {
     @Published var isImportingFromURL = false
     @Published var invalidURL = false
     
+    @Published var recipesWebHandler = RecipeSearchApiHandler()
+    @Published var isPopullating = true
+    @Published var recipeNotFound = false
+    
+    private var webHandlerCancellable: AnyCancellable?
+    private var recipeDetailCancellable: AnyCancellable?
+    private var recipeDetailErrorCancellable: AnyCancellable?
+    
     var originalServings: Int = 0
 
     private var recipeTranscriberCancellable: AnyCancellable?
@@ -33,6 +41,7 @@ class RecipeVM: ObservableObject {
 
     // MARK: - Init
     
+    // inits recipe in a category
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
         
@@ -43,9 +52,17 @@ class RecipeVM: ObservableObject {
         popullateImages()
     }
     
+    // inits a create new recipe in a category
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
         self.category = category
+        
+        setCancellables()
+    }
+    
+    // inits a public recipe from search
+    init(recipe: Recipe) {
+        self.recipe = recipe
         
         setCancellables()
     }
@@ -74,6 +91,23 @@ class RecipeVM: ObservableObject {
             .sink { (recipeText) in
                 self.recipeText = recipeText
             }
+        
+        self.webHandlerCancellable = self.recipesWebHandler.objectWillChange
+            .sink { _ in
+                self.objectWillChange.send()
+            }
+        
+        self.recipeDetailCancellable = self.recipesWebHandler.$recipeDetail.sink { (recipe) in
+            if let recipe = recipe {
+                self.recipe = recipe
+                self.imageHandler.setImages(self.recipe.images)
+                self.isPopullating = false
+            }
+        }
+        
+        self.recipeDetailErrorCancellable = self.recipesWebHandler.$recipeDetailError.sink { (isError) in
+            self.recipeNotFound = isError
+        }
     }
     
     // MARK: - Model Access
@@ -108,6 +142,20 @@ class RecipeVM: ObservableObject {
     }
     
     // MARK: - Intents
+    
+    // MARK: - Public Recipe
+    
+    // calls api to get detail of a recipe (its parts)
+    func popullateDetail() {
+        recipesWebHandler.listRecipeDetail(recipe)
+    }
+    
+    // copies recipe to category of user's collection
+    func copyRecipe(toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {
+        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
+    }
+    
+    // MARK: - Recipe
     
     // gets recipe, directions, ingredients, and images from db
     func popullateRecipe() {
@@ -151,7 +199,7 @@ class RecipeVM: ObservableObject {
             refreshRecipe()
         }
         
-        category.refreshCategory()
+        category!.refreshCategory()
     }
     
     func moveRecipe(toCategoryId categoryId: Int) {

@@ -12,7 +12,7 @@ struct RecipeSearch: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
-    @ObservedObject var recipeWebHandler = RecipesWebHandler()
+    @ObservedObject var recipeWebHandler = RecipeSearchApiHandler()
     
     @State var hasSearched = false
         
@@ -46,7 +46,7 @@ struct RecipeSearch: View {
                     List {
                         ForEach(recipeWebHandler.recipeList) { recipe in
                             NavigationLink ("\(recipe.name)", destination:
-                                PublicRecipeView(recipe: PublicRecipeVM(publicRecipe: recipe))
+                                PublicRecipeView(recipe: RecipeVM(recipe: recipe))
                             )
                         }
                     }

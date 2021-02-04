@@ -66,6 +66,7 @@
 		DB6EFA8725C89F440060B2B4 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */; };
 		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
 		DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */; };
+		DB6EFA8D25CC9B990060B2B4 /* RecipeSearchApiHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8C25CC9B990060B2B4 /* RecipeSearchApiHandler.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -164,6 +165,7 @@
 		DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 		DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
+		DB6EFA8C25CC9B990060B2B4 /* RecipeSearchApiHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchApiHandler.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				DB49B4C52565E49F00808CC8 /* RecipeVM.swift */,
 				DB49B5182579F1B300808CC8 /* ImageHandler.swift */,
 				DB49B53E258018C200808CC8 /* TimerHandler.swift */,
+				DB6EFA8C25CC9B990060B2B4 /* RecipeSearchApiHandler.swift */,
 				DB49B5482581A66200808CC8 /* RecipesWebHandler.swift */,
 				DB49B56625827ADA00808CC8 /* PublicRecipeVM.swift */,
 				DB83F6A525AE16590041DAA7 /* UserVM.swift */,
@@ -694,6 +697,7 @@
 				DB49B5632582746E00808CC8 /* PublicRecipeView.swift in Sources */,
 				DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
+				DB6EFA8D25CC9B990060B2B4 /* RecipeSearchApiHandler.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,

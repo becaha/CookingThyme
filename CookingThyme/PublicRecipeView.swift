@@ -12,7 +12,7 @@ struct PublicRecipeView: View {
 
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
-    @ObservedObject var recipe: PublicRecipeVM
+    @ObservedObject var recipe: RecipeVM
     
     @State private var categoriesPresented = false
     
@@ -51,7 +51,7 @@ struct PublicRecipeView: View {
                         ReadImagesView(uiImages: recipe.imageHandler.images)
                     }
                     
-                    RecipeLists(ingredients: recipe.ingredients,
+                    RecipeLists(
                         addToShoppingList: { ingredient in
                             user.collection!.addToShoppingList(ingredient)
                         },
@@ -61,8 +61,7 @@ struct PublicRecipeView: View {
                         onNotSignedIn: {
                             signinAlert = true
                             signinAlertMessage = "Sign in to add ingredients to shopping list."
-                        },
-                        directions: recipe.directions)
+                        })
                         .environmentObject(recipe)
                 }
             }

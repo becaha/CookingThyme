@@ -305,9 +305,9 @@ class RecipesWebHandler: ObservableObject {
 //    }
 }
 
-extension NSNumber {
-    func toString() -> String? {
-        let formatter = NumberFormatter()
-        return formatter.string(from: self)
-    }
-}
+//extension NSNumber {
+//    func toString() -> String? {
+//        let formatter = NumberFormatter()
+//        return formatter.string(from: self)
+//    }
+//}

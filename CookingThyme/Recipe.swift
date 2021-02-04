@@ -40,6 +40,14 @@ struct Recipe: Identifiable {
     var images: [RecipeImage] = []
     var recipeCategoryId: Int
     
+    // recipe from api will have an id and name
+    init(id: Int, name: String) {
+        self.id = id
+        self.name = name
+        self.servings = 0
+        self.recipeCategoryId = 0
+    }
+    
     init() {
         self.id = 0
         self.name = ""
