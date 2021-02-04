@@ -55,12 +55,12 @@ struct RecipeCollectionView: View {
             
     var body: some View {
         NavigationView {
-            Group {
+            GeometryReader { geometry in
                 if isLandscape {
-                    CollectionViewLandscape()
+                    CollectionViewLandscape(width: geometry.size.width, height: geometry.size.height)
                 }
                 else {
-                    CollectionView()
+                    CollectionView(width: geometry.size.width)
                 }
             }
             .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
@@ -94,9 +94,9 @@ struct RecipeCollectionView: View {
     }
     
     @ViewBuilder
-    func CollectionView() -> some View {
+    func CollectionView(width: CGFloat) -> some View {
         VStack(spacing: 0) {
-            CategoriesView()
+            CategoriesView(width: width)
             
             CurrentCategoryView()
             
@@ -105,15 +105,19 @@ struct RecipeCollectionView: View {
     }
     
     @ViewBuilder
-    func CollectionViewLandscape() -> some View {
-        HStack(spacing: 0) {
-            CategoriesView()
-            
-            VStack(spacing: 0) {
-                CurrentCategoryView()
-                
-                AddNewRecipeView()
+    func CollectionViewLandscape(width: CGFloat, height: CGFloat) -> some View {
+        ZStack {
+            HStack(spacing: 0) {
+                CategoriesView(width: width)
+
+                VStack(spacing: 0) {
+                    CurrentCategoryView()
+                    
+                    AddNewRecipeView()
+                }
             }
+            
+            AddCategoryViewLandscape(width: width)
         }
     }
     
@@ -268,7 +272,7 @@ struct RecipeCollectionView: View {
     }
     
     @ViewBuilder
-    func CategoriesScrollLandscape() -> some View {
+    func CategoriesScrollLandscape(width: CGFloat) -> some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
                 ForEach(collection.categories, id: \.self) { category in
@@ -276,15 +280,16 @@ struct RecipeCollectionView: View {
                 }
             }
         }
+        .frame(width: width / 7)
         .padding(.bottom, 60) // leaves space for add category button
     }
 
     @ViewBuilder
-    func CategoriesView() -> some View {
+    func CategoriesView(width: CGFloat) -> some View {
         ZStack {
             Group {
                 if isLandscape {
-                    CategoriesScrollLandscape()
+                    CategoriesScrollLandscape(width: width)
                 }
                 else {
                     CategoriesScroll()
@@ -334,10 +339,7 @@ struct RecipeCollectionView: View {
                       secondaryButton: .cancel())
             }
             
-            if isLandscape {
-                AddCategoryViewLandscape()
-            }
-            else {
+            if !isLandscape {
                 AddCategoryView()
             }
         }
@@ -359,14 +361,19 @@ struct RecipeCollectionView: View {
     }
     
     @ViewBuilder
-    func AddCategoryViewLandscape() -> some View {
-        VStack(alignment: .center) {
-            Spacer()
+    func AddCategoryViewLandscape(width: CGFloat) -> some View {
+        HStack {
+            VStack(alignment: .center) {
+                Spacer()
+                
+                AddCategoryButton()
+                    .padding(.horizontal, 23)
+            }
+            .padding()
+            .frame(width: width / 7)
             
-            AddCategoryButton()
+            Spacer()
         }
-        .padding()
-        .zIndex(1)
     }
     
     
