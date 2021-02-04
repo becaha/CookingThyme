@@ -96,7 +96,6 @@
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
 		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
-		DBCDE79625A8EE8C003DC95F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE79525A8EE8C003DC95F /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -193,7 +192,6 @@
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
 		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
-		DBCDE79525A8EE8C003DC95F /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -511,7 +509,6 @@
 		DBCDE79725A8EE9C003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
-				DBCDE79525A8EE8C003DC95F /* Keys.swift */,
 			);
 			name = Credentials;
 			sourceTree = "<group>";
@@ -650,7 +647,6 @@
 				DB49B54525806B8300808CC8 /* SimpleTimer.swift in Sources */,
 				DB49B53D2580163500808CC8 /* TimerView.swift in Sources */,
 				DB49B55D2581E63000808CC8 /* WebMeasurement.swift in Sources */,
-				DBCDE79625A8EE8C003DC95F /* Keys.swift in Sources */,
 				DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */,
 				DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */,
 				DB49B51D257AA4C000808CC8 /* RecipeImage.swift in Sources */,
