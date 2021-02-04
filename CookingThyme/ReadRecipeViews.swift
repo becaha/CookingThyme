@@ -18,7 +18,7 @@ struct RecipeNameTitle: View {
 }
 
 struct RecipeLists: View {
-    @Binding var servings: Int
+    @EnvironmentObject var recipe: RecipeVM
     
     @EnvironmentObject var user: UserVM
     var ingredients: [Ingredient]
@@ -30,7 +30,7 @@ struct RecipeLists: View {
     
     var body: some View {
         VStack {
-            IngredientsView(servings: $servings, ingredients: ingredients,
+            IngredientsView(ingredients: ingredients,
                 addToShoppingList: { ingredient in
                     addToShoppingList(ingredient)
                 },
@@ -44,9 +44,8 @@ struct RecipeLists: View {
     }
 }
 
-// TODO: servings doesnt change in landscape
 struct IngredientsView: View {
-    @Binding var servings: Int
+    @EnvironmentObject var recipe: RecipeVM
     
     @EnvironmentObject var user: UserVM
     var ingredients: [Ingredient]
@@ -68,10 +67,9 @@ struct IngredientsView: View {
                 Spacer()
                 
                 VStack {
-                    // should be changing servings but not in db
-                    Picker(selection: $servings, label:
+                    Picker(selection: $recipe.servings, label:
                             HStack {
-                                Text("Servings: \(servings) ")
+                                Text("Servings: \(recipe.servings) ")
                                     .textCase(.uppercase)
                                     .font(.subheadline)
                         

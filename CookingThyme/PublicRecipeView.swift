@@ -51,7 +51,7 @@ struct PublicRecipeView: View {
                         ReadImagesView(uiImages: recipe.imageHandler.images)
                     }
                     
-                    RecipeLists(servings: $recipe.servings, ingredients: recipe.ingredients,
+                    RecipeLists(ingredients: recipe.ingredients,
                         addToShoppingList: { ingredient in
                             user.collection!.addToShoppingList(ingredient)
                         },
@@ -63,6 +63,7 @@ struct PublicRecipeView: View {
                             signinAlertMessage = "Sign in to add ingredients to shopping list."
                         },
                         directions: recipe.directions)
+                        .environmentObject(recipe)
                 }
             }
         }

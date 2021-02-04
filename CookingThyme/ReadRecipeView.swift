@@ -15,7 +15,6 @@ struct ReadRecipeView: View {
     
     @State private var categoriesPresented = false
     
-//    @State private var directionIndicesCompleted = [Int]()
     @State private var newAmount: String = ""
     @State private var newUnit: String = ""
     @State private var newName: String = ""
@@ -30,7 +29,7 @@ struct ReadRecipeView: View {
             
             getImageView()
             
-            RecipeLists(servings: $recipe.servings, ingredients: recipe.ingredients,
+            RecipeLists(ingredients: recipe.ingredients,
                         addToShoppingList: { ingredient in
                             collection.addToShoppingList(ingredient)
                         },
@@ -40,6 +39,7 @@ struct ReadRecipeView: View {
                         onNotSignedIn: {},
                         directions: recipe.directions
             )
+            .environmentObject(recipe)
         }
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $categoriesPresented, content: {

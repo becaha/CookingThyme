@@ -229,7 +229,7 @@ struct EditRecipeView: View {
     private func setRecipe() {
         if name == "" {
             name = recipe.name
-            servings = recipe.servings.toString()
+            servings = recipe.originalServings.toString()
         }
     }
     

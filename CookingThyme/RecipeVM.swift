@@ -25,6 +25,8 @@ class RecipeVM: ObservableObject {
     @Published var importFromURL = false
     @Published var isImportingFromURL = false
     @Published var invalidURL = false
+    
+    var originalServings: Int = 0
 
     private var recipeTranscriberCancellable: AnyCancellable?
     private var recipeTextTranscriberCancellable: AnyCancellable?
@@ -33,6 +35,7 @@ class RecipeVM: ObservableObject {
     
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
+        
         self.category = category
         setCancellables()
         
@@ -119,6 +122,7 @@ class RecipeVM: ObservableObject {
     }
     
     func popullateRecipeTemps() {
+        self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
