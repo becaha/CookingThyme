@@ -65,6 +65,7 @@
 		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
 		DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */; };
 		DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */; };
+		DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8E25CCB9760060B2B4 /* Keys.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -161,6 +162,7 @@
 		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 		DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchHandler.swift; sourceTree = "<group>"; };
+		DB6EFA8E25CCB9760060B2B4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -509,6 +511,7 @@
 		DBCDE79725A8EE9C003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
+				DB6EFA8E25CCB9760060B2B4 /* Keys.swift */,
 			);
 			name = Credentials;
 			sourceTree = "<group>";
@@ -638,6 +641,7 @@
 				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
+				DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */,
 				DB49B5592581BB0D00808CC8 /* RecipeSearch.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
