@@ -15,12 +15,12 @@ struct HomeView: View {
     var body: some View {
         TabView {
             RecipeSearch()
-                .homeNavigationBar(settingsAction: settingsAction)
-                .environmentObject(sheetNavigator)
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Recipe Search")
-                }
+            .homeNavigationBar(settingsAction: settingsAction)
+            .environmentObject(sheetNavigator)
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Recipe Search")
+            }
             
             VStack {
                 if !user.isSignedIn {

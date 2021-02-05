@@ -66,6 +66,7 @@
 		DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */; };
 		DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8E25CCB9760060B2B4 /* Keys.swift */; };
 		DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */; };
+		DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -163,6 +164,7 @@
 		DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchHandler.swift; sourceTree = "<group>"; };
 		DB6EFA8E25CCB9760060B2B4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationBar.swift; sourceTree = "<group>"; };
+		DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarColor.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -344,7 +346,6 @@
 				DB49B51E257ABF5800808CC8 /* Border.swift */,
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4FE256F488200808CC8 /* Deletable.swift */,
-				DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */,
 				DB49B54025801B4600808CC8 /* IsActive.swift */,
 				DB49B546258070C400808CC8 /* AnimatableCircleStroke.swift */,
 				DB88CD3925BF688B00A7F32C /* AutoSearchBar.swift */,
@@ -474,7 +475,9 @@
 			children = (
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
 				DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */,
+				DB49B529257EEE5500808CC8 /* NavigationBarConfigurator.swift */,
 				DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */,
+				DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -690,6 +693,7 @@
 				DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */,
+				DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */,
 				DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,

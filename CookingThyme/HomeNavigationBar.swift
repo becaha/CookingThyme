@@ -14,10 +14,6 @@ struct HomeNavigationBar: ViewModifier {
     func body(content: Content) -> some View {
         NavigationView {
             content
-            .background(NavigationBarConfigurator { nc in
-                nc.navigationBar.barTintColor = mainUIColor()
-                nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
-            })
             .font(.headline)
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
             .navigationBarItems(trailing:
@@ -26,6 +22,7 @@ struct HomeNavigationBar: ViewModifier {
                         .foregroundColor(.black)
                 }
             )
+            .navigationBarColor(mainUIColor())
         }
         // make sure all navigation is shown in stacks (one at a time, no sidebar)
         .navigationViewStyle(StackNavigationViewStyle())

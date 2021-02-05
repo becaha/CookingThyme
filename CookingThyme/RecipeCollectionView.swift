@@ -89,6 +89,7 @@ struct RecipeCollectionView: View {
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
+            .navigationBarColor(.white)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
