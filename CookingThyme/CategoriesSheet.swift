@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: if public recipe should show all category
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 
@@ -34,7 +33,7 @@ struct CategoriesSheet: View {
                 
                 List {
                     ForEach(collection.categories, id: \.self) { category in
-                        if category.name != "All" {
+                        if category.name != "All" || (actionWord == "Save") {
                             Button(action: {
                                 withAnimation {
                                     selectedId = category.id
