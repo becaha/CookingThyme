@@ -80,6 +80,7 @@ struct CategoriesSheet: View {
                         Text("Cancel")
                     }
             )
+            .navigationBarColor(offWhiteUIColor())
         }
     }
 }

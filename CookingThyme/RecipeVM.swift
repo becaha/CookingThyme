@@ -137,6 +137,10 @@ class RecipeVM: ObservableObject {
         recipe.images
     }
     
+    var source: String {
+        recipe.source
+    }
+    
     var categoryId: Int {
         recipe.recipeCategoryId
     }
@@ -194,8 +198,8 @@ class RecipeVM: ObservableObject {
         }
     }
     
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, categoryId: Int) {
-        if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
+    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: Int) {
+        if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) {
             refreshRecipe()
         }
         
@@ -207,7 +211,7 @@ class RecipeVM: ObservableObject {
     }
     
     static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: Int) {
-        if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId) {
+        if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) {
             print("error moving recipe")
         }
     }

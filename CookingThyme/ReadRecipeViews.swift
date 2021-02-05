@@ -38,6 +38,21 @@ struct RecipeLists: View {
                 .environmentObject(recipe)
             
             DirectionsList()
+            
+            SourceCredit()
+        }
+    }
+}
+
+struct SourceCredit: View {
+    @EnvironmentObject var recipe: RecipeVM
+
+    var body: some View {
+        if recipe.source != "" {
+            HStack {
+                Text("Source: \(recipe.source)")
+                    .font(.caption)
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// TODO: give credit to original source
 // search recipes with spoonacular api
 class RecipeSearchHandler: ObservableObject {
     @Published var recipeList = [Recipe]()
@@ -168,16 +169,20 @@ class RecipeSearchHandler: ObservableObject {
                         recipe.images = images
                     }
                     
-                    // TODO: handle clean html from instruction
-                    // instructions
+                    // instructions, TODO they do have analyzed instructions for future improvement
                     if let instructions = jsonObject["instructions"] as? String {
-                        let recipeInstructions = instructions.components(separatedBy: "\n")
+                        let cleanedInstructions = HTMLTranscriber.cleanHtmlTags(fromHtml: instructions, returnTitle: false)
+                        let recipeInstructions = cleanedInstructions.components(separatedBy: "\n")
                         recipe.directions = Direction.toDirections(directionStrings: recipeInstructions, withRecipeId: 0)
                     }
                     
                     // servings
                     if let servings = jsonObject["servings"] as? Int {
                         recipe.servings = servings
+                    }
+                    
+                    if let recipeSource = jsonObject["sourceUrl"] as? String {
+                        recipe.source = recipeSource
                     }
 
                     if let ingredients = jsonObject["extendedIngredients"] as? [Any] {
@@ -235,15 +240,16 @@ class RecipeSearchHandler: ObservableObject {
         }
         else {
             print("error getting recipe with id \(recipe.id)")
+            self.recipeDetailError = true
         }
     }
     
     // recipe is valid
     func isValid(_ recipe: Recipe) -> Bool {
-        if recipe.name != "", recipe.directions.count > 0, recipe.ingredients.count > 0 {
-            return true
+        if recipe.name == "", recipe.directions.count == 0, recipe.ingredients.count == 0 {
+            return false
         }
-        return false
+        return true
     }
     
 //    func prettyPrinting(data: Data) {

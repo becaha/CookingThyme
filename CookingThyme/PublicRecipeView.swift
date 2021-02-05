@@ -66,6 +66,7 @@ struct PublicRecipeView: View {
                 }
             }
         }
+        .navigationBarColor(offWhiteUIColor())
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .onAppear {
             withAnimation {

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+// TODO: new signed in user, cant click new recipe, cant click a lot
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
     // portrait or landscape
@@ -89,7 +91,7 @@ struct RecipeCollectionView: View {
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
-            .navigationBarColor(.white)
+            .navigationBarColor(offWhiteUIColor())
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

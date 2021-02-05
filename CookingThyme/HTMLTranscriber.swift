@@ -29,12 +29,12 @@ class HTMLTranscriber: ObservableObject {
             
             var name = ""
             if let contents = try? String(contentsOf: url) {
-                name = self.getTitle(fromHtml: contents)
+                name = HTMLTranscriber.cleanHtmlTags(fromHtml: contents, returnTitle: true)
             }
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
 //                self.printHTML(recipeString)
-                let recipe = self.parseRecipe(recipeString, withName: name)
+                let recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
                 DispatchQueue.main.async {
                     setRecipe(recipe, recipeString)
                 }
@@ -43,28 +43,44 @@ class HTMLTranscriber: ObservableObject {
         .resume()
     }
     
+    // <ul><li>thing</li><li>thing2</li>
     // TODO: symbols in html like &numbers &#039
-    func getTitle(fromHtml html: String) -> String {
+    static func cleanHtmlTags(fromHtml html: String, returnTitle: Bool) -> String {
         var cleanString = ""
         var inTag = false
         var currentTag = ""
+        var text = ""
         var title = ""
         var isTitle = false
+        // if there are no tags, return original string
+        if !html.contains("<") {
+            return html
+        }
         for char in html {
+            // start of tag
             if char == "<" {
                 inTag = true
                 currentTag = ""
+                // section off the text sectioned in the tags by adding new line to string
+                if text != "" {
+                    cleanString.append(text)
+                    cleanString.append("\n")
+                    text = ""
+                }
                 continue
             }
+            // end of tag
             else if char == ">" {
-                if currentTag.lowercased() == "title" && title == "" {
-                    isTitle = true
-                }
-                else {
-                    if isTitle {
-                        return title
+                if returnTitle {
+                    if currentTag.lowercased() == "title" && title == "" {
+                        isTitle = true
                     }
-                    isTitle = false
+                    else {
+                        if isTitle {
+                            return text
+                        }
+                        isTitle = false
+                    }
                 }
                 inTag = false
                 continue
@@ -74,17 +90,26 @@ class HTMLTranscriber: ObservableObject {
                 currentTag.append(char)
             }
             else {
-                if isTitle {
+                if returnTitle, isTitle {
                     title.append(char)
                 }
-                cleanString.append(char)
+                text.append(char)
             }
         }
-        return title
+        
+        if returnTitle {
+            return title
+        }
+        // remove last \n
+        if cleanString.count > 0 {
+            cleanString.removeLast(1)
+            return cleanString
+        }
+        return ""
     }
     
     // TODO: 1 1/2 cups (440 g), ignoring the stuff in parenthesis, just part of the name, no change with serving size
-    func parseRecipe(_ recipeString: String, withName name: String) -> Recipe {
+    func parseRecipe(_ recipeString: String, withName name: String, recipeURL: String) -> Recipe {
         enum CurrentPart {
             case serving
             case ingredient
@@ -189,7 +214,7 @@ class HTMLTranscriber: ObservableObject {
         let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: 0)
         let ingredients = Ingredient.toIngredients(fromStrings: ingredientStrings)
         
-        return Recipe(name: name, ingredients: ingredients, directions: directions, images: [RecipeImage](), servings: servings)
+        return Recipe(name: name, ingredients: ingredients, directions: directions, images: [RecipeImage](), servings: servings, source: recipeURL)
     }
     
     // "\t", "\u{xxxx}"

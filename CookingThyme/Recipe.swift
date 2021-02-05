@@ -17,6 +17,7 @@ struct Recipe: Identifiable {
         static let id = "Id"
         static let name = "Name"
         static let servings = "Servings"
+        static let source = "Source"
         static let recipeCategoryId = "RecipeCategoryId"
     }
     
@@ -38,6 +39,7 @@ struct Recipe: Identifiable {
     var ingredients: [Ingredient] = []
     var directions: [Direction] = []
     var images: [RecipeImage] = []
+    var source: String = ""
     var recipeCategoryId: Int
     
     // recipe from api will have an id and name
@@ -45,6 +47,7 @@ struct Recipe: Identifiable {
         self.id = id
         self.name = name
         self.servings = 0
+        self.source = ""
         self.recipeCategoryId = 0
     }
     
@@ -52,23 +55,26 @@ struct Recipe: Identifiable {
         self.id = 0
         self.name = ""
         self.servings = 0
+        self.source = ""
         self.recipeCategoryId = 0
     }
     
-    init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int) {
+    init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int, source: String) {
         self.name = name.lowercased().capitalized
         self.ingredients = ingredients
         self.directions = directions
         self.images = images
         self.servings = servings
+        self.source = source
         self.id = 0
         self.recipeCategoryId = 0
     }
     
-    init(id: Int, name: String, servings: Int, recipeCategoryId: Int) {
+    init(id: Int, name: String, servings: Int, source: String, recipeCategoryId: Int) {
         self.id = id
         self.name = name.lowercased().capitalized
         self.servings = servings
+        self.source = source
         self.recipeCategoryId = recipeCategoryId
     }
     
@@ -76,6 +82,7 @@ struct Recipe: Identifiable {
         id = row[Table.id]
         name = String(row[Table.name]).lowercased().capitalized
         servings = row[Table.servings]
+        source = row[Table.source]
         recipeCategoryId = row[Table.recipeCategoryId]
     }
     

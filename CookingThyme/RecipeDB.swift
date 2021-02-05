@@ -70,21 +70,21 @@ class RecipeDB {
     
     // MARK: - Create
     
-    func createRecipe(name: String, servings: Int, recipeCategoryId: Int) -> Recipe? {
+    func createRecipe(name: String, servings: Int, source: String, recipeCategoryId: Int) -> Recipe? {
         do {
             let recipe = try dbQueue.write{ (db: Database) -> Recipe in
 
                 try db.execute(
                     sql:
                     """
-                    INSERT INTO \(Recipe.Table.databaseTableName) (\(Recipe.Table.name), \(Recipe.Table.servings), \(Recipe.Table.recipeCategoryId)) \
-                    VALUES (?, ?, ?)
+                    INSERT INTO \(Recipe.Table.databaseTableName) (\(Recipe.Table.name), \(Recipe.Table.servings), \(Recipe.Table.source), \(Recipe.Table.recipeCategoryId)) \
+                    VALUES (?, ?, ?, ?)
                     """,
-                    arguments: [name, servings, recipeCategoryId])
+                    arguments: [name, servings, source, recipeCategoryId])
 
                 let recipeId = db.lastInsertedRowID
 
-                return Recipe(id: Int(recipeId), name: name, servings: servings, recipeCategoryId: recipeCategoryId)
+                return Recipe(id: Int(recipeId), name: name, servings: servings, source: source, recipeCategoryId: recipeCategoryId)
             }
             
             return recipe
@@ -434,7 +434,8 @@ class RecipeDB {
             let allRecipes = try dbQueue.read { db -> [Recipe] in
                 let rows = try Row.fetchCursor(db,
                                                sql: """
-                                                    SELECT DISTINCT \(Recipe.Table.databaseTableName).\(Recipe.Table.id), \(Recipe.Table.databaseTableName).\(Recipe.Table.name), \(Recipe.Table.databaseTableName).\(Recipe.Table.servings), \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId) FROM \(Recipe.Table.databaseTableName) \
+                                                    SELECT DISTINCT \(Recipe.Table.databaseTableName).\(Recipe.Table.id), \(Recipe.Table.databaseTableName).\(Recipe.Table.name), \(Recipe.Table.databaseTableName).\(Recipe.Table.servings),
+                                                    \(Recipe.Table.databaseTableName).\(Recipe.Table.source), \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId) FROM \(Recipe.Table.databaseTableName) \
                                                     INNER JOIN \(RecipeCategory.Table.databaseTableName) \
                                                     ON \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.id) = \(Recipe.Table.databaseTableName).\(Recipe.Table.recipeCategoryId)
                                                     WHERE \(RecipeCategory.Table.databaseTableName).\(RecipeCategory.Table.recipeCollectionId) = ?
@@ -600,7 +601,7 @@ class RecipeDB {
     
     // MARK: - Update
     
-    func updateRecipe(withId id: Int, name: String, servings: Int, recipeCategoryId: Int) -> Bool {
+    func updateRecipe(withId id: Int, name: String, servings: Int, source: String, recipeCategoryId: Int) -> Bool {
         do {
             try dbQueue.write{ (db: Database) in
 
@@ -610,10 +611,11 @@ class RecipeDB {
                     UPDATE \(Recipe.Table.databaseTableName) \
                     SET \(Recipe.Table.name) = ?, \
                     \(Recipe.Table.servings) = ?, \
+                    \(Recipe.Table.source) = ?, \
                     \(Recipe.Table.recipeCategoryId) = ? \
                     WHERE \(Recipe.Table.id) = ?
                     """,
-                    arguments: [name, servings, recipeCategoryId, id])
+                    arguments: [name, servings, source, recipeCategoryId, id])
             }
             return true
         } catch {

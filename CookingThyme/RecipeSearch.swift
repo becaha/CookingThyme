@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// TODO dont scroll thorugh the battery life and clock at top
+// TODO: no nav bar
 struct RecipeSearch: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
@@ -46,7 +46,7 @@ struct RecipeSearch: View {
                     List {
                         ForEach(recipeWebHandler.recipeList) { recipe in
                             NavigationLink ("\(recipe.name)", destination:
-                                PublicRecipeView(recipe: RecipeVM(recipe: recipe))
+                                                PublicRecipeView(recipe: RecipeVM(recipe: recipe))
                             )
                         }
                     }
@@ -74,7 +74,8 @@ struct RecipeSearch: View {
                     Section(header: UIControls.Loading()) {}
                 }
             }
-            .navigationBarHidden(true)
+            .navigationBarTitle("Recipe Search", displayMode: .inline)
+            .navigationBarColor(offWhiteUIColor())
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

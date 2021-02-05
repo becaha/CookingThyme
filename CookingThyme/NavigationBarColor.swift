@@ -11,7 +11,7 @@ struct NavigationBarColor: ViewModifier {
         
     var backgroundColor: UIColor?
     
-    init( backgroundColor: UIColor?) {
+    init(backgroundColor: UIColor?) {
         self.backgroundColor = backgroundColor
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()

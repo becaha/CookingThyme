@@ -149,15 +149,15 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         popullateImage()
     }
     
-    // creates recipe given temp ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Bool {
+    // updates recipe given temp ingredients
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Bool {
         let ingredients = Ingredient.toIngredients(tempIngredients)
-        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
+        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source)
     }
     
-    // creates recipe given ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Bool {
-        if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), recipeCategoryId: categoryId),
+    // updates recipe given ingredients
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Bool {
+        if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId),
             RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions),
             RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients),
             RecipeDB.shared.updateImages(withRecipeId: id, images: images) {
@@ -172,10 +172,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
     }
     
-    // creates recipe given ingredients
+    // creates recipe given ingredients, recipe created by user, no source
     static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
         var createdRecipe: Recipe?
-        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), recipeCategoryId: categoryId) {
+        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: "", recipeCategoryId: categoryId) {
             createdRecipe = recipe
             RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
             RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)

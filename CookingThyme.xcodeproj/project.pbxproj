@@ -340,7 +340,6 @@
 				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
 				DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */,
 				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
-				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
 				DB49B51E257ABF5800808CC8 /* Border.swift */,
@@ -421,6 +420,7 @@
 		DB49B5552581BA8300808CC8 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
+				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,

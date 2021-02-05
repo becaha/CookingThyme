@@ -113,5 +113,6 @@ struct Settings: View {
             )
         }
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
+        .navigationBarColor(offWhiteUIColor())
     }
 }

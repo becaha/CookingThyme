@@ -200,7 +200,7 @@ class RecipeCollectionVM: ObservableObject {
     
     func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
         if let recipe = getRecipe(withName: name) {
-            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, recipeCategoryId: categoryId)
+            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId)
         }
     }
     

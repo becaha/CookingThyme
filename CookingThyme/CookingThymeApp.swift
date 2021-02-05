@@ -72,6 +72,10 @@ func placeholderFontColor() -> Color {
     return getAssetColor(withName: "Placeholder")
 }
 
+func offWhiteUIColor() -> UIColor {
+    return UIColor(getAssetColor(withName: "OffWhite"))
+}
+
 func getAssetColor(withName name: String) -> Color {
     if let uiColor = UIColor(named: name) {
         return Color(uiColor)
