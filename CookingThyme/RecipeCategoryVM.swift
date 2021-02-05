@@ -166,31 +166,31 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         return false
     }
     
-    // creates recipe given temp ingredients
-    static func createRecipe(forCategoryId categoryId: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
-        let ingredients = Ingredient.toIngredients(tempIngredients)
-        return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings)
-    }
-    
-    // creates recipe given ingredients, recipe created by user, no source
-    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
+    // creates recipe with given parts, called by actually creating new recipe
+    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
         var createdRecipe: Recipe?
-        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: "", recipeCategoryId: categoryId) {
+        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) {
             createdRecipe = recipe
-            RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
-            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
-            RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
+            popullateRecipes()
+            popullateImage()
         }
         return createdRecipe
     }
     
-    // creates recipe with given parts, called by actually creating new recipe
-    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String) -> Recipe? {
+    // creates recipe given temp ingredients
+    static func createRecipe(forCategoryId categoryId: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
+        let ingredients = Ingredient.toIngredients(tempIngredients)
+        return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source)
+    }
+    
+    // creates recipe given ingredients, recipe created by user, no source
+    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
         var createdRecipe: Recipe?
-        if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings) {
+        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) {
             createdRecipe = recipe
-            popullateRecipes()
-            popullateImage()
+            RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
+            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+            RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
         }
         return createdRecipe
     }

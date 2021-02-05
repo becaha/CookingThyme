@@ -53,6 +53,7 @@ struct SourceCredit: View {
                 Text("Source: \(recipe.source)")
                     .font(.caption)
             }
+            .padding()
         }
     }
 }

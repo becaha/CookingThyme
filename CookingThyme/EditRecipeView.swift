@@ -42,6 +42,8 @@ struct EditRecipeView: View {
     @State private var directionPlaceholder = "New Direction"
     @State private var direction: String = ""
     
+    @State private var source: String = ""
+    
     @State private var cameraRollSheetPresented = false
     @State private var importRecipePresented = false
     @State private var selectedImage: UIImage?
@@ -230,6 +232,7 @@ struct EditRecipeView: View {
         if name == "" {
             name = recipe.name
             servings = recipe.originalServings.toString()
+            source = recipe.source
         }
     }
     
@@ -242,6 +245,10 @@ struct EditRecipeView: View {
             direction.direction != ""
         }
         servingsFieldMissing = false
+        nameFieldMissing = false
+        ingredientsFieldMissing = false
+        directionsFieldMissing = false
+
         if name == "" {
             nameFieldMissing = true
         }
@@ -256,7 +263,7 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                if let createdRecipe = category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings) {
+                if let createdRecipe = category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source) {
                     recipe.setRecipe(createdRecipe)
                 }
                 else {
@@ -264,7 +271,7 @@ struct EditRecipeView: View {
                 }
             }
             else {
-                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: recipe.source, categoryId: recipe.categoryId)
+                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source, categoryId: recipe.categoryId)
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place

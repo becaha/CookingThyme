@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+// TODO: if public recipe should show all category
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 
