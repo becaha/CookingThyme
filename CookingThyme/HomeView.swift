@@ -15,6 +15,7 @@ struct HomeView: View {
     var body: some View {
         TabView {
             RecipeSearch()
+                .homeNavigationBar(settingsAction: settingsAction)
                 .environmentObject(sheetNavigator)
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -31,6 +32,7 @@ struct HomeView: View {
                         .environmentObject(user.collection!)
                 }
             }
+            .homeNavigationBar(settingsAction: settingsAction)
             .tabItem {
                 Image(systemName: "book.fill")
                 Text("Recipe Book")
@@ -46,37 +48,21 @@ struct HomeView: View {
                         .environmentObject(user.collection!)
                 }
             }
+            .homeNavigationBar(settingsAction: settingsAction)
             .tabItem {
                 Image(systemName: "cart.fill")
                 Text("Shopping List")
             }
 
             TimerView()
-                .tabItem {
-                    Image(systemName: "timer")
-                    Text("Timer")
-                }
+            .homeNavigationBar(settingsAction: settingsAction)
+            .tabItem {
+                Image(systemName: "timer")
+                Text("Timer")
+            }
             
         }
-        .font(.headline)
         .accentColor(mainColor())
-        .navigationBarTitle("Cooking Thyme", displayMode: .inline)
-        .navigationBarItems(trailing:
-            Button(action: {
-                if user.isSignedIn {
-                    self.sheetNavigator.sheetDestination = .settings
-                } else {
-                    self.sheetNavigator.sheetDestination = .signin
-                }
-            }) {
-                Image(systemName: "gear")
-                    .foregroundColor(.black)
-            }
-        )
-        .background(NavigationBarConfigurator { nc in
-            nc.navigationBar.barTintColor = mainUIColor()
-            nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black]
-        })
         .sheet(isPresented: self.$sheetNavigator.showSheet) {
             self.sheetNavigator.navView()
                 .environmentObject(sheetNavigator)
@@ -98,6 +84,14 @@ struct HomeView: View {
         }
         .environmentObject(timer)
         .environmentObject(user)
+    }
+    
+    func settingsAction() {
+        if user.isSignedIn {
+            self.sheetNavigator.sheetDestination = .settings
+        } else {
+            self.sheetNavigator.sheetDestination = .signin
+        }
     }
 }
 

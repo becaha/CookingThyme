@@ -90,7 +90,6 @@ struct ShoppingListView: View {
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
         .listStyle(InsetGroupedListStyle())
-        .navigationBarTitle("Shopping List", displayMode: .inline)
     }
     
     @ViewBuilder

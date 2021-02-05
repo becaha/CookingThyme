@@ -115,11 +115,3 @@ struct Settings: View {
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
     }
 }
-
-//struct Settings_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationView {
-//            Settings()
-//        }
-//    }
-//}

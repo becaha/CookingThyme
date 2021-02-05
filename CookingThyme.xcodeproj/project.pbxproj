@@ -13,7 +13,6 @@
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
 		DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B72565E49E00808CC8 /* UIControls.swift */; };
 		DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4B82565E49E00808CC8 /* Fraction.swift */; };
-		DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BA2565E49F00808CC8 /* ScreenView.swift */; };
 		DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */; };
 		DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BC2565E49F00808CC8 /* Ingredient.swift */; };
 		DB49B4CE2565E49F00808CC8 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4BD2565E49F00808CC8 /* RecipeView.swift */; };
@@ -66,6 +65,7 @@
 		DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */; };
 		DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */; };
 		DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8E25CCB9760060B2B4 /* Keys.swift */; };
+		DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -110,7 +110,6 @@
 		DB49B4B02565E47400808CC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB49B4B72565E49E00808CC8 /* UIControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIControls.swift; sourceTree = "<group>"; };
 		DB49B4B82565E49E00808CC8 /* Fraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fraction.swift; sourceTree = "<group>"; };
-		DB49B4BA2565E49F00808CC8 /* ScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenView.swift; sourceTree = "<group>"; };
 		DB49B4BB2565E49F00808CC8 /* UnitOfMeasurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitOfMeasurement.swift; sourceTree = "<group>"; };
 		DB49B4BC2565E49F00808CC8 /* Ingredient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
 		DB49B4BD2565E49F00808CC8 /* RecipeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
@@ -163,6 +162,7 @@
 		DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchHandler.swift; sourceTree = "<group>"; };
 		DB6EFA8E25CCB9760060B2B4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationBar.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -341,7 +341,6 @@
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
-				DB49B4BA2565E49F00808CC8 /* ScreenView.swift */,
 				DB49B51E257ABF5800808CC8 /* Border.swift */,
 				DB49B4B72565E49E00808CC8 /* UIControls.swift */,
 				DB49B4FE256F488200808CC8 /* Deletable.swift */,
@@ -475,6 +474,7 @@
 			children = (
 				DB49B525257EEABA00808CC8 /* HomeView.swift */,
 				DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */,
+				DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -690,6 +690,7 @@
 				DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */,
+				DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
@@ -702,7 +703,6 @@
 				DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,
-				DB49B4CB2565E49F00808CC8 /* ScreenView.swift in Sources */,
 				DBCDE78825945661003DC95F /* FormTitle.swift in Sources */,
 				DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */,
 				DB49B54E2581B74900808CC8 /* WebRecipe.swift in Sources */,
