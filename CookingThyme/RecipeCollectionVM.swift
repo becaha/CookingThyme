@@ -129,6 +129,19 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
+    // removes recipe from category, if category is all, do not remove TODO: ?
+    func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: Int) {
+        if let allCategory = self.allCategory {
+            let allCategoryId = allCategory.id
+            if categoryId != allCategoryId {
+                if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) {
+                    print("error moving recipe")
+                }
+            }
+        }
+        popullateCategories()
+    }
+    
     func filterCurrentCategory(withSearch search: String) {
         if let currentCategory = self.currentCategory {
             currentCategory.filterRecipes(withSearch: search)

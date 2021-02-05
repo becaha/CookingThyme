@@ -42,9 +42,11 @@ struct ReadRecipeView: View {
         }
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $categoriesPresented, content: {
-            CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented) { categoryId in
+            CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented, onAction: { categoryId in
                 recipe.moveRecipe(toCategoryId: categoryId)
-            }
+            }, onRemove: { categoryId in
+                collection.removeRecipe(recipe.recipe, fromCategoryId: categoryId)
+            })
             .environmentObject(collection)
         })
         .navigationBarTitle("", displayMode: .inline)

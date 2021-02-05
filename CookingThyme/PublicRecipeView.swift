@@ -74,7 +74,7 @@ struct PublicRecipeView: View {
             }
         }
         .sheet(isPresented: $categoriesPresented, content: {
-            CategoriesSheet(currentCategoryId: currentCategoryId, actionWord: "Save", isPresented: $categoriesPresented) { categoryId in
+            CategoriesSheet(currentCategoryId: currentCategoryId, actionWord: "Save", isPresented: $categoriesPresented, onAction: { categoryId in
                 if currentCategoryId == nil {
                     recipe.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
                 }
@@ -83,7 +83,9 @@ struct PublicRecipeView: View {
                 }
                 currentCategoryId = categoryId
 
-            }
+            }, onRemove: { categoryId in
+                user.collection!.removeRecipe(recipe.recipe, fromCategoryId: categoryId)
+            })
             .environmentObject(user.collection!)
         })
         .alert(isPresented: $signinAlert, content: {
@@ -111,7 +113,7 @@ struct PublicRecipeView: View {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .padding(.trailing)
-                .disabled(isLoading || recipe.recipeNotFound)
+                .disabled(isLoading || recipe.recipeNotFound || currentCategoryId != nil)
         )
     }
     

@@ -14,6 +14,7 @@ struct CategoriesSheet: View {
     var actionWord: String
     @Binding var isPresented: Bool
     var onAction: (Int) -> Void
+    var onRemove: (Int) -> Void
     
     @State private var selectedId: Int?
     
@@ -33,12 +34,20 @@ struct CategoriesSheet: View {
                 
                 List {
                     ForEach(collection.categories, id: \.self) { category in
-                        if category.name != "All" || (actionWord == "Save") {
+                        if category.name != "All" || actionWord == "Save" {
                             Button(action: {
                                 withAnimation {
                                     selectedId = category.id
+                                
+                                    // if category is the current category, remove it
+                                    if category.id == currentCategoryId {
+                                        onRemove(category.id)
+                                        selectedId = nil
+                                    }
+                                    else {
+                                        onAction(category.id)
+                                    }
                                 }
-                                onAction(category.id)
 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     isPresented = false

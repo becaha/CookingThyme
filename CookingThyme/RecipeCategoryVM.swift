@@ -197,12 +197,16 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // deletes recipe and associated parts
     func deleteRecipe(withId id: Int) {
+        RecipeCategoryVM.deleteRecipe(withId: id)
+        popullateRecipes()
+        popullateImage()
+    }
+    
+    static func deleteRecipe(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
         RecipeDB.shared.deleteImages(withRecipeId: id)
-        popullateRecipes()
-        popullateImage()
     }
     
     // updates category name
