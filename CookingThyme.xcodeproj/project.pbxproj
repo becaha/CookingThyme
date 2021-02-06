@@ -67,6 +67,8 @@
 		DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8E25CCB9760060B2B4 /* Keys.swift */; };
 		DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */; };
 		DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */; };
+		DB6EFA9625CDF5690060B2B4 /* CloudKitDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9525CDF5690060B2B4 /* CloudKitDB.swift */; };
+		DB6EFA9825CE106E0060B2B4 /* FirebaseDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9725CE106E0060B2B4 /* FirebaseDB.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
 		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
@@ -165,6 +167,8 @@
 		DB6EFA8E25CCB9760060B2B4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationBar.swift; sourceTree = "<group>"; };
 		DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarColor.swift; sourceTree = "<group>"; };
+		DB6EFA9525CDF5690060B2B4 /* CloudKitDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitDB.swift; sourceTree = "<group>"; };
+		DB6EFA9725CE106E0060B2B4 /* FirebaseDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDB.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -377,6 +381,8 @@
 			children = (
 				DB49B4F2256CBC8F00808CC8 /* recipe.sqlite */,
 				DB49B4E225672AE000808CC8 /* RecipeDB.swift */,
+				DB6EFA9525CDF5690060B2B4 /* CloudKitDB.swift */,
+				DB6EFA9725CE106E0060B2B4 /* FirebaseDB.swift */,
 			);
 			name = DB;
 			sourceTree = "<group>";
@@ -496,8 +502,8 @@
 			children = (
 				DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */,
 				DB88CD3425BBA49F00A7F32C /* RecipeTitle.swift */,
-				DB49B564258276C700808CC8 /* RecipeControls.swift */,
 				DB88CD3725BBAABD00A7F32C /* RecipeTitleBorder.swift */,
+				DB49B564258276C700808CC8 /* RecipeControls.swift */,
 			);
 			name = RecipeHelpers;
 			sourceTree = "<group>";
@@ -673,10 +679,12 @@
 				DB88CD2B25BB64A500A7F32C /* RecipeTextView.swift in Sources */,
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
 				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,
+				DB6EFA9625CDF5690060B2B4 /* CloudKitDB.swift in Sources */,
 				DB88CD1D25B75D0E00A7F32C /* Droppable.swift in Sources */,
 				DB49B4D02565E49F00808CC8 /* EditRecipeView.swift in Sources */,
 				DB83F6B725B384EE0041DAA7 /* HTMLTranscriber.swift in Sources */,
 				DB49B5042576A70C00808CC8 /* EditableDirection.swift in Sources */,
+				DB6EFA9825CE106E0060B2B4 /* FirebaseDB.swift in Sources */,
 				DB49B5612581E84000808CC8 /* WebSection.swift in Sources */,
 				DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */,
 				DB49B522257AF94D00808CC8 /* ImagePicker.swift in Sources */,

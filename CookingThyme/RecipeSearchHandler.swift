@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: give credit to original source
 // search recipes with spoonacular api
 class RecipeSearchHandler: ObservableObject {
     @Published var recipeList = [Recipe]()

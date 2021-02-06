@@ -46,9 +46,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -78,9 +78,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -94,9 +94,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -110,9 +110,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -126,9 +126,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -142,9 +142,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -158,9 +158,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -226,22 +226,6 @@
                   offsetFromSymbolStart = "49">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7E2CF382-4163-423C-B4D7-329FC65989FF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/HTMLTranscriber.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "createTranscription(fromUrlString:setRecipe:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1390,9 +1374,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1534,9 +1518,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1550,9 +1534,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1582,9 +1566,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1598,9 +1582,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1614,9 +1598,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1630,9 +1614,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1646,9 +1630,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1838,8 +1822,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "removeFormat(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1854,8 +1838,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "removeFormat(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1870,8 +1854,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "createTranscription(fromUrlString:setRecipe:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1934,9 +1918,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1950,9 +1934,9 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
-            landmarkName = "parseRecipe(_:withName:)"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "parseRecipe(_:withName:recipeURL:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1966,8 +1950,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
             landmarkName = "createTranscription(fromUrlString:setRecipe:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1998,8 +1982,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "createTranscription(fromUrlString:setRecipe:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2014,8 +1998,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "createTranscription(fromUrlString:setRecipe:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2222,8 +2206,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2238,10 +2222,10 @@
             filePath = "CookingThyme/TimerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "CountdownLandscape(width:height:)"
-            landmarkType = "7">
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "body"
+            landmarkType = "24">
             <Locations>
                <Location
                   uuid = "41203833-6102-405E-AC56-D21B7C54C90D - df5eedb8f42342c1"
@@ -2286,8 +2270,8 @@
             filePath = "CookingThyme/TimerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2302,8 +2286,8 @@
             filePath = "CookingThyme/TimerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2318,8 +2302,8 @@
             filePath = "CookingThyme/TimerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2398,8 +2382,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2414,8 +2398,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2430,8 +2414,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
             landmarkName = "setRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2670,8 +2654,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2686,8 +2670,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2702,8 +2686,8 @@
             filePath = "CookingThyme/HTMLTranscriber.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2718,8 +2702,8 @@
             filePath = "CookingThyme/RecipeSearchHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
             landmarkName = "setRecipeDetail(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2766,8 +2750,8 @@
             filePath = "CookingThyme/RecipeSearchHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "listRecipeDetail(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2782,8 +2766,8 @@
             filePath = "CookingThyme/RecipeSearchHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "listRecipeDetail(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2840,7 +2824,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "CFF7A086-CAC7-475A-9713-E0CCCB5AE8B4"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/RecipeDB.swift"
@@ -2862,8 +2846,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "saveRecipe()"
             landmarkType = "7">
             <Locations>
@@ -2910,8 +2894,8 @@
             filePath = "CookingThyme/EditRecipeView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
+            startingLineNumber = "286"
+            endingLineNumber = "286"
             landmarkName = "saveRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2978,6 +2962,150 @@
             endingLineNumber = "67"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "23166C02-44EC-4A19-B5D8-2E3D347D984A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/CloudKitDB.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "init()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B74BC74E-F3D0-45F5-BA45-E7A89CB3F2FD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "createTranscription(fromUrlString:setRecipe:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D4BDA881-F534-4714-8972-5B94A1C0AFAE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "createTranscription(fromUrlString:setRecipe:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E265AF16-676A-439C-961B-485C7528C7F9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "createTranscription(fromUrlString:setRecipe:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "29C7CE8A-FA5C-4D7B-90FF-94635D601CAB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "createTranscription(fromUrlString:setRecipe:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8D1483E8-222C-43BD-BFF0-C70B53EF7DCD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD8721CD-8248-441A-8180-7EB6EA1C99AD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AB7E05D3-16F9-4A97-80E0-D2112173F08A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "15958D82-BFB9-4D9E-9D91-980C6D71E81A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/HTMLTranscriber.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "cleanHtmlTags(fromHtml:returnTitle:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

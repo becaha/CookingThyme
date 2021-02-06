@@ -10,9 +10,14 @@ import SwiftUI
 // TODO: store urls -> recipe
 // TODO: delish.com recipes are in divs not lists so they don't get found
 class HTMLTranscriber: ObservableObject {
-    var recipesStore = [String: Recipe]()
+    var recipesStore = [String: (recipe: Recipe, recipeText: String)]()
     
     func createTranscription(fromUrlString urlString: String, setRecipe: @escaping (Recipe?, String?) -> Void) {
+        let storedRecipe = self.recipesStore[urlString]
+        if let storedRecipe = storedRecipe {
+            setRecipe(storedRecipe.recipe, storedRecipe.recipeText)
+            return
+        }
         guard let url = URL(string: urlString) else {
             print("Error: \(urlString) doesn't seem to be a valid URL")
             setRecipe(nil, nil)
@@ -28,19 +33,34 @@ class HTMLTranscriber: ObservableObject {
             }
             
             var name = ""
+            var htmlString = ""
             if let contents = try? String(contentsOf: url) {
-                name = HTMLTranscriber.cleanHtmlTags(fromHtml: contents, returnTitle: true)
+                htmlString = contents
+                name = HTMLTranscriber.cleanHtmlTags(fromHtml: htmlString, returnTitle: true)
             }
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
 //                self.printHTML(recipeString)
-                let recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
+                var recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
+//                if !self.isValid(recipe) {
+//                    let cleanRecipeString = HTMLTranscriber.cleanHtmlTags(fromHtml: htmlString, returnTitle: false)
+//                    recipe = self.parseRecipe(cleanRecipeString, withName: name, recipeURL: urlString)
+//                }
+                self.recipesStore[urlString] = (recipe: recipe, recipeText: recipeString)
                 DispatchQueue.main.async {
                     setRecipe(recipe, recipeString)
                 }
             }
         }
         .resume()
+    }
+    
+    // recipe is valid
+    func isValid(_ recipe: Recipe) -> Bool {
+        if recipe.name == "", recipe.directions.count == 0, recipe.ingredients.count == 0 {
+            return false
+        }
+        return true
     }
     
     // <ul><li>thing</li><li>thing2</li>
@@ -60,13 +80,13 @@ class HTMLTranscriber: ObservableObject {
             // start of tag
             if char == "<" {
                 inTag = true
-                currentTag = ""
                 // section off the text sectioned in the tags by adding new line to string
-                if text != "" {
+                if text != "" && currentTag.lowercased() != "script" {
                     cleanString.append(text)
                     cleanString.append("\n")
-                    text = ""
                 }
+                text = ""
+                currentTag = ""
                 continue
             }
             // end of tag
@@ -124,7 +144,11 @@ class HTMLTranscriber: ObservableObject {
         let sections = recipeString.components(separatedBy: "\n\n")
         for section in sections {
             var currentPart = CurrentPart.none
-            let lines = section.components(separatedBy: "\n")
+            var lines = section.components(separatedBy: "\n")
+            lines = lines.filter { (line) -> Bool in
+                // line is not only whitespace and line is not empty string
+                !line.trimmingCharacters(in: .whitespaces).isEmpty && line != ""
+            }
             for line in lines {
                 let cleanLine = removeFormat(line)
                 let cleanLineHeader = removeAll(line)
