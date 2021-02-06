@@ -174,7 +174,7 @@ class HTMLTranscriber: ObservableObject {
                     let words = cleanLine.components(separatedBy: " ")
                     for word in words {
                         if let servingsNum = Int(word) {
-                            servings = servingsNum
+                            servings = max(servingsNum, 0)
                             currentPart = CurrentPart.none
                         }
                     }

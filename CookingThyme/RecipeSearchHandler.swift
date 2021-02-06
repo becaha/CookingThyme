@@ -176,7 +176,7 @@ class RecipeSearchHandler: ObservableObject {
                     }
                     
                     // servings
-                    if let servings = jsonObject["servings"] as? Int {
+                    if let servings = jsonObject["servings"] as? Int, servings > 0 {
                         recipe.servings = servings
                     }
                     
