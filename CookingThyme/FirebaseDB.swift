@@ -1,29 +1,60 @@
-////
-////  FirebaseDB.swift
-////  CookingThyme
-////
-////  Created by Rebecca Nybo on 2/5/21.
-////
 //
-//import Foundation
-//import Firebase
+//  FirebaseDB.swift
+//  CookingThyme
 //
-//class FirebaseDB {
+//  Created by Rebecca Nybo on 2/5/21.
+//
+
+import Foundation
+import Firebase
+
+import FirebaseUI
+
+// https://benmcmahen.com/authentication-with-swiftui-and-firebase/
+
+//func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+//        // Override point for customization after application launch.
+//        FirebaseApp.configure()
+//        return true
+//    }
+
+class FirebaseDB {
 ////    var db: type
-//
-//    // MARK: - Singleton
-//
-//    static let shared = FirebaseDB()
-//    
-//    private init() {
-//
+
+    // MARK: - Singleton
+
+    static let shared = FirebaseDB()
+    static let auth = FUIAuth.defaultAuthUI()
+    
+    private init() {
+
 //        FirebaseApp.configure()
 //        
 //        db = Firestore.firestore()
-//    }
-//    
-//    // MARK: - Create
-//    
+        
+        FirebaseApp.configure()
+//        let authUI = FUIAuth.defaultAuthUI()
+//        // You need to adopt a FUIAuthDelegate protocol to receive callback
+//        authUI.delegate = self
+//
+//        let providers: [FUIAuthProvider] = [
+//          FUIGoogleAuth(),
+//          FUIFacebookAuth(),
+//          FUITwitterAuth(),
+//          FUIPhoneAuth(authUI:FUIAuth.defaultAuthUI()),
+//        ]
+//        self.authUI.providers = providers
+//
+//        let authViewController = authUI.authViewController()
+//
+//        func authUI(_ authUI: FUIAuth, didSignInWith user: FIRUser?, error: Error?) {
+//          // handle user and error as necessary
+//        }
+
+    }
+    
+    // MARK: - Create
+    
 //    func createRecipe(name: String, servings: Int, source: String, recipeCategoryId: Int) -> Recipe? {
 //        var ref: DocumentReference? = nil
 //        ref = db.collection(Recipe.Table.databaseTableName).addDocument(data: [
@@ -831,4 +862,4 @@
 //enum CreateUserError: Error {
 //    case usernameTaken
 //    case emailTaken
-//}
+}

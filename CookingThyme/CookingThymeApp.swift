@@ -8,12 +8,15 @@
 // https://stackoverflow.com/questions/57847239/xcode-source-control-push-local-changes-stuck-on-loading
 
 import SwiftUI
+import Firebase
 
 @main
 struct CookingThymeApp: App {
     @ObservedObject var user = UserVM()
     @ObservedObject var timer = TimerHandler()
     @ObservedObject var sheetNavigator = SheetNavigator()
+    
+    @UIApplicationDelegateAdaptor(Delegate.self) var delegate
     
     init() {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(mainColor())
@@ -31,6 +34,14 @@ struct CookingThymeApp: App {
                 .environmentObject(sheetNavigator)
                 .environmentObject(timer)
         }
+    }
+}
+
+class Delegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        FirebaseApp.configure()
+        return true
     }
 }
 

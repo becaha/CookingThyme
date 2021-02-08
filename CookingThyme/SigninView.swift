@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct SigninView: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
         
     @State var email: String = ""
-    @State var username: String = ""
     @State var password: String = ""
     @State var isSignIn: Bool = true
     
@@ -35,9 +35,10 @@ struct SigninView: View {
                 
                 if isSignIn {
                     Group {
-                        TextField("Username", text: $username)
+                        TextField("Email", text: $email)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
+                            .keyboardType(.emailAddress)
                             .formItem()
 
                         SecureField("Password", text: $password) {
@@ -89,11 +90,6 @@ struct SigninView: View {
                 }
                 else {
                     Group {
-                        TextField("Username", text: $username)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .formItem()
-
                         TextField("Email", text: $email)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
@@ -163,7 +159,6 @@ struct SigninView: View {
     }
     
     func reset() {
-        username = ""
         password = ""
         email = ""
         signupErrorMessages = [String]()
@@ -171,7 +166,7 @@ struct SigninView: View {
     }
     
     func signin() {
-        user.signin(username: username, password: password)
+        user.signin(email: email, password: password)
         if user.signinError {
             isSigningIn = false
             signinErrorMessage = "Username or password incorrect."
@@ -182,7 +177,7 @@ struct SigninView: View {
     }
     
     func signup() {
-        user.signup(username: username, password: password, email: email)
+        user.signup(email: email, password: password)
         withAnimation {
             signupErrorMessages = [String]()
             
@@ -192,21 +187,15 @@ struct SigninView: View {
             else {
                 isSigningIn = false
             }
-            if user.signupErrors.contains(InvalidSignup.usernameTaken) {
-                signupErrorMessages.append("Username already taken.")
-            }
             if user.signupErrors.contains(InvalidSignup.emailTaken) {
                 signupErrorMessages.append("Email already taken.")
             }
             
-            if user.signupErrors.contains(InvalidSignup.username) {
-                signupErrorMessages.append("Invalid username.")
+            if user.signupErrors.contains(InvalidSignup.email) {
+                signupErrorMessages.append("Invalid email.")
             }
             if user.signupErrors.contains(InvalidSignup.password) {
                 signupErrorMessages.append("Invalid password.")
-            }
-            if user.signupErrors.contains(InvalidSignup.email) {
-                signupErrorMessages.append("Invalid email.")
             }
         }
     }

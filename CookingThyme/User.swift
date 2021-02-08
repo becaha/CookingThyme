@@ -9,6 +9,8 @@ import Foundation
 import GRDB
 import CryptoKit
 
+import Firebase
+
 struct User {
     static let userKey = "CookingThymeCurrentUser"
 
@@ -28,6 +30,7 @@ struct User {
     var email: String
     
     init() {
+
         self.id = 0
         self.username = ""
         self.salt = ""
@@ -82,9 +85,13 @@ struct User {
         do {
             let salt = UUID().uuidString
             let hashedPassword = hashPassword(password, withSalt: salt)
-            if let user = try RecipeDB.shared.createUser(username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
-                return try signin(username: user.username, password: password)
+//            if let user = try RecipeDB.shared.createUser(username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
+//                return try signin(username: user.username, password: password)
+//            }
+            Firebase.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+              // ...
             }
+            
         }
         catch CreateUserError.usernameTaken {
             throw UserError.badSignup(taken: "username")

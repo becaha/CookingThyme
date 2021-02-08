@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @EnvironmentObject var timer: TimerHandler
     @EnvironmentObject var sheetNavigator: SheetNavigator
             
+    @AppStorage("log_status") var status = false
+
+    
     var body: some View {
         TabView {
             RecipeSearch()
