@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: store urls -> recipe
 // TODO: delish.com recipes are in divs not lists so they don't get found
 class HTMLTranscriber: ObservableObject {
     var recipesStore = [String: (recipe: Recipe, recipeText: String)]()

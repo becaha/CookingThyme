@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: the nav bar to be green
 struct HomeNavigationBar: ViewModifier {
     var settingsAction: () -> Void
     

@@ -631,11 +631,10 @@ class RecipeDB {
                 """
                 UPDATE \(Direction.Table.databaseTableName) \
                 SET \(Direction.Table.step) = ?, \
-                \(Direction.Table.direction) = ?, \
-                \(Direction.Table.recipeId) = ? \
+                \(Direction.Table.direction) = ? \
                 WHERE \(Direction.Table.id) = ?
                 """,
-                arguments: [direction.step, direction.direction, direction.recipeId, direction.id])
+                arguments: [direction.step, direction.direction, direction.id])
             return
         }
     }
@@ -643,7 +642,12 @@ class RecipeDB {
     func updateDirections(withRecipeId recipeId: Int, directions: [Direction]) -> Bool {
         do {
             for direction in directions {
-                try updateDirection(direction)
+                if direction.temp {
+                    try createDirection(direction, withRecipeId: recipeId)
+                }
+                else {
+                    try updateDirection(direction)
+                }
             }
             
             return true
@@ -653,7 +657,7 @@ class RecipeDB {
         }
     }
     
-    func updateIngredient(_ ingredient: Ingredient, withRecipeId recipeId: Int) throws {
+    func updateIngredient(_ ingredient: Ingredient) throws {
         try dbQueue.write{ (db: Database) in
             try db.execute(
                 sql:
@@ -661,11 +665,10 @@ class RecipeDB {
                 UPDATE \(Ingredient.Table.databaseTableName) \
                 SET \(Ingredient.Table.name) = ?, \
                 \(Ingredient.Table.amount) = ?, \
-                \(Ingredient.Table.unitName) = ?, \
-                \(Ingredient.Table.recipeId) = ? \
+                \(Ingredient.Table.unitName) = ? \
                 WHERE \(Ingredient.Table.id) = ?
                 """,
-                arguments: [ingredient.name, ingredient.amount, ingredient.unitName.getName(), recipeId, ingredient.id])
+                arguments: [ingredient.name, ingredient.amount, ingredient.unitName.getName(), ingredient.id])
             return
         }
     }
@@ -673,7 +676,12 @@ class RecipeDB {
     func updateIngredients(withRecipeId recipeId: Int, ingredients: [Ingredient]) -> Bool {
         do {
             for ingredient in ingredients {
-                try updateIngredient(ingredient, withRecipeId: recipeId)
+                if ingredient.temp {
+                    try createIngredient(ingredient, withRecipeId: recipeId)
+                }
+                else {
+                    try updateIngredient(ingredient)
+                }
             }
 
             return true
@@ -683,7 +691,7 @@ class RecipeDB {
         }
     }
     
-    func updateImage(_ image: RecipeImage, withRecipeId recipeId: Int) throws {
+    func updateImage(_ image: RecipeImage) throws {
         try dbQueue.write{ (db: Database) in
             try db.execute(
                 sql:
@@ -691,9 +699,9 @@ class RecipeDB {
                 UPDATE \(RecipeImage.Table.databaseTableName) \
                 SET \(RecipeImage.Table.type) = ?, \
                 \(RecipeImage.Table.data) = ? \
-                WHERE \(RecipeImage.Table.recipeId) = ?
+                WHERE \(RecipeImage.Table.id) = ?
                 """,
-                arguments: [image.type.rawValue, image.data, recipeId])
+                arguments: [image.type.rawValue, image.data, image.id])
             return
         }
     }
@@ -701,7 +709,12 @@ class RecipeDB {
     func updateImages(withRecipeId recipeId: Int, images: [RecipeImage]) -> Bool {
         do {
             for image in images {
-                try updateImage(image, withRecipeId: recipeId)
+                if image.id == 0 {
+                    try createImage(image, withRecipeId: recipeId)
+                }
+                else {
+                    try updateImage(image)
+                }
             }
 
             return true

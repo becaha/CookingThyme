@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-// TODO: image in recipe in landscape
 // TODO: image loading
+
 // TODO: in edit mode allow drag ordering of the images
 // TODO: make images scrollable by left/right arrows
 struct ScrollableImagesView: View {
@@ -20,12 +20,17 @@ struct ScrollableImagesView: View {
     var isEditing: Bool
     var borderWidth: CGFloat = 3
     var widthOffset: CGFloat = 6
+    var pictureWidth: CGFloat
+    var pictureHeight: CGFloat
+
     
     init(uiImages: [Int: UIImage], width: CGFloat, height: CGFloat, isEditing: Bool) {
         self.uiImages = uiImages
         self.width = width
         self.height = height
         self.isEditing = isEditing
+        self.pictureWidth = min(width/2 - widthOffset, height * (4.0/3.0))
+        self.pictureHeight = min(pictureWidth * (3.0/4.0), height)
     }
 
     var body: some View {
@@ -67,8 +72,8 @@ struct ScrollableImagesView: View {
                             }
                         
                             Image(uiImage: uiImages[index]!)
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: width/2 - widthOffset, height: height)))
-                                .frame(width: width/2 - widthOffset, height: height, alignment: .center)
+                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: pictureHeight)))
+                                .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                                 .clipped()
                                 .border(Color.black, width: borderWidth)
                         }

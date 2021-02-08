@@ -36,26 +36,6 @@ struct TimerView: View {
                 VStack {
                     Spacer()
                     
-                    Button(action: {}) {
-                        Image(systemName: "doc.plaintext")
-                            .opacity(buttonFlashOpacity)
-                            .scaleEffect(buttonScale)
-                            .onAppear {
-                                withAnimation((Animation.linear(duration: 0.5)                                           .repeatCount(3, autoreverses: true))) {
-                                    self.buttonFlashOpacity = 1
-                                    self.buttonScale = 1
-                                    
-                                }
-                            }
-                    }
-                    
-                    Button(action: {
-                        
-                    }) {
-                        Text("")
-                    }
-                    
-                    
                     if timer.isSetting {
                         SetTimer(width: geometry.size.width, height: geometry.size.height)
                     }
