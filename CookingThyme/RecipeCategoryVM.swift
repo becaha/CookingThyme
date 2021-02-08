@@ -150,17 +150,17 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // updates recipe given temp ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Bool {
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
         let ingredients = Ingredient.toIngredients(tempIngredients)
-        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source)
+        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe)
     }
     
     // updates recipe given ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Bool {
+    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
         if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId),
-            RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions),
-            RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients),
-            RecipeDB.shared.updateImages(withRecipeId: id, images: images) {
+           RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe),
+            RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe),
+            RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) {
             return true
         }
         return false

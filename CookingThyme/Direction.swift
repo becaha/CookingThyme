@@ -8,7 +8,7 @@
 import Foundation
 import GRDB
 
-struct Direction {
+struct Direction: Identifiable {
     struct Table {
         static let databaseTableName = "Direction"
         

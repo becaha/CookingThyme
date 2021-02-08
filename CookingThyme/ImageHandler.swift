@@ -105,7 +105,19 @@ class ImageHandler: ObservableObject {
         if let imagesCount = self.imagesCount {
             self.imagesCount = imagesCount - 1
         }
+        updateMapIndices(forRemovedIndex: index)
         self.images[index] = nil
+    }
+    
+    func updateMapIndices(forRemovedIndex removedIndex: Int) {
+        if let imagesCount = self.imagesCount {
+            for index in removedIndex..<imagesCount {
+                if let newImage = self.images[index + 1] {
+                    self.images.updateValue(newImage, forKey: index)
+                }
+            }
+            self.images[imagesCount] = nil
+        }
     }
     
     // sets image data for a imageURL

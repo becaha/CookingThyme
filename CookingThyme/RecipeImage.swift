@@ -8,7 +8,7 @@
 import Foundation
 import GRDB
 
-struct RecipeImage {
+struct RecipeImage: Identifiable {
     struct Table {
         static let databaseTableName = "RecipeImage"
         

@@ -46,6 +46,7 @@ struct ScrollableImagesView: View {
 
                             Spacer()
                         }
+                        .frame(height: height)
                     }
                     else if index < uiImages.count, uiImages[index] != nil {
                         ZStack {

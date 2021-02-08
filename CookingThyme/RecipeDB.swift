@@ -639,15 +639,21 @@ class RecipeDB {
         }
     }
     
-    func updateDirections(withRecipeId recipeId: Int, directions: [Direction]) -> Bool {
+    func updateDirections(withRecipeId recipeId: Int, directions: [Direction], oldRecipe recipe: Recipe) -> Bool {
         do {
+            var directionsToDelete = recipe.directions
             for direction in directions {
                 if direction.temp {
                     try createDirection(direction, withRecipeId: recipeId)
                 }
                 else {
+                    directionsToDelete.remove(element: direction)
                     try updateDirection(direction)
                 }
+            }
+            // delete direction
+            for direction in directionsToDelete {
+                deleteDirection(withId: direction.id)
             }
             
             return true
@@ -673,15 +679,21 @@ class RecipeDB {
         }
     }
     
-    func updateIngredients(withRecipeId recipeId: Int, ingredients: [Ingredient]) -> Bool {
+    func updateIngredients(withRecipeId recipeId: Int, ingredients: [Ingredient], oldRecipe recipe: Recipe) -> Bool {
         do {
+            var ingredientsToDelete = recipe.ingredients
             for ingredient in ingredients {
                 if ingredient.temp {
                     try createIngredient(ingredient, withRecipeId: recipeId)
                 }
                 else {
+                    ingredientsToDelete.remove(element: ingredient)
                     try updateIngredient(ingredient)
                 }
+            }
+            // delete ingredients
+            for ingredient in ingredientsToDelete {
+                deleteIngredient(withId: ingredient.id)
             }
 
             return true
@@ -706,15 +718,21 @@ class RecipeDB {
         }
     }
     
-    func updateImages(withRecipeId recipeId: Int, images: [RecipeImage]) -> Bool {
+    func updateImages(withRecipeId recipeId: Int, images: [RecipeImage], oldRecipe recipe: Recipe) -> Bool {
         do {
+            var imagesToDelete = recipe.images
             for image in images {
                 if image.id == 0 {
                     try createImage(image, withRecipeId: recipeId)
                 }
                 else {
+                    imagesToDelete.remove(element: image)
                     try updateImage(image)
                 }
+            }
+            // delete images
+            for image in imagesToDelete {
+                deleteImage(withId: image.id)
             }
 
             return true
@@ -843,6 +861,27 @@ class RecipeDB {
         }
     }
     
+    func deleteDirection(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Direction.Table.databaseTableName) \
+                    WHERE \(Direction.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting direction")
+            return
+        }
+    }
+    
     func deleteDirections(withRecipeId recipeId: Int) {
         do {
             try dbQueue.write{ (db: Database) in
@@ -860,6 +899,27 @@ class RecipeDB {
             return
         } catch {
             print("Error deleting directions")
+            return
+        }
+    }
+    
+    func deleteIngredient(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(Ingredient.Table.databaseTableName) \
+                    WHERE \(Ingredient.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting ingredient")
             return
         }
     }
