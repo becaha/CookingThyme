@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// TODO: image loading
+// TODO: image loading, viewe doesnt update to loading only to new image
 
 // TODO: in edit mode allow drag ordering of the images
 // TODO: make images scrollable by left/right arrows
@@ -41,12 +41,12 @@ struct ScrollableImagesView: View {
                     if uiImages[index] == nil {
                         VStack {
                             Spacer()
-                            
+
                             UIControls.Loading()
 
                             Spacer()
                         }
-                        .frame(height: height)
+                        .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                     }
                     else if index < uiImages.count, uiImages[index] != nil {
                         ZStack {
@@ -71,18 +71,22 @@ struct ScrollableImagesView: View {
                                 }
                                 .zIndex(1)
                             }
-                        
+
                             Image(uiImage: uiImages[index]!)
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: pictureHeight)))
+                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: height)))
                                 .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                                 .clipped()
                                 .border(Color.black, width: borderWidth)
+                                .animation(.easeInOut(duration: 1.0))
+                                .transition(.slide)
+                            
                         }
                     }
                 }
             }
             .frame(minWidth: width)
         }
+        .frame(height: height)
     }
     
 }

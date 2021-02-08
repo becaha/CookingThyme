@@ -43,7 +43,7 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
-    // sets images for UI
+    // sets images for UI from images pulled from db
     func setImages(_ images: [RecipeImage]) {
         if images.count > 0 {
             self.loadingImages = true
@@ -57,7 +57,7 @@ class ImageHandler: ObservableObject {
         }
     }
     
-    // sets image for UI
+    // sets image for UI from images pulled from db
     func setImage(_ image: RecipeImage, at index: Int) {
         if image.type == ImageType.url {
             addImage(url: URL(string: image.data), at: index)
@@ -72,6 +72,7 @@ class ImageHandler: ObservableObject {
     
     // adds URL image to end of images
     func addImage(url: URL?) {
+        self.loadingImages = true
         if let imagesCount = self.imagesCount {
             self.imagesCount = imagesCount + 1
         }
@@ -87,6 +88,7 @@ class ImageHandler: ObservableObject {
     
     // adds UIImage to end of images
     func addImage(uiImage: UIImage) {
+        self.loadingImages = true
         if let imagesCount = self.imagesCount {
             self.imagesCount = imagesCount + 1
         }

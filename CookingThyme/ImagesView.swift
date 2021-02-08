@@ -18,7 +18,13 @@ struct ImagesView: View {
             VStack {
                 GeometryReader { geometry in
                     HStack {
-                        if recipe.imageHandler.loadingImages || recipe.imageHandler.images.count > 0 {
+                        if recipe.imageHandler.loadingImages {
+                            VStack {
+                                UIControls.Loading()
+                            }
+                            .frame(height: geometry.size.height)
+                        }
+                        else if recipe.imageHandler.images.count > 0 {
                             ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                         }
                         else if isEditing {

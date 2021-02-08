@@ -48,7 +48,7 @@ struct PublicRecipeView: View {
                 }
                 else {
                     if recipe.imageHandler.images.count > 0 {
-                        ReadImagesView(uiImages: recipe.imageHandler.images)
+                        ImagesView(isEditing: false)
                     }
                     
                     RecipeLists(
@@ -62,9 +62,9 @@ struct PublicRecipeView: View {
                             signinAlert = true
                             signinAlertMessage = "Sign in to add ingredients to shopping list."
                         })
-                        .environmentObject(recipe)
                 }
             }
+            .environmentObject(recipe)
         }
         .navigationBarColor(offWhiteUIColor())
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))

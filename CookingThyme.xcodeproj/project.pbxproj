@@ -58,7 +58,6 @@
 		DB49B5632582746E00808CC8 /* PublicRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B5622582746E00808CC8 /* PublicRecipeView.swift */; };
 		DB49B565258276C700808CC8 /* RecipeControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B564258276C700808CC8 /* RecipeControls.swift */; };
 		DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56A2582CEF400808CC8 /* SearchBar.swift */; };
-		DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */; };
 		DB6EFA8525C8978C0060B2B4 /* EditableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */; };
 		DB6EFA8725C89F440060B2B4 /* SelectableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */; };
 		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
@@ -158,7 +157,6 @@
 		DB49B5622582746E00808CC8 /* PublicRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeView.swift; sourceTree = "<group>"; };
 		DB49B564258276C700808CC8 /* RecipeControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeControls.swift; sourceTree = "<group>"; };
 		DB49B56A2582CEF400808CC8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadImagesView.swift; sourceTree = "<group>"; };
 		DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
@@ -441,7 +439,6 @@
 			children = (
 				DB49B5162579EA1500808CC8 /* ImagesView.swift */,
 				DB49B51A2579F80300808CC8 /* ScrollableImagesView.swift */,
-				DB49B56E2582FC1200808CC8 /* ReadImagesView.swift */,
 				DBCDE782258D63C8003DC95F /* CircleImage.swift */,
 				DB88CD3B25BF779400A7F32C /* EditPhotoMenu.swift */,
 			);
@@ -665,7 +662,6 @@
 				DB88CD2525BA08BE00A7F32C /* PasteButton.swift in Sources */,
 				DB88CD3E25BF992C00A7F32C /* CategoriesSheet.swift in Sources */,
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
-				DB49B56F2582FC1200808CC8 /* ReadImagesView.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
 				DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */,
