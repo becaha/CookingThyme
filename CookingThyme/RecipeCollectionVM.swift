@@ -30,10 +30,10 @@ class RecipeCollectionVM: ObservableObject {
                 self.objectWillChange.send()
             }
         
-        sortShoppingList()
-        popullateCategories()
-        popullateImages()
-        resetCurrentCategory()
+        self.sortShoppingList()
+        self.popullateCategories()
+        self.popullateImages()
+        self.resetCurrentCategory()
     }
     
     // MARK: Access
@@ -80,15 +80,16 @@ class RecipeCollectionVM: ObservableObject {
     // gets categories from db
     func popullateCategories() {
         let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
-        self.categories = [RecipeCategoryVM]()
+        var popullatedCategories = [RecipeCategoryVM]()
         var hasAllCategory = false
         for category in categories {
             if category.name == "All" {
                 hasAllCategory = true
             }
-            self.categories.append(RecipeCategoryVM(category: category, collection: self))
+            popullatedCategories.append(RecipeCategoryVM(category: category, collection: self))
         }
-        sortCategories()
+        self.categories = popullatedCategories
+        self.sortCategories()
         
         if !hasAllCategory {
             RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
@@ -96,15 +97,15 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func popullateImages() {
-        for category in categories {
+        for category in self.categories {
             if let image = RecipeDB.shared.getImage(withCategoryId: category.id) {
-                imageHandler.setImage(image, at: 0)
+                self.imageHandler.setImage(image, at: 0)
             }
         }
     }
     
     func sortCategories() {
-        var currentCategories = categories
+        var currentCategories = self.categories
         currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
             if a.name == "All" {
                 return true
@@ -119,12 +120,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // sorts shopping list by alphabetical order
     func sortShoppingList() {
-        tempShoppingList = tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
+        let sortedTempShoppingList = self.tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
             if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
                 return true
             }
             return false
         })
+        self.tempShoppingList = sortedTempShoppingList
     }
     
     // MARK: Intents
@@ -139,7 +141,7 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
-        popullateCategories()
+        self.popullateCategories()
     }
     
     func filterCurrentCategory(withSearch search: String) {
@@ -213,7 +215,9 @@ class RecipeCollectionVM: ObservableObject {
     
     func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
         if let recipe = getRecipe(withName: name) {
-            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId)
+            if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) {
+                print("error moving recipe")
+            }
         }
     }
     

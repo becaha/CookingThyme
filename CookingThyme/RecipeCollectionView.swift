@@ -54,6 +54,8 @@ struct RecipeCollectionView: View {
     @State private var searchMinY: CGFloat = 0
     
     @State private var search: String = ""
+    
+    let categoryNameMaxCount = 15
             
     var body: some View {
         NavigationView {
@@ -101,9 +103,11 @@ struct RecipeCollectionView: View {
         VStack(spacing: 0) {
             CategoriesView(width: width)
             
-            CurrentCategoryView()
-            
-            AddNewRecipeView()
+            if collection.currentCategory != nil {
+                CurrentCategoryView()
+                
+                AddNewRecipeView()
+            }
         }
     }
     
@@ -113,10 +117,12 @@ struct RecipeCollectionView: View {
             HStack(spacing: 0) {
                 CategoriesView(width: width)
 
-                VStack(spacing: 0) {
-                    CurrentCategoryView()
-                    
-                    AddNewRecipeView()
+                if collection.currentCategory != nil {
+                    VStack(spacing: 0) {
+                        CurrentCategoryView()
+                        
+                        AddNewRecipeView()
+                    }
                 }
             }
             
@@ -126,70 +132,68 @@ struct RecipeCollectionView: View {
     
     @ViewBuilder
     func CurrentCategoryView() -> some View {
-        if collection.currentCategory != nil {
-            GeometryReader { frameGeometry in
-                VStack(spacing: 0) {
-                    GeometryReader { geometry in
-                        HStack {
-                            AutoSearchBar(search: $search) { result in
-                                searchRecipes(result)
-                            }
-                            .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+        GeometryReader { frameGeometry in
+            VStack(spacing: 0) {
+                GeometryReader { geometry in
+                    HStack {
+                        AutoSearchBar(search: $search) { result in
+                            searchRecipes(result)
                         }
-                        .formItem(isSearchBar: true)
-                        .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                        .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                     }
-                    .frame(height: 35)
-                    .padding(.bottom)
+                    .formItem(isSearchBar: true)
+                    .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                }
+                .frame(height: 35)
+                .padding(.bottom)
 
-                    if collection.currentCategory!.filteredRecipes.count == 0 {
-                        Text("No recipes found.")
-                    }
+                if collection.currentCategory!.filteredRecipes.count == 0 {
+                    Text("No recipes found.")
+                }
 
-                    ForEach(collection.currentCategory!.filteredRecipes) { recipe in
-                        Group {
-                            if isEditing {
+                ForEach(collection.currentCategory!.filteredRecipes) { recipe in
+                    Group {
+                        if isEditing {
+                            Text("\(recipe.name)")
+                                .deletable(isDeleting: true, onDelete: {
+                                    withAnimation {
+                                        collection.deleteRecipe(withId: recipe.id)
+                                    }
+                                })
+                            .formItem()
+                        }
+                        else {
+                            NavigationLink(destination:
+                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!), isEditingRecipe: false)
+                                    .environmentObject(collection.currentCategory!)
+                                    .environmentObject(collection)
+                            ) {
                                 Text("\(recipe.name)")
-                                    .deletable(isDeleting: true, onDelete: {
-                                        withAnimation {
-                                            collection.deleteRecipe(withId: recipe.id)
-                                        }
-                                    })
-                                .formItem()
-                            }
-                            else {
-                                NavigationLink(destination:
-                                                RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!), isEditingRecipe: false)
-                                        .environmentObject(collection.currentCategory!)
-                                        .environmentObject(collection)
-                                ) {
-                                    Text("\(recipe.name)")
-                                        .fontWeight(.regular)
-                                        .formItem(isNavLink: true)
-                                }
+                                    .fontWeight(.regular)
+                                    .formItem(isNavLink: true)
                             }
                         }
-                        .onDrag {
-                            droppableRecipe = recipe
-                            return NSItemProvider(object: recipe.name as NSString)
-                        }
                     }
-                    .onDelete { indexSet in
-                        indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
-                            collection.deleteRecipe(withId: recipe.id)
-                        }
-                    }
-
-                    Spacer()
-
-                    GeometryReader { geometry -> Text in
-                        bottomScrollY = geometry.frame(in: .global).minY
-                        frameMaxY = frameGeometry.frame(in: .global).maxY
-                        return Text("")
+                    .onDrag {
+                        droppableRecipe = recipe
+                        return NSItemProvider(object: recipe.name as NSString)
                     }
                 }
-                .formed()
+                .onDelete { indexSet in
+                    indexSet.map{ collection.currentCategory!.recipes[$0] }.forEach { recipe in
+                        collection.deleteRecipe(withId: recipe.id)
+                    }
+                }
+
+                Spacer()
+
+                GeometryReader { geometry -> Text in
+                    bottomScrollY = geometry.frame(in: .global).minY
+                    frameMaxY = frameGeometry.frame(in: .global).maxY
+                    return Text("")
+                }
             }
+            .formed()
         }
     }
     
@@ -239,19 +243,26 @@ struct RecipeCollectionView: View {
         }
     }
     
-    // TODO: categories with long name
+    // TODO: categories with long name, character limit or 2 lines
     @ViewBuilder
     func CategoryView(_ category: RecipeCategoryVM) -> some View {
         VStack {
             CategoryCircleView(category)
             
             EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
-                // without this, the image will update, it causes an early refresh
-                collection.updateCategory(forCategoryId: category.id, toName: name)
+//                if name.count < categoryNameMaxCount {
+                    collection.updateCategory(forCategoryId: category.id, toName: name)
+//                }
+//                else {
+//
+//                }
             })
+            .lineLimit(2)
             .multilineTextAlignment(.center)
             .font(.subheadline)
             .foregroundColor(.black)
+            .lineSpacing(0)
+            .frame(width: 80, height: 40)
         }
         .droppable(if: isDroppable(toCategory: category), of: ["public.image", "public.text"], isTargeted: nil) { providers in
             return drop(providers: providers, category: category)
@@ -266,7 +277,6 @@ struct RecipeCollectionView: View {
             }
         }
         .padding()
-        .padding(.horizontal, 7)
         .environmentObject(category)
     }
     
