@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum UnitType {
+    case mass
+    case volume
+    case none
+}
+
 // TODO: localization for unit names
 // used for representing a unit of measurement for ingredients
 enum UnitOfMeasurement: CaseIterable {
@@ -50,6 +56,29 @@ enum UnitOfMeasurement: CaseIterable {
         return singularName
     }
     
+    func getUnit() -> Unit? {
+        var unit: Unit?
+        switch self {
+        case .cup: unit = UnitVolume.cups
+        case .pint: unit = UnitVolume.pints
+        case .quart: unit = UnitVolume.quarts
+        case .gallon: unit = UnitVolume.gallons
+        case .teaspoon: unit = UnitVolume.teaspoons
+        case .tablespoon: unit = UnitVolume.tablespoons
+        case .liter: unit = UnitVolume.liters
+        case .mililiter: unit = UnitVolume.milliliters
+        case .pound: unit = UnitMass.pounds
+        case .ounce: unit = UnitMass.ounces
+        case .fluidOunce: unit = UnitVolume.fluidOunces
+        case .gram: unit = UnitMass.grams
+        case .kilogram: unit = UnitMass.kilograms
+        case .milligram: unit = UnitMass.milligrams
+        case .none: unit = nil
+        case .unknown(_): unit = nil
+        }
+        return unit
+    }
+    
     func getName(plural: Bool) -> String {
         var singularName = ""
         switch self {
@@ -86,7 +115,7 @@ enum UnitOfMeasurement: CaseIterable {
         case .quart: singularShorthand = "q"
         case .gallon: singularShorthand = "gal"
         case .teaspoon: singularShorthand = "tsp"
-        case .tablespoon: singularShorthand = "Tbsp"
+        case .tablespoon: singularShorthand = "tbsp"
         case .liter: singularShorthand = "L"
         case .mililiter: singularShorthand = "mL"
         case .pound: singularShorthand = "lb"
@@ -101,8 +130,52 @@ enum UnitOfMeasurement: CaseIterable {
         return singularShorthand
     }
     
+    func caseType() -> UnitType {
+        if UnitOfMeasurement.volCases.contains(where: { (unit) -> Bool in
+            unit.getName() == self.getName()
+        }) {
+            return UnitType.volume
+        }
+        else if UnitOfMeasurement.massCases.contains(where: { (unit) -> Bool in
+            unit.getName() == self.getName()
+        }) {
+            return UnitType.mass
+        }
+        return UnitType.none
+    }
+    
     static var allCases: [UnitOfMeasurement] {
-        return [.cup, .pint, .quart, .gallon, .teaspoon, .tablespoon, .liter, .mililiter, .pound]
+        var allCases = volCases
+        allCases.append(contentsOf: massCases)
+        return allCases
+    }
+    
+    static var massCases: [UnitOfMeasurement] {
+        var massCases = massGramCases
+        massCases.append(contentsOf: massPoundCases)
+        return massCases
+    }
+    
+    static var volCases: [UnitOfMeasurement] {
+        var volCases = volGalCases
+        volCases.append(contentsOf: volLiterCases)
+        return volCases
+    }
+    
+    static var volGalCases: [UnitOfMeasurement] {
+        return [.gallon, .quart, .pint, .cup, .tablespoon, .teaspoon]
+    }
+    
+    static var volLiterCases: [UnitOfMeasurement] {
+        return [.liter, .mililiter]
+    }
+    
+    static var massGramCases: [UnitOfMeasurement] {
+        return [.kilogram, .gram, milligram]
+    }
+    
+    static var massPoundCases: [UnitOfMeasurement] {
+        return [.pound, .ounce]
     }
     
     static func fromString(unitString: String) -> UnitOfMeasurement {

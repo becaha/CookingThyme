@@ -62,7 +62,116 @@ struct Ingredient: Identifiable, Equatable {
         if amount == 0 {
             return ""
         }
-        return Fraction.toString(fromDouble: amount)
+        return getAmountBrokenDownString()
+//        return Fraction.toString(fromDouble: amount)
+    }
+    
+    func getAmountBrokenDownString() -> String {
+        if unitName.caseType() == UnitType.volume {
+            return getVolumeString()
+        }
+        else if unitName.caseType() == UnitType.mass {
+            return getMassString()
+        }
+        
+        // get closest fraction
+        let fraction = Fraction.toFraction(fromDouble: amount, allDenominators: true)
+        return Fraction.toString(fromFraction: fraction) + " " + self.unitName.getName(plural: fraction.isPlural())
+    }
+    
+    // TODO if 2/3 tbsp but can be 1 tsp make it 1 tsp
+    func getMassString() -> String {
+        var massString = ""
+        var index = 0
+        var massCases = UnitOfMeasurement.massGramCases
+        if let foundIndex = massCases.firstIndex(where: { (massUnit) -> Bool in
+            self.unitName.getName() == massUnit.getName()
+        }) {
+            index = foundIndex
+        }
+        else {
+            massCases = UnitOfMeasurement.massPoundCases
+            if let foundIndex = massCases.firstIndex(where: { (massUnit) -> Bool in
+                self.unitName.getName() == massUnit.getName()
+            }) {
+                index = foundIndex
+            }
+        }
+        
+        var amountLeft = self.amount
+        if let bigUnit = unitName.getUnit() as? UnitMass {
+            var biggerMeasurement = Measurement(value: amountLeft, unit: bigUnit)
+            // array of volume units from largest to smallest
+            for unit in massCases[index...] {
+                // gets unit as a measurement (1.2 cups)
+                if let smallerUnit = unit.getUnit() as? UnitMass {
+                    let conversionMeasurement = biggerMeasurement.converted(to: smallerUnit)
+                    // gets closest fraction to take (1.2 cups -> 1 cup)
+                    let fraction = Fraction.toFraction(fromDouble: conversionMeasurement.value)
+                    // there is a big enough conversion
+                    if fraction.whole > 0 || fraction.rational != nil {
+                        massString += Fraction.toString(fromFraction: fraction) + " " + unit.getShorthand() + " "
+                        
+                        // amount left (1.2 - 1 -> .2)
+                        amountLeft = conversionMeasurement.value - Fraction.toDouble(fromFraction: fraction)
+                        if amountLeft == 0 {
+                            return massString
+                        }
+                        // sets next biggerMeasurement to current smaller measurement and amount left in it
+                        biggerMeasurement = Measurement(value: amountLeft, unit: conversionMeasurement.unit)
+                        
+                    }
+                }
+            }
+        }
+        return massString
+    }
+    
+    func getVolumeString() -> String {
+        var volString = ""
+        var index = 0
+        var volCases = UnitOfMeasurement.volGalCases
+        if let foundIndex = volCases.firstIndex(where: { (volUnit) -> Bool in
+            self.unitName.getName() == volUnit.getName()
+        }) {
+            index = foundIndex
+        }
+        else {
+            volCases = UnitOfMeasurement.volLiterCases
+            if let foundIndex = volCases.firstIndex(where: { (volUnit) -> Bool in
+                self.unitName.getName() == volUnit.getName()
+            }) {
+                index = foundIndex
+            }
+        }
+        
+        var amountLeft = self.amount
+        if let bigUnit = unitName.getUnit() as? UnitVolume {
+            var biggerMeasurement = Measurement(value: amountLeft, unit: bigUnit)
+            // array of volume units from largest to smallest
+            for unit in volCases[index...] {
+                // gets unit as a measurement (1.2 cups)
+                if let smallerUnit = unit.getUnit() as? UnitVolume {
+                    let conversionMeasurement = biggerMeasurement.converted(to: smallerUnit)
+                    // gets closest fraction to take (1.2 cups -> 1 cup)
+                    let fraction = Fraction.toFraction(fromDouble: conversionMeasurement.value)
+                    // there is a big enough conversion
+                    if fraction.whole > 0 || fraction.rational != nil {
+                        volString += Fraction.toString(fromFraction: fraction) + " " + unit.getShorthand() + " "
+                        
+                        // amount left (1.2 - 1 -> .2)
+                        amountLeft = conversionMeasurement.value - Fraction.toDouble(fromFraction: fraction)
+                        if amountLeft == 0 {
+                            return volString
+                        }
+                        // sets next biggerMeasurement to current smaller measurement and amount left in it
+                        biggerMeasurement = Measurement(value: amountLeft, unit: conversionMeasurement.unit)
+                        
+                    }
+                }
+            }
+        }
+        return volString
     }
     
     // makes enum UnitOfMeasurement from unit String
@@ -208,7 +317,7 @@ struct Ingredient: Identifiable, Equatable {
         return Ingredient(name: name, amount: doubleAmount, unitName: unit)
     }
     
-    // turns ingredient into a one line string (1 cup apple juice)
+    // turns ingredient into a one line string readable for ui (1 cup apple juice)
     func toString() -> String {
         var string = ""
         let amountString = getAmountString()

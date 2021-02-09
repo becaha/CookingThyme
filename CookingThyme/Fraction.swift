@@ -97,6 +97,10 @@ struct Fraction {
         return pieces
     }
     
+    func isPlural() -> Bool {
+        return self.whole > 1 || (self.whole == 1 && self.rational != nil)
+    }
+    
     // MARK: - Fraction Conversions (Doubles, Fractions, Strings)
     // the amounts are stored in db as doubles and shown in UI as strings
     // the Fraction and Rational classes are used to help the conversion from double -> string and back
@@ -121,14 +125,16 @@ struct Fraction {
     }
     
     // converts double to Fraction
-    static func toFraction(fromDouble double: Double) -> Fraction {
+    static func toFraction(fromDouble double: Double, allDenominators: Bool = false) -> Fraction {
         let decimalPart = double.truncatingRemainder(dividingBy: 1)
         let wholePart = Int(double - decimalPart)
         if decimalPart == 0 {
             return Fraction(whole: wholePart, rational: nil)
         }
-        let rational = Rational.init(decimal: decimalPart)
-        
+        let rational = Rational.init(decimal: decimalPart, allDenominators: allDenominators)
+        if rational.numerator == 0 {
+            return Fraction(whole: wholePart, rational: nil)
+        }
         return Fraction(whole: wholePart, rational: rational)
     }
     

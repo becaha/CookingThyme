@@ -9,9 +9,9 @@ import Foundation
 
 // represents a fraction, 1/2
 struct Rational {
-    let numerator : Int
+    let numerator: Int
     let denominator: Int
-
+    
     init(numerator: Int, denominator: Int) {
         self.numerator = numerator
         self.denominator = denominator
@@ -20,7 +20,7 @@ struct Rational {
     // TODO use tablespoons and teaspoons for smaller measures
     // denominator can be 10, 9, 8, 7, 6, 5, 4, 3, 2
     // initializes Rational with a double and converts to closest rational, ex. 0.49 -> 1/2
-    init(decimal: Double) {
+    init(decimal: Double, allDenominators: Bool = false) {
         var rationalDistances = [(closestNumerator: Int, denominator: Int, closestDistance: Double)]()
         let closestTenth = Rational.findClosest(denominator: 10, decimal: decimal)
         let closestNinth = Rational.findClosest(denominator: 9, decimal: decimal)
@@ -28,7 +28,12 @@ struct Rational {
         let closestSeventh = Rational.findClosest(denominator: 7, decimal: decimal)
         let closestSixth = Rational.findClosest(denominator: 6, decimal: decimal)
         let closestThird = Rational.findClosest(denominator: 3, decimal: decimal)
-        rationalDistances.append(contentsOf: [closestTenth, closestNinth, closestEighth, closestSeventh, closestSixth, closestThird])
+        if allDenominators {
+            rationalDistances.append(contentsOf: [closestTenth, closestNinth, closestEighth, closestSeventh, closestSixth, closestThird])
+        }
+        else {
+            rationalDistances.append(contentsOf: [closestEighth, closestThird])
+        }
         
         var fraction: (numerator: Int, denominator: Int)
         var closestRationalDistance = closestTenth
@@ -36,12 +41,6 @@ struct Rational {
             closestRationalDistance = minRationalDistance
         }
         fraction = Rational.reduce(numerator: closestRationalDistance.closestNumerator, denominator: closestRationalDistance.denominator)
-//        if closestThird.closestDistance <= closestEighth.closestDistance {
-//            fraction = Rational.reduce(numerator: closestThird.closestNumerator, denominator: 3)
-//        }
-//        else {
-//            fraction = Rational.reduce(numerator: closestEighth.closestNumerator, denominator: 8)
-//        }
         self.init(numerator: fraction.numerator, denominator: fraction.denominator)
     }
     
@@ -73,6 +72,9 @@ struct Rational {
     // finds factors of num
     static func findFactors(num: Int) -> [Int] {
         var factors = [Int]()
+        if num == 0 {
+            return factors
+        }
         var endFactor = num
         for i in 1...num {
             if i == endFactor {
@@ -88,14 +90,28 @@ struct Rational {
     }
     
     // finds closest fraction to decimal with accuracy of 1/3 and 1/8's
-    static func findClosest(denominator: Int, decimal: Double) -> (closestNumerator: Int, denominator: Int, closestDistance: Double) {
-        var closestNumerator: Int = 1
-        var closestDistance: Double = abs((1.0 / Double(denominator)) - decimal)
-        for numerator in 2..<denominator {
-            let distance = abs((Double(numerator) / Double(denominator)) - decimal)
-            if distance < closestDistance {
+    // smaller is true if closest fraction must be smaller than the decimal
+    static func findClosest(denominator: Int, decimal: Double, smaller: Bool = true) -> (closestNumerator: Int, denominator: Int, closestDistance: Double) {
+        var closestNumerator: Int = 0
+        if !smaller {
+            closestNumerator = 1
+        }
+        var closestDistance: Double = abs((Double(closestNumerator) / Double(denominator)) - decimal)
+        if smaller {
+            closestDistance = decimal
+        }
+        for numerator in (closestNumerator + 1)..<denominator {
+            var distance = abs((Double(numerator) / Double(denominator)) - decimal)
+            if smaller {
+                distance = decimal - (Double(numerator) / Double(denominator))
+            }
+            if distance < closestDistance && distance >= 0 {
                 closestDistance = distance
                 closestNumerator = numerator
+            }
+            // found exact fraction or went larger than decimal, return
+            if distance <= 0 {
+                break
             }
         }
         return (closestNumerator, denominator, abs(closestDistance))
