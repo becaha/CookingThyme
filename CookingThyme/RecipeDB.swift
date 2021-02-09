@@ -52,8 +52,8 @@ class RecipeDB {
                         try fileManager.copyItem(atPath: path, toPath: dbPath)
                     }
                     // RESET DB
-                    try fileManager.removeItem(atPath: dbPath)
-                    try fileManager.copyItem(atPath: path, toPath: dbPath)
+//                    try fileManager.removeItem(atPath: dbPath)
+//                    try fileManager.copyItem(atPath: path, toPath: dbPath)
                 } catch {
                     print("Error copying database")
                 }

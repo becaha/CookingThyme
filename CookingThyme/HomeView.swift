@@ -21,14 +21,6 @@ struct HomeView: View {
     
     var body: some View {
         TabView {
-            RecipeSearch()
-            .homeNavigationBar(settingsAction: settingsAction)
-            .environmentObject(sheetNavigator)
-            .tabItem {
-                Image(systemName: "magnifyingglass")
-                Text("Recipe Search")
-            }
-            
             VStack {
                 if !user.isSignedIn {
                     SigninPromptView(message: "to start creating a recipe book.")
@@ -43,6 +35,14 @@ struct HomeView: View {
             .tabItem {
                 Image(systemName: "book.fill")
                 Text("Recipe Book")
+            }
+            
+            RecipeSearch()
+            .homeNavigationBar(settingsAction: settingsAction)
+            .environmentObject(sheetNavigator)
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Recipe Search")
             }
 
             VStack {

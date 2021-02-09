@@ -114,7 +114,7 @@ class UserVM: ObservableObject {
         
         
         do {
-            if let user = try user.signin(username: username, password: password) {
+            if let user = try user.signin(username: email, password: password) {
                 self.signinError = false
                 setAuthToken(withUserId: user.id)
                 setUserCollection()

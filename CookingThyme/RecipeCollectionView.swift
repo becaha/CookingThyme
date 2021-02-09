@@ -61,8 +61,7 @@ struct RecipeCollectionView: View {
     let categoryNameMaxCount = 15
             
     var body: some View {
-        NavigationView {
-
+//        NavigationView {
             GeometryReader { geometry in
                 if isLandscape {
                     CollectionViewLandscape(width: geometry.size.width, height: geometry.size.height)
@@ -99,9 +98,9 @@ struct RecipeCollectionView: View {
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
-            .navigationBarColor(offWhiteUIColor())
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+//            .navigationBarColor(offWhiteUIColor())
+//        }
+//        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     @ViewBuilder
@@ -254,7 +253,7 @@ struct RecipeCollectionView: View {
     func CategoryView(_ category: RecipeCategoryVM) -> some View {
         VStack {
             CategoryCircleView(category)
-            
+
             EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
 //                if name.count < categoryNameMaxCount {
                     collection.updateCategory(forCategoryId: category.id, toName: name)
