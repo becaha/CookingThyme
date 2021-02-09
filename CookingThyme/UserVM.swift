@@ -84,48 +84,48 @@ class UserVM: ObservableObject {
     func signin(email: String, password: String) {
         // is loading = true
         
-        Firebase.Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
-            // is loading = false
-            if err != nil {
-                // FIRAuthErrorCodeInvalidEmail
-                // FIRAuthErrorCodeWrongPassword
-                // FIRAuthErrorCodeUserDisabled
-                // FIRAuthErrorCodeOperationNotAllowed
-                self.signinError = true
-                return
-            }
-            let user = Firebase.Auth.auth().currentUser
-            
-            if !user!.isEmailVerified {
-                // please verify email
-                
-                // log them out
-                try! Firebase.Auth.auth().signOut()
-                return
-            }
-            
-            // set logged status to true, user is logged in
-            self.status = true
-            self.signinError = false
-            self.setUserCollection()
-
-            
-        }
-        
-        
-//        do {
-//            if let user = try user.signin(username: username, password: password) {
-//                self.signinError = false
-//                setAuthToken(withUserId: user.id)
-//                setUserCollection()
+//        Firebase.Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
+//            // is loading = false
+//            if err != nil {
+//                // FIRAuthErrorCodeInvalidEmail
+//                // FIRAuthErrorCodeWrongPassword
+//                // FIRAuthErrorCodeUserDisabled
+//                // FIRAuthErrorCodeOperationNotAllowed
+//                self.signinError = true
+//                return
 //            }
-//        }
-//        catch UserError.badSignin {
-//            self.signinError = true
-//        }
-//        catch {
+//            let user = Firebase.Auth.auth().currentUser
+//
+//            if !user!.isEmailVerified {
+//                // please verify email
+//
+//                // log them out
+//                try! Firebase.Auth.auth().signOut()
+//                return
+//            }
+//
+//            // set logged status to true, user is logged in
+//            self.status = true
+//            self.signinError = false
+//            self.setUserCollection()
+//
 //
 //        }
+        
+        
+        do {
+            if let user = try user.signin(username: username, password: password) {
+                self.signinError = false
+                setAuthToken(withUserId: user.id)
+                setUserCollection()
+            }
+        }
+        catch UserError.badSignin {
+            self.signinError = true
+        }
+        catch {
+
+        }
     }
     
     func setAuthToken(withUserId userId: Int) {
@@ -137,69 +137,69 @@ class UserVM: ObservableObject {
     func signup(email: String, password: String) {
         // is loading = true
         
-        if !isValidUser(email: email, password: password) {
-            return
-        }
+//        if !isValidUser(email: email, password: password) {
+//            return
+//        }
 
-        Firebase.Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
-            // is loading = false
-            
-            if err != nil {
-                // FIRAuthErrorCodeInvalidEmail
-                // FIRAuthErrorCodeEmailAlreadyInUse
-                // FIRAuthErrorCodeWeakPassword
-                // FIRAuthErrorCodeOperationNotAllowed
-                
-//                if err?.localizedDescription.contains("username") ?? false {
-//                    self.signupErrors.append(InvalidSignup.usernameTaken)
-//                }
-//                if err?.localizedDescription.contains("email") ?? false {
-//                    self.signupErrors.append(InvalidSignup.emailTaken)
-//                }
-                self.signupErrors.append(InvalidSignup.emailTaken)
-                return
-            }
-            
-            // send verification link
-//            result?.user.sendEmailVerification(completion: { err in
-//                if err != nil {
-//                     FIRAuthErrorCodeUserNotFound
-//                    return
-//                }
+//        Firebase.Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
+//            // is loading = false
 //
-//                // alert user to verify email
+//            if err != nil {
+//                // FIRAuthErrorCodeInvalidEmail
+//                // FIRAuthErrorCodeEmailAlreadyInUse
+//                // FIRAuthErrorCodeWeakPassword
+//                // FIRAuthErrorCodeOperationNotAllowed
 //
-//
-//                // The link was successfully sent. Inform the user.
-//                // Save the email locally so you don't need to ask the user for it again
-//                // if they open the link on the same device.
-//                UserDefaults.standard.set(email, forKey: "Email")
-//
-//            })
-            self.signin(email: email, password: password)
-        }
-        
-        
-//        do {
-//            if isValidUser(username: username, password: password, email: email) {
-//                if let user = try user.signup(username: username, password: password, email: email) {
-//                    setAuthToken(withUserId: user.id)
-//                    user.createUserCollection()
-//                    setUserCollection()
-//                }
-//            }
-//        }
-//        catch UserError.badSignup(let taken) {
-//            if taken.contains("username") {
-//                self.signupErrors.append(InvalidSignup.usernameTaken)
-//            }
-//            if taken.contains("email") {
+////                if err?.localizedDescription.contains("username") ?? false {
+////                    self.signupErrors.append(InvalidSignup.usernameTaken)
+////                }
+////                if err?.localizedDescription.contains("email") ?? false {
+////                    self.signupErrors.append(InvalidSignup.emailTaken)
+////                }
 //                self.signupErrors.append(InvalidSignup.emailTaken)
+//                return
 //            }
-//        }
-//        catch {
 //
+//            // send verification link
+////            result?.user.sendEmailVerification(completion: { err in
+////                if err != nil {
+////                     FIRAuthErrorCodeUserNotFound
+////                    return
+////                }
+////
+////                // alert user to verify email
+////
+////
+////                // The link was successfully sent. Inform the user.
+////                // Save the email locally so you don't need to ask the user for it again
+////                // if they open the link on the same device.
+////                UserDefaults.standard.set(email, forKey: "Email")
+////
+////            })
+//            self.signin(email: email, password: password)
 //        }
+        
+        
+        do {
+            if isValidUser(email: email, password: password) {
+                if let user = try user.signup(username: email, password: password, email: email) {
+                    setAuthToken(withUserId: user.id)
+                    user.createUserCollection()
+                    setUserCollection()
+                }
+            }
+        }
+        catch UserError.badSignup(let taken) {
+            if taken.contains("username") {
+                self.signupErrors.append(InvalidSignup.usernameTaken)
+            }
+            if taken.contains("email") {
+                self.signupErrors.append(InvalidSignup.emailTaken)
+            }
+        }
+        catch {
+
+        }
     }
     
     func isValidUser(email: String, password: String) -> Bool {
@@ -226,38 +226,39 @@ class UserVM: ObservableObject {
     }
     
     func signout() {
-        try! Firebase.Auth.auth().signOut()
+//        try! Firebase.Auth.auth().signOut()
+//        self.user = User()
+//        // FIRAuthErrorCodeKeychainError
+//
+//        status = false
         
-        // FIRAuthErrorCodeKeychainError
         
-        status = false
-        
-        
-//        let id = user.id
+        let id = user.id
         self.user = User()
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            User.signout(id)
-//        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            User.signout(id)
+        }
     }
     
     func delete() {
-        let user = Firebase.Auth.auth().currentUser
-
-        user?.delete { error in
-          if let error = error {
-            // FIRAuthErrorCodeRequiresRecentLogin
-            // An error happened.
-          } else {
-            // Account deleted.
-            self.user = User()
-          }
-        }
-        
-//        let id = user.id
-//        self.user = User()
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            User.delete(id)
+//        let user = Firebase.Auth.auth().currentUser
+//
+//        user?.delete { error in
+//          if let error = error {
+//            // FIRAuthErrorCodeRequiresRecentLogin
+//            // An error happened.
+//          } else {
+//            // Account deleted.
+//            self.user = User()
+//          }
 //        }
+        
+        let id = user.id
+        collection?.delete()
+        self.user = User()
+        DispatchQueue.global(qos: .userInitiated).async {
+            User.delete(id)
+        }
     }
     
     // TODO change throws to be specific/exhaustive
@@ -276,37 +277,30 @@ class UserVM: ObservableObject {
             return
         }
         
-        Firebase.Auth.auth().currentUser?.updatePassword(to: newPassword) { err in
-            if err != nil {
-                // FIRAuthErrorCodeRequiresRecentLogin
-                // FIRAuthErrorCodeWeakPassword
-                // FIRAuthErrorCodeOperationNotAllowed
-                return
+//        Firebase.Auth.auth().currentUser?.updatePassword(to: newPassword) { err in
+//            if err != nil {
+//                // FIRAuthErrorCodeRequiresRecentLogin
+//                // FIRAuthErrorCodeWeakPassword
+//                // FIRAuthErrorCodeOperationNotAllowed
+//                return
+//            }
+//        }
+        
+        
+        do {
+            if changePasswordError == "" {
+                try user.changePassword(oldPassword: oldPassword, newPassword: newPassword)
             }
         }
-        
-        
-//        changePasswordError = ""
-//        do {
-//            if !isValidPassword(newPassword) {
-//                changePasswordError = "Invalid password."
-//            }
-//            if newPassword != confirmPassword {
-//                changePasswordError = "Passwords do not match."
-//            }
-//            if changePasswordError == "" {
-//                try user.changePassword(oldPassword: oldPassword, newPassword: newPassword)
-//            }
-//        }
-//        catch ChangePasswordError.incorrectOldPassword {
-//            changePasswordError = "Incorrect password."
-//        }
-//        catch ChangePasswordError.badNewPassword {
-//            changePasswordError = "Invalid password."
-//        }
-//        catch {
-//            changePasswordError = "Error creating new password."
-//        }
+        catch ChangePasswordError.incorrectOldPassword {
+            changePasswordError = "Incorrect password."
+        }
+        catch ChangePasswordError.badNewPassword {
+            changePasswordError = "Invalid password."
+        }
+        catch {
+            changePasswordError = "Error creating new password."
+        }
     }
     
     func resetPassword(email: String) {

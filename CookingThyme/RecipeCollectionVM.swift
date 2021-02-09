@@ -172,12 +172,39 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
+    // deletes recipe and associated parts
     func deleteRecipe(withId id: Int) {
+        self.deleteRecipeAndParts(withId: id)
+        refreshCurrrentCategory()
+    }
+    
+    private func deleteRecipeAndParts(withId id: Int) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
         RecipeDB.shared.deleteImages(withRecipeId: id)
-        refreshCurrrentCategory()
+    }
+    
+    // deletes category and its recipes
+    func deleteCategory(withId id: Int) {
+        RecipeDB.shared.deleteCategory(withId: id)
+    
+        for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
+            self.deleteRecipeAndParts(withId: categoryRecipe.id)
+        }
+        
+        popullateCategories()
+        if let currentCategory = self.currentCategory, id == currentCategory.id {
+            resetCurrentCategory()
+        }
+    }
+    
+    // deletes all collection, categories
+    func delete() {
+        RecipeDB.shared.deleteCollection(withId: self.id)
+        for category in self.categories {
+            self.deleteCategory(withId: category.id)
+        }
     }
     
     // adds new category to collection
@@ -190,16 +217,6 @@ class RecipeCollectionVM: ObservableObject {
     func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {
         RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id)
 //        popullateCategories()
-    }
-    
-    // deletes category from collection
-    func deleteCategory(withId id: Int) {
-        RecipeDB.shared.deleteCategory(withId: id)
-        RecipeDB.shared.deleteRecipes(withCategoryId: id)
-        popullateCategories()
-        if let currentCategory = self.currentCategory, id == currentCategory.id {
-            resetCurrentCategory()
-        }
     }
     
     func getRecipe(withName name: String) -> Recipe? {

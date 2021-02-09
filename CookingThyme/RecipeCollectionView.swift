@@ -11,6 +11,9 @@ import SwiftUI
 // TODO: new signed in user, cant click new recipe, cant click a lot
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
+    // the view knows when sheet is dismissed
+    @Environment(\.presentationMode) var presentation
+
     // portrait or landscape
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
@@ -59,6 +62,7 @@ struct RecipeCollectionView: View {
             
     var body: some View {
         NavigationView {
+
             GeometryReader { geometry in
                 if isLandscape {
                     CollectionViewLandscape(width: geometry.size.width, height: geometry.size.height)
@@ -85,11 +89,13 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = false
                 }
             } : nil)
-            .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                    unfocusEditable()
-                }
-            )
+            // needed this for editing tapping off of editing would unfocus it
+            // this breaks other tapping when user just signs up
+//            .simultaneousGesture(
+//                TapGesture().onEnded { _ in
+//                    unfocusEditable()
+//                }
+//            )
             .onAppear {
                 collection.refreshCurrrentCategory()
             }

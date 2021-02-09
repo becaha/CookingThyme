@@ -52,8 +52,8 @@ class RecipeDB {
                         try fileManager.copyItem(atPath: path, toPath: dbPath)
                     }
                     // RESET DB
-//                    try fileManager.removeItem(atPath: dbPath)
-//                    try fileManager.copyItem(atPath: path, toPath: dbPath)
+                    try fileManager.removeItem(atPath: dbPath)
+                    try fileManager.copyItem(atPath: path, toPath: dbPath)
                 } catch {
                     print("Error copying database")
                 }
@@ -1088,6 +1088,27 @@ class RecipeDB {
             return
         } catch {
             print("Error deleting shopping items in collection")
+            return
+        }
+    }
+    
+    func deleteCollection(withId id: Int) {
+        do {
+            try dbQueue.write{ (db: Database) in
+
+                try db.execute(
+                    sql:
+                    """
+                    DELETE FROM \(RecipeCollection.Table.databaseTableName) \
+                    WHERE \(RecipeCollection.Table.id) = ?
+                    """,
+                    arguments: [id])
+                
+                return
+            }
+            return
+        } catch {
+            print("Error deleting collection")
             return
         }
     }

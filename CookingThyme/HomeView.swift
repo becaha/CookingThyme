@@ -9,6 +9,9 @@ import SwiftUI
 import Firebase
 
 struct HomeView: View {
+    // the view knows when sheet is dismissed
+    @Environment(\.presentationMode) var presentation
+    
     @EnvironmentObject var user: UserVM
     @EnvironmentObject var timer: TimerHandler
     @EnvironmentObject var sheetNavigator: SheetNavigator

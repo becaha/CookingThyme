@@ -280,8 +280,6 @@ class RecipeVM: ObservableObject {
         imageHandler.removeImage(at: index)
     }
 
-    
-    // TODO make more robust, id is initialized to 0 but cannot be zero once created
     func isCreatingRecipe() -> Bool {
         return recipe.id == 0
     }
