@@ -33,29 +33,6 @@ enum UnitOfMeasurement: CaseIterable {
     case none
     case unknown(String)
     
-    func getName() -> String {
-        var singularName = ""
-        switch self {
-        case .cup: singularName = "cup"
-        case .pint: singularName = "pint"
-        case .quart: singularName = "quart"
-        case .gallon: singularName = "gallon"
-        case .teaspoon: singularName = "teaspoon"
-        case .tablespoon: singularName = "tablespoon"
-        case .liter: singularName = "liter"
-        case .mililiter: singularName = "mililiter"
-        case .pound: singularName = "pound"
-        case .ounce: singularName = "ounce"
-        case .fluidOunce: singularName = "fluid ounce"
-        case .gram: singularName = "gram"
-        case .kilogram: singularName = "kilogram"
-        case .milligram: singularName = "milligram"
-        case .none: singularName = ""
-        case .unknown(let unitName): singularName = unitName
-        }
-        return singularName
-    }
-    
     func getUnit() -> Unit? {
         var unit: Unit?
         switch self {
@@ -79,7 +56,7 @@ enum UnitOfMeasurement: CaseIterable {
         return unit
     }
     
-    func getName(plural: Bool) -> String {
+    func getName(plural: Bool = false) -> String {
         var singularName = ""
         switch self {
         case .cup: singularName = "cup"
@@ -110,9 +87,9 @@ enum UnitOfMeasurement: CaseIterable {
     func getShorthand() -> String {
         var singularShorthand = ""
         switch self {
-        case .cup: singularShorthand = "c"
-        case .pint: singularShorthand = "p"
-        case .quart: singularShorthand = "q"
+        case .cup: singularShorthand = "cup"
+        case .pint: singularShorthand = "pt"
+        case .quart: singularShorthand = "qt"
         case .gallon: singularShorthand = "gal"
         case .teaspoon: singularShorthand = "tsp"
         case .tablespoon: singularShorthand = "tbsp"
