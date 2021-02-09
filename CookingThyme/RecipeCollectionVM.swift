@@ -199,9 +199,10 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // deletes all collection, categories
+    // deletes all collection, categories, shopping items
     func delete() {
         RecipeDB.shared.deleteCollection(withId: self.id)
+        RecipeDB.shared.deleteShoppingItems(withCollectionId: self.id)
         for category in self.categories {
             self.deleteCategory(withId: category.id)
         }
