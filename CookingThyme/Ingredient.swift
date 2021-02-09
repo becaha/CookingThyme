@@ -62,11 +62,13 @@ struct Ingredient: Identifiable, Equatable {
         if amount == 0 {
             return ""
         }
-        return getAmountBrokenDownString()
-//        return Fraction.toString(fromDouble: amount)
+        return Fraction.toString(fromDouble: amount)
     }
     
-    func getAmountBrokenDownString() -> String {
+    func getMeasurementString() -> String {
+        if amount == 0 {
+            return ""
+        }
         if unitName.caseType() == UnitType.volume {
             return getVolumeString()
         }
@@ -74,9 +76,14 @@ struct Ingredient: Identifiable, Equatable {
             return getMassString()
         }
         
-        // get closest fraction
+        // if unit doesn't break down, get closest fraction
         let fraction = Fraction.toFraction(fromDouble: amount, allDenominators: true)
-        return Fraction.toString(fromFraction: fraction) + " " + self.unitName.getName(plural: fraction.isPlural())
+        if self.unitName.getName(plural: false) != "" {
+            return Fraction.toString(fromFraction: fraction) + " " + self.unitName.getName(plural: false)
+        }
+        else {
+            return Fraction.toString(fromFraction: fraction)
+        }
     }
     
     // TODO if 2/3 tbsp but can be 1 tsp make it 1 tsp
@@ -115,6 +122,7 @@ struct Ingredient: Identifiable, Equatable {
                         // amount left (1.2 - 1 -> .2)
                         amountLeft = conversionMeasurement.value - Fraction.toDouble(fromFraction: fraction)
                         if amountLeft == 0 {
+                            massString.removeLast(1)
                             return massString
                         }
                         // sets next biggerMeasurement to current smaller measurement and amount left in it
@@ -124,6 +132,7 @@ struct Ingredient: Identifiable, Equatable {
                 }
             }
         }
+        massString.removeLast(1)
         return massString
     }
     
@@ -162,6 +171,7 @@ struct Ingredient: Identifiable, Equatable {
                         // amount left (1.2 - 1 -> .2)
                         amountLeft = conversionMeasurement.value - Fraction.toDouble(fromFraction: fraction)
                         if amountLeft == 0 {
+                            volString.removeLast(1)
                             return volString
                         }
                         // sets next biggerMeasurement to current smaller measurement and amount left in it
@@ -171,6 +181,7 @@ struct Ingredient: Identifiable, Equatable {
                 }
             }
         }
+        volString.removeLast(1)
         return volString
     }
     
@@ -330,6 +341,16 @@ struct Ingredient: Identifiable, Equatable {
         string += self.name
         return string
     }
+    
+    func toStringMeasurement() -> String {
+        var string = ""
+        let measurementString = getMeasurementString()
+        if measurementString != "" {
+            string += measurementString + " "
+        }
+        string += self.name
+        return string
+    }
 }
 
 // used as a temporary ingredient while editing recipe (amount and unit name are string for easy editing)
@@ -342,6 +363,7 @@ struct TempIngredient {
     var id: Int?
     
     var ingredientString: String
+    var ingredientStringMeasurement: String
     
     init(name: String, amount: String, unitName: String, recipeId: Int, id: Int?) {
         self.name = name
@@ -351,7 +373,9 @@ struct TempIngredient {
         self.id = id
         
         self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
         self.ingredientString = self.toString()
+        self.ingredientStringMeasurement = self.toStringMeasurement()
     }
     
     init(ingredientString: String, recipeId: Int, id: Int?) {
@@ -362,11 +386,16 @@ struct TempIngredient {
         self.name = ""
         self.amount = ""
         self.unitName = ""
+        self.ingredientStringMeasurement = ""
         self.setIngredientParts()
     }
     
     func toString() -> String {
         Ingredient.toIngredient(self).toString()
+    }
+    
+    func toStringMeasurement() -> String {
+        Ingredient.toIngredient(self).toStringMeasurement()
     }
     
     mutating func setIngredientParts() {
@@ -375,6 +404,7 @@ struct TempIngredient {
             self.name = ingredient.name
             self.amount = ingredient.getAmountString()
             self.unitName = ingredient.unitName.getName(plural: ingredient.amount > 1)
+            self.ingredientStringMeasurement = ingredient.getMeasurementString()
         }
     }
 }

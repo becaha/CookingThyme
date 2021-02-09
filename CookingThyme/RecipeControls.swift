@@ -51,7 +51,7 @@ struct RecipeControls {
     // temporary changed ingredients
     @ViewBuilder
     static func ReadIngredientText(_ ingredient: Ingredient) -> some View {
-        Text("\(ingredient.toString())")
+        Text("\(ingredient.toStringMeasurement())")
             .font(.body)
             .fixedSize(horizontal: false, vertical: true)
     }
