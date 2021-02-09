@@ -158,7 +158,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // updates recipe given ingredients
     static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
         if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId),
-           RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe),
+            RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe),
             RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe),
             RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) {
             return true

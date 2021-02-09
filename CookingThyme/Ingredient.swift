@@ -28,23 +28,28 @@ struct Ingredient: Identifiable, Equatable {
     var unitName: UnitOfMeasurement
     var id: Int
     var recipeId: Int
-    var temp = false
     
     init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        // is temporary, will be replaced
-        let id = Double(name.hashValue) + Double(unitName.getName().count)
-        if let uuid = Int(UUID().uuidString) {
-            self.id = uuid
-        }
-        else {
-            self.id = Int(id)
-        }
-        // is temporary, will be replaced
+        // temporary until id is created in db
+        self.id = 0
+        // is temporary, will be replaced when saved with recipe
         self.recipeId = 0
-        self.temp = true
+    }
+    
+    init(id: Int?, name: String, amount: Double, unitName: UnitOfMeasurement) {
+        self.name = name
+        self.amount = amount
+        self.unitName = unitName
+        // temporary until id is created in db
+        self.id = 0
+        if let id = id {
+            self.id = id
+        }
+        // is temporary, will be replaced when saved with recipe
+        self.recipeId = 0
     }
     
     init(row: Row) {
@@ -132,7 +137,9 @@ struct Ingredient: Identifiable, Equatable {
                 }
             }
         }
-        massString.removeLast(1)
+        if massString.count > 0 {
+            massString.removeLast(1)
+        }
         return massString
     }
     
@@ -181,7 +188,9 @@ struct Ingredient: Identifiable, Equatable {
                 }
             }
         }
-        volString.removeLast(1)
+        if volString.count > 0 {
+            volString.removeLast(1)
+        }
         return volString
     }
     
@@ -199,10 +208,11 @@ struct Ingredient: Identifiable, Equatable {
         return ingredients
     }
     
+    // to ingredient from temp ingredient, keeps id
     static func toIngredient(_ temp: TempIngredient) -> Ingredient {
         var setTemp = temp
         setTemp.setIngredientParts()
-        return Ingredient(name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName))
+        return Ingredient(id: setTemp.id, name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName))
     }
     
     // takes ingredients and turns into temp ingredients for use in edit recipe
@@ -214,10 +224,12 @@ struct Ingredient: Identifiable, Equatable {
         return temps
     }
     
+    // ingredient to temp ingredient, keeps id
     static func toTempIngredient(_ ingredient: Ingredient) -> TempIngredient {
         TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id)
     }
     
+    // used in parse recipe, temp ingredients, no id
     static func toIngredients(fromStrings ingredientStrings: [String]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for ingredientString in ingredientStrings {
@@ -232,6 +244,7 @@ struct Ingredient: Identifiable, Equatable {
         case name
     }
     
+    // used by parse recipe and temp ingredients to set amount, unit, name, no id
     static func toIngredient(fromString ingredientString: String) -> Ingredient {
         var amount = ""
         var unitName = ""

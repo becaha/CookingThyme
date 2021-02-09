@@ -643,7 +643,7 @@ class RecipeDB {
         do {
             var directionsToDelete = recipe.directions
             for direction in directions {
-                if direction.temp {
+                if direction.id == 0 {
                     try createDirection(direction, withRecipeId: recipeId)
                 }
                 else {
@@ -683,7 +683,7 @@ class RecipeDB {
         do {
             var ingredientsToDelete = recipe.ingredients
             for ingredient in ingredients {
-                if ingredient.temp {
+                if ingredient.id == 0 {
                     try createIngredient(ingredient, withRecipeId: recipeId)
                 }
                 else {
