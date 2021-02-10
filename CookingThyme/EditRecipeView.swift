@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: reloads old recipe after alert
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -16,7 +17,7 @@ struct EditRecipeView: View {
     @EnvironmentObject var recipe: RecipeVM
             
     private var fieldMissing: Bool {
-        return nameFieldMissing || newIngredientFieldMissing || newDirectionFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
+        return nameFieldMissing || ingredientsFieldMissing || directionsFieldMissing || servingsFieldMissing
     }
     
     @State var presentErrorAlert = false
@@ -264,6 +265,8 @@ struct EditRecipeView: View {
         nameFieldMissing = false
         ingredientsFieldMissing = false
         directionsFieldMissing = false
+        newDirectionFieldMissing = false
+        newIngredientFieldMissing = false
 
         // TODO: what if they want to name their recipee Recipe Name (name == placeholder && nameFieldMissing)?
         // name cannot the placeholder, or just whitespace
@@ -304,7 +307,7 @@ struct EditRecipeView: View {
     }
     
     private func addDirection() {
-        if direction != directionPlaceholder {
+        if !direction.isOnlyWhitespace() && direction != directionPlaceholder {
             newDirectionFieldMissing = false
             recipe.addTempDirection(direction)
             direction = directionPlaceholder
@@ -318,7 +321,7 @@ struct EditRecipeView: View {
     }
     
     private func addIngredient() {
-        if ingredient != "" {
+        if !ingredient.isOnlyWhitespace() && ingredient != ingredientPlaceholder {
             newIngredientFieldMissing = false
             recipe.addTempIngredient(ingredient)
             ingredient = ingredientPlaceholder
@@ -651,12 +654,6 @@ struct EditRecipeView: View {
         var errorMessage = ""
         if nameFieldMissing {
             errorMessage.append(nameFieldMissingMessage)
-        }
-        if newIngredientFieldMissing {
-            errorMessage.append(newIngredientFieldMissingMessage)
-        }
-        if newDirectionFieldMissing {
-            errorMessage.append(newDirectionFieldMissingMessage)
         }
         if ingredientsFieldMissing {
             errorMessage.append(ingredientsFieldMissingMessage)
