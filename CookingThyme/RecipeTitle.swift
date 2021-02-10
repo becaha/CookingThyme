@@ -11,7 +11,9 @@ struct RecipeTitle: ViewModifier {
     func body(content: Content) -> some View {
         content
         .multilineTextAlignment(.center)
-        .font(.system(size: 30, weight: .bold))
+        .font(.largeTitle)
+        
+//        .font(.system(size: 30, weight: .bold))
     }
 }
 

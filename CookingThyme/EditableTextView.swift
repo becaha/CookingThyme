@@ -25,12 +25,12 @@ struct EditableTextView: UIViewRepresentable {
  
     @Binding var textBinding: String
     var isFirstResponder: Bool = false
-//    var text: String
-//    var textStyle: UIFont.TextStyle
+    var textStyle: UIFont.TextStyle = UIFont.TextStyle.body
+    
     
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView(frame: .zero)
-        textView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        textView.font = UIFont.preferredFont(forTextStyle: textStyle)
         textView.delegate = context.coordinator
         textView.isEditable = true
 

@@ -36,6 +36,7 @@ struct EditRecipeView: View {
     @State private var servingsFieldMissing = false
             
     @State private var name: String = ""
+    @State private var nameFieldPlaceholder: String = "Recipe Name"
     @State private var servings: String = ""
     @State private var ingredientPlaceholder = "New Ingredient"
     @State private var ingredient: String = ""
@@ -56,6 +57,8 @@ struct EditRecipeView: View {
     
     @State private var editingIngredientIndex: Int?
     @State private var editingDirectionIndex: Int?
+    
+    @State private var editingName = false
     
     @State private var partialRecipeAlert = false
     @State private var alertShown = false
@@ -205,6 +208,7 @@ struct EditRecipeView: View {
                     Button(action: {
                         saveRecipe()
                         unfocusEditable()
+                        unfocusMultilineTexts()
                     })
                     {
                         Text("Done")
@@ -236,8 +240,12 @@ struct EditRecipeView: View {
     }
     
     private func setRecipe() {
+        // todo: check this with placeholder
         if name == "" {
             name = recipe.name
+            if name.isOnlyWhitespace() {
+                name = nameFieldPlaceholder
+            }
             servings = recipe.originalServings.toString()
             source = recipe.source
         }
@@ -246,18 +254,22 @@ struct EditRecipeView: View {
     // tODO: saave should be not on main thread
     private func saveRecipe() {
         recipe.tempIngredients = recipe.tempIngredients.filter { (ingredient) -> Bool in
-            ingredient.ingredientString != ""
+            !ingredient.ingredientString.isOnlyWhitespace()
         }
+        
         recipe.tempDirections = recipe.tempDirections.filter { (direction) -> Bool in
-            direction.direction != ""
+            !direction.direction.isOnlyWhitespace()
         }
         servingsFieldMissing = false
         nameFieldMissing = false
         ingredientsFieldMissing = false
         directionsFieldMissing = false
 
-        if name == "" {
+        // TODO: what if they want to name their recipee Recipe Name (name == placeholder && nameFieldMissing)?
+        // name cannot the placeholder, or just whitespace
+        if name == nameFieldPlaceholder || name.isOnlyWhitespace() {
             nameFieldMissing = true
+            name = nameFieldPlaceholder
         }
         if recipe.tempIngredients.count == 0 {
             ingredientsFieldMissing = true
@@ -341,14 +353,62 @@ struct EditRecipeView: View {
                 
                 HStack {
                     VStack(alignment: .leading) {
-                        TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
-                            if name != "" {
-                                withAnimation {
-                                    nameFieldMissing = false
+                        ZStack {
+                            HStack {
+                                Spacer()
+                                
+                                RecipeNameTitle(name: name)
+                                    .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : .black)
+                                
+                                Spacer()
+                            }
+                            .opacity(!editingName ? 1 : 0)
+
+                            if editingName {
+                                VStack {
+                                    Spacer()
+                                    
+                                    EditableTextView(textBinding: $name, isFirstResponder: true, textStyle:  UIFont.TextStyle.largeTitle)
+                                        .onChange(of: name) { value in
+                                            // on commit by enter
+                                            if value.hasSuffix("\n") {
+                                                name.removeLast(1)
+                                                withAnimation {
+                                                    // unfocus
+                                                    unfocusEditable()
+                                                    editingName = false
+                                                }
+                                                if name.isOnlyWhitespace() {
+                                                    name = nameFieldPlaceholder
+                                                }
+                                            }
+                                            if name != "" && name != nameFieldPlaceholder {
+                                                withAnimation {
+                                                    nameFieldMissing = false
+                                                }
+                                            }
+                                        }
+                                        .recipeTitle()
+                                        .background(formBackgroundColor())
+                 
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
+                        .simultaneousGesture(
+                            TapGesture(count: 1).onEnded { _ in
+                                // if not editing name currently
+                                if !editingName {
+                                    unfocusEditable()
+                                    unfocusMultilineTexts()
+                                }
+                                editingName = true
+                                if name == nameFieldPlaceholder {
+                                    name = ""
                                 }
                             }
-                        })
-                        .recipeTitle()
+                        )
                         
                         ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
                             .padding(0)
@@ -405,6 +465,7 @@ struct EditRecipeView: View {
                             .simultaneousGesture(
                                 TapGesture(count: 1).onEnded { _ in
                                     unfocusEditable()
+                                    unfocusMultilineTexts()
                                     editingIngredientIndex = index
                                 }
                             )
@@ -493,6 +554,7 @@ struct EditRecipeView: View {
                             .simultaneousGesture(
                                 TapGesture(count: 1).onEnded { _ in
                                     unfocusEditable()
+                                    unfocusMultilineTexts()
                                     editingDirectionIndex = index
                                 }
                             )
@@ -559,10 +621,9 @@ struct EditRecipeView: View {
                     .formFooter()
                 }
             }
-            .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil ? TapGesture(count: 1).onEnded {
+            .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
                 withAnimation {
-                    editingIngredientIndex = nil
-                    editingDirectionIndex = nil
+                    unfocusMultilineTexts()
                 }
             } : nil)
         }
@@ -574,6 +635,15 @@ struct EditRecipeView: View {
             else if alertShown {
                 partialRecipeAlert = false
             }
+        }
+    }
+    
+    func unfocusMultilineTexts() {
+        editingIngredientIndex = nil
+        editingDirectionIndex = nil
+        editingName = false
+        if name.isOnlyWhitespace() {
+            name = nameFieldPlaceholder
         }
     }
     
@@ -615,5 +685,11 @@ extension Array where Element: Identifiable {
         if let index = indexOf(element: element) {
             self.remove(at: index)
         }
+    }
+}
+
+extension String {
+    func isOnlyWhitespace() -> Bool {
+        self == "" || self.trimmingCharacters(in: .whitespaces).isEmpty
     }
 }
