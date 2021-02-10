@@ -176,6 +176,7 @@ struct EditRecipeView: View {
             ,
             trailing:
                 HStack(spacing: 20) {
+                    // TODO: make present recipe txt not sticky
                     // cannot animate items in nav bar
 //                    if recipe.recipeText != nil {
 //                        Button(action: {
