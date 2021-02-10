@@ -23,7 +23,7 @@ struct RecipeView: View {
                 EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
             }
         }
-        .navigationBarColor(offWhiteUIColor())
         .environmentObject(recipe)
+        .navigationBarColor(offWhiteUIColor())
     }
 }

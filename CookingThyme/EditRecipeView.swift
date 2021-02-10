@@ -27,7 +27,7 @@ struct EditRecipeView: View {
     var ingredientsFieldMissingMessage = "Must have at least one ingredient."
     var directionsFieldMissingMessage = "Must have at least one direction."
     var servingsFieldMissingMessage = "Must have a serving size."
-    
+        
     @State private var nameFieldMissing = false
     @State private var newIngredientFieldMissing = false
     @State private var newDirectionFieldMissing = false
@@ -60,8 +60,8 @@ struct EditRecipeView: View {
     @State private var partialRecipeAlert = false
     @State private var alertShown = false
     
-    @State var buttonFlashOpacity: Double = 0.6
-    @State var buttonScale: CGFloat = 0.9
+    @State var buttonFlashOpacity: Double = 1 // 0.6
+    @State var buttonScale: CGFloat = 1 // 0.9
     
     var body: some View {
         VStack(spacing: 0) {
@@ -112,38 +112,6 @@ struct EditRecipeView: View {
                 .formed()
             }
             else {
-                if recipe.recipeText != nil {
-                    HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            withAnimation {
-                                // save stuff
-                                unfocusEditable()
-                                presentRecipeText.toggle()
-                            }
-                        })
-                        {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 35, height: 35)
-                                    .foregroundColor(.white)
-                                    .shadow(radius: 1)
-                                
-                                if presentRecipeText {
-                                    Image(systemName: "doc.plaintext.fill")
-                                }
-                                else {
-                                    Image(systemName: "doc.plaintext")
-                                }
-                            }
-                            .opacity(buttonFlashOpacity)
-                            .scaleEffect(buttonScale)
-                        }
-                    }
-                    .padding([.horizontal, .top])
-                }
-                
                 if presentRecipeText {
                     RecipeTextView()
                 }
@@ -176,27 +144,26 @@ struct EditRecipeView: View {
             ,
             trailing:
                 HStack(spacing: 20) {
-                    // TODO: make present recipe txt not sticky
-                    // cannot animate items in nav bar
-//                    if recipe.recipeText != nil {
-//                        Button(action: {
-//                            withAnimation {
-//                                // save stuff
-//                                unfocusEditable()
-//                                presentRecipeText.toggle()
-//                            }
-//                        })
-//                        {
-//                            if presentRecipeText {
-//                                Image(systemName: "doc.plaintext.fill")
-//                            }
-//                            else {
-//                                Image(systemName: "doc.plaintext")
-//                                    .opacity(buttonFlashOpacity)
-//                                    .scaleEffect(buttonScale)
-//                            }
-//                        }
-//                    }
+//                     TODO: animate, cannot animate items in nav bar
+                    if recipe.recipeText != nil {
+                        Button(action: {
+                            withAnimation {
+                                // save stuff
+                                unfocusEditable()
+                                presentRecipeText.toggle()
+                            }
+                        })
+                        {
+                            if presentRecipeText {
+                                Image(systemName: "doc.plaintext.fill")
+                            }
+                            else {
+                                Image(systemName: "doc.plaintext")
+                                    .opacity(buttonFlashOpacity)
+                                    .scaleEffect(buttonScale)
+                            }
+                        }
+                    }
                     
                     if recipe.isCreatingRecipe() {
                         Menu {
@@ -356,6 +323,22 @@ struct EditRecipeView: View {
     func EditableRecipe() -> some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
+                if partialRecipeAlert {
+//                    Button(action: {
+//                        withAnimation {
+//                            // save stuff
+//                            unfocusEditable()
+//                            presentRecipeText = true
+//                        }
+//                    }) {
+                        HStack {
+                            (Text("Missing fields? Reference the full recipe text by clicking ") +  Text(Image(systemName: "doc.plaintext")) + Text(" above."))
+                                .font(.caption)
+                        }
+                        .formHeader()
+//                    }
+                }
+                
                 HStack {
                     VStack(alignment: .leading) {
                         TextField("Recipe Name", text: $name, onEditingChanged: { isEditing in
@@ -581,22 +564,13 @@ struct EditRecipeView: View {
                 }
             } : nil)
         }
-        .alert(isPresented: $partialRecipeAlert) {
-            Alert(title: Text("Bad Format."),
-                  message: Text("The website recipe transcriber missed some parts of the recipe due to formatting. Click the document button to reference the text of the website and add the missing parts to the recipe."),
-                  dismissButton: .default(Text("Ok")) {
-                        withAnimation((Animation.linear(duration: 0.5)                                           .repeatCount(3, autoreverses: true))) {
-                            self.buttonFlashOpacity = 1
-                            self.buttonScale = 1
-                            
-                        }
-                  }
-            )
-        }
         .onAppear {
             if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {
                 alertShown = true
                 partialRecipeAlert = true
+            }
+            else if alertShown {
+                partialRecipeAlert = false
             }
         }
     }
