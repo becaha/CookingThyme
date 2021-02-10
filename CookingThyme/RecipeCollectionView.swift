@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+// todo: timerv on stop alert, issetting = true
+// todo: settings no heading background
+// todo: text fields all hstack clickable
 
 // TODO: new signed in user, cant click new recipe, cant click a lot
 // TODO: measurement page to ask how many tbsp in an ounce
@@ -61,28 +64,44 @@ struct RecipeCollectionView: View {
     let categoryNameMaxCount = 15
             
     var body: some View {
-//        NavigationView {
-            GeometryReader { geometry in
-                if isLandscape {
-                    CollectionViewLandscape(width: geometry.size.width, height: geometry.size.height)
+        VStack(spacing: 0) {
+            ZStack {
+                HStack {
+                    Spacer()
+                    
+                    Text("\(collection.name)'s Recipes")
+                    
+                    Spacer()
                 }
-                else {
-                    CollectionView(width: geometry.size.width)
+                
+                HStack {
+                    Spacer()
+                    
+                    UIControls.EditButton(
+                        action: {
+                            isEditing.toggle()
+                            if !isEditing {
+                                unfocusEditable()
+                                collection.popullateCategories()
+                            }
+                        },
+                        isEditing: isEditing)
                 }
             }
-            .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
-            .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
-            .navigationBarItems(trailing:
-                UIControls.EditButton(
-                    action: {
-                        isEditing.toggle()
-                        if !isEditing {
-                            unfocusEditable()
-                            collection.popullateCategories()
-                        }
-                    },
-                    isEditing: isEditing)
-            )
+            .padding()
+            .background(Color(offWhiteUIColor()))
+            
+            GeometryReader { geometry in
+                Group {
+                    if isLandscape {
+                        CollectionViewLandscape(width: geometry.size.width, height: geometry.size.height)
+                    }
+                    else {
+                        CollectionView(width: geometry.size.width)
+                    }
+                }
+                .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
+            }
             .gesture(addCategoryExpanded ? TapGesture(count: 1).onEnded {
                 withAnimation {
                     addCategoryExpanded = false
@@ -98,9 +117,7 @@ struct RecipeCollectionView: View {
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
-//            .navigationBarColor(offWhiteUIColor())
-//        }
-//        .navigationViewStyle(StackNavigationViewStyle())
+        }
     }
     
     @ViewBuilder
