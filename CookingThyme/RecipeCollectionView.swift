@@ -65,32 +65,6 @@ struct RecipeCollectionView: View {
             
     var body: some View {
         VStack(spacing: 0) {
-            ZStack {
-                HStack {
-                    Spacer()
-                    
-                    Text("\(collection.name)'s Recipes")
-                    
-                    Spacer()
-                }
-                
-                HStack {
-                    Spacer()
-                    
-                    UIControls.EditButton(
-                        action: {
-                            isEditing.toggle()
-                            if !isEditing {
-                                unfocusEditable()
-                                collection.popullateCategories()
-                            }
-                        },
-                        isEditing: isEditing)
-                }
-            }
-            .padding()
-            .background(Color(offWhiteUIColor()))
-            
             GeometryReader { geometry in
                 Group {
                     if isLandscape {
@@ -107,17 +81,28 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = false
                 }
             } : nil)
-            // needed this for editing tapping off of editing would unfocus it
-            // this breaks other tapping when user just signs up
-//            .simultaneousGesture(
-//                TapGesture().onEnded { _ in
-//                    unfocusEditable()
-//                }
-//            )
+            .simultaneousGesture(
+                TapGesture().onEnded { _ in
+                    unfocusEditable()
+                }
+            )
             .onAppear {
                 collection.refreshCurrrentCategory()
             }
         }
+        .navigationBarColor(offWhiteUIColor())
+        .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
+        .navigationBarItems(trailing:
+            UIControls.EditButton(
+                action: {
+                    isEditing.toggle()
+                    if !isEditing {
+                        unfocusEditable()
+                        collection.popullateCategories()
+                    }
+                },
+                isEditing: isEditing)
+        )
     }
     
     @ViewBuilder

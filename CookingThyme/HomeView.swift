@@ -21,7 +21,7 @@ struct HomeView: View {
     
     var body: some View {
         TabView {
-            VStack {
+            NavigationView {
                 if !user.isSignedIn {
                     SigninPromptView(message: "to start creating a recipe book.")
                         .environmentObject(sheetNavigator)
