@@ -371,7 +371,7 @@ struct EditRecipeView: View {
                                 VStack {
                                     Spacer()
                                     
-                                    EditableTextView(textBinding: $name, isFirstResponder: true, textStyle:  UIFont.TextStyle.largeTitle)
+                                    EditableTextView(textBinding: $name, isFirstResponder: true, textStyle:  UIFont.TextStyle.largeTitle, textAlignment: NSTextAlignment.center)
                                         .onChange(of: name) { value in
                                             // on commit by enter
                                             if value.hasSuffix("\n") {

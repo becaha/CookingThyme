@@ -26,6 +26,7 @@ struct EditableTextView: UIViewRepresentable {
     @Binding var textBinding: String
     var isFirstResponder: Bool = false
     var textStyle: UIFont.TextStyle = UIFont.TextStyle.body
+    var textAlignment = NSTextAlignment.left
     var backgroundColor: UIColor = UIColor.clear
     
     
@@ -33,6 +34,7 @@ struct EditableTextView: UIViewRepresentable {
         let textView = UITextView(frame: .zero)
         textView.font = UIFont.preferredFont(forTextStyle: textStyle)
         textView.backgroundColor = backgroundColor
+        textView.textAlignment = textAlignment
         textView.delegate = context.coordinator
         textView.isEditable = true
 
