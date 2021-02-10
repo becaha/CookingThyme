@@ -36,7 +36,7 @@ struct EditRecipeView: View {
     @State private var servingsFieldMissing = false
             
     @State private var name: String = ""
-    @State private var servings: String = "100"
+    @State private var servings: String = ""
     @State private var ingredientPlaceholder = "New Ingredient"
     @State private var ingredient: String = ""
     @State private var directionPlaceholder = "New Direction"
@@ -373,6 +373,8 @@ struct EditRecipeView: View {
                                         Text("Servings: \(servings)")
                                             .textCase(.uppercase)
                                             .font(.subheadline)
+                                            // can't remember why this was a problem
+                                            .fixedSize(horizontal: true, vertical: false)
                                 
                                         Image(systemName: "chevron.down")
                                     }
