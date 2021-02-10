@@ -375,14 +375,15 @@ struct EditRecipeView: View {
                                         .onChange(of: name) { value in
                                             // on commit by enter
                                             if value.hasSuffix("\n") {
+                                                editingName = false
                                                 name.removeLast(1)
                                                 withAnimation {
                                                     // unfocus
                                                     unfocusEditable()
-                                                    editingName = false
-                                                }
-                                                if name.isOnlyWhitespace() {
-                                                    name = nameFieldPlaceholder
+                                                    
+                                                    if name.isOnlyWhitespace() {
+                                                        name = nameFieldPlaceholder
+                                                    }
                                                 }
                                             }
                                             if name != "" && name != nameFieldPlaceholder {
@@ -642,11 +643,13 @@ struct EditRecipeView: View {
     }
     
     func unfocusMultilineTexts() {
-        editingIngredientIndex = nil
-        editingDirectionIndex = nil
         editingName = false
-        if name.isOnlyWhitespace() {
-            name = nameFieldPlaceholder
+        withAnimation {
+            editingIngredientIndex = nil
+            editingDirectionIndex = nil
+            if name.isOnlyWhitespace() {
+                name = nameFieldPlaceholder
+            }
         }
     }
     
