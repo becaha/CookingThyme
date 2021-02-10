@@ -17,8 +17,7 @@ struct Rational {
         self.denominator = denominator
     }
     
-    // TODO use tablespoons and teaspoons for smaller measures
-    // denominator can be 10, 9, 8, 7, 6, 5, 4, 3, 2
+    // denominator can be 10, 9, (8), 7, 6, 5, (4), (3), (2)
     // initializes Rational with a double and converts to closest rational, ex. 0.49 -> 1/2
     init(decimal: Double, allDenominators: Bool = false) {
         var rationalDistances = [(closestNumerator: Int, denominator: Int, closestDistance: Double)]()

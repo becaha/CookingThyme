@@ -63,6 +63,7 @@ class HTMLTranscriber: ObservableObject {
     }
     
     // <ul><li>thing</li><li>thing2</li>
+    // <title>the title</title>
     // TODO: symbols in html like &numbers &#039
     static func cleanHtmlTags(fromHtml html: String, returnTitle: Bool) -> String {
         var cleanString = ""
@@ -86,7 +87,6 @@ class HTMLTranscriber: ObservableObject {
                 }
                 text = ""
                 currentTag = ""
-                continue
             }
             // end of tag
             else if char == ">" {
@@ -96,23 +96,23 @@ class HTMLTranscriber: ObservableObject {
                     }
                     else {
                         if isTitle {
-                            return text
+                            return title
                         }
                         isTitle = false
                     }
                 }
                 inTag = false
-                continue
-            }
-            
-            if inTag {
-                currentTag.append(char)
             }
             else {
-                if returnTitle, isTitle {
-                    title.append(char)
+                if inTag {
+                    currentTag.append(char)
                 }
-                text.append(char)
+                else {
+                    if returnTitle, isTitle {
+                        title.append(char)
+                    }
+                    text.append(char)
+                }
             }
         }
         
