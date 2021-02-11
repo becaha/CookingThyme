@@ -99,6 +99,7 @@
 		DBCDE78825945661003DC95F /* FormTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78725945661003DC95F /* FormTitle.swift */; };
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
 		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
+		DBEF371025D4DD5000ED83D4 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -198,6 +199,7 @@
 		DBCDE78725945661003DC95F /* FormTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTitle.swift; sourceTree = "<group>"; };
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
 		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
+		DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,6 +429,7 @@
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
 				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
+				DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
 				DB88CD2A25BB64A500A7F32C /* RecipeTextView.swift */,
@@ -720,6 +723,7 @@
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
+				DBEF371025D4DD5000ED83D4 /* CreateRecipeView.swift in Sources */,
 				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
 				DB88CD2D25BB8F9200A7F32C /* Test.swift in Sources */,
 				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,

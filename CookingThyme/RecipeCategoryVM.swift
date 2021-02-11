@@ -20,12 +20,12 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     var collection: RecipeCollectionVM
     @Published var category: RecipeCategory
-    @Published var recipes: [Recipe] {
+    @Published var recipes: [RecipeVM] {
         didSet {
             filteredRecipes = recipes
         }
     }
-    @Published var filteredRecipes: [Recipe] = []
+    @Published var filteredRecipes: [RecipeVM] = []
     
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
@@ -68,15 +68,20 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // gets recipes of category from db
     func popullateRecipes() {
+        var updatedRecipes = [Recipe]()
         if category.name == "All" {
-            self.recipes = RecipeDB.shared.getAllRecipes(withCollectionId: collection.id)
+            updatedRecipes = RecipeDB.shared.getAllRecipes(withCollectionId: collection.id)
         }
         else {
-            self.recipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
+            updatedRecipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
         }
-        self.recipes.sort { (recipeA, recipeB) -> Bool in
+        updatedRecipes.sort { (recipeA, recipeB) -> Bool in
             return recipeA.name < recipeB.name
         }
+        
+        self.recipes = updatedRecipes.map({ (recipe) -> RecipeVM in
+            RecipeVM(recipe: recipe, category: self)
+        })
     }
     
     // MARK: - Image

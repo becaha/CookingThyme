@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 // TODO: everything on background threed
-class RecipeVM: ObservableObject {
+class RecipeVM: ObservableObject, Identifiable {
     var category: RecipeCategoryVM?
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []

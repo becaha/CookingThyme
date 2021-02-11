@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: reloads old recipe after alert
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -127,6 +126,7 @@ struct EditRecipeView: View {
                 }
             }
         }
+        // TODO: errors go away on new upload of recipe
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
@@ -154,6 +154,8 @@ struct EditRecipeView: View {
                             withAnimation {
                                 // save stuff
                                 unfocusEditable()
+                                // TODO name change switch to recipe text and back
+                                unfocusMultilineTexts()
                                 presentRecipeText.toggle()
                             }
                         })
@@ -241,8 +243,7 @@ struct EditRecipeView: View {
     }
     
     private func setRecipe() {
-        // todo: check this with placeholder
-        if name == "" {
+        if name == "" || name == nameFieldPlaceholder {
             name = recipe.name
             if name.isOnlyWhitespace() {
                 name = nameFieldPlaceholder

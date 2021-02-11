@@ -86,9 +86,9 @@ struct RecipeCollectionView: View {
                     unfocusEditable()
                 }
             )
-            .onAppear {
+            .onReceive(collection.objectWillChange, perform: { _ in
                 collection.refreshCurrrentCategory()
-            }
+            })
         }
         .navigationBarColor(offWhiteUIColor())
         .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
@@ -171,7 +171,7 @@ struct RecipeCollectionView: View {
                         }
                         else {
                             NavigationLink(destination:
-                                            RecipeView(recipe: RecipeVM(recipe: recipe, category: collection.currentCategory!), isEditingRecipe: false)
+                                            RecipeView(recipe: recipe, isEditingRecipe: false)
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
                             ) {
@@ -182,7 +182,7 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .onDrag {
-                        droppableRecipe = recipe
+                        droppableRecipe = recipe.recipe
                         return NSItemProvider(object: recipe.name as NSString)
                     }
                 }
@@ -213,7 +213,8 @@ struct RecipeCollectionView: View {
                 }
                 
                 NavigationLink(destination:
-                                RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
+//                                RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
+                    CreateRecipeView()
                         .environmentObject(collection.currentCategory!)
                         .environmentObject(collection)
                 ) {
