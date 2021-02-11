@@ -231,7 +231,7 @@ class RecipeCollectionVM: ObservableObject {
         if let currentCategory = self.currentCategory {
             for recipe in currentCategory.recipes {
                 if recipe.name == name {
-                    return recipe.recipe
+                    return recipe
                 }
             }
         }

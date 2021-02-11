@@ -20,12 +20,12 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     var collection: RecipeCollectionVM
     @Published var category: RecipeCategory
-    @Published var recipes: [RecipeVM] {
+    @Published var recipes: [Recipe] {
         didSet {
             filteredRecipes = recipes
         }
     }
-    @Published var filteredRecipes: [RecipeVM] = []
+    @Published var filteredRecipes: [Recipe] = []
     
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
@@ -79,9 +79,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             return recipeA.name < recipeB.name
         }
         
-        self.recipes = updatedRecipes.map({ (recipe) -> RecipeVM in
-            RecipeVM(recipe: recipe, category: self)
-        })
+        self.recipes = updatedRecipes
+//            .map({ (recipe) -> RecipeVM in
+//            RecipeVM(recipe: recipe, category: self)
+//        })
     }
     
     // MARK: - Image
@@ -147,6 +148,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             self.category = category
             popullateCategory()
         }
+        collection.refreshCurrrentCategory()
     }
     
     func popullateCategory() {

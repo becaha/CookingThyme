@@ -170,7 +170,7 @@ struct RecipeCollectionView: View {
                         }
                         else {
                             NavigationLink(destination:
-                                            RecipeView(recipe: recipe.recipe, isEditingRecipe: false)
+                                            RecipeView(recipe: recipe, isEditingRecipe: false)
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
                             ) {
@@ -181,7 +181,7 @@ struct RecipeCollectionView: View {
                         }
                     }
                     .onDrag {
-                        droppableRecipe = recipe.recipe
+                        droppableRecipe = recipe
                         return NSItemProvider(object: recipe.name as NSString)
                     }
                 }
