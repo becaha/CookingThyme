@@ -18,20 +18,16 @@ struct EditableIngredient: View {
     
     var body: some View {
         ZStack {
-            HStack {
-                RecipeControls.ReadIngredientText(getIngredient())
-                    .padding()
-
-                Spacer()
-            }
-            .opacity(editingIndex != index ? 1 : 0)
+            SpaceKeeper(text: " ")
+            
+            SpaceKeeper(text: getIngredientString())
 
             if editingIndex == index {
                 VStack {
                     Spacer()
                     
                     EditableTextView(textBinding: getIngredientBinding(), isFirstResponder: true)
-                        .onChange(of: getIngredient()) { value in
+                        .onChange(of: getIngredientString()) { value in
                             if value.hasSuffix("\n") {
                                 commitIngredient()
                                 withAnimation {
@@ -55,7 +51,7 @@ struct EditableIngredient: View {
         }
     }
     
-    func getIngredient() -> String {
+    func getIngredientString() -> String {
         if index < recipe.tempIngredients.count {
             return recipe.tempIngredients[index].ingredientString
         }
@@ -67,6 +63,17 @@ struct EditableIngredient: View {
             return $recipe.tempIngredients[index].ingredientString
         }
         return $dummyBinding
+    }
+    
+    @ViewBuilder
+    func SpaceKeeper(text: String) -> some View {
+        HStack {
+            RecipeControls.ReadIngredientText(text)
+                .padding()
+
+            Spacer()
+        }
+        .opacity(editingIndex != index ? 1 : 0)
     }
 }
 

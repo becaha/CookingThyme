@@ -18,20 +18,16 @@ struct EditableDirection: View {
     
     var body: some View {
         ZStack {
-            HStack {
-                RecipeControls.ReadIngredientText(getDirection())
-                    .padding()
-
-                Spacer()
-            }
-            .opacity(editingIndex != index ? 1 : 0)
+            SpaceKeeper(text: " ")
+            
+            SpaceKeeper(text: getDirectionString())
 
             if editingIndex == index {
                 VStack {
                     Spacer()
                     
                     EditableTextView(textBinding: getDirectionBinding(), isFirstResponder: true)
-                        .onChange(of: getDirection()) { value in
+                        .onChange(of: getDirectionString()) { value in
                             if value.hasSuffix("\n") {
                                 commitDirection()
                                 withAnimation {
@@ -63,11 +59,22 @@ struct EditableDirection: View {
         return $dummyBinding
     }
     
-    func getDirection() -> String {
+    func getDirectionString() -> String {
         if index < recipe.tempDirections.count {
             return recipe.tempDirections[index].direction
         }
         return ""
+    }
+    
+    @ViewBuilder
+    func SpaceKeeper(text: String) -> some View {
+        HStack {
+            RecipeControls.ReadIngredientText(text)
+                .padding()
+
+            Spacer()
+        }
+        .opacity(editingIndex != index ? 1 : 0)
     }
 }
 

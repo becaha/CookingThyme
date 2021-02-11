@@ -359,8 +359,17 @@ struct EditRecipeView: View {
                         ZStack {
                             HStack {
                                 Spacer()
+
+                                RecipeNameTitle(name: " ")
+
+                                Spacer()
+                            }
+                            .opacity(!editingName ? 1 : 0)
+                            
+                            HStack {
+                                Spacer()
                                 
-                                RecipeNameTitle(name: name)
+                                RecipeNameTitle(name: "\(name)")
                                     .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : .black)
                                 
                                 Spacer()
@@ -393,7 +402,6 @@ struct EditRecipeView: View {
                                             }
                                         }
                                         .recipeTitle()
-                                        .background(formBackgroundColor())
                  
                                     Spacer()
                                 }
@@ -483,6 +491,14 @@ struct EditRecipeView: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 ZStack {
+                                    HStack {
+                                        RecipeControls.ReadIngredientText(" ")
+                                            .padding()
+
+                                        Spacer()
+                                    }
+                                    .opacity(0)
+                                    
                                     HStack {
                                         RecipeControls.ReadIngredientText(ingredient)
                                             .padding()
@@ -574,6 +590,14 @@ struct EditRecipeView: View {
                                 Text("\(recipe.tempDirections.count + 1)")
                                 
                                 ZStack {
+                                    HStack(spacing: 0) {
+                                        RecipeControls.ReadDirection(direction: " ")
+                                            .padding()
+
+                                        Spacer()
+                                    }
+                                    .opacity(0)
+                                    
                                     HStack(spacing: 0) {
                                         RecipeControls.ReadDirection(direction: direction)
                                             .padding()
