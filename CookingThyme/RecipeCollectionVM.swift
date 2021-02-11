@@ -12,6 +12,8 @@ class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
+    private var currentCategoryCancellable: AnyCancellable?
+
     
     @Published var tempShoppingList: [ShoppingItem] = []
     
@@ -29,6 +31,11 @@ class RecipeCollectionVM: ObservableObject {
             .sink { _ in
                 self.objectWillChange.send()
             }
+        
+        self.currentCategoryCancellable = self.currentCategory?.objectWillChange.sink {
+            _ in
+            self.objectWillChange.send()
+        }
         
         self.sortShoppingList()
         self.popullateCategories()

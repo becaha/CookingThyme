@@ -11,7 +11,6 @@ import SwiftUI
 // todo: settings no heading background
 // todo: text fields all hstack clickable
 
-// TODO: new signed in user, cant click new recipe, cant click a lot
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed

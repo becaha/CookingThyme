@@ -179,6 +179,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             popullateRecipes()
             popullateImage()
         }
+        collection.refreshCurrrentCategory()
         return createdRecipe
     }
     
