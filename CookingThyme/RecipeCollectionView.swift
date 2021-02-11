@@ -213,9 +213,7 @@ struct RecipeCollectionView: View {
                 }
                 
                 NavigationLink(destination:
-//                                RecipeView(recipe: RecipeVM(category: collection.currentCategory!), isEditingRecipe: true)
-                    CreateRecipeView()
-                        .environmentObject(collection.currentCategory!)
+                    CreateRecipeView(category: collection.currentCategory!)
                         .environmentObject(collection)
                 ) {
                     UIControls.AddView(withLabel: "New Recipe")
