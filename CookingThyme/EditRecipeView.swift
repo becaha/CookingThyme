@@ -115,15 +115,17 @@ struct EditRecipeView: View {
                 .formed()
             }
             else {
-                if presentRecipeText {
-                    RecipeTextView()
+                Group {
+                    if presentRecipeText {
+                        RecipeTextView()
+                    }
+                    else {
+                        EditableRecipe()
+                    }
                 }
-                else {
-                    EditableRecipe()
-                        .onAppear {
-                            setRecipe()
-                        }
-                }
+                .onReceive(recipe.$recipe, perform: { _ in
+                    setRecipe()
+                })
             }
         }
         // TODO: errors go away on new upload of recipe
@@ -151,11 +153,11 @@ struct EditRecipeView: View {
 //                     TODO: animate, cannot animate items in nav bar
                     if recipe.recipeText != nil {
                         Button(action: {
+                            // save stuff
+                            unfocusEditable()
+                            // TODO name change switch to recipe text and back
+                            unfocusMultilineTexts()
                             withAnimation {
-                                // save stuff
-                                unfocusEditable()
-                                // TODO name change switch to recipe text and back
-                                unfocusMultilineTexts()
                                 presentRecipeText.toggle()
                             }
                         })
@@ -651,9 +653,7 @@ struct EditRecipeView: View {
                 }
             }
             .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
-                withAnimation {
-                    unfocusMultilineTexts()
-                }
+                unfocusMultilineTexts()
             } : nil)
         }
         .onAppear {
