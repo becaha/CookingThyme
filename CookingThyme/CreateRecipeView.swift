@@ -26,9 +26,3 @@ struct CreateRecipeView: View {
     }
 }
 
-//struct CreateRecipeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CreateRecipeView()
-//            .environmentObject
-//    }
-//}

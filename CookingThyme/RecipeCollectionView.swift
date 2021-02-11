@@ -86,9 +86,9 @@ struct RecipeCollectionView: View {
                     unfocusEditable()
                 }
             )
-            .onReceive(collection.objectWillChange, perform: { _ in
+            .onAppear {
                 collection.refreshCurrrentCategory()
-            })
+            }
         }
         .navigationBarColor(offWhiteUIColor())
         .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)

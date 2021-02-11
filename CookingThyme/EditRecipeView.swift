@@ -255,7 +255,7 @@ struct EditRecipeView: View {
         }
     }
     
-    // tODO: saave should be not on main thread
+    // TODO: save should be not on main thread
     private func saveRecipe() {
         recipe.tempIngredients = recipe.tempIngredients.filter { (ingredient) -> Bool in
             !ingredient.ingredientString.isOnlyWhitespace()
