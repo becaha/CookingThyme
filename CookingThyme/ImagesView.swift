@@ -11,6 +11,9 @@ import Combine
 struct ImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     var isEditing: Bool = true
+    var widthOffset: CGFloat = 6
+    @State var pictureWidth: CGFloat = 200
+    @State var pictureHeight: CGFloat = 150
     
     var body: some View {
         
@@ -50,13 +53,20 @@ struct ImagesView: View {
                                     }
                                     .border(Color.black, width: 3.0, isDashed: true)
                                 }
-                                .frame(width: geometry.size.width/2)
+                                .frame(width: pictureWidth, height: pictureHeight)
+                                .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                             }
                             .background(formBackgroundColor())
                             .padding([.bottom, .horizontal])
                             .frame(width: geometry.size.width, height: 150)
-                            .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                         }
+                    }
+                    .onAppear {
+                        pictureWidth = min(geometry.size.width/2 - widthOffset, geometry.size.height * (4.0/3.0))
+                        pictureHeight = min(pictureWidth * (3.0/4.0), geometry.size.height)
+                    }
+                    .onReceive(recipe.imageHandler.$images) { images in
+                        print("")
                     }
                 }
                 .padding(.bottom)

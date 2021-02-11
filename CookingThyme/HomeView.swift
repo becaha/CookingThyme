@@ -31,6 +31,7 @@ struct HomeView: View {
                         .environmentObject(user.collection!)
                 }
             }
+            .navigationViewStyle(StackNavigationViewStyle())
             .homeNavigationBar(settingsAction: settingsAction)
             .tabItem {
                 Image(systemName: "book.fill")

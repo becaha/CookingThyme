@@ -170,7 +170,7 @@ struct RecipeCollectionView: View {
                         }
                         else {
                             NavigationLink(destination:
-                                            RecipeView(recipe: recipe, isEditingRecipe: false)
+                                            RecipeView(recipe: recipe.recipe, isEditingRecipe: false)
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
                             ) {
@@ -248,7 +248,7 @@ struct RecipeCollectionView: View {
         }
     }
     
-    // TODO: categories with long name, character limit or 2 lines
+    // TODO: categories with long name, character limit or 2 lines?
     @ViewBuilder
     func CategoryView(_ category: RecipeCategoryVM) -> some View {
         VStack {
@@ -281,7 +281,7 @@ struct RecipeCollectionView: View {
                 ImagePicker(image: self.$selectedImage)
             }
         }
-        .padding()
+        .padding(isLandscape ? [.horizontal, .top] : .all)
         .environmentObject(category)
     }
     

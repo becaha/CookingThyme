@@ -10,20 +10,33 @@ import SwiftUI
 struct RecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
-    @ObservedObject var recipe: RecipeVM
-            
+    @State var recipeVM: RecipeVM?
+    
+    var recipe: Recipe
     @State var isEditingRecipe: Bool
+    
+//    init(recipe: Recipe, isEditingRecipe: Bool) {
+//        self.recipe = recipe
+//        self.isEditingRecipe = isEditingRecipe
+//    }
     
     var body: some View {
         VStack {
-            if !isEditingRecipe {
-                ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
-            }
-            else {
-                EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
+            if recipeVM != nil {
+                Group {
+                    if !isEditingRecipe {
+                        ReadRecipeView(isEditingRecipe: self.$isEditingRecipe)
+                    }
+                    else {
+                        EditRecipeView(isEditingRecipe: self.$isEditingRecipe)
+                    }
+                }
+                .environmentObject(recipeVM!)
             }
         }
-        .environmentObject(recipe)
+        .onAppear {
+            recipeVM = RecipeVM(recipe: recipe, category: category)
+        }
         .navigationBarColor(offWhiteUIColor())
     }
 }

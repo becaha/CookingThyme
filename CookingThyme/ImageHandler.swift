@@ -73,6 +73,9 @@ class ImageHandler: ObservableObject {
     // adds URL image to end of images
     func addImage(url: URL?) {
         self.loadingImages = true
+        if self.imagesCount == nil {
+            self.imagesCount = 0
+        }
         if let imagesCount = self.imagesCount {
             self.imagesCount = imagesCount + 1
         }
@@ -89,6 +92,9 @@ class ImageHandler: ObservableObject {
     // adds UIImage to end of images
     func addImage(uiImage: UIImage) {
         self.loadingImages = true
+        if self.imagesCount == nil {
+            self.imagesCount = 0
+        }
         if let imagesCount = self.imagesCount {
             self.imagesCount = imagesCount + 1
         }
