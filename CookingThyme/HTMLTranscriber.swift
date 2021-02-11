@@ -40,7 +40,7 @@ class HTMLTranscriber: ObservableObject {
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
 //                self.printHTML(recipeString)
-                var recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
+                let recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
 //                if !self.isValid(recipe) {
 //                    let cleanRecipeString = HTMLTranscriber.cleanHtmlTags(fromHtml: htmlString, returnTitle: false)
 //                    recipe = self.parseRecipe(cleanRecipeString, withName: name, recipeURL: urlString)
@@ -48,6 +48,11 @@ class HTMLTranscriber: ObservableObject {
                 self.recipesStore[urlString] = (recipe: recipe, recipeText: recipeString)
                 DispatchQueue.main.async {
                     setRecipe(recipe, recipeString)
+                }
+            }
+            else {
+                DispatchQueue.main.async {
+                    setRecipe(nil, nil)
                 }
             }
         }

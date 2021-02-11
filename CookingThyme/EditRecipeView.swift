@@ -231,6 +231,7 @@ struct EditRecipeView: View {
     private func transcribeWeb() {
         if urlString != "" {
             recipe.invalidURL = false
+            resetErrors()
             recipe.transcribeRecipe(fromUrlString: urlString)
         }
         else {
@@ -255,6 +256,15 @@ struct EditRecipeView: View {
         }
     }
     
+    func resetErrors() {
+        servingsFieldMissing = false
+        nameFieldMissing = false
+        ingredientsFieldMissing = false
+        directionsFieldMissing = false
+        newDirectionFieldMissing = false
+        newIngredientFieldMissing = false
+    }
+    
     // TODO: save should be not on main thread
     private func saveRecipe() {
         recipe.tempIngredients = recipe.tempIngredients.filter { (ingredient) -> Bool in
@@ -264,12 +274,7 @@ struct EditRecipeView: View {
         recipe.tempDirections = recipe.tempDirections.filter { (direction) -> Bool in
             !direction.direction.isOnlyWhitespace()
         }
-        servingsFieldMissing = false
-        nameFieldMissing = false
-        ingredientsFieldMissing = false
-        directionsFieldMissing = false
-        newDirectionFieldMissing = false
-        newIngredientFieldMissing = false
+        resetErrors()
 
         // TODO: what if they want to name their recipee Recipe Name (name == placeholder && nameFieldMissing)?
         // name cannot the placeholder, or just whitespace
