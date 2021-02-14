@@ -14,157 +14,136 @@ import Firebase
 struct User {
     static let userKey = "CookingThymeCurrentUser"
 
-    struct Table {
-        static let databaseTableName = "User"
-        static let id = "Id"
-        static let username = "Username"
-        static let salt = "Salt"
-        static let hashedPassword = "HashedPassword"
-        static let email = "Email"
-    }
-    
-    var id: Int
-    var username: String
-    var salt: String
-    var hashedPassword: String
     var email: String
     
     init() {
-
-        self.id = 0
-        self.username = ""
-        self.salt = ""
-        self.hashedPassword = ""
         self.email = ""
     }
     
-    init(id: Int, username: String, salt: String, hashedPassword: String, email: String) {
-        self.id = id
-        self.username = username
-        self.salt = salt
-        self.hashedPassword = hashedPassword
+    init(email: String) {
         self.email = email
-    }
-    
-    init(username: String, salt: String, hashedPassword: String, email: String) {
-        self.username = username
-        self.salt = salt
-        self.hashedPassword = hashedPassword
-        self.email = email
-        self.id = 0
-    }
-    
-    init(row: Row) {
-        self.id = row[Table.id]
-        self.username = row[Table.username]
-        self.salt = row[Table.salt]
-        self.hashedPassword = row[Table.hashedPassword]
-        self.email = row[Table.email]
-    }
-    
-    // saves current username to user defaults to keep user logged in
-    static func setCurrentUsername(_ username: String?) {
-        UserDefaults.standard.set(username, forKey: User.userKey)
     }
     
     // gets user of user if the password is correct
-    mutating func signin(username: String, password: String) throws -> User? {
-        if let user = RecipeDB.shared.getUser(withUsername: username) {
-            if isCorrectPassword(user, withPassword: password) {
-                self = user
-                User.setCurrentUsername(user.username)
-                return user
-            }
-        }
-        // resets current user due to failed sign in attempt
-        User.setCurrentUsername(nil)
-        throw UserError.badSignin
-    }
-    
-    mutating func signup(username: String, password: String, email: String) throws -> User? {
-        do {
-            let salt = UUID().uuidString
-            let hashedPassword = hashPassword(password, withSalt: salt)
-            if let user = try RecipeDB.shared.createUser(username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
-                return try signin(username: user.username, password: password)
-            }
-//            Firebase.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-//              // ...
+//    mutating func signin(email: String, password: String) {
+//        Firebase.Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
+//            if let error = err as NSError? {
+//                self.setErrorMessage(fromInternalError: error)
+//                // resets current user due to failed sign in attempt
+//                User.setCurrentUsername(nil)
+//                return
 //            }
-            
-        }
-        catch CreateUserError.usernameTaken {
-            throw UserError.badSignup(taken: "username")
-        }
-        catch CreateUserError.emailTaken {
-            throw UserError.badSignup(taken: "email")
-        }
-        throw UserError.badSignup(taken: "")
+//
+////            let user = Firebase.Auth.auth().currentUser
+//
+////            if !user!.isEmailVerified {
+////                // please verify email
+////
+////                // log them out
+////                try! Firebase.Auth.auth().signOut()
+////                self.isLoading = false
+////                return
+////            }
+//
+//            // set logged status to true, user is logged in
+//            self = User(email: email)
+//            User.setCurrentUsername(email)
+//        }
+//    }
+//
+//    mutating func signup(email: String, password: String) {
+//        Firebase.Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
+//            if err != nil {
+//                if let error = err as NSError? {
+//                    self.setErrorMessage(fromInternalError: error)
+//                }
+//                return
+//            }
+//
+//            // send verification link
+////            result?.user.sendEmailVerification(completion: { err in
+////                if err != nil {
+////                     FIRAuthErrorCodeUserNotFound
+////                    return
+////                }
+////
+////                // alert user to verify email
+////
+////
+////                // The link was successfully sent. Inform the user.
+////                // Save the email locally so you don't need to ask the user for it again
+////                // if they open the link on the same device.
+////                UserDefaults.standard.set(email, forKey: "Email")
+////
+////            })
+//            self.createUserCollection()
+//            self.signin(email: email, password: password)
+//        }
+//    }
+//
+//    mutating func signout() {
+//        try! Firebase.Auth.auth().signOut()
+//        setSignedOut()
+//        // FIRAuthErrorCodeKeychainError
+//    }
+    
+    mutating func setSignedOut() {
+        self = User()
+        User.setCurrentUsername(nil)
     }
     
-    mutating func changePassword(oldPassword: String, newPassword: String) throws {
-        if isCorrectPassword(self, withPassword: oldPassword) {
-            let hashedPassword = hashPassword(newPassword, withSalt: self.salt)
-            if !RecipeDB.shared.updateUser(withId: id, username: username, salt: salt, hashedPassword: hashedPassword, email: email) {
-                throw ChangePasswordError.badNewPassword
-            }
-            self.hashedPassword = hashedPassword
-            return
-        }
-        throw ChangePasswordError.incorrectOldPassword
-    }
-
-    func hashPassword(_ password: String, withSalt salt: String) -> String {
-        var passwordString = password
-        passwordString.append(salt)
-
-        let inputData = Data(passwordString.utf8)
-
-        let hashed = SHA256.hash(data: inputData)
-        
-        return hashed.compactMap { String(format: "%02x", $0) }.joined()
-    }
-    
-    func hashPassword(_ password: String) -> String {
-        var passwordString = password
-        passwordString.append(self.salt)
-
-        let inputData = Data(passwordString.utf8)
-
-        let hashed = SHA256.hash(data: inputData)
-        
-        return hashed.compactMap { String(format: "%02x", $0) }.joined()
-    }
-    
-    func isCorrectPassword(_ user: User, withPassword password: String) -> Bool {
-        if user.hashedPassword == hashPassword(password, withSalt: user.salt) {
-            return true
-        }
-        return false
-    }
+//    mutating func changePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
+//
+//        if newPassword != confirmPassword {
+//            userErrors.append("Passwords do not match.")
+//            return
+//        }
+//
+//        // TODO: confirm oldPassword is correct
+//
+//        Firebase.Auth.auth().currentUser?.updatePassword(to: newPassword) { err in
+//            if let error = err as NSError? {
+//                self.setErrorMessage(fromInternalError: error)
+//                return
+//            }
+//        }
+//    }
+//
+//    mutating func delete() {
+//        let user = Firebase.Auth.auth().currentUser
+//
+//        user?.delete { err in
+//            if let error = err as NSError? {
+//                self.setErrorMessage(fromInternalError: error)
+//                return
+//            }
+//            else {
+//                // Account deleted, sign out.
+//                self.setSignedOut()
+//            }
+//        }
+//    }
     
     func getUserCollection() -> RecipeCollectionVM? {
-        if let collection = RecipeDB.shared.getCollection(withUsername: username) {
+        if let collection = RecipeDB.shared.getCollection(withUsername: email) {
             return RecipeCollectionVM(collection: collection)
         }
         return nil
     }
     
     func createUserCollection() {
+        User.createUserCollection(withUsername: self.email)
+    }
+    
+    static func createUserCollection(withUsername username: String) {
         if let collection = RecipeDB.shared.createCollection(withUsername: username) {
             RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
         }
     }
     
-    // deletes current auth and user defaults and resets to blank user
-    static func signout(_ userId: Int) {
-        RecipeDB.shared.deleteAuth(withUserId: userId)
-        User.setCurrentUsername(nil)
-    }
-    
-    static func delete(_ userId: Int) {
-        RecipeDB.shared.deleteUser(withId: userId)
-        signout(userId)
+    // saves current username to user defaults to keep user logged in
+    static func setCurrentUsername(_ username: String?) {
+        UserDefaults.standard.set(username, forKey: User.userKey)
     }
 }
 

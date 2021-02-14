@@ -70,7 +70,6 @@
 		DB6EFA9825CE106E0060B2B4 /* FirebaseDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9725CE106E0060B2B4 /* FirebaseDB.swift */; };
 		DB83F6A425AE15400041DAA7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A325AE15400041DAA7 /* User.swift */; };
 		DB83F6A625AE16590041DAA7 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A525AE16590041DAA7 /* UserVM.swift */; };
-		DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A725AE2A780041DAA7 /* Auth.swift */; };
 		DB83F6AA25AE39F60041DAA7 /* CustomFormItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */; };
 		DB83F6AC25AE438C0041DAA7 /* SigninView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6AB25AE438C0041DAA7 /* SigninView.swift */; };
 		DB83F6AE25AE4B120041DAA7 /* SigninPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB83F6AD25AE4B120041DAA7 /* SigninPromptView.swift */; };
@@ -100,6 +99,8 @@
 		DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78A25A3B057003DC95F /* Transcription.swift */; };
 		DBCDE78D25A3BA8A003DC95F /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE78C25A3BA8A003DC95F /* Annotation.swift */; };
 		DBEF371025D4DD5000ED83D4 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */; };
+		DBEF371225D70E8E00ED83D4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBEF371125D70E8E00ED83D4 /* GoogleService-Info.plist */; };
+		DBEF371425D836B800ED83D4 /* UserErrorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371325D836B800ED83D4 /* UserErrorsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -170,7 +171,6 @@
 		DB6EFA9725CE106E0060B2B4 /* FirebaseDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDB.swift; sourceTree = "<group>"; };
 		DB83F6A325AE15400041DAA7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DB83F6A525AE16590041DAA7 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
-		DB83F6A725AE2A780041DAA7 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		DB83F6A925AE39F60041DAA7 /* CustomFormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFormItem.swift; sourceTree = "<group>"; };
 		DB83F6AB25AE438C0041DAA7 /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
 		DB83F6AD25AE4B120041DAA7 /* SigninPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninPromptView.swift; sourceTree = "<group>"; };
@@ -200,6 +200,8 @@
 		DBCDE78A25A3B057003DC95F /* Transcription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcription.swift; sourceTree = "<group>"; };
 		DBCDE78C25A3BA8A003DC95F /* Annotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
+		DBEF371125D70E8E00ED83D4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DBEF371325D836B800ED83D4 /* UserErrorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserErrorsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +270,7 @@
 				DB49B4D82565E4D300808CC8 /* View */,
 				DB49B4AB2565E47400808CC8 /* Assets.xcassets */,
 				DB49B4B02565E47400808CC8 /* Info.plist */,
+				DBEF371125D70E8E00ED83D4 /* GoogleService-Info.plist */,
 				DB49B4AD2565E47400808CC8 /* Preview Content */,
 			);
 			path = CookingThyme;
@@ -371,7 +374,6 @@
 				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
 				DB49B531257F379400808CC8 /* ShoppingItem.swift */,
 				DB83F6A325AE15400041DAA7 /* User.swift */,
-				DB83F6A725AE2A780041DAA7 /* Auth.swift */,
 			);
 			name = Table;
 			sourceTree = "<group>";
@@ -472,6 +474,7 @@
 			children = (
 				DB83F6AB25AE438C0041DAA7 /* SigninView.swift */,
 				DB83F6AD25AE4B120041DAA7 /* SigninPromptView.swift */,
+				DBEF371325D836B800ED83D4 /* UserErrorsView.swift */,
 			);
 			name = Signin;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */,
+				DBEF371225D70E8E00ED83D4 /* GoogleService-Info.plist in Resources */,
 				DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */,
 				DB49B4F3256CBC8F00808CC8 /* recipe.sqlite in Resources */,
 			);
@@ -722,6 +726,7 @@
 				DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
+				DBEF371425D836B800ED83D4 /* UserErrorsView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,
 				DBEF371025D4DD5000ED83D4 /* CreateRecipeView.swift in Sources */,
 				DB49B55F2581E67300808CC8 /* WebUnit.swift in Sources */,
@@ -729,7 +734,6 @@
 				DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */,
 				DB49B4CC2565E49F00808CC8 /* UnitOfMeasurement.swift in Sources */,
 				DB49B4D52565E49F00808CC8 /* Rational.swift in Sources */,
-				DB83F6A825AE2A780041DAA7 /* Auth.swift in Sources */,
 				DB88CD3A25BF688B00A7F32C /* AutoSearchBar.swift in Sources */,
 				DB49B51B2579F80300808CC8 /* ScrollableImagesView.swift in Sources */,
 				DB49B4C92565E49F00808CC8 /* Fraction.swift in Sources */,

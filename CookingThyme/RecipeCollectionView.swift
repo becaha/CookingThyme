@@ -90,7 +90,7 @@ struct RecipeCollectionView: View {
             }
         }
         .navigationBarColor(offWhiteUIColor())
-        .navigationBarTitle("\(collection.name)'s Recipes", displayMode: .inline)
+        .navigationBarTitle("Recipe Book", displayMode: .inline)
         .navigationBarItems(trailing:
             UIControls.EditButton(
                 action: {

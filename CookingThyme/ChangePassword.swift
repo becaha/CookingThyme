@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct ChangePassword: View {
-    var onSaveChanges: (String, String, String) -> String
+    var onSaveChanges: (String, String, String) -> [String]
     
     @State var oldPassword: String = ""
     @State var newPassword: String = ""
     @State var confirmPassword: String = ""
-    @State var changeErrorMessage: String = ""
+    @State var changeErrors = [String]()
     
     @State var success = false
 
@@ -35,20 +35,11 @@ struct ChangePassword: View {
                 .disableAutocorrection(true)
                 .formItem()
             
-            HStack {
-                Text("\(changeErrorMessage)")
-                    .font(.footnote)
-                    .foregroundColor(.red)
-                    .padding(0)
-                
-                Spacer()
-            }
-            .padding(.leading)
-            .padding(.bottom, 10)
+            UserErrorsView(userErrors: changeErrors)
 
             Button(action: {
-                changeErrorMessage = onSaveChanges(oldPassword, newPassword, confirmPassword)
-                if changeErrorMessage == "" {
+                changeErrors = onSaveChanges(oldPassword, newPassword, confirmPassword)
+                if changeErrors.count == 0 {
                     withAnimation {
                         success = true
                         reset()

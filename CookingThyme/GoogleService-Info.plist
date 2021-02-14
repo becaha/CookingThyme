@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>980447317053-999orfa8afkduvo59ec8u5te4b3ld52a.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.980447317053-999orfa8afkduvo59ec8u5te4b3ld52a</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAMekYp6v6hxPEqTOyknS14YF0lEK5aZ0M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>980447317053</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>edu.byu.CookingThyme</string>
+	<key>PROJECT_ID</key>
+	<string>cooking-thyme-298818</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cooking-thyme-298818.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:980447317053:ios:77a0828c0c75b4d592ae54</string>
+</dict>
+</plist>

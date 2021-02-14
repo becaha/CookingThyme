@@ -16,14 +16,14 @@ struct CookingThymeApp: App {
     @ObservedObject var timer = TimerHandler()
     @ObservedObject var sheetNavigator = SheetNavigator()
     
-//    @UIApplicationDelegateAdaptor(Delegate.self) var delegate
+    @UIApplicationDelegateAdaptor(Delegate.self) var delegate
     
     init() {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(mainColor())
         UIView.appearance(whenContainedInInstancesOf: [UINavigationController.self]).tintColor = UIColor(mainColor())
         // sets current logged in user
         if let currentUsername = UserDefaults.standard.string(forKey: User.userKey) {
-            self.user = UserVM(username: currentUsername)
+            self.user = UserVM(email: currentUsername)
         }
     }
     
@@ -37,13 +37,13 @@ struct CookingThymeApp: App {
     }
 }
 
-//class Delegate: NSObject, UIApplicationDelegate {
-//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-//
-//        FirebaseApp.configure()
-//        return true
-//    }
-//}
+class Delegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+
+        FirebaseApp.configure()
+        return true
+    }
+}
 
 func unfocusEditable() {
     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)

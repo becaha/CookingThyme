@@ -15,15 +15,10 @@ struct SigninView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var isSignIn: Bool = true
-    
-    @State var signinErrorMessage = ""
-    @State var signupErrorMessages = [String]()
-    
-    @State var isSigningIn = false
-
+        
     var body: some View {
         ZStack {
-            if isSigningIn {
+            if user.isLoading != nil, user.isLoading! {
                 UIControls.Loading()
             }
             
@@ -43,7 +38,6 @@ struct SigninView: View {
 
                         SecureField("Password", text: $password) {
                             withAnimation {
-                                isSigningIn = true
                                 signin()
                             }
                         }
@@ -52,19 +46,10 @@ struct SigninView: View {
                         .formItem()
                     }
                     
-                    HStack {
-                        Text("\(signinErrorMessage)")
-                            .font(.footnote)
-                            .foregroundColor(.red)
-                            .padding(0)
-                        
-                        Spacer()
-                    }
-                    .padding([.leading, .bottom])
-                    
+                    UserErrorsView(userErrors: user.userErrors)
+
                     Button(action: {
                         withAnimation {
-                            isSigningIn = true
                             signin()
                         }
                     }) {
@@ -98,7 +83,6 @@ struct SigninView: View {
 
                         SecureField("Password", text: $password) {
                             withAnimation {
-                                isSigningIn = true
                                 signup()
                             }
                         }
@@ -107,23 +91,10 @@ struct SigninView: View {
                         .formItem()
                     }
 
-                    VStack {
-                        ForEach(signupErrorMessages, id: \.self) { message in
-                            HStack {
-                                Text("\(message)")
-                                    .font(.footnote)
-                                    .foregroundColor(.red)
-                                    .padding(0)
-
-                                Spacer()
-                            }
-                        }
-                    }
-                    .padding([.leading, .bottom])
+                    UserErrorsView(userErrors: user.userErrors)
 
                     Button(action: {
                         withAnimation {
-                            isSigningIn = true
                             signup()
                         }
                     }) {
@@ -152,7 +123,17 @@ struct SigninView: View {
                 
             }
             .padding()
-            .opacity(isSigningIn ? 0.5 : 1)
+            .opacity(user.isLoading != nil && user.isLoading! ? 0.5 : 1)
+        }
+        .onAppear {
+            user.clearErrors()
+            user.isLoading = nil
+        }
+        .onReceive(user.$isLoading) { isLoading in
+            if let isLoading = isLoading, !isLoading {
+                user.isLoading = nil
+                onLoadingComplete()
+            }
         }
         .accentColor(mainColor())
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
@@ -161,41 +142,23 @@ struct SigninView: View {
     func reset() {
         password = ""
         email = ""
-        signupErrorMessages = [String]()
-        signinErrorMessage = ""
+        user.userErrors = [String]()
     }
     
     func signin() {
         user.signin(email: email, password: password)
-        if user.signinError {
-            isSigningIn = false
-            signinErrorMessage = "Username or password incorrect."
-        }
-        else {
-            sheetNavigator.showSheet = false
-        }
     }
     
     func signup() {
         user.signup(email: email, password: password)
+    }
+    
+    // TODO: why is on loading complete called on first opening of signin view,
+    // signout, change password are in settings, have on receive in settings to do aa loadingcomplete
+    func onLoadingComplete() {
         withAnimation {
-            signupErrorMessages = [String]()
-            
-            if user.signupErrors.count == 0 {
+            if user.userErrors.count == 0 {
                 sheetNavigator.showSheet = false
-            }
-            else {
-                isSigningIn = false
-            }
-            if user.signupErrors.contains(InvalidSignup.emailTaken) {
-                signupErrorMessages.append("Email already taken.")
-            }
-            
-            if user.signupErrors.contains(InvalidSignup.email) {
-                signupErrorMessages.append("Invalid email.")
-            }
-            if user.signupErrors.contains(InvalidSignup.password) {
-                signupErrorMessages.append("Invalid password.")
             }
         }
     }

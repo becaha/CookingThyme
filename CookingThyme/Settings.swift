@@ -24,19 +24,6 @@ struct Settings: View {
             List {
                 Section(header: Text("Account Details")) {
                     HStack {
-                        Text("Username")
-                            .bold()
-
-                        Spacer()
-
-                        Text("\(username)")
-                            .fontWeight(.regular)
-                            .onAppear {
-                                username = user.username
-                            }
-                    }
-                    
-                    HStack {
                         Text("Email")
                             .bold()
                         
@@ -53,7 +40,7 @@ struct Settings: View {
                             ChangePassword(
                                   onSaveChanges: { oldPassword, newPassword, confirmPassword in
                                     user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
-                                    return user.changePasswordError
+                                    return user.userErrors
                               })
                     ) {
                         Text("Change Password")
