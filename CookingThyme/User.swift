@@ -140,7 +140,12 @@ struct User {
     static func createUserCollection(withUsername username: String) {
         RecipeDB.shared.createCollection(withUsername: username) { collection in
             if let collection = collection {
-                RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
+                RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id) {
+                    success in
+                    if !success {
+                        print("error creating all category")
+                    }
+                }
             }
         }
     }

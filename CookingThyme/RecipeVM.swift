@@ -163,7 +163,7 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // gets recipe, directions, ingredients, and images from db
     func popullateRecipe() {
-        RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) { recipeWithDirections in
+        RecipeDB.shared.getDirections(forRecipe: self.recipe, withId: self.recipe.id) { recipeWithDirections in
             if let recipeWithDirections = recipeWithDirections {
                 RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: self.recipe.id) { recipeWithIngredients in
                     if let recipeWithIngredients = recipeWithIngredients {

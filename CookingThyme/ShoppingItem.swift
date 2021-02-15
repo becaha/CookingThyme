@@ -60,15 +60,15 @@ struct ShoppingItem: Identifiable {
     }
     
     init(document: DocumentSnapshot) {
-        id = ""
-        name = ""
-        amount = 0
-        let completedInt: Int = 0
+        self.id = document.documentID
+        name = document.get(Table.name) as? String ?? ""
+        amount = document.get(Table.amount) as? Double ?? 0
+        let completedInt: Int = document.get(Table.completed) as? Int ?? 0
         completed = completedInt.toBool()
-        collectionId = ""
+        collectionId = document.get(Table.collectionId) as? String ?? RecipeCollection.defaultId
         
-        let unitString: String = ""
-        unitName = UnitOfMeasurement.unknown("")
+        let unitString: String = document.get(Table.unitName) as? String ?? ""
+        unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
     // converts shopping item to one line string (1 cup apple juice)

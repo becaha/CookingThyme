@@ -37,9 +37,9 @@ struct RecipeCategory: Hashable {
     }
     
     init(document: DocumentSnapshot) {
-        self.name = ""
-        self.recipeCollectionId = ""
-        self.id = ""
+        self.id = document.documentID
+        self.name = document.get(Table.name) as? String ?? ""
+        self.recipeCollectionId = document.get(Table.recipeCollectionId) as? String ?? RecipeCollection.defaultId
     }
 }
 

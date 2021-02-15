@@ -95,16 +95,11 @@ struct Recipe: Identifiable {
     }
     
     init(document: DocumentSnapshot) {
-        self.id = ""
-        self.name = ""
-        self.servings = 0
-        self.source = ""
-        self.recipeCategoryId = ""
-//        id = document[Table.id]
-//        name = String(document[Table.name]).lowercased().capitalized
-//        servings = document[Table.servings]
-//        source = document[Table.source]
-//        recipeCategoryId = document[Table.recipeCategoryId]
+        self.id = document.documentID
+        self.name = document.get(Table.name) as? String ?? ""
+        self.servings = document.get(Table.servings) as? Int ?? 0
+        self.source = document.get(Table.source) as? String ?? ""
+        self.recipeCategoryId = document.get(Table.recipeCategoryId) as? String ?? RecipeCategory.defaultId
     }
     
     mutating func addIngredient(document: DocumentSnapshot) {

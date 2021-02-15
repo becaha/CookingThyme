@@ -42,7 +42,7 @@ class RecipeCollectionVM: ObservableObject {
         self.sortShoppingList()
         self.popullateCategories()
         self.popullateImages()
-        self.resetCurrentCategory()
+//        self.resetCurrentCategory()
     }
     
     // MARK: Access
@@ -102,7 +102,14 @@ class RecipeCollectionVM: ObservableObject {
             self.sortCategories()
             
             if !hasAllCategory {
-                RecipeDB.shared.createCategory(withName: "All", forCollectionId: self.collection.id)
+                RecipeDB.shared.createCategory(withName: "All", forCollectionId: self.collection.id) { success in
+                    if success {
+                        self.resetCurrentCategory()
+                    }
+                }
+            }
+            else {
+                self.resetCurrentCategory()
             }
         }
     }
@@ -225,8 +232,9 @@ class RecipeCollectionVM: ObservableObject {
     
     // adds new category to collection
     func addCategory(_ category: String) -> Void {
-        RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id)
-        popullateCategories()
+        RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { success in
+            self.popullateCategories()
+        }
     }
     
     // updates name of category

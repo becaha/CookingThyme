@@ -33,7 +33,7 @@ struct RecipeCollection {
     }
     
     init(document: DocumentSnapshot) {
-        self.name = ""
-        self.id = RecipeCollection.defaultId
+        self.name = document.get(Table.name) as? String ?? ""
+        self.id = document.documentID
     }
 }

@@ -70,7 +70,7 @@ class RecipeDB {
     
     func createDirection(_ direction: Direction, withRecipeId recipeId: String) throws {
         var ref: DocumentReference? = nil
-        ref = db.collection(Recipe.Table.databaseTableName).addDocument(data: [
+        ref = db.collection(Direction.Table.databaseTableName).addDocument(data: [
             Direction.Table.step: direction.step,
             Direction.Table.direction: direction.direction,
             Direction.Table.recipeId: recipeId
@@ -167,7 +167,7 @@ class RecipeDB {
         }
     }
     
-    func createCategory(withName name: String, forCollectionId collectionId: String) {
+    func createCategory(withName name: String, forCollectionId collectionId: String, onCompletion: @escaping (Bool) -> Void) {
         var ref: DocumentReference? = nil
         ref = db.collection(RecipeCategory.Table.databaseTableName).addDocument(data: [
             RecipeCategory.Table.name: name,
@@ -175,8 +175,10 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error adding category: \(err)")
+                onCompletion(false)
             } else {
                 print("Category added with ID: \(ref!.documentID)")
+                onCompletion(true)
             }
         }
     }

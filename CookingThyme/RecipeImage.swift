@@ -59,10 +59,17 @@ struct RecipeImage: Identifiable {
     }
     
     init(document: DocumentSnapshot) {
-        self.type = ImageType.error
-        self.data = ""
-        self.recipeId = ""
-        self.id = ""
+        let type = document.get(Table.type) as? String ?? ""
+        if let type = ImageType.init(rawValue: type) {
+            self.type = type
+        }
+        else {
+            print("error getting image type")
+            self.type = ImageType.error
+        }
+        self.data = document.get(Table.data) as? String ?? ""
+        self.recipeId = document.get(Table.recipeId) as? String ?? Recipe.defaultId
+        self.id = document.documentID
     }
 }
 

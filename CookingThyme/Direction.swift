@@ -43,12 +43,10 @@ struct Direction: Identifiable {
     }
     
     init(document: DocumentSnapshot) {
-        self.step = 0
-        self.direction = ""
-        // temporary until id is created in db
-        self.id = ""
-        // is temporary, will be replaced when saved with recipe
-        self.recipeId = ""
+        self.step = document.get(Table.step) as? Int ?? 0
+        self.direction = document.get(Table.direction) as? String ?? ""
+        self.id = document.documentID
+        self.recipeId = document.get(Table.recipeId) as? String ?? Recipe.defaultId
     }
     
     // takes directions strings from edit recipe and changs them to directions with the actual recipe id for db

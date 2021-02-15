@@ -67,13 +67,12 @@ struct Ingredient: Identifiable, Equatable {
     }
     
     init(document: DocumentSnapshot) {
-        self.name = ""
-        self.amount = 0
-        self.unitName = UnitOfMeasurement.unknown("")
-        // temporary until id is created in db
-        self.id = Ingredient.defaultId
-        // is temporary, will be replaced when saved with recipe
-        self.recipeId = Recipe.defaultId
+        self.name = document.get(Table.name) as? String ?? ""
+        self.amount = document.get(Table.amount) as? Double ?? 0
+        let unitName = document.get(Table.unitName) as? String ?? ""
+        self.unitName = UnitOfMeasurement.fromString(unitString: unitName)
+        self.id = document.documentID
+        self.recipeId = document.get(Table.recipeId) as? String ?? Recipe.defaultId
     }
     
     // gets the string value of the ingredient amount
