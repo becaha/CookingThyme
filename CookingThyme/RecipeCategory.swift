@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import Firebase
 
 struct RecipeCategory: Hashable {
     struct Table {
@@ -17,14 +18,16 @@ struct RecipeCategory: Hashable {
         static let recipeCollectionId = "RecipeCollectionId"
     }
     
-    var id: Int
-    var name: String
-    var recipeCollectionId: Int
+    static let defaultId = ""
     
-    init(name: String, recipeCollectionId: Int) {
+    var id: String
+    var name: String
+    var recipeCollectionId: String
+    
+    init(name: String, recipeCollectionId: String) {
         self.name = name
         self.recipeCollectionId = recipeCollectionId
-        self.id = 0
+        self.id = RecipeCategory.defaultId
     }
     
     init(row: Row) {
@@ -32,4 +35,12 @@ struct RecipeCategory: Hashable {
         name = row[Table.name]
         recipeCollectionId = row[Table.recipeCollectionId]
     }
+    
+    init(document: DocumentSnapshot) {
+        self.name = ""
+        self.recipeCollectionId = ""
+        self.id = ""
+    }
 }
+
+

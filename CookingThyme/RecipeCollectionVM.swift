@@ -25,7 +25,9 @@ class RecipeCollectionVM: ObservableObject {
     init(collection: RecipeCollection) {
         self.collection = collection
         self.categories = [RecipeCategoryVM]()
-        self.tempShoppingList = RecipeDB.shared.getShoppingItems(byCollectionId: collection.id)
+        RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in 
+            self.tempShoppingList = shoppingList
+        }
         
         self.imageHandlerCancellable = self.imageHandler.objectWillChange
             .sink { _ in
@@ -45,7 +47,7 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Access
     
-    var id: Int {
+    var id: String {
         collection.id
     }
     
@@ -72,7 +74,7 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    func getCategory(withId id: Int) -> RecipeCategoryVM? {
+    func getCategory(withId id: String) -> RecipeCategoryVM? {
         let foundCategory = self.categories.filter { (category) -> Bool in
             category.id == id
         }
@@ -86,27 +88,31 @@ class RecipeCollectionVM: ObservableObject {
     
     // gets categories from db
     func popullateCategories() {
-        let categories = RecipeDB.shared.getCategories(byCollectionId: collection.id)
-        var popullatedCategories = [RecipeCategoryVM]()
-        var hasAllCategory = false
-        for category in categories {
-            if category.name == "All" {
-                hasAllCategory = true
+        RecipeDB.shared.getCategories(byCollectionId: collection.id) {
+            categories in
+            var popullatedCategories = [RecipeCategoryVM]()
+            var hasAllCategory = false
+            for category in categories {
+                if category.name == "All" {
+                    hasAllCategory = true
+                }
+                popullatedCategories.append(RecipeCategoryVM(category: category, collection: self))
             }
-            popullatedCategories.append(RecipeCategoryVM(category: category, collection: self))
-        }
-        self.categories = popullatedCategories
-        self.sortCategories()
-        
-        if !hasAllCategory {
-            RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
+            self.categories = popullatedCategories
+            self.sortCategories()
+            
+            if !hasAllCategory {
+                RecipeDB.shared.createCategory(withName: "All", forCollectionId: self.collection.id)
+            }
         }
     }
     
     func popullateImages() {
         for category in self.categories {
-            if let image = RecipeDB.shared.getImage(withCategoryId: category.id) {
-                self.imageHandler.setImage(image, at: 0)
+            RecipeDB.shared.getImage(withCategoryId: category.id) { image in
+                if let image = image {
+                    self.imageHandler.setImage(image, at: 0)
+                }
             }
         }
     }
@@ -139,12 +145,14 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: Intents
     
     // removes recipe from category, if category is all, do not remove TODO: ?
-    func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: Int) {
+    func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: String) {
         if let allCategory = self.allCategory {
             let allCategoryId = allCategory.id
             if categoryId != allCategoryId {
-                if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) {
-                    print("error moving recipe")
+                RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
+                    if !success {
+                        print("error moving recipe")
+                    }
                 }
             }
         }
@@ -180,12 +188,12 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // deletes recipe and associated parts
-    func deleteRecipe(withId id: Int) {
+    func deleteRecipe(withId id: String) {
         self.deleteRecipeAndParts(withId: id)
         refreshCurrrentCategory()
     }
     
-    private func deleteRecipeAndParts(withId id: Int) {
+    private func deleteRecipeAndParts(withId id: String) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
@@ -193,7 +201,7 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // deletes category and its recipes
-    func deleteCategory(withId id: Int) {
+    func deleteCategory(withId id: String) {
         RecipeDB.shared.deleteCategory(withId: id)
     
         for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
@@ -222,9 +230,12 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // updates name of category
-    func updateCategory(forCategoryId categoryId: Int, toName categoryName: String) {
-        RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id)
-//        popullateCategories()
+    func updateCategory(forCategoryId categoryId: String, toName categoryName: String) {
+        RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id) { success in
+            if !success {
+                print("error updating category")
+            }
+        }
     }
     
     func getRecipe(withName name: String) -> Recipe? {
@@ -238,10 +249,12 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
-    func moveRecipe(withName name: String, toCategoryId categoryId: Int) {
+    func moveRecipe(withName name: String, toCategoryId categoryId: String) {
         if let recipe = getRecipe(withName: name) {
-            if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) {
-                print("error moving recipe")
+            RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) { success in
+                if !success {
+                    print("error moving recipe")
+                }
             }
         }
     }

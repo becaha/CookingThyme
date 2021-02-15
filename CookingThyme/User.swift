@@ -124,20 +124,24 @@ struct User {
 //        }
 //    }
     
-    func getUserCollection() -> RecipeCollectionVM? {
-        if let collection = RecipeDB.shared.getCollection(withUsername: email) {
-            return RecipeCollectionVM(collection: collection)
-        }
-        return nil
-    }
+//    func getUserCollection() -> RecipeCollectionVM? {
+//        RecipeDB.shared.getCollection(withUsername: email) { collection in
+//            if let collection = collection {
+//                return RecipeCollectionVM(collection: collection)
+//            }
+//        }
+//        return nil
+//    }
     
     func createUserCollection() {
         User.createUserCollection(withUsername: self.email)
     }
     
     static func createUserCollection(withUsername username: String) {
-        if let collection = RecipeDB.shared.createCollection(withUsername: username) {
-            RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
+        RecipeDB.shared.createCollection(withUsername: username) { collection in
+            if let collection = collection {
+                RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id)
+            }
         }
     }
     

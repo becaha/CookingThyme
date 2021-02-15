@@ -112,8 +112,8 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // MARK: - Model Access
     
-    var id: Int {
-        Int(recipe.id)
+    var id: String {
+        recipe.id
     }
     
     var name: String {
@@ -141,7 +141,7 @@ class RecipeVM: ObservableObject, Identifiable {
         recipe.source
     }
     
-    var categoryId: Int {
+    var categoryId: String {
         recipe.recipeCategoryId
     }
     
@@ -155,7 +155,7 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // copies recipe to category of user's collection
-    func copyRecipe(toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {
+    func copyRecipe(toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
     }
     
@@ -163,11 +163,17 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // gets recipe, directions, ingredients, and images from db
     func popullateRecipe() {
-        if let recipeWithDirections = RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) {
-            if let recipeWithIngredients = RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: recipe.id) {
-                if let recipeWithImages = RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: recipe.id) {
-                    recipe = recipeWithImages
-                    popullateRecipeTemps()
+        RecipeDB.shared.getDirections(forRecipe: recipe, withId: recipe.id) { recipeWithDirections in
+            if let recipeWithDirections = recipeWithDirections {
+                RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: self.recipe.id) { recipeWithIngredients in
+                    if let recipeWithIngredients = recipeWithIngredients {
+                        RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: self.recipe.id) { recipeWithImages in
+                            if let recipeWithImages = recipeWithImages {
+                                self.recipe = recipeWithImages
+                                self.popullateRecipeTemps()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -192,14 +198,16 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // gets recipe from db
     func refreshRecipe() {
-        if let recipe = RecipeDB.shared.getRecipe(byId: recipe.id) {
-            self.recipe = recipe
-            popullateRecipe()
+        RecipeDB.shared.getRecipe(byId: recipe.id) { recipe in
+            if let recipe = recipe {
+                self.recipe = recipe
+                self.popullateRecipe()
+            }
         }
     }
     
     
-    func updateRecipe(withId id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: Int) {
+    func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
         if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) {
             refreshRecipe()
         }
@@ -207,17 +215,19 @@ class RecipeVM: ObservableObject, Identifiable {
         category!.refreshCategory()
     }
     
-    func moveRecipe(toCategoryId categoryId: Int) {
+    func moveRecipe(toCategoryId categoryId: String) {
         RecipeVM.moveRecipe(self.recipe, toCategoryId: categoryId)
     }
     
-    static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: Int) {
-        if !RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) {
-            print("error moving recipe")
+    static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: String) {
+        RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) { success in
+            if !success {
+                print("error moving recipe")
+            }
         }
     }
     
-    static func copy(recipe: Recipe, toCategoryId categoryId: Int, inCollection collection: RecipeCollectionVM) {
+    static func copy(recipe: Recipe, toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         if let category = collection.getCategory(withId: categoryId) {
             let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source)
             if recipe == nil {
@@ -249,7 +259,7 @@ class RecipeVM: ObservableObject, Identifiable {
         tempIngredients.remove(at: index)
     }
     
-    static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: Int) -> RecipeImage {
+    static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: String) -> RecipeImage {
         return RecipeImage(type: ImageType.url, data: url.absoluteString, recipeId: recipeId)
     }
     
@@ -261,7 +271,7 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
-    static func toRecipeImage(fromUIImage uiImage: UIImage, withRecipeId recipeId: Int) -> RecipeImage? {
+    static func toRecipeImage(fromUIImage uiImage: UIImage, withRecipeId recipeId: String) -> RecipeImage? {
         if let imageData = ImageHandler.encodeImage(uiImage) {
             return RecipeImage(type: ImageType.uiImage, data: imageData, recipeId: recipeId)
         }
@@ -281,7 +291,7 @@ class RecipeVM: ObservableObject, Identifiable {
     }
 
     func isCreatingRecipe() -> Bool {
-        return recipe.id == 0
+        return recipe.id == Recipe.defaultId
     }
     
     // creates ingredient from given name, amount, unit in strings

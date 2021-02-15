@@ -239,7 +239,7 @@ class HTMLTranscriber: ObservableObject {
                 break
             }
         }
-        let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: 0)
+        let directions = Direction.toDirections(directionStrings: directionStrings, withRecipeId: Recipe.defaultId)
         let ingredients = Ingredient.toIngredients(fromStrings: ingredientStrings)
         
         return Recipe(name: name, ingredients: ingredients, directions: directions, images: [RecipeImage](), servings: servings, source: recipeURL)

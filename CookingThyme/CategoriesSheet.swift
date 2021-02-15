@@ -10,13 +10,13 @@ import SwiftUI
 struct CategoriesSheet: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 
-    var currentCategoryId: Int?
+    var currentCategoryId: String?
     var actionWord: String
     @Binding var isPresented: Bool
-    var onAction: (Int) -> Void
-    var onRemove: (Int) -> Void
+    var onAction: (String) -> Void
+    var onRemove: (String) -> Void
     
-    @State private var selectedId: Int?
+    @State private var selectedId: String?
     
     var body: some View {
         NavigationView {

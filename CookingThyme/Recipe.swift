@@ -7,6 +7,8 @@
 
 import Foundation
 import GRDB
+import Firebase
+
 
 struct Recipe: Identifiable {
     // MARK: - Constants
@@ -21,9 +23,11 @@ struct Recipe: Identifiable {
         static let recipeCategoryId = "RecipeCategoryId"
     }
     
+    static let defaultId = ""
+    
     // MARK: - DB Properties
 
-    var id: Int
+    var id: String
     var name: String {
         didSet {
             name = name.lowercased().capitalized
@@ -40,23 +44,27 @@ struct Recipe: Identifiable {
     var directions: [Direction] = []
     var images: [RecipeImage] = []
     var source: String = ""
-    var recipeCategoryId: Int
+    var recipeCategoryId: String
     
-    // recipe from api will have an id and name
-    init(id: Int, name: String) {
-        self.id = id
+    // for search recipes
+    var detailId: Int?
+    
+    // recipe from api will have a detail id and name
+    init(detailId: Int, name: String) {
+        self.id = Recipe.defaultId
+        self.detailId = detailId
         self.name = name
         self.servings = 0
         self.source = ""
-        self.recipeCategoryId = 0
+        self.recipeCategoryId = RecipeCategory.defaultId
     }
     
     init() {
-        self.id = 0
+        self.id = Recipe.defaultId
         self.name = ""
         self.servings = 0
         self.source = ""
-        self.recipeCategoryId = 0
+        self.recipeCategoryId = RecipeCategory.defaultId
     }
     
     init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int, source: String) {
@@ -66,11 +74,11 @@ struct Recipe: Identifiable {
         self.images = images
         self.servings = servings
         self.source = source
-        self.id = 0
-        self.recipeCategoryId = 0
+        self.id = Recipe.defaultId
+        self.recipeCategoryId = RecipeCategory.defaultId
     }
     
-    init(id: Int, name: String, servings: Int, source: String, recipeCategoryId: Int) {
+    init(id: String, name: String, servings: Int, source: String, recipeCategoryId: String) {
         self.id = id
         self.name = name.lowercased().capitalized
         self.servings = servings
@@ -84,6 +92,31 @@ struct Recipe: Identifiable {
         servings = row[Table.servings]
         source = row[Table.source]
         recipeCategoryId = row[Table.recipeCategoryId]
+    }
+    
+    init(document: DocumentSnapshot) {
+        self.id = ""
+        self.name = ""
+        self.servings = 0
+        self.source = ""
+        self.recipeCategoryId = ""
+//        id = document[Table.id]
+//        name = String(document[Table.name]).lowercased().capitalized
+//        servings = document[Table.servings]
+//        source = document[Table.source]
+//        recipeCategoryId = document[Table.recipeCategoryId]
+    }
+    
+    mutating func addIngredient(document: DocumentSnapshot) {
+        ingredients.append(Ingredient(document: document))
+    }
+    
+    mutating func addDirection(document: DocumentSnapshot) {
+        directions.append(Direction(document: document))
+    }
+    
+    mutating func addImage(document: DocumentSnapshot) {
+        images.append(RecipeImage(document: document))
     }
     
     mutating func addIngredient(row: Row) {

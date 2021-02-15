@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import Firebase
 
 //TODO history of shopping items
 struct ShoppingItem: Identifiable {
@@ -21,24 +22,27 @@ struct ShoppingItem: Identifiable {
         static let collectionId = "CollectionId"
     }
     
-    var id: Int
+    static let defaultId = ""
+    
+    var id: String
     var name: String
     var amount: Double?
     var unitName: UnitOfMeasurement
     var completed: Bool
-    var collectionId: Int
+    var collectionId: String
     
-    init(name: String, amount: Double?, unitName: UnitOfMeasurement, collectionId: Int, completed: Bool = false) {
+    init(name: String, amount: Double?, unitName: UnitOfMeasurement, collectionId: String, completed: Bool = false) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
-        if let uuid = Int(UUID().uuidString) {
-            self.id = uuid
-        }
-        else {
-            self.id = Int(id)
-        }
+        self.id = UUID().uuidString
+//        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
+//        if let uuid = Int(UUID().uuidString) {
+//            self.id = uuid
+//        }
+//        else {
+//            self.id = Int(id)
+//        }
         self.collectionId = collectionId
         self.completed = completed
     }
@@ -53,6 +57,18 @@ struct ShoppingItem: Identifiable {
         
         let unitString: String = row[Table.unitName]
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
+    }
+    
+    init(document: DocumentSnapshot) {
+        id = ""
+        name = ""
+        amount = 0
+        let completedInt: Int = 0
+        completed = completedInt.toBool()
+        collectionId = ""
+        
+        let unitString: String = ""
+        unitName = UnitOfMeasurement.unknown("")
     }
     
     // converts shopping item to one line string (1 cup apple juice)

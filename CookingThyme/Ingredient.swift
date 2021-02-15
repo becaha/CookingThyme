@@ -7,6 +7,8 @@
 
 import Foundation
 import GRDB
+import Firebase
+
 
 struct Ingredient: Identifiable, Equatable {
     static func == (lhs: Ingredient, rhs: Ingredient) -> Bool {
@@ -23,33 +25,35 @@ struct Ingredient: Identifiable, Equatable {
         static let recipeId = "RecipeId"
     }
     
+    static let defaultId = ""
+    
     var name: String
     var amount: Double
     var unitName: UnitOfMeasurement
-    var id: Int
-    var recipeId: Int
+    var id: String
+    var recipeId: String
     
     init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
         // temporary until id is created in db
-        self.id = 0
+        self.id = Ingredient.defaultId
         // is temporary, will be replaced when saved with recipe
-        self.recipeId = 0
+        self.recipeId = Recipe.defaultId
     }
     
-    init(id: Int?, name: String, amount: Double, unitName: UnitOfMeasurement) {
+    init(id: String?, name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
         // temporary until id is created in db
-        self.id = 0
+        self.id = Ingredient.defaultId
         if let id = id {
             self.id = id
         }
         // is temporary, will be replaced when saved with recipe
-        self.recipeId = 0
+        self.recipeId = Recipe.defaultId
     }
     
     init(row: Row) {
@@ -60,6 +64,16 @@ struct Ingredient: Identifiable, Equatable {
         
         let unitString: String = row[Table.unitName]
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
+    }
+    
+    init(document: DocumentSnapshot) {
+        self.name = ""
+        self.amount = 0
+        self.unitName = UnitOfMeasurement.unknown("")
+        // temporary until id is created in db
+        self.id = Ingredient.defaultId
+        // is temporary, will be replaced when saved with recipe
+        self.recipeId = Recipe.defaultId
     }
     
     // gets the string value of the ingredient amount
@@ -372,13 +386,13 @@ struct TempIngredient {
     var name: String
     var amount: String
     var unitName: String
-    var recipeId: Int
-    var id: Int?
+    var recipeId: String
+    var id: String?
     
     var ingredientString: String
     var ingredientStringMeasurement: String
     
-    init(name: String, amount: String, unitName: String, recipeId: Int, id: Int?) {
+    init(name: String, amount: String, unitName: String, recipeId: String, id: String?) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
@@ -391,7 +405,7 @@ struct TempIngredient {
         self.ingredientStringMeasurement = self.toStringMeasurement()
     }
     
-    init(ingredientString: String, recipeId: Int, id: Int?) {
+    init(ingredientString: String, recipeId: String, id: String?) {
         self.ingredientString = ingredientString
         self.recipeId = recipeId
         self.id = id

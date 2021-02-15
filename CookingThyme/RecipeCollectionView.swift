@@ -36,7 +36,7 @@ struct RecipeCollectionView: View {
     @State var isEditingCategory = false
     
     @State var deleteCategoryAlert = false
-    @State var deleteCategoryId: Int?
+    @State var deleteCategoryId: String?
     
     @State private var isCreatingRecipe = false
         

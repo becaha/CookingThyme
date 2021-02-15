@@ -45,7 +45,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // MARK: - Model Access
     
-    var id: Int {
+    var id: String {
         category.id
     }
     
@@ -70,32 +70,42 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     func popullateRecipes() {
         var updatedRecipes = [Recipe]()
         if category.name == "All" {
-            updatedRecipes = RecipeDB.shared.getAllRecipes(withCollectionId: collection.id)
+            RecipeDB.shared.getAllRecipes(withCollectionId: collection.id) { recipes in
+                var sortedRecipes = recipes
+
+                sortedRecipes.sort { (recipeA, recipeB) -> Bool in
+                    return recipeA.name < recipeB.name
+                }
+                
+                self.recipes = sortedRecipes
+            }
         }
         else {
-            updatedRecipes = RecipeDB.shared.getRecipes(byCategoryId: category.id)
+            RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in
+                var sortedRecipes = recipes
+
+                sortedRecipes.sort { (recipeA, recipeB) -> Bool in
+                    return recipeA.name < recipeB.name
+                }
+                
+                self.recipes = sortedRecipes
+            }
         }
-        updatedRecipes.sort { (recipeA, recipeB) -> Bool in
-            return recipeA.name < recipeB.name
-        }
-        
-        self.recipes = updatedRecipes
-//            .map({ (recipe) -> RecipeVM in
-//            RecipeVM(recipe: recipe, category: self)
-//        })
     }
     
     // MARK: - Image
     
     func popullateImage() {
-        if let image = RecipeDB.shared.getImage(withCategoryId: id) {
-            imageHandler.setImages([image])
+        RecipeDB.shared.getImage(withCategoryId: id) { image in
+            if let image = image {
+                self.imageHandler.setImages([image])
+            }
         }
     }
     
     func setImage(url: URL?) {
         if let url = url {
-            var image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: 0)
+            var image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: Recipe.defaultId)
             image.recipeId = nil
             image.categoryId = id
             setImage(image, replace: true)
@@ -103,7 +113,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
 
     func setImage(uiImage: UIImage) {
-        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: 0) {
+        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: Recipe.defaultId) {
             var recipeImage = image
             recipeImage.recipeId = nil
             recipeImage.categoryId = id
@@ -144,9 +154,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // gets category from db
     func refreshCategory() {
-        if let category = RecipeDB.shared.getCategory(withId: category.id) {
-            self.category = category
-            popullateCategory()
+        RecipeDB.shared.getCategory(withId: category.id) { category in
+            if let category = category {
+                self.category = category
+                self.popullateCategory()
+            }
         }
         collection.refreshCurrrentCategory()
     }
@@ -157,20 +169,39 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // updates recipe given temp ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
+    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe)
     }
     
     // updates recipe given ingredients
-    static func updateRecipe(forCategoryId categoryId: Int, id: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
-        if RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId),
-            RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe),
-            RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe),
-            RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) {
-            return true
+    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
+        var updateSuccess = true
+        RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { success in
+            if !success {
+                updateSuccess = false
+            }
         }
-        return false
+        
+        RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+        }
+        
+        RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+        }
+        
+        RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+        }
+        
+        return updateSuccess
     }
     
     // creates recipe with given parts, called by actually creating new recipe
@@ -186,31 +217,33 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // creates recipe given temp ingredients
-    static func createRecipe(forCategoryId categoryId: Int, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
+    static func createRecipe(forCategoryId categoryId: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source)
     }
     
     // creates recipe given ingredients, recipe created by user, no source
-    static func createRecipe(forCategoryId categoryId: Int, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
+    static func createRecipe(forCategoryId categoryId: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) -> Recipe? {
         var createdRecipe: Recipe?
-        if let recipe = RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) {
-            createdRecipe = recipe
-            RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
-            RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
-            RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
+        RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { recipe in
+            if let recipe = recipe {
+                createdRecipe = recipe
+                RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
+                RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+                RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
+            }
         }
         return createdRecipe
     }
     
     // deletes recipe and associated parts
-    func deleteRecipe(withId id: Int) {
+    func deleteRecipe(withId id: String) {
         RecipeCategoryVM.deleteRecipe(withId: id)
         popullateRecipes()
         popullateImage()
     }
     
-    static func deleteRecipe(withId id: Int) {
+    static func deleteRecipe(withId id: String) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)

@@ -7,6 +7,8 @@
 
 import Foundation
 import GRDB
+import Firebase
+
 
 struct Direction: Identifiable {
     struct Table {
@@ -18,17 +20,19 @@ struct Direction: Identifiable {
         static let direction = "Direction"
     }
     
-    var id: Int
+    static let defaultId = ""
+    
+    var id: String
     var step: Int
-    var recipeId: Int
+    var recipeId: String
     var direction: String
     
-    init(step: Int, recipeId: Int, direction: String) {
+    init(step: Int, recipeId: String, direction: String) {
         self.step = step
         self.recipeId = recipeId
         self.direction = direction
         // temporary until id is created in db
-        self.id = 0
+        self.id = Direction.defaultId
     }
     
     init(row: Row) {
@@ -38,8 +42,17 @@ struct Direction: Identifiable {
         direction = row[Table.direction]
     }
     
+    init(document: DocumentSnapshot) {
+        self.step = 0
+        self.direction = ""
+        // temporary until id is created in db
+        self.id = ""
+        // is temporary, will be replaced when saved with recipe
+        self.recipeId = ""
+    }
+    
     // takes directions strings from edit recipe and changs them to directions with the actual recipe id for db
-    static func toDirections(directionStrings: [String], withRecipeId recipeId: Int) -> [Direction] {
+    static func toDirections(directionStrings: [String], withRecipeId recipeId: String) -> [Direction] {
         var directions = [Direction]()
         for index in 0..<directionStrings.count {
             directions.append(Direction(step: index + 1, recipeId: recipeId, direction: directionStrings[index]))

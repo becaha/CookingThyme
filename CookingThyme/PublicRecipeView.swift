@@ -19,7 +19,7 @@ struct PublicRecipeView: View {
     @State private var signinAlert = false
     @State private var signinAlertMessage: String = ""
     
-    @State private var currentCategoryId: Int?
+    @State private var currentCategoryId: String?
 
     private var isLoading: Bool {
         return recipe.isPopullating && !recipe.recipeNotFound

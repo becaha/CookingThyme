@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import Firebase
 
 struct RecipeCollection {
     struct Table {
@@ -16,7 +17,9 @@ struct RecipeCollection {
         static let name = "Name"
     }
     
-    var id: Int
+    static let defaultId = ""
+    
+    var id: String
     var name: String
     
     init(row: Row) {
@@ -24,8 +27,13 @@ struct RecipeCollection {
         name = row[Table.name]
     }
     
-    init(id: Int, name: String) {
+    init(id: String, name: String) {
         self.id = id
         self.name = name
+    }
+    
+    init(document: DocumentSnapshot) {
+        self.name = ""
+        self.id = RecipeCollection.defaultId
     }
 }

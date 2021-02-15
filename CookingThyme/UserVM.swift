@@ -71,8 +71,10 @@ class UserVM: ObservableObject {
     // MARK: - Intents
     
     func setUserCollection() {
-        if let collection = self.user.getUserCollection() {
-            self.collection = collection
+        RecipeDB.shared.getCollection(withUsername: email) { collection in
+            if let collection = collection {
+                self.collection = RecipeCollectionVM(collection: collection)
+            }
         }
     }
     

@@ -90,7 +90,7 @@ class RecipeSearchHandler: ObservableObject {
                                 let name = recipe["title"] as? String
                                 let id = recipe["id"] as? Int
                                 if let recipeId = id, let recipeName = name {
-                                    recipes.append(Recipe(id: recipeId, name: recipeName))
+                                    recipes.append(Recipe(detailId: recipeId, name: recipeName))
                                 }
                             }
                         }
@@ -116,11 +116,14 @@ class RecipeSearchHandler: ObservableObject {
     // very deep api result caused a very deep function
     func listRecipeDetail(_ recipe: Recipe) {
         recipeDetailError = false
-        if self.recipesStore[recipe.id] != nil {
+        if recipe.detailId == nil {
+            return
+        }
+        if self.recipesStore[recipe.detailId!] != nil {
             self.recipeDetail = recipe
             return
         }
-        let idString = recipe.id.toString()
+        let idString = recipe.detailId!.toString()
         
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -163,7 +166,7 @@ class RecipeSearchHandler: ObservableObject {
                     if let imageURL = jsonObject["image"] as? String {
                         var images = [RecipeImage]()
                         if imageURL != "" {
-                            images.append(RecipeImage(type: ImageType.url, data: imageURL, recipeId: 0))
+                            images.append(RecipeImage(type: ImageType.url, data: imageURL, recipeId: Recipe.defaultId))
                         }
                         recipe.images = images
                     }
@@ -172,7 +175,7 @@ class RecipeSearchHandler: ObservableObject {
                     if let instructions = jsonObject["instructions"] as? String {
                         let cleanedInstructions = HTMLTranscriber.cleanHtmlTags(fromHtml: instructions, returnTitle: false)
                         let recipeInstructions = cleanedInstructions.components(separatedBy: "\n")
-                        recipe.directions = Direction.toDirections(directionStrings: recipeInstructions, withRecipeId: 0)
+                        recipe.directions = Direction.toDirections(directionStrings: recipeInstructions, withRecipeId: Recipe.defaultId)
                     }
                     
                     // servings
@@ -233,12 +236,12 @@ class RecipeSearchHandler: ObservableObject {
     
     // sets the detail of a recipe
     func setRecipeDetail(_ recipe: Recipe) {
-        if isValid(recipe) {
+        if isValid(recipe) && recipe.detailId != nil {
             self.recipeDetail = recipe
-            self.recipesStore[recipe.id] = recipe
+            self.recipesStore[recipe.detailId!] = recipe
         }
         else {
-            print("error getting recipe with id \(recipe.id)")
+            print("error getting recipe with id \(recipe.detailId)")
             self.recipeDetailError = true
         }
     }

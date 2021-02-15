@@ -7,6 +7,8 @@
 
 import Foundation
 import GRDB
+import Firebase
+
 
 struct RecipeImage: Identifiable {
     struct Table {
@@ -19,25 +21,27 @@ struct RecipeImage: Identifiable {
         static let categoryId = "CategoryId"
     }
     
-    var id: Int
+    static let defaultId = ""
+    
+    var id: String
     var type: ImageType
     var data: String
     // has either recipeId or categoryId
-    var recipeId: Int?
-    var categoryId: Int?
+    var recipeId: String?
+    var categoryId: String?
     
-    init(type: ImageType, data: String, recipeId: Int) {
+    init(type: ImageType, data: String, recipeId: String) {
         self.type = type
         self.data = data
         self.recipeId = recipeId
-        self.id = 0
+        self.id = RecipeImage.defaultId
     }
     
-    init(type: ImageType, data: String, categoryId: Int) {
+    init(type: ImageType, data: String, categoryId: String) {
         self.type = type
         self.data = data
         self.categoryId = categoryId
-        self.id = 0
+        self.id = RecipeImage.defaultId
     }
     
     init(row: Row) {
@@ -52,6 +56,13 @@ struct RecipeImage: Identifiable {
         data = row[Table.data]
         recipeId = row[Table.recipeId]
         categoryId = row[Table.categoryId]
+    }
+    
+    init(document: DocumentSnapshot) {
+        self.type = ImageType.error
+        self.data = ""
+        self.recipeId = ""
+        self.id = ""
     }
 }
 

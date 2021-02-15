@@ -66,9 +66,9 @@ struct IngredientsView: View {
     var addAllToShoppingList: ([Ingredient]) -> Bool
     var onNotSignedIn: () -> Void
     
-    @State private var confirmAddIngredient: Int?
+    @State private var confirmAddIngredient: String?
     @State private var addedAllIngredients = false
-    @State private var addedIngredients = [Int]()
+    @State private var addedIngredients = [String]()
 
     var body: some View {
         VStack(spacing: 0) {
