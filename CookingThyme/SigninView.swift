@@ -129,14 +129,15 @@ struct SigninView: View {
             user.clearErrors()
             user.isLoading = nil
         }
-        .onReceive(user.$isLoading) { isLoading in
+        .onChange(of: user.isLoading, perform: { isLoading in
             if let isLoading = isLoading, !isLoading {
                 user.isLoading = nil
                 onLoadingComplete()
             }
-        }
+        })
         .accentColor(mainColor())
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
+        .navigationBarColor(offWhiteUIColor())
     }
     
     func reset() {
@@ -153,8 +154,6 @@ struct SigninView: View {
         user.signup(email: email, password: password)
     }
     
-    // TODO: why is on loading complete called on first opening of signin view,
-    // signout, change password are in settings, have on receive in settings to do aa loadingcomplete
     func onLoadingComplete() {
         withAnimation {
             if user.userErrors.count == 0 {

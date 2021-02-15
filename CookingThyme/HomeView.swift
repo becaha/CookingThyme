@@ -24,6 +24,7 @@ struct HomeView: View {
             NavigationView {
                 if !user.isSignedIn {
                     SigninPromptView(message: "to start creating a recipe book.")
+                        .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
                         .environmentObject(sheetNavigator)
                 }
                 else if user.collection != nil {

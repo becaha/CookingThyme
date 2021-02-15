@@ -20,12 +20,7 @@ class UserVM: ObservableObject {
     @Published var collection: RecipeCollectionVM?
     @Published var isSignedIn: Bool = false
     
-    @Published var isLoading: Bool? {
-        didSet {
-            let loading = isLoading
-            print("")
-        }
-    }
+    @Published var isLoading: Bool?
     
     // errors
     @Published var userErrors = [String]()

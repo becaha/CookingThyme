@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ChangePassword: View {
+    @EnvironmentObject var user: UserVM
+
     var onSaveChanges: (String, String, String) -> [String]
     
     @State var oldPassword: String = ""
@@ -64,6 +66,15 @@ struct ChangePassword: View {
             }
             .formItem(backgroundColor: mainColor())
         }
+        .onAppear {
+            user.clearErrors()
+            user.isLoading = nil
+        }
+        .onChange(of: user.isLoading, perform: { isLoading in
+            if let isLoading = isLoading, !isLoading {
+                user.isLoading = nil
+            }
+        })
         .formed()
         .navigationBarTitle("Change Password")
     }

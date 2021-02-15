@@ -55,10 +55,6 @@ struct Settings: View {
                         Button(action: {
                             withAnimation {
                                 user.signout()
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    sheetNavigator.showSheet = false
-                                }
                             }
                         }) {
                             Text("Sign Out")
@@ -93,13 +89,30 @@ struct Settings: View {
                   primaryButton: .default(Text("Delete")) {
                     withAnimation {
                         user.delete()
-                        sheetNavigator.showSheet = false
                     }
                   },
                   secondaryButton: .cancel()
             )
         }
+        .onAppear {
+            user.clearErrors()
+            user.isLoading = nil
+        }
+        .onChange(of: user.isLoading, perform: { isLoading in
+            if let isLoading = isLoading, !isLoading {
+                user.isLoading = nil
+                onLoadingComplete()
+            }
+        })
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
         .navigationBarColor(offWhiteUIColor())
+    }
+    
+    func onLoadingComplete() {
+        withAnimation {
+            if user.userErrors.count == 0 {
+                sheetNavigator.showSheet = false
+            }
+        }
     }
 }
