@@ -100,6 +100,7 @@
 		DBEF371025D4DD5000ED83D4 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */; };
 		DBEF371225D70E8E00ED83D4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DBEF371125D70E8E00ED83D4 /* GoogleService-Info.plist */; };
 		DBEF371425D836B800ED83D4 /* UserErrorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371325D836B800ED83D4 /* UserErrorsView.swift */; };
+		DBEF371625DACDF000ED83D4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371525DACDF000ED83D4 /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -200,6 +201,7 @@
 		DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 		DBEF371125D70E8E00ED83D4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DBEF371325D836B800ED83D4 /* UserErrorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserErrorsView.swift; sourceTree = "<group>"; };
+		DBEF371525DACDF000ED83D4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -521,6 +523,7 @@
 		DBCDE79725A8EE9C003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
+				DBEF371525DACDF000ED83D4 /* Keys.swift */,
 			);
 			name = Credentials;
 			sourceTree = "<group>";
@@ -691,6 +694,7 @@
 				DB49B51325794B7400808CC8 /* ErrorMessage.swift in Sources */,
 				DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */,
 				DB49B4D22565E49F00808CC8 /* RecipeCollectionView.swift in Sources */,
+				DBEF371625DACDF000ED83D4 /* Keys.swift in Sources */,
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */,
 				DB88CD2B25BB64A500A7F32C /* RecipeTextView.swift in Sources */,
