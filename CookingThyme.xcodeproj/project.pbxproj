@@ -63,7 +63,6 @@
 		DB6EFA8925CA37490060B2B4 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */; };
 		DB6EFA8B25CA7DA30060B2B4 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */; };
 		DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */; };
-		DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA8E25CCB9760060B2B4 /* Keys.swift */; };
 		DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */; };
 		DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */; };
 		DB6EFA9625CDF5690060B2B4 /* CloudKitDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6EFA9525CDF5690060B2B4 /* CloudKitDB.swift */; };
@@ -164,7 +163,6 @@
 		DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 		DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DB6EFA8C25CC9B990060B2B4 /* RecipeSearchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchHandler.swift; sourceTree = "<group>"; };
-		DB6EFA8E25CCB9760060B2B4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DB6EFA9025CD0A040060B2B4 /* HomeNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationBar.swift; sourceTree = "<group>"; };
 		DB6EFA9225CDB8E60060B2B4 /* NavigationBarColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarColor.swift; sourceTree = "<group>"; };
 		DB6EFA9525CDF5690060B2B4 /* CloudKitDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitDB.swift; sourceTree = "<group>"; };
@@ -523,7 +521,6 @@
 		DBCDE79725A8EE9C003DC95F /* Credentials */ = {
 			isa = PBXGroup;
 			children = (
-				DB6EFA8E25CCB9760060B2B4 /* Keys.swift */,
 			);
 			name = Credentials;
 			sourceTree = "<group>";
@@ -671,7 +668,6 @@
 				DB49B4E325672AE000808CC8 /* RecipeDB.swift in Sources */,
 				DB49B4F5256DC74100808CC8 /* RecipeCategoryVM.swift in Sources */,
 				DB49B526257EEABA00808CC8 /* HomeView.swift in Sources */,
-				DB6EFA8F25CCB9760060B2B4 /* Keys.swift in Sources */,
 				DB49B5592581BB0D00808CC8 /* RecipeSearch.swift in Sources */,
 				DB49B4FB256E015000808CC8 /* EditableText.swift in Sources */,
 				DB49B4C82565E49F00808CC8 /* UIControls.swift in Sources */,
