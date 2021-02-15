@@ -12,12 +12,6 @@ import FirebaseUI
 
 // https://benmcmahen.com/authentication-with-swiftui-and-firebase/
 
-//func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        // Override point for customization after application launch.
-//        FirebaseApp.configure()
-//        return true
-//    }
-
 class FirebaseDB {
 ////    var db: type
 
