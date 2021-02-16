@@ -91,33 +91,21 @@ class RecipeCollectionVM: ObservableObject {
     
     // gets categories from db
     func popullateCategories() {
-        RecipeDB.shared.getCategories(byCollectionId: collection.id) {
-            categories in
+        RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
+            if !success {
+                return 
+            }
             var popullatedCategories = [RecipeCategoryVM]()
-            var hasAllCategory = false
+            
             for category in categories {
-                if category.name == "All" {
-                    hasAllCategory = true
-                }
                 popullatedCategories.append(RecipeCategoryVM(category: category, collection: self))
             }
+            
             self.categories = popullatedCategories
             self.sortCategories()
             
-            // should not come here
-            if !hasAllCategory {
-                RecipeDB.shared.createCategory(withName: "All", forCollectionId: self.collection.id) { success in
-                    if success {
-                        self.popullateAllRecipes()
-                        self.resetCurrentCategory()
-                    }
-                }
-            }
-            else {
-                self.popullateAllRecipes()
-                self.resetCurrentCategory()
-            }
-            
+            self.popullateAllRecipes()
+            self.resetCurrentCategory()
         }
     }
     
@@ -151,10 +139,10 @@ class RecipeCollectionVM: ObservableObject {
     // to refresh view
     func refreshCurrrentCategory() {
         refreshView = true
-//        if let currentCategory = self.currentCategory {
-//            currentCategory.popullateCategory()
-//            self.currentCategory = currentCategory
-//        }
+        if let currentCategory = self.currentCategory {
+            currentCategory.popullateCategory()
+            self.currentCategory = currentCategory
+        }
     }
     
     // TODO only reset if current category is nil

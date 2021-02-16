@@ -133,18 +133,12 @@ struct User {
 //        return nil
 //    }
     
-    func createUserCollection() {
-        User.createUserCollection(withUsername: self.email)
-    }
-    
-    static func createUserCollection(withUsername username: String) {
+    static func createUserCollection(withUsername username: String, onCompletion: @escaping (Bool) -> Void) {
         RecipeDB.shared.createCollection(withUsername: username) { collection in
             if let collection = collection {
                 RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id) {
                     success in
-                    if !success {
-                        print("error creating all category")
-                    }
+                    onCompletion(success)
                 }
             }
         }

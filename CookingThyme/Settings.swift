@@ -152,8 +152,13 @@ struct Settings: View {
         withAnimation {
             if user.userErrors.count == 0 && !user.isReauthenticating {
                 withAnimation {
-                    deleteSuccessful = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if presentDeleteAlert {
+                        deleteSuccessful = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            sheetNavigator.showSheet = false
+                        }
+                    }
+                    else {
                         sheetNavigator.showSheet = false
                     }
                 }

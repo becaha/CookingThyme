@@ -152,8 +152,14 @@ class UserVM: ObservableObject {
 //                UserDefaults.standard.set(email, forKey: "Email")
 //
 //            })
-            User.createUserCollection(withUsername: email)
-            self.firebaseSignin(email: email, password: password)
+            User.createUserCollection(withUsername: email) { success in
+                if !success {
+                    print("error creating all category")
+                }
+                else {
+                    self.firebaseSignin(email: email, password: password)
+                }
+            }
         }
     }
     

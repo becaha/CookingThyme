@@ -387,18 +387,18 @@ class RecipeDB {
         }
     }
     
-    func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping ([RecipeCategory]) -> Void) {
+    func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping (Bool, [RecipeCategory]) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).order(by: RecipeCategory.Table.name).addSnapshotListener { (querySnapshot, err) in
             var categories = [RecipeCategory]()
             if let err = err {
                 print("Error getting categories: \(err)")
-                onRetrieve([])
+                onRetrieve(false, [])
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     categories.append(RecipeCategory(document: document))
                 }
-                onRetrieve(categories)
+                onRetrieve(true, categories)
             }
         }
     }

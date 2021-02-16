@@ -103,7 +103,6 @@
 		DBEF371625DACDF000ED83D4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371525DACDF000ED83D4 /* Keys.swift */; };
 		DBEF371825DC32AD00ED83D4 /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371725DC32AD00ED83D4 /* Loadable.swift */; };
 		DBEF371A25DC39AF00ED83D4 /* Signin.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371925DC39AF00ED83D4 /* Signin.swift */; };
-		DBEF371C25DC3B3300ED83D4 /* Reauthenticatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEF371B25DC3B3300ED83D4 /* Reauthenticatable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -207,7 +206,6 @@
 		DBEF371525DACDF000ED83D4 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		DBEF371725DC32AD00ED83D4 /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
 		DBEF371925DC39AF00ED83D4 /* Signin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signin.swift; sourceTree = "<group>"; };
-		DBEF371B25DC3B3300ED83D4 /* Reauthenticatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reauthenticatable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,7 +502,6 @@
 			children = (
 				DB83F6AF25AF92CE0041DAA7 /* Settings.swift */,
 				DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */,
-				DBEF371B25DC3B3300ED83D4 /* Reauthenticatable.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -734,7 +731,6 @@
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */,
 				DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */,
-				DBEF371C25DC3B3300ED83D4 /* Reauthenticatable.swift in Sources */,
 				DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
