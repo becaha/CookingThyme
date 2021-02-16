@@ -28,10 +28,7 @@ class RecipeCollectionVM: ObservableObject {
     init(collection: RecipeCollection) {
         self.collection = collection
         self.categories = [RecipeCategoryVM]()
-        RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
-            self.permShoppingList = shoppingList
-            self.tempShoppingList = shoppingList
-        }
+        self.popullateShoppingItems()
         
         self.imageHandlerCancellable = self.imageHandler.objectWillChange
             .sink { _ in
@@ -125,6 +122,13 @@ class RecipeCollectionVM: ObservableObject {
                     self.imageHandler.setImage(image, at: 0)
                 }
             }
+        }
+    }
+    
+    func popullateShoppingItems() {
+        RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
+            self.permShoppingList = shoppingList
+            self.tempShoppingList = shoppingList
         }
     }
     
@@ -383,11 +387,13 @@ class RecipeCollectionVM: ObservableObject {
     func saveShoppingList() {
         RecipeDB.shared.updateShoppingItems(withCollectionId: collection.id, shoppingItems: tempShoppingList, oldItems: permShoppingList) { success in
             if !success {
-                print("errorr updating shopping list")
+                print("error updating shopping list")
+            }
+            else {
+//                self.popullateShoppingItems()
             }
         }
-//        RecipeDB.shared.deleteShoppingItems(withCollectionId: collection.id)
-//        RecipeDB.shared.createShoppingItems(items: tempShoppingList, withCollectionId: collection.id)
+        
     }
     
     // adds all ingredients of given recipe to shopping list

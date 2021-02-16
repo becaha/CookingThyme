@@ -366,12 +366,12 @@
 		DB49B54A2581B6EF00808CC8 /* Table */ = {
 			isa = PBXGroup;
 			children = (
+				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
 				DB49B4EE2568B8EB00808CC8 /* RecipeCategory.swift */,
-				DB49B4BC2565E49F00808CC8 /* Ingredient.swift */,
 				DB49B4C32565E49F00808CC8 /* Recipe.swift */,
+				DB49B4BC2565E49F00808CC8 /* Ingredient.swift */,
 				DB49B4EC2568B15B00808CC8 /* Direction.swift */,
 				DB49B51C257AA4C000808CC8 /* RecipeImage.swift */,
-				DB49B4F02568B96100808CC8 /* RecipeCollection.swift */,
 				DB49B531257F379400808CC8 /* ShoppingItem.swift */,
 				DB83F6A325AE15400041DAA7 /* User.swift */,
 			);
