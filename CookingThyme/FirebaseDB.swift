@@ -317,20 +317,25 @@ class RecipeDB {
                 print("Error getting recipes: \(err)")
             }
             else {
-                var recipes = [Recipe]()
+//                var recipes = [Recipe]()
                 for document in querySnapshot!.documents {
                     let category = document
-                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: document.documentID).getDocuments() { querySnapshot, err in
+                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).getDocuments() { querySnapshot, err in
                         if let err = err {
                             print("Error getting recipes: \(err)")
                         }
                         else {
-                            let categoryRecipes = querySnapshot!.documents
+                            var categoryRecipes = [Recipe]()
+                            let categoryDocs = querySnapshot!.documents
+                            for categoryDoc in categoryDocs {
+                                categoryRecipes.append(Recipe(document: categoryDoc))
+                            }
 //                            recipes.append(contentsOf: categoryRecipes)
+                            onRetrieve(categoryRecipes)
                         }
                     }
                 }
-                onRetrieve(recipes)
+                onRetrieve([])
             }
         }
     }
@@ -382,7 +387,8 @@ class RecipeDB {
     
     func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping ([RecipeCategory]) -> Void) {
         var categories = [RecipeCategory]()
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).getDocuments() { (querySnapshot, err) in
+        // .getDocuments()
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting categories: \(err)")
                 onRetrieve([])
