@@ -86,6 +86,7 @@ struct RecipeCollectionView: View {
                 }
             )
             .onAppear {
+                // reecipes change in category doesnt refresh view
                 collection.refreshCurrrentCategory()
             }
         }
@@ -97,7 +98,7 @@ struct RecipeCollectionView: View {
                     isEditing.toggle()
                     if !isEditing {
                         unfocusEditable()
-                        collection.popullateCategories()
+//                        collection.popullateCategories()
                     }
                 },
                 isEditing: isEditing)

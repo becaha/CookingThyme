@@ -83,6 +83,7 @@ class ImageHandler: ObservableObject {
         addImage(url: url, at: index)
     }
     
+    // TODO adding url image is failing
     // adds URL image at index
     private func addImage(url: URL?, at index: Int) {
         imageURL = url?.imageURL

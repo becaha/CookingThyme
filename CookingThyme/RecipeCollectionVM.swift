@@ -12,11 +12,14 @@ class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
+    @Published var refreshView: Bool = false
+
     private var currentCategoryCancellable: AnyCancellable?
 
     
     @Published var tempShoppingList: [ShoppingItem] = []
-    
+    var permShoppingList: [ShoppingItem] = []
+
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     
@@ -25,7 +28,8 @@ class RecipeCollectionVM: ObservableObject {
     init(collection: RecipeCollection) {
         self.collection = collection
         self.categories = [RecipeCategoryVM]()
-        RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in 
+        RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
+            self.permShoppingList = shoppingList
             self.tempShoppingList = shoppingList
         }
         
@@ -84,7 +88,7 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
-    // MARK: - Init Helpers
+    // MARK: - DB Loaders
     
     // gets categories from db
     func popullateCategories() {
@@ -123,6 +127,27 @@ class RecipeCollectionVM: ObservableObject {
             }
         }
     }
+    
+    // to refresh view
+    func refreshCurrrentCategory() {
+        refreshView = true
+//        if let currentCategory = self.currentCategory {
+//            currentCategory.popullateCategory()
+//            self.currentCategory = currentCategory
+//        }
+    }
+    
+    // TODO only reset if current category is nil
+    func resetCurrentCategory() {
+        if allCategory == nil {
+            print("error")
+        }
+        else {
+            currentCategory = allCategory!
+        }
+    }
+    
+    // MARK: - Helpers
     
     func sortCategories() {
         var currentCategories = self.categories
@@ -163,7 +188,8 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
-        self.popullateCategories()
+        self.refreshView = true
+//        self.popullateCategories()
     }
     
     func filterCurrentCategory(withSearch search: String) {
@@ -174,30 +200,15 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func setCurrentCategory(_ category: RecipeCategoryVM) {
-        category.popullateCategory()
+        category.popullateRecipes()
         currentCategory = category
-    }
-    
-    func refreshCurrrentCategory() {
-        if let currentCategory = self.currentCategory {
-            currentCategory.popullateCategory()
-            self.currentCategory = currentCategory
-        }
-    }
-    
-    func resetCurrentCategory() {
-        if allCategory == nil {
-            print("error")
-        }
-        else {
-            currentCategory = allCategory!
-        }
     }
     
     // deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
         self.deleteRecipeAndParts(withId: id)
-        refreshCurrrentCategory()
+        refreshView = true
+//        refreshCurrrentCategory()
     }
     
     private func deleteRecipeAndParts(withId id: String) {
@@ -215,9 +226,9 @@ class RecipeCollectionVM: ObservableObject {
             self.deleteRecipeAndParts(withId: categoryRecipe.id)
         }
         
-        popullateCategories()
+//        popullateCategories()
         if let currentCategory = self.currentCategory, id == currentCategory.id {
-            resetCurrentCategory()
+//            resetCurrentCategory()
         }
     }
     
@@ -233,7 +244,7 @@ class RecipeCollectionVM: ObservableObject {
     // adds new category to collection
     func addCategory(_ category: String) -> Void {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { success in
-            self.popullateCategories()
+//            self.popullateCategories()
         }
     }
     
@@ -265,6 +276,7 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
+        refreshView = true
     }
     
     // MARK: - Shopping List
@@ -368,8 +380,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // saves temp shopping list to db
     func saveShoppingList() {
-        RecipeDB.shared.deleteShoppingItems(withCollectionId: collection.id)
-        RecipeDB.shared.createShoppingItems(items: tempShoppingList, withCollectionId: collection.id)
+        RecipeDB.shared.updateShoppingItems(withCollectionId: collection.id, shoppingItems: tempShoppingList, oldItems: permShoppingList) { success in
+            if !success {
+                print("errorr updating shopping list")
+            }
+        }
+//        RecipeDB.shared.deleteShoppingItems(withCollectionId: collection.id)
+//        RecipeDB.shared.createShoppingItems(items: tempShoppingList, withCollectionId: collection.id)
     }
     
     // adds all ingredients of given recipe to shopping list

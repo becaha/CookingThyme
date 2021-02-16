@@ -53,32 +53,26 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         category.name
     }
     
-    // MARK: - Intents
+    // MARK: - DB Loaders
     
-    func filterRecipes(withSearch search: String) {
-        if search == "" {
-            self.filteredRecipes = self.recipes
-        }
-        else {
-            self.filteredRecipes = self.recipes.filter({ (recipe) -> Bool in
-                recipe.name.localizedCaseInsensitiveContains(search)
-            })
-        }
+    func popullateCategory() {
+        popullateRecipes()
+        popullateImage()
     }
-    
+
     // gets recipes of category from db
     func popullateRecipes() {
         if category.name == "All" {
-            RecipeDB.shared.getAllRecipes(withCollectionId: collection.id) { recipes in
-                var sortedRecipes = self.recipes
-                sortedRecipes.append(contentsOf: recipes)
-
-                sortedRecipes.sort { (recipeA, recipeB) -> Bool in
-                    return recipeA.name < recipeB.name
-                }
-                
-                self.recipes = sortedRecipes
-            }
+//            RecipeDB.shared.getAllRecipes(withCollectionId: collection.id) { recipes in
+//                var sortedRecipes = self.recipes
+//                sortedRecipes.append(contentsOf: recipes)
+//
+//                sortedRecipes.sort { (recipeA, recipeB) -> Bool in
+//                    return recipeA.name < recipeB.name
+//                }
+//
+//                self.recipes = sortedRecipes
+//            }
         }
         else {
             RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in
@@ -93,8 +87,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
-    // MARK: - Image
-    
     func popullateImage() {
         RecipeDB.shared.getImage(withCategoryId: id) { image in
             if let image = image {
@@ -103,6 +95,32 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
+    // gets category from db
+    func refreshCategory() {
+//        RecipeDB.shared.getCategory(withId: category.id) { category in
+//            if let category = category {
+//                self.category = category
+//                self.popullateCategory()
+//            }
+//        }
+//        collection.refreshCurrrentCategory()
+    }
+    
+    // MARK: - Intents
+    
+    func filterRecipes(withSearch search: String) {
+        if search == "" {
+            self.filteredRecipes = self.recipes
+        }
+        else {
+            self.filteredRecipes = self.recipes.filter({ (recipe) -> Bool in
+                recipe.name.localizedCaseInsensitiveContains(search)
+            })
+        }
+    }
+    
+    // MARK: - Image
+
     func setImage(url: URL?) {
         if let url = url {
             var image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: Recipe.defaultId)
@@ -123,7 +141,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     func createImage(_ image: RecipeImage) {
         RecipeDB.shared.createImage(image, withCategoryId: id)
-        popullateImage()
+//        popullateImage()
     }
     
     func removeImage() {
@@ -140,32 +158,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             RecipeDB.shared.deleteImage(withCategoryId: id)
             createImage(image)
         }
-    }
-    
-//    func addImage(_ image: RecipeImage, withURL url: URL) {
-//        setImage(image, replace: false)
-//        imageHandler.addImage(url: url)
-//    }
-//
-//    func addImage(_ image: RecipeImage, withUIImage uiImage: UIImage) {
-//        setImage(image, replace: false)
-//        imageHandler.addImage(uiImage: uiImage)
-//    }
-    
-    // gets category from db
-    func refreshCategory() {
-        RecipeDB.shared.getCategory(withId: category.id) { category in
-            if let category = category {
-                self.category = category
-                self.popullateCategory()
-            }
-        }
-        collection.refreshCurrrentCategory()
-    }
-    
-    func popullateCategory() {
-        popullateRecipes()
-        popullateImage()
     }
     
     // updates recipe given temp ingredients
@@ -209,10 +201,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         var createdRecipe: Recipe?
         if let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) {
             createdRecipe = recipe
-            popullateRecipes()
-            popullateImage()
+//            popullateRecipes()
+//            popullateImage()
         }
-        collection.refreshCurrrentCategory()
+//        collection.refreshCurrrentCategory()
         return createdRecipe
     }
     
@@ -239,8 +231,9 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
         RecipeCategoryVM.deleteRecipe(withId: id)
+        // need this for recipe on delete to disappear
         popullateRecipes()
-        popullateImage()
+//        popullateImage()
     }
     
     static func deleteRecipe(withId id: String) {
@@ -253,6 +246,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // updates category name
     func updateCategory(toName name: String) {
         collection.updateCategory(forCategoryId: category.id, toName: name)
-        refreshCategory()
+//        refreshCategory()
     }
 }

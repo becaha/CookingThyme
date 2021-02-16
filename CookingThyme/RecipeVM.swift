@@ -161,6 +161,18 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // MARK: - Recipe
     
+    // MARK: - DB Loaders
+    
+    // gets recipe from db
+    func refreshRecipe() {
+        RecipeDB.shared.getRecipe(byId: recipe.id) { recipe in
+            if let recipe = recipe {
+                self.recipe = recipe
+                self.popullateRecipe()
+            }
+        }
+    }
+    
     // gets recipe, directions, ingredients, and images from db
     func popullateRecipe() {
         RecipeDB.shared.getDirections(forRecipe: self.recipe, withId: self.recipe.id) { recipeWithDirections in
@@ -196,23 +208,13 @@ class RecipeVM: ObservableObject, Identifiable {
         popullateRecipe()
     }
     
-    // gets recipe from db
-    func refreshRecipe() {
-        RecipeDB.shared.getRecipe(byId: recipe.id) { recipe in
-            if let recipe = recipe {
-                self.recipe = recipe
-                self.popullateRecipe()
-            }
-        }
-    }
-    
     
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
         if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) {
-            refreshRecipe()
+//            refreshRecipe()
         }
         
-        category!.refreshCategory()
+//        category!.refreshCategory()
     }
     
     func moveRecipe(toCategoryId categoryId: String) {

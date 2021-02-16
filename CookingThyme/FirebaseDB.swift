@@ -235,7 +235,7 @@ class RecipeDB {
     // MARK: - Read
     
     func getRecipe(byId id: String, onRetrieve: @escaping (Recipe?) -> Void) {
-        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
+        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.id, isEqualTo: id).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting recipe: \(err)")
                 onRetrieve(nil)
@@ -250,7 +250,7 @@ class RecipeDB {
     
     func getIngredients(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
+        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting ingredients: \(err)")
                 onRetrieve(nil)
@@ -266,7 +266,7 @@ class RecipeDB {
     
     func getDirections(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
+        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting directions: \(err)")
                 onRetrieve(nil)
@@ -282,13 +282,13 @@ class RecipeDB {
     
     func getImages(forRecipe recipe: Recipe, withRecipeId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
+        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting images: \(err)")
                 onRetrieve(nil)
             } else {
                 for document in querySnapshot!.documents {
-                    print("\(document.documentID) => \(document.data())")
+//                    print("\(document.documentID) => \(document.data())")
                     updatedRecipe.addImage(document: document)
                 }
                 onRetrieve(updatedRecipe)
@@ -297,13 +297,13 @@ class RecipeDB {
     }
     
     func getImage(withCategoryId categoryId: String, onRetrieve: @escaping (RecipeImage?) -> Void) {
-        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
+        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting image: \(err)")
                 onRetrieve(nil)
             } else {
                 for document in querySnapshot!.documents {
-                    print("\(document.documentID) => \(document.data())")
+//                    print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeImage(document: document))
                 }
             }
@@ -312,7 +312,7 @@ class RecipeDB {
     
     // TODO
     func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).getDocuments() { querySnapshot, err in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { querySnapshot, err in
             if let err = err {
                 print("Error getting recipes: \(err)")
             }
@@ -320,7 +320,7 @@ class RecipeDB {
 //                var recipes = [Recipe]()
                 for document in querySnapshot!.documents {
                     let category = document
-                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).getDocuments() { querySnapshot, err in
+                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).addSnapshotListener { querySnapshot, err in
                         if let err = err {
                             print("Error getting recipes: \(err)")
                         }
@@ -341,9 +341,9 @@ class RecipeDB {
     }
     
     func getRecipes(byCategoryId categoryId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
-        var recipes = [Recipe]()
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId)
-            .getDocuments() { (querySnapshot, err) in
+            .addSnapshotListener { (querySnapshot, err) in
+                var recipes = [Recipe]()
                 if let err = err {
                     print("Error getting recipes: \(err)")
                     onRetrieve([])
@@ -358,7 +358,7 @@ class RecipeDB {
     }
     
     func getCategory(withId id: String, onRetrieve: @escaping (RecipeCategory?) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.id, isEqualTo: id).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting category: \(err)")
                 onRetrieve(nil)
@@ -372,7 +372,7 @@ class RecipeDB {
     }
     
     func getCollection(withUsername username: String, onRetrieve: @escaping (RecipeCollection?) -> Void) {
-        db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).getDocuments() { (querySnapshot, err) in
+        db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).addSnapshotListener { (querySnapshot, err) in
             if let err = err {
                 print("Error getting collection: \(err)")
                 onRetrieve(nil)
@@ -386,9 +386,8 @@ class RecipeDB {
     }
     
     func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping ([RecipeCategory]) -> Void) {
-        var categories = [RecipeCategory]()
-        // .getDocuments()
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { (querySnapshot, err) in
+            var categories = [RecipeCategory]()
             if let err = err {
                 print("Error getting categories: \(err)")
                 onRetrieve([])
@@ -403,8 +402,8 @@ class RecipeDB {
     }
     
     func getShoppingItems(byCollectionId collectionId: String, onRetrieve: @escaping ([ShoppingItem]) -> Void) {
-        var items = [ShoppingItem]()
-        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).getDocuments() { (querySnapshot, err) in
+        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).addSnapshotListener { (querySnapshot, err) in
+            var items = [ShoppingItem]()
             if let err = err {
                 print("Error getting shopping items: \(err)")
                 onRetrieve([])
@@ -573,6 +572,55 @@ class RecipeDB {
             onCompletion(true)
         } catch {
             print("Error updating images")
+            onCompletion(false)
+        }
+    }
+    
+    func updateShoppingItem(_ item: ShoppingItem, onCompletion: @escaping (Bool) -> Void) {
+        let ref = db.collection(ShoppingItem.Table.databaseTableName).document(item.id)
+
+        ref.updateData([
+            // currently completed is only piece editable
+//            ShoppingItem.Table.name: item.name,
+//            ShoppingItem.Table.amount: item.amount,
+//            ShoppingItem.Table.unitName: item.unitName.getName(),
+            ShoppingItem.Table.completed: item.completed.toInt()
+        ]) { err in
+            if let err = err {
+                print("Error updating shopping item: \(err)")
+                onCompletion(false)
+            } else {
+                print("Shopping item successfully updated")
+                onCompletion(true)
+            }
+        }
+    }
+    
+    
+    func updateShoppingItems(withCollectionId collectionId: String, shoppingItems: [ShoppingItem], oldItems items: [ShoppingItem], onCompletion: @escaping (Bool) -> Void) {
+        do {
+            var itemsToDelete = items
+            for shoppingItem in shoppingItems {
+                if shoppingItem.id == ShoppingItem.defaultId {
+                    try createShoppingItem(shoppingItem, withCollectionId: collectionId)
+                }
+                else {
+                    itemsToDelete.remove(element: shoppingItem)
+                    updateShoppingItem(shoppingItem) { success in
+                        if !success {
+                            onCompletion(false)
+                        }
+                    }
+                }
+            }
+            // delete direction
+            for item in itemsToDelete {
+                deleteShoppingItem(withId: item.id)
+            }
+            
+            onCompletion(true)
+        } catch {
+            print("Error updating shopping items")
             onCompletion(false)
         }
     }

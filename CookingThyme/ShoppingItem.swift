@@ -35,7 +35,9 @@ struct ShoppingItem: Identifiable {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        self.id = UUID().uuidString
+        self.id = ShoppingItem.defaultId
+        // wonky when no id
+//        self.id = UUID().uuidString
 //        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
 //        if let uuid = Int(UUID().uuidString) {
 //            self.id = uuid
