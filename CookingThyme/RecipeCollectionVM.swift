@@ -90,6 +90,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: - DB Loaders
     
     // gets categories from db
+    // TODO is it just bad connection that makes a second call to geeet categories with error
     func popullateCategories() {
         RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
             if !success {
@@ -236,7 +237,7 @@ class RecipeCollectionVM: ObservableObject {
             self.deleteRecipeAndParts(withId: categoryRecipe.id)
         }
         
-//        popullateCategories()
+        popullateCategories()
         if let currentCategory = self.currentCategory, id == currentCategory.id {
 //            resetCurrentCategory()
         }
@@ -254,7 +255,9 @@ class RecipeCollectionVM: ObservableObject {
     // adds new category to collection
     func addCategory(_ category: String) -> Void {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { success in
-//            self.popullateCategories()
+            if success {
+                self.popullateCategories()
+            }
         }
     }
     
