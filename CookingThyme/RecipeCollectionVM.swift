@@ -149,6 +149,7 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: - Helpers
     
+    // TODO sort with auto all in first place
     func sortCategories() {
         var currentCategories = self.categories
         currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
@@ -165,13 +166,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // sorts shopping list by alphabetical order
     func sortShoppingList() {
-        let sortedTempShoppingList = self.tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
-            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
-                return true
-            }
-            return false
-        })
-        self.tempShoppingList = sortedTempShoppingList
+//        let sortedTempShoppingList = self.tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
+//            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
+//                return true
+//            }
+//            return false
+//        })
+//        self.tempShoppingList = sortedTempShoppingList
     }
     
     // MARK: Intents

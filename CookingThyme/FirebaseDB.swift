@@ -310,7 +310,7 @@ class RecipeDB {
         }
     }
     
-    // TODO
+    // TODO, then .order(by: Recipe.Table.name)
     func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { querySnapshot, err in
             if let err = err {
@@ -341,7 +341,7 @@ class RecipeDB {
     }
     
     func getRecipes(byCategoryId categoryId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
-        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId)
+        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId).order(by: Recipe.Table.name)
             .addSnapshotListener { (querySnapshot, err) in
                 var recipes = [Recipe]()
                 if let err = err {
@@ -386,7 +386,7 @@ class RecipeDB {
     }
     
     func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping ([RecipeCategory]) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).order(by: RecipeCategory.Table.name).addSnapshotListener { (querySnapshot, err) in
             var categories = [RecipeCategory]()
             if let err = err {
                 print("Error getting categories: \(err)")
@@ -402,7 +402,7 @@ class RecipeDB {
     }
     
     func getShoppingItems(byCollectionId collectionId: String, onRetrieve: @escaping ([ShoppingItem]) -> Void) {
-        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).order(by: ShoppingItem.Table.name).addSnapshotListener { (querySnapshot, err) in
             var items = [ShoppingItem]()
             if let err = err {
                 print("Error getting shopping items: \(err)")
@@ -601,7 +601,7 @@ class RecipeDB {
         do {
             var itemsToDelete = items
             for shoppingItem in shoppingItems {
-                if shoppingItem.id == ShoppingItem.defaultId {
+                if shoppingItem.id == shoppingItem.defaultId {
                     try createShoppingItem(shoppingItem, withCollectionId: collectionId)
                 }
                 else {

@@ -31,11 +31,14 @@ struct ShoppingItem: Identifiable {
     var completed: Bool
     var collectionId: String
     
+    var defaultId: String
+    
     init(name: String, amount: Double?, unitName: UnitOfMeasurement, collectionId: String, completed: Bool = false) {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        self.id = ShoppingItem.defaultId
+        // temp, TODO no dupllicates addable
+        self.id = name
         // wonky when no id
 //        self.id = UUID().uuidString
 //        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
@@ -47,6 +50,7 @@ struct ShoppingItem: Identifiable {
 //        }
         self.collectionId = collectionId
         self.completed = completed
+        self.defaultId = name
     }
     
     init(row: Row) {
@@ -59,6 +63,7 @@ struct ShoppingItem: Identifiable {
         
         let unitString: String = row[Table.unitName]
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
+        self.defaultId = name
     }
     
     init(document: DocumentSnapshot) {
@@ -71,6 +76,7 @@ struct ShoppingItem: Identifiable {
         
         let unitString: String = document.get(Table.unitName) as? String ?? ""
         unitName = UnitOfMeasurement.fromString(unitString: unitString)
+        self.defaultId = name
     }
     
     // converts shopping item to one line string (1 cup apple juice)
