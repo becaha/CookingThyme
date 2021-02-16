@@ -13,10 +13,11 @@ import Firebase
 
 //https://medium.com/firebase-developers/ios-firebase-authentication-sdk-email-and-password-login-6a3bb27e0536
 
+// TODO reset password
+// TODO reauthenticate
 class UserVM: ObservableObject {
     @Published var user: User
-    @Published var authToken: String?
-    @Published var signinPresented: Bool = false
+    @Published var isReauthenticating: Bool = false
     @Published var collection: RecipeCollectionVM?
     @Published var isSignedIn: Bool = false
     
@@ -85,6 +86,7 @@ class UserVM: ObservableObject {
     
     func clearErrors() {
         self.userErrors = [String]()
+        self.isReauthenticating = false
     }
     
     private func firebaseSignin(email: String, password: String) {
@@ -163,8 +165,8 @@ class UserVM: ObservableObject {
     }
     
     func signout() {
-        clearErrors()
         self.isLoading = true
+        clearErrors()
         
         try! Firebase.Auth.auth().signOut()
         user.setSignedOut()
@@ -176,57 +178,61 @@ class UserVM: ObservableObject {
         self.isLoading = false
     }
     
-    private func firebaseChangePassword(newPassword: String) {
-        Firebase.Auth.auth().currentUser?.updatePassword(to: newPassword) { err in
-            if let error = err as NSError? {
-                self.setErrorMessage(fromInternalError: error)
-                return
+    private func firebaseChangePassword(oldPassword: String, newPassword: String) {
+        firebaseReauthenticate(email: self.user.email, password: oldPassword) {
+            // reauthentication is successful, update paassword
+            Firebase.Auth.auth().currentUser?.updatePassword(to: newPassword) { err in
+                if let error = err as NSError? {
+                    self.setErrorMessage(fromInternalError: error)
+                    self.isLoading = false
+                    return
+                }
+                self.isLoading = false
             }
         }
     }
     
-    // TODO change throws to be specific/exhaustive
     func changePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
-        clearErrors()
         self.isLoading = true
+        clearErrors()
         
         if newPassword != confirmPassword {
             userErrors.append("Passwords do not match.")
+            self.isLoading = false
             return
         }
-        
-        // TODO: confirm oldPassword is correct
-        
-        firebaseChangePassword(newPassword: newPassword)
-        
-        self.isLoading = false
+                
+        firebaseChangePassword(oldPassword: oldPassword, newPassword: newPassword)
     }
     
-    private func firebaseDelete() {
-        let user = Firebase.Auth.auth().currentUser
+    private func firebaseDelete(password: String) {
+        firebaseReauthenticate(email: self.user.email, password: password) {
+            // reauthentication is successful, update paassword
+            let user = Firebase.Auth.auth().currentUser
 
-        user?.delete { err in
-            if let error = err as NSError? {
-                self.setErrorMessage(fromInternalError: error)
-                return
-            }
-            else {
-                // Account deleted, sign out.
-                self.user.setSignedOut()
+            user?.delete { err in
+                if let error = err as NSError? {
+                    self.setErrorMessage(fromInternalError: error)
+                    self.isLoading = false
+                    return
+                }
+                else {
+                    // Account deleted, sign out.
+                    self.user.setSignedOut()
+                    self.collection?.delete()
+                    self.status = false
+                    
+                    self.isLoading = false
+                }
             }
         }
     }
     
-    func delete() {
+    func delete(password: String) {
         clearErrors()
         self.isLoading = true
         
-        firebaseDelete()
-        
-        collection?.delete()
-        status = false
-        
-        self.isLoading = false
+        firebaseDelete(password: password)
     }
     
     func isValidUser(email: String, password: String) -> Bool {
@@ -278,33 +284,34 @@ class UserVM: ObservableObject {
         }
     }
     
-    func reauthenticate() {
-        clearErrors()
+    private func firebaseReauthenticate(email: String, password: String, onSuccess: @escaping () -> Void) {
+        let user = Firebase.Auth.auth().currentUser
+        let credential = EmailAuthProvider.credential(withEmail: email, password: password)
 
-//        let user = Firebase.Auth.auth().currentUser
-//        var credential: AuthCredential
-//
-//        // Prompt the user to re-provide their sign-in credentials
-//
-//        user?.reauthenticate(with: credential) { (result, error) in
-//          if let error = error {
-                // FIRAuthErrorCodeInvalidCredential
-        // FIRAuthErrorCodeInvalidEmail
-        // FIRAuthErrorCodeWrongPassword
-        // FIRAuthErrorCodeUserMismatch
-        // FIRAuthErrorCodeUserDisabled
-        // FIRAuthErrorCodeEmailAlreadyInUse
-        // FIRAuthErrorCodeOperationNotAllowed
-//            // An error happened.
-//          } else {
-//            // User re-authenticated.
-//          }
-//        }
+        user?.reauthenticate(with: credential) { (result, err) in
+          if let error = err as NSError? {
+            self.setErrorMessage(fromInternalError: error)
+            self.isLoading = false
+            // An error happened.
+          } else {
+            // User re-authenticated.
+            onSuccess()
+          }
+        }
+    }
+    
+    func reauthenticate(email: String, password: String) {
+        clearErrors()
+        self.isLoading = true
+        
+        self.firebaseReauthenticate(email: email, password: password) {
+            self.isLoading = false
+        }
     }
     
     func setErrorMessage(fromInternalError error: NSError) {
         // reset errors
-        userErrors = [String]()
+        clearErrors()
         
         switch AuthErrorCode(rawValue: error.code) {
         // all
@@ -317,19 +324,33 @@ class UserVM: ObservableObject {
           // FIRAuthErrorCodeUserDisabled: The user account has been disabled by an administrator.
             print("Error: \(error.localizedDescription)")
             self.userErrors.append("This account has been disabled.")
+            
+            
+        // change password
+        case .invalidCredential:
+            // FIRAuthErrorCodeInvalidCredential
+            print("Error: \(error.localizedDescription)")
+            self.userErrors.append("Wrong email or password")
+            
+        // change password
+        case .userMismatch:
+            // FIRAuthErrorCodeUserMismatch
+            print("Error: \(error.localizedDescription)")
+            self.userErrors.append("Wrong email or password")
 
         // signin
         case .wrongPassword:
           // FIRAuthErrorCodeWrongPassword: The password is invalid or the user does not have a password.
             print("Error: \(error.localizedDescription)")
             self.userErrors.append("Incorrect Password.")
-            
+        
+        // signin
         case .userNotFound:
             // FIRAuthErrorCodeUserNotFound: There is no user record corresponding to this identifier. The user may have been deleted.
               print("Error: \(error.localizedDescription)")
               self.userErrors.append("User not found.")
           
-        // signup
+        // signup, change password (why?)
         case .emailAlreadyInUse:
             // FIRAuthErrorCodeEmailAlreadyInUse: The email address is already in use by another account.
             print("Error: \(error.localizedDescription)")
@@ -350,20 +371,23 @@ class UserVM: ObservableObject {
         // delete user, change password
         case .requiresRecentLogin:
               // FIRAuthErrorCodeRequiresRecentLogin: Updating a user’s password is a security sensitive operation that requires a recent login from the user. This error indicates the user has not signed in recently enough. To resolve, reauthenticate the user by invoking reauthenticateWithCredential:completion: on FIRUser.
-            self.userErrors.append("Must confirm sign in to delete the account.")
+//            self.userErrors.append("Must confirm sign in to delete the account.")
+            self.isReauthenticating = true
             
         case .userTokenExpired:
             // user credential is no longer valid, must sign in again
-            self.userErrors.append("Must sign in again.")
+//            self.userErrors.append("Must sign in again.")
+            self.isReauthenticating = true
             
         case .keychainError:
             // FIRAuthErrorCodeKeychainError
-            self.userErrors.append("Must sign in again.")
+//            self.userErrors.append("Must sign in again.")
+            self.isReauthenticating = true
 
         default:
             let errorType = AuthErrorCode(rawValue: error.code)
             let errorMessage = error.localizedDescription
-            print("\(errorType): \(errorMessage)")
+            print("\(String(describing: errorType)): \(errorMessage)")
             self.userErrors.append("Error")
         }
     }

@@ -16,8 +16,12 @@ struct Settings: View {
 
     @State var isEditing = false
     
-    @State var username = ""
     @State var email = ""
+    @State var password = ""
+
+    @State var deleteSuccessful = false
+    
+    @State var isReauthenticating = false
     
     var body: some View {
         VStack {
@@ -40,7 +44,6 @@ struct Settings: View {
                             ChangePassword(
                                   onSaveChanges: { oldPassword, newPassword, confirmPassword in
                                     user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
-                                    return user.userErrors
                               })
                     ) {
                         Text("Change Password")
@@ -65,35 +68,72 @@ struct Settings: View {
                     }
                 }
                 
-                Section {
+                Section(footer: UserErrorsView(userErrors: user.userErrors, padding: false)) {
+                    if presentDeleteAlert {
+                        HStack {
+                            SecureField("Confirm Password", text: $password)
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                                .formItem(padding: false)
+                        }
+                    }
+                    
                     HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            presentDeleteAlert = true
-                        }) {
-                            Text("Delete Account")
-                                .bold()
-                                .foregroundColor(.red)
+                        if presentDeleteAlert && !deleteSuccessful {
+                            Button(action: {
+                                presentDeleteAlert = false
+                            }) {
+                                Text("Cancel")
+                                    .foregroundColor(mainColor())
+                                    .bold()
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            Spacer()
                         }
                         
-                        Spacer()
+                        Button(action: {
+                            withAnimation {
+                                if !presentDeleteAlert {
+                                    presentDeleteAlert = true
+                                }
+                                else {
+                                    user.delete(password: password)
+                                }
+                            }
+                        }) {
+                            if !deleteSuccessful && !presentDeleteAlert {
+                                Spacer()
+                                
+                                Text("Delete Account")
+                                    .bold()
+                                    .foregroundColor(.red)
+                                
+                                Spacer()
+                            }
+                            else if !deleteSuccessful && presentDeleteAlert {
+                                Text("Delete Account")
+                                    .bold()
+                                    .foregroundColor(.red)
+                            }
+                            else {
+                                Spacer()
+                                
+                                Text("Successfully Deleted Account")
+                                    .bold()
+                                    .foregroundColor(.red)
+                                
+                                Spacer()
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
             .listStyle(InsetGroupedListStyle())
 
         }
-        .alert(isPresented: $presentDeleteAlert) {
-            Alert(title: Text("Confirm Delete Account"),
-                  primaryButton: .default(Text("Delete")) {
-                    withAnimation {
-                        user.delete()
-                    }
-                  },
-                  secondaryButton: .cancel()
-            )
-        }
+        .loadable(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil
@@ -110,9 +150,15 @@ struct Settings: View {
     
     func onLoadingComplete() {
         withAnimation {
-            if user.userErrors.count == 0 {
-                sheetNavigator.showSheet = false
+            if user.userErrors.count == 0 && !user.isReauthenticating {
+                withAnimation {
+                    deleteSuccessful = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        sheetNavigator.showSheet = false
+                    }
+                }
             }
+            
         }
     }
 }

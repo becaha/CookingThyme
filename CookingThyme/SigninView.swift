@@ -17,114 +17,77 @@ struct SigninView: View {
     @State var isSignIn: Bool = true
         
     var body: some View {
-        ZStack {
-            if user.isLoading != nil, user.isLoading! {
-                UIControls.Loading()
-            }
+        VStack(spacing: 0) {
+            Spacer()
             
-            VStack(spacing: 0) {
-                Spacer()
-                
-                logo()
-                    .padding(.bottom, 25)
-                
-                if isSignIn {
-                    Group {
-                        TextField("Email", text: $email)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .keyboardType(.emailAddress)
-                            .formItem()
-
-                        SecureField("Password", text: $password) {
-                            withAnimation {
-                                signin()
-                            }
-                        }
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .formItem()
-                    }
-                    
-                    UserErrorsView(userErrors: user.userErrors)
-
-                    Button(action: {
-                        withAnimation {
-                            signin()
-                        }
-                    }) {
-                        HStack {
-                            Spacer()
-                            
-                            Text("Sign In")
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                        }
-                    }
-                    .formItem(backgroundColor: mainColor())
-                    
-                    Button(action: {
-                        withAnimation {
-                            isSignIn = false
-                            reset()
-                        }
-                    }) {
-                        Text("Sign Up")
-                    }
+            logo()
+                .padding(.bottom, 25)
+            
+            if isSignIn {
+                Signin() { email, password in
+                    signin(email: email, password: password)
                 }
-                else {
-                    Group {
-                        TextField("Email", text: $email)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                            .keyboardType(.emailAddress)
-                            .formItem()
-
-                        SecureField("Password", text: $password) {
-                            withAnimation {
-                                signup()
-                            }
-                        }
+                
+                Button(action: {
+                    withAnimation {
+                        isSignIn = false
+                        reset()
+                    }
+                }) {
+                    Text("Sign Up")
+                }
+            }
+            else {
+                Group {
+                    TextField("Email", text: $email)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
                         .formItem()
-                    }
 
-                    UserErrorsView(userErrors: user.userErrors)
-
-                    Button(action: {
+                    SecureField("Password", text: $password) {
                         withAnimation {
                             signup()
                         }
-                    }) {
-                        HStack {
-                            Spacer()
-                            
-                            Text("Sign Up")
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                        }
                     }
-                    .formItem(backgroundColor: mainColor())
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .formItem()
+                }
 
-                    Button(action: {
-                        withAnimation {
-                            isSignIn = true
-                            reset()
-                        }
-                    }) {
-                        Text("Sign In")
+                UserErrorsView(userErrors: user.userErrors)
+
+                Button(action: {
+                    withAnimation {
+                        signup()
+                    }
+                }) {
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign Up")
+                            .foregroundColor(.white)
+                        
+                        Spacer()
                     }
                 }
-                
-                Spacer()
-                
+                .formItem(backgroundColor: mainColor())
+
+                Button(action: {
+                    withAnimation {
+                        isSignIn = true
+                        reset()
+                    }
+                }) {
+                    Text("Sign In")
+                }
             }
-            .padding()
-            .opacity(user.isLoading != nil && user.isLoading! ? 0.5 : 1)
+            
+            Spacer()
+            
         }
+        .padding()
+        .loadable(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil
@@ -146,7 +109,7 @@ struct SigninView: View {
         user.userErrors = [String]()
     }
     
-    func signin() {
+    func signin(email: String, password: String) {
         user.signin(email: email, password: password)
     }
     
@@ -158,6 +121,9 @@ struct SigninView: View {
         withAnimation {
             if user.userErrors.count == 0 {
                 sheetNavigator.showSheet = false
+            }
+            else if user.isReauthenticating {
+                sheetNavigator.sheetDestination = .signin
             }
         }
     }

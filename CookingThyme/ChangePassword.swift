@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct ChangePassword: View {
+    @Environment(\.presentationMode) var presentationMode
+
+    @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
 
-    var onSaveChanges: (String, String, String) -> [String]
+    var onSaveChanges: (String, String, String) -> Void
     
     @State var oldPassword: String = ""
     @State var newPassword: String = ""
     @State var confirmPassword: String = ""
-    @State var changeErrors = [String]()
     
     @State var success = false
-
     
     var body: some View {
         VStack {
@@ -37,16 +38,10 @@ struct ChangePassword: View {
                 .disableAutocorrection(true)
                 .formItem()
             
-            UserErrorsView(userErrors: changeErrors)
+            UserErrorsView(userErrors: user.userErrors)
 
             Button(action: {
-                changeErrors = onSaveChanges(oldPassword, newPassword, confirmPassword)
-                if changeErrors.count == 0 {
-                    withAnimation {
-                        success = true
-                        reset()
-                    }
-                }
+                onSaveChanges(oldPassword, newPassword, confirmPassword)
             }) {
                 HStack {
                     Spacer()
@@ -66,6 +61,7 @@ struct ChangePassword: View {
             }
             .formItem(backgroundColor: mainColor())
         }
+        .loadable(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil
@@ -73,6 +69,15 @@ struct ChangePassword: View {
         .onChange(of: user.isLoading, perform: { isLoading in
             if let isLoading = isLoading, !isLoading {
                 user.isLoading = nil
+                if user.userErrors.count == 0 && !user.isReauthenticating {
+                    withAnimation {
+                        success = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.presentationMode.wrappedValue.dismiss()
+                            reset()
+                        }
+                    }
+                }
             }
         })
         .formed()
@@ -85,9 +90,3 @@ struct ChangePassword: View {
         confirmPassword = ""
     }
 }
-
-//struct ChangeSetting_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ChangeSetting()
-//    }
-//}

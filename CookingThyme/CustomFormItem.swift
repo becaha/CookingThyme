@@ -13,20 +13,30 @@ struct CustomFormItem: ViewModifier {
     var cornerRadius: CGFloat = 7
     var height: CGFloat = 40
     var isSearchBar: Bool = false
+    var padding: Bool = false
     
     init() {
         self.backgroundColor = Color.white
         self.isNavLink = false
+        self.padding = true
     }
     
     init(backgroundColor: Color) {
         self.backgroundColor = backgroundColor
         self.isNavLink = false
+        self.padding = true
     }
     
     init(isNavLink: Bool) {
         self.backgroundColor = Color.white
         self.isNavLink = isNavLink
+        self.padding = true
+    }
+    
+    init(padding: Bool) {
+        self.backgroundColor = Color.white
+        self.isNavLink = false
+        self.padding = padding
     }
     
     init(isSearchBar: Bool) {
@@ -36,6 +46,7 @@ struct CustomFormItem: ViewModifier {
             self.height = 35
             self.isSearchBar = true
         }
+        self.padding = true
     }
     
     func body(content: Content) -> some View {
@@ -62,7 +73,7 @@ struct CustomFormItem: ViewModifier {
 
         }
         .frame(height: height)
-        .padding(.horizontal)
+        .padding(padding ? .horizontal : [])
         .padding(.vertical, 2)
         .padding(isSearchBar ? .bottom : [])
     }
@@ -101,5 +112,9 @@ extension View {
     
     func formItem(isSearchBar: Bool) -> some View {
         modifier(CustomFormItem(isSearchBar: isSearchBar))
+    }
+    
+    func formItem(padding: Bool) -> some View {
+        modifier(CustomFormItem(padding: padding))
     }
 }

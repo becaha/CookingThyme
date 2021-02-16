@@ -241,7 +241,7 @@ class RecipeSearchHandler: ObservableObject {
             self.recipesStore[recipe.detailId!] = recipe
         }
         else {
-            print("error getting recipe with id \(recipe.detailId)")
+            print("error getting recipe with id \(String(describing: recipe.detailId))")
             self.recipeDetailError = true
         }
     }

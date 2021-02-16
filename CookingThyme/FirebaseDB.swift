@@ -20,7 +20,9 @@ class RecipeDB {
     
     private init() {
 
-        FirebaseApp.configure()
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
         
         db = Firestore.firestore()
         
@@ -206,7 +208,7 @@ class RecipeDB {
         var ref: DocumentReference? = nil
         ref = db.collection(ShoppingItem.Table.databaseTableName).addDocument(data: [
             ShoppingItem.Table.name: item.name,
-            ShoppingItem.Table.amount: item.amount,
+            ShoppingItem.Table.amount: item.amount as Any,
             ShoppingItem.Table.unitName: item.unitName.getName(),
             ShoppingItem.Table.completed: item.completed.toInt(),
             ShoppingItem.Table.collectionId: collectionId

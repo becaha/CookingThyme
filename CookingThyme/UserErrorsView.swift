@@ -8,7 +8,7 @@
 import SwiftUI
 
 @ViewBuilder
-func UserErrorsView(userErrors: [String]) -> some View {
+func UserErrorsView(userErrors: [String], padding: Bool = true) -> some View {
     VStack {
         ForEach(userErrors, id: \.self) { message in
             HStack {
@@ -21,5 +21,5 @@ func UserErrorsView(userErrors: [String]) -> some View {
             }
         }
     }
-    .padding([.leading, .bottom])
+    .padding(padding ? [.leading, .bottom] : [])
 }

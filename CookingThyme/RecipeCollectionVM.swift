@@ -13,6 +13,8 @@ class RecipeCollectionVM: ObservableObject {
     @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
     @Published var refreshView: Bool = false
+    
+    @Published var allRecipes = [Recipe]()
 
     private var currentCategoryCancellable: AnyCancellable?
 
@@ -102,15 +104,29 @@ class RecipeCollectionVM: ObservableObject {
             self.categories = popullatedCategories
             self.sortCategories()
             
+            // should not come here
             if !hasAllCategory {
                 RecipeDB.shared.createCategory(withName: "All", forCollectionId: self.collection.id) { success in
                     if success {
+                        self.popullateAllRecipes()
                         self.resetCurrentCategory()
                     }
                 }
             }
             else {
+                self.popullateAllRecipes()
                 self.resetCurrentCategory()
+            }
+            
+        }
+    }
+    
+    func popullateAllRecipes() {
+        allRecipes = [Recipe]()
+//        categoriesAdded = 0 for loading
+        for category in categories {
+            RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in
+                self.allRecipes.append(contentsOf: recipes)
             }
         }
     }
@@ -146,8 +162,9 @@ class RecipeCollectionVM: ObservableObject {
         if allCategory == nil {
             print("error")
         }
-        else {
+        else if currentCategory == nil {
             currentCategory = allCategory!
+            currentCategory!.recipes = allRecipes
         }
     }
     
