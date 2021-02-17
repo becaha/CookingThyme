@@ -38,6 +38,8 @@ class RecipeVM: ObservableObject, Identifiable {
 
     private var recipeTranscriberCancellable: AnyCancellable?
     private var recipeTextTranscriberCancellable: AnyCancellable?
+    
+    var imagesChanged = false
 
     // MARK: - Init
     
@@ -49,7 +51,6 @@ class RecipeVM: ObservableObject, Identifiable {
         setCancellables()
         
         popullateRecipe()
-        popullateImages()
     }
     
     // inits a create new recipe in a category
@@ -196,11 +197,16 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
+        popullateImages()
     }
     
     // sends images to image handler to prep for ui
     func popullateImages() {
-        imageHandler.setImages(tempImages)
+        // only update images if they have been (added to/deleted from) or image handler count is wrong
+        if imagesChanged || imageHandler.images.count != tempImages.count {
+            imageHandler.setImages(tempImages)
+            imagesChanged = false
+        }
     }
     
     func setRecipe(_ recipe: Recipe) {
@@ -284,12 +290,14 @@ class RecipeVM: ObservableObject, Identifiable {
         if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: recipe.id) {
             tempImages.append(image)
             imageHandler.addImage(uiImage: uiImage)
+            imagesChanged = true
         }
     }
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
         imageHandler.removeImage(at: index)
+        imagesChanged = true
     }
 
     func isCreatingRecipe() -> Bool {

@@ -109,9 +109,8 @@ class RecipeDB {
     }
     
     func createStorageImage(_ image: RecipeImage, withName name: String) {
-        let dataPath = name + ".jpg"
-        // Create a reference to the file you want to upload
-        let ref = storage.child("images/\(dataPath)")
+        let ref = getStorageImageRef(withName: name)
+
         if let imageData = ImageHandler.decodeImageToData(image.data) {
             // Upload the file to the path
 //            let uploadTask =
@@ -331,7 +330,7 @@ class RecipeDB {
     
     func getImages(forRecipe recipe: Recipe, withRecipeId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting images: \(err)")
                 onRetrieve(nil)
@@ -341,15 +340,16 @@ class RecipeDB {
                 for document in querySnapshot!.documents {
                     imageGroup.enter()
                     print("image retrieved id: \(document.documentID)")
-                    let recipeImage = RecipeImage(document: document, withData: nil)
+                    var recipeImage = RecipeImage(document: document)
                     if recipeImage.type == .uiImage {
-                        self.getStorageImage(withName: document.documentID) { data in
-                            updatedRecipe.addImage(document: document, withData: data)
+                        self.getStorageImageURL(withName: document.documentID) { url in
+                            recipeImage.data = url?.absoluteString ?? ""
+                            updatedRecipe.addImage(recipeImage)
                             imageGroup.leave()
                         }
                     }
                     else {
-                        updatedRecipe.addImage(document: document, withData: nil)
+                        updatedRecipe.addImage(recipeImage)
                         imageGroup.leave()
                     }
                 }
@@ -362,49 +362,24 @@ class RecipeDB {
     }
     
     func getStorageImageURL(withName name: String, onRetrieve: @escaping (URL?) -> Void) {
-        // Create a reference to the file you want to download
-        let ref = storage.child("images/\(name).jpg")
+        let ref = getStorageImageRef(withName: name)
 
-//        if let documentDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
         if let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let path = documentDir.absoluteString
-//            let fileManager = FileManager()
-//            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-            
+            // creates local filesystem url
             let localURL = documentDir.appendingPathComponent("\(name).jpg")
 
-
-            // Create local filesystem URL
-//            if let localURL = URL(string: "\(documentDir)/\(name).jpg") {
             // Download to the local filesystem
-                let downloadTask = ref.write(toFile: localURL) { url, error in
-                    if let error = error {
-                        let message = error.localizedDescription
-                        print("error: \(message)")
-                        onRetrieve(nil)
-                    }
-                    else {
-                        // Local file URL for "images/island.jpg" is returned
-                        onRetrieve(url)
-                    }
+//            let downloadTask =
+            ref.write(toFile: localURL) { url, error in
+                if let error = error {
+                    let message = error.localizedDescription
+                    print("error: \(message)")
+                    onRetrieve(nil)
                 }
-            
-        }
-         
-    }
-    
-    func getStorageImage(withName name: String, onRetrieve: @escaping (Data?) -> Void) {
-        let ref = storage.child("images/\(name).jpg")
-
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
-          if let error = error {
-            let message = error.localizedDescription
-            print("error: \(message)")
-            onRetrieve(nil)
-          } else {
-            onRetrieve(data)
-          }
+                else {
+                    onRetrieve(url)
+                }
+            }
         }
     }
     
@@ -416,7 +391,7 @@ class RecipeDB {
             } else {
                 for document in querySnapshot!.documents {
                     print("image retrieved id: \(document.documentID)")
-                    var recipeImage = RecipeImage(document: document, withData: nil)
+                    var recipeImage = RecipeImage(document: document)
                     if recipeImage.type == .uiImage {
                         self.getStorageImageURL(withName: document.documentID) { url in
                             recipeImage.data = url?.absoluteString ?? ""
@@ -622,23 +597,25 @@ class RecipeDB {
         }
     }
     
-    func updateImage(_ image: RecipeImage, onCompletion: @escaping (Bool) -> Void) {
-        let ref = db.collection(RecipeImage.Table.databaseTableName).document(image.id)
-
-        ref.updateData([
-            RecipeImage.Table.type: image.type.rawValue,
-            RecipeImage.Table.data: image.data
-        ]) { err in
-            if let err = err {
-                print("Error updating image: \(err)")
-                onCompletion(false)
-            } else {
-                print("Image successfully updated")
-                onCompletion(true)
-            }
-        }
-    }
+    // images are never updated, don't need
+//    func updateImage(_ image: RecipeImage, onCompletion: @escaping (Bool) -> Void) {
+//        let ref = db.collection(RecipeImage.Table.databaseTableName).document(image.id)
+//
+//        ref.updateData([
+//            RecipeImage.Table.type: image.type.rawValue,
+//            RecipeImage.Table.data: image.data
+//        ]) { err in
+//            if let err = err {
+//                print("Error updating image: \(err)")
+//                onCompletion(false)
+//            } else {
+//                print("Image successfully updated")
+//                onCompletion(true)
+//            }
+//        }
+//    }
     
+    // TODO
     func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
         do {
             var imagesToDelete = recipe.images
@@ -648,11 +625,12 @@ class RecipeDB {
                 }
                 else {
                     imagesToDelete.remove(element: image)
-                    updateImage(image) { success in
-                        if !success {
-                            onCompletion(false)
-                        }
-                    }
+                    // images are never updated, so neither creating nor deleting, just leave alone
+//                    updateImage(image) { success in
+//                        if !success {
+//                            onCompletion(false)
+//                        }
+//                    }
                 }
             }
             // delete images
@@ -833,7 +811,26 @@ class RecipeDB {
                             print("Image successfully removed!")
                         }
                     }
+                    self.deleteStorageImage(withId: document.documentID)
                 }
+            }
+        }
+    }
+    
+    func getStorageImageRef(withName name: String) -> StorageReference {
+        return storage.child("images/\(name).jpg")
+    }
+    
+    func deleteStorageImage(withId id: String) {
+        let ref = getStorageImageRef(withName: id)
+
+        ref.delete { error in
+            if let error = error {
+                let message = error.localizedDescription
+                print("error: \(message)")
+            }
+            else {
+                // File deleted successfully
             }
         }
     }
@@ -846,6 +843,7 @@ class RecipeDB {
                 print("Image successfully removed!")
             }
         }
+        deleteStorageImage(withId: id)
     }
     
     func deleteImage(withCategoryId categoryId: String) {
@@ -862,6 +860,7 @@ class RecipeDB {
                                 print("Image successfully removed!")
                             }
                     }
+                    self.deleteStorageImage(withId: document.documentID)
                 }
             }
         }

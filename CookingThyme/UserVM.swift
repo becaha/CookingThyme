@@ -14,7 +14,6 @@ import Firebase
 //https://medium.com/firebase-developers/ios-firebase-authentication-sdk-email-and-password-login-6a3bb27e0536
 
 // TODO reset password
-// TODO reauthenticate
 class UserVM: ObservableObject {
     @Published var user: User
     @Published var isReauthenticating: Bool = false

@@ -131,11 +131,8 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     func createImage(_ image: RecipeImage) {
-        RecipeDB.shared.createImage(image, withCategoryId: id) // { success in
-//            if success {
-                self.imageHandler.setImages([image])
-//            }
-//        }
+        RecipeDB.shared.createImage(image, withCategoryId: id)
+        self.imageHandler.setImages([image])
     }
     
     func removeImage() {

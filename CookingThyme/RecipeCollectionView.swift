@@ -334,11 +334,13 @@ struct RecipeCollectionView: View {
                                     category.setImage(url: UIPasteboard.general.url)
                                     editCategory = nil
                                     confirmPaste = false
+                                    photoEditAlert = false
                                 }
                               },
                               secondaryButton: .default(Text("Cancel")) {
                                 editCategory = nil
                                 confirmPaste = false
+                                photoEditAlert = false
                               })
                     }
                     if explainPaste {
@@ -346,19 +348,22 @@ struct RecipeCollectionView: View {
                               message: Text("Copy the URL of an image to the clipboard and tap this button to add the image"),
                               dismissButton: .default(Text("Ok")) {
                                 explainPaste = false
+                                photoEditAlert = false
                               })
                     }
                     return Alert(title: Text("Delete Image"),
                                  message: Text("Are you sure you want to delete the image for this category?"),
                                  primaryButton: .default(Text("Ok")) {
-                                   if let category = editCategory {
-                                    withAnimation {
-                                        category.removeImage()
+                                    if let category = editCategory {
+                                        withAnimation {
+                                            category.removeImage()
+                                        }
                                     }
-                                   }
+                                    photoEditAlert = false
                                  },
                                  secondaryButton: .default(Text("Cancel")) {
-                                   editCategory = nil
+                                    editCategory = nil
+                                    photoEditAlert = false
                                  })
                 }
                 // deleteCategoryAlert

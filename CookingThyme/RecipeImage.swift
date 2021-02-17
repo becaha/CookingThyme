@@ -58,7 +58,7 @@ struct RecipeImage: Identifiable {
         categoryId = row[Table.categoryId]
     }
     
-    init(document: DocumentSnapshot, withData data: Data?) {
+    init(document: DocumentSnapshot) {
         let type = document.get(Table.type) as? String ?? ""
         if let type = ImageType.init(rawValue: type) {
             self.type = type
@@ -70,13 +70,6 @@ struct RecipeImage: Identifiable {
         self.data = ""
         if self.type == ImageType.url {
             self.data = document.get(Table.data) as? String ?? ""
-        }
-        else if self.type == ImageType.uiImage {
-            if let data = data {
-                if let dataString = ImageHandler.encodeImageFromData(data) {
-                    self.data = dataString
-                }
-            }
         }
         self.recipeId = document.get(Table.recipeId) as? String ?? Recipe.defaultId
         self.categoryId = document.get(Table.categoryId) as? String ?? RecipeCategory.defaultId

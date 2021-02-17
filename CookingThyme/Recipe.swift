@@ -110,8 +110,8 @@ struct Recipe: Identifiable {
         directions.append(Direction(document: document))
     }
     
-    mutating func addImage(document: DocumentSnapshot, withData data: Data?) {
-        images.append(RecipeImage(document: document, withData: data))
+    mutating func addImage(_ image: RecipeImage) {
+        images.append(image)
     }
     
     mutating func addIngredient(row: Row) {
