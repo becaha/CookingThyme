@@ -8,42 +8,23 @@
 import Foundation
 import Firebase
 
-// https://benmcmahen.com/authentication-with-swiftui-and-firebase/
-
 class RecipeDB {
     var db: Firestore
+    var storage: StorageReference
 
     // MARK: - Singleton
 
     static let shared = RecipeDB()
-//    static let auth = FUIAuth.defaultAuthUI()
     
     private init() {
 
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
-        
+                
         db = Firestore.firestore()
-        
-//        let authUI = FUIAuth.defaultAuthUI()
-//        // You need to adopt a FUIAuthDelegate protocol to receive callback
-//        authUI.delegate = self
-//
-//        let providers: [FUIAuthProvider] = [
-//          FUIGoogleAuth(),
-//          FUIFacebookAuth(),
-//          FUITwitterAuth(),
-//          FUIPhoneAuth(authUI:FUIAuth.defaultAuthUI()),
-//        ]
-//        self.authUI.providers = providers
-//
-//        let authViewController = authUI.authViewController()
-//
-//        func authUI(_ authUI: FUIAuth, didSignInWith user: FIRUser?, error: Error?) {
-//          // handle user and error as necessary
-//        }
-
+        let dataStorage = Storage.storage()
+        storage = dataStorage.reference()
     }
     
     // MARK: - Create
@@ -127,17 +108,41 @@ class RecipeDB {
         }
     }
     
+    func createStorageImage(_ image: RecipeImage, withName name: String) {
+        let dataPath = name + ".jpg"
+        // Create a reference to the file you want to upload
+        let ref = storage.child("images/\(dataPath)")
+        if let imageData = ImageHandler.decodeImageToData(image.data) {
+            // Upload the file to the path
+//            let uploadTask =
+            ref.putData(imageData, metadata: nil) { (metadata, error) in
+//                guard let metadata = metadata else { return }
+                // Metadata contains file metadata such as size, content-type.
+//                let size = metadata.size
+                // You can also access to download URL after upload.
+//                ref.downloadURL { (url, error) in
+//                    guard let downloadURL = url else { return }
+//                }
+            }
+        }
+    }
+    
     func createImage(_ image: RecipeImage, withRecipeId recipeId: String) throws {
         var ref: DocumentReference? = nil
+        var imageData = image.data
+        if image.type == .uiImage {
+            imageData = ""
+        }
         ref = db.collection(RecipeImage.Table.databaseTableName).addDocument(data: [
             RecipeImage.Table.type: image.type.rawValue,
-            RecipeImage.Table.data: image.data,
+            RecipeImage.Table.data: imageData,
             RecipeImage.Table.recipeId: recipeId
         ]) { err in
             if let err = err {
                 print("Error adding image: \(err)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
+                self.createStorageImage(image, withName: ref!.documentID)
             }
         }
     }
@@ -156,9 +161,13 @@ class RecipeDB {
     
     func createImage(_ image: RecipeImage, withCategoryId categoryId: String) {
         var ref: DocumentReference? = nil
+        var imageData = image.data
+        if image.type == .uiImage {
+            imageData = ""
+        }
         ref = db.collection(RecipeImage.Table.databaseTableName).addDocument(data: [
             RecipeImage.Table.type: image.type.rawValue,
-            RecipeImage.Table.data: image.data,
+            RecipeImage.Table.data: imageData,
             RecipeImage.Table.categoryId: categoryId
         ]) { err in
             if let err = err {
@@ -166,6 +175,7 @@ class RecipeDB {
                 print("Error adding image: \(message)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
+                self.createStorageImage(image, withName: ref!.documentID)
             }
         }
     }
@@ -292,10 +302,70 @@ class RecipeDB {
             } else {
                 for document in querySnapshot!.documents {
 //                    print("\(document.documentID) => \(document.data())")
-                    updatedRecipe.addImage(document: document)
+                    let recipeImage = RecipeImage(document: document, withData: nil)
+                    if recipeImage.type == .uiImage {
+                        self.getStorageImage(withName: document.documentID) { data in
+                            updatedRecipe.addImage(document: document, withData: data)
+                        }
+                    }
+                    else {
+                        updatedRecipe.addImage(document: document, withData: nil)
+                    }
                 }
                 onRetrieve(updatedRecipe)
             }
+        }
+    }
+    
+    func getStorageImageURL(withName name: String, onRetrieve: @escaping (URL?) -> Void) {
+        // Create a reference to the file you want to download
+        let ref = storage.child("images/\(name).jpg")
+
+//        if let documentDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
+        if let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let path = documentDir.absoluteString
+//            let fileManager = FileManager()
+//            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+            
+            let localURL = documentDir.appendingPathComponent("\(name).jpg")
+
+
+            // Create local filesystem URL
+//            if let localURL = URL(string: "\(documentDir)/\(name).jpg") {
+            // Download to the local filesystem
+                let downloadTask = ref.write(toFile: localURL) { url, error in
+                    if let error = error {
+                        let message = error.localizedDescription
+                        print("error: \(message)")
+                        onRetrieve(nil)
+                    }
+                    else {
+                        // Local file URL for "images/island.jpg" is returned
+                        onRetrieve(url)
+                    }
+                }
+            
+        }
+         
+    }
+    
+    func getStorageImage(withName name: String, onRetrieve: @escaping (Data?) -> Void) {
+        let dataPath = name + ".jpg"
+        // Create a reference to the file you want to download
+        let ref = storage.child("images/\(dataPath)")
+
+        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+        ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
+          if let error = error {
+            let message = error.localizedDescription
+            print("error: \(message)")
+            // Uh-oh, an error occurred!
+            onRetrieve(nil)
+          } else {
+            // Data is returned
+//            let image = UIImage(data: data!)
+            onRetrieve(data)
+          }
         }
     }
     
@@ -307,7 +377,17 @@ class RecipeDB {
             } else {
                 for document in querySnapshot!.documents {
 //                    print("\(document.documentID) => \(document.data())")
-                    onRetrieve(RecipeImage(document: document))
+                    var recipeImage = RecipeImage(document: document, withData: nil)
+                    if recipeImage.type == .uiImage {
+                        self.getStorageImageURL(withName: document.documentID) { url in
+                            recipeImage.data = url?.absoluteString ?? ""
+                            onRetrieve(recipeImage)
+//                            onRetrieve(RecipeImage(document: document, withData: data))
+                        }
+                    }
+                    else {
+                        onRetrieve(recipeImage)
+                    }
                 }
             }
         }

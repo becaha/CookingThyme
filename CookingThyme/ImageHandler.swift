@@ -38,12 +38,38 @@ class ImageHandler: ObservableObject {
         return nil
     }
     
+    
+    // decodes image data into string to be used
+    static func encodeImageFromData(_ imageData: Data) -> String? {
+        return imageData.base64EncodedString(options: .lineLength64Characters)
+    }
+    
+    static func encodeImageToData(_ image: UIImage) -> Data? {
+        if let imageData = image.pngData() {
+            return imageData
+        }
+        return nil
+    }
+    
     // decodes image string into uiImage to be used in UI
     func decodeImage(_ imageString: String) -> UIImage? {
         if let decodedData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
             return UIImage(data: decodedData)
         }
         return nil
+    }
+    
+    // decodes image string into uiImage to be used in UI
+    static func decodeImageToData(_ imageString: String) -> Data? {
+        if let decodedData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
+            return decodedData
+        }
+        return nil
+    }
+    
+    // decodes image string into uiImage to be used in UI
+    static func decodeImageFromData(_ imageData: Data) -> UIImage? {
+        return UIImage(data: imageData)
     }
     
     // sets images for UI from images pulled from db
@@ -62,15 +88,15 @@ class ImageHandler: ObservableObject {
     
     // sets image for UI from images pulled from db
     func setImage(_ image: RecipeImage, at index: Int) {
-        if image.type == ImageType.url {
+//        if image.type == ImageType.url {
             addImage(url: URL(string: image.data), at: index)
-        }
-        else if image.type == ImageType.uiImage {
-            imageURL = nil
-            if let decodedImage = decodeImage(image.data) {
-                addImage(uiImage: decodedImage, at: index)
-            }
-        }
+//        }
+//        else if image.type == ImageType.uiImage {
+//            imageURL = nil
+//            if let decodedImage = decodeImage(image.data) {
+//                addImage(uiImage: decodedImage, at: index)
+//            }
+//        }
     }
     
     // adds URL image to end of images

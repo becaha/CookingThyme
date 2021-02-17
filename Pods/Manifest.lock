@@ -415,6 +415,7 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Auth
   - Firebase/Firestore
+  - Firebase/Storage
   - FirebaseUI
   - GRDB.swift
   - SwiftyJSON
@@ -482,6 +483,6 @@ SPEC CHECKSUMS:
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 752eb03eae100911a6c7f7ec1364edb9ef0b1e16
+PODFILE CHECKSUM: b006b472e9a09282dfa3c31532af0bf8058ff622
 
 COCOAPODS: 1.10.0
