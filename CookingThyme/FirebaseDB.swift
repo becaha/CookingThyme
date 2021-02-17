@@ -162,7 +162,8 @@ class RecipeDB {
             RecipeImage.Table.categoryId: categoryId
         ]) { err in
             if let err = err {
-                print("Error adding image: \(err)")
+                let message = err.localizedDescription
+                print("Error adding image: \(message)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
             }
@@ -308,36 +309,6 @@ class RecipeDB {
 //                    print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeImage(document: document))
                 }
-            }
-        }
-    }
-    
-    // TODO, then .order(by: Recipe.Table.name)
-    func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { querySnapshot, err in
-            if let err = err {
-                print("Error getting recipes: \(err)")
-            }
-            else {
-//                var recipes = [Recipe]()
-                for document in querySnapshot!.documents {
-                    let category = document
-                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).addSnapshotListener { querySnapshot, err in
-                        if let err = err {
-                            print("Error getting recipes: \(err)")
-                        }
-                        else {
-                            var categoryRecipes = [Recipe]()
-                            let categoryDocs = querySnapshot!.documents
-                            for categoryDoc in categoryDocs {
-                                categoryRecipes.append(Recipe(document: categoryDoc))
-                            }
-//                            recipes.append(contentsOf: categoryRecipes)
-                            onRetrieve(categoryRecipes)
-                        }
-                    }
-                }
-                onRetrieve([])
             }
         }
     }

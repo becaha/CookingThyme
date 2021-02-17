@@ -8,6 +8,8 @@
 import Foundation
 import Combine
 
+// TODO on edit done, category names are unchanged
+// TODO on load, no imaages
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
@@ -155,13 +157,11 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // TODO only reset if current category is nil
     func resetCurrentCategory() {
         if allCategory == nil {
             print("error")
         }
         else if currentCategory == nil {
-            let recipes = allRecipes
             allCategory!.recipes = allRecipes
             currentCategory = allCategory!
         }

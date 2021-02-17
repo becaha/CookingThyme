@@ -98,7 +98,9 @@ struct RecipeCollectionView: View {
                     isEditing.toggle()
                     if !isEditing {
                         unfocusEditable()
-//                        collection.popullateCategories()
+                        withAnimation {
+                            collection.popullateCategories()
+                        }
                     }
                 },
                 isEditing: isEditing)
@@ -577,6 +579,7 @@ struct RecipeCollectionView: View {
                 category.setImage(uiImage: inputImage)
                 self.editCategory = nil
             }
+            selectedImage = nil
         }
     }
     

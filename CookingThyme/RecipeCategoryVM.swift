@@ -64,16 +64,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     func popullateRecipes() {
         if category.name == "All" {
             self.recipes = collection.allRecipes
-//            RecipeDB.shared.getAllRecipes(withCollectionId: collection.id) { recipes in
-//                var sortedRecipes = self.recipes
-//                sortedRecipes.append(contentsOf: recipes)
-//
-//                sortedRecipes.sort { (recipeA, recipeB) -> Bool in
-//                    return recipeA.name < recipeB.name
-//                }
-//
-//                self.recipes = sortedRecipes
-//            }
         }
         else {
             RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in

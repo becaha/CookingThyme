@@ -27,6 +27,9 @@ class ImageHandler: ObservableObject {
     var imageURL: URL?
     private var fetchImageCancellable: AnyCancellable?
     
+    // TODO: use firebase storage to upload images
+//  https://www.makeschool.com/academy/track/build-ios-apps/build-a-photo-sharing-app/uploading-photos-to-firebase
+    // firestore has error request payload size exceeeeds the limit of 11534336 bytes
     // encodes uiImage into string to be put in db
     static func encodeImage(_ image: UIImage) -> String? {
         if let imageData = image.pngData() {
