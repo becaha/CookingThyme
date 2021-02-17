@@ -8,13 +8,13 @@
 import Foundation
 import Combine
 
-// TODO on edit done, category names are unchanged
-// TODO on load, no imaages
+// TODO photos reload too much
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
     @Published var refreshView: Bool = false
+
     
     @Published var allRecipes = [Recipe]()
     var categoryRecipesAdded = 0
@@ -117,15 +117,9 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func popullateAllRecipes(onCompletion: @escaping (Bool) -> Void) {
-        allRecipes = [Recipe]()
-        for category in categories {
-            RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in
-                self.allRecipes.append(contentsOf: recipes)
-                self.categoryRecipesAdded += 1
-                if self.categoryRecipesAdded == self.categories.count {
-                    onCompletion(true)
-                }
-            }
+        RecipeDB.shared.getAllRecipes(withCollectionId: id) { recipes in
+            self.allRecipes = recipes
+            onCompletion(true)
         }
     }
     

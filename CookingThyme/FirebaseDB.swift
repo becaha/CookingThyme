@@ -261,6 +261,42 @@ class RecipeDB {
         }
     }
     
+    func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { querySnapshot, err in
+            if let err = err {
+                print("Error getting recipes: \(err)")
+            }
+            else {
+                var recipes = [Recipe]()
+                let recipesGroup = DispatchGroup()
+                
+                for document in querySnapshot!.documents {
+                    recipesGroup.enter()
+                    let category = document
+                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).addSnapshotListener { querySnapshot, err in
+                        if let err = err {
+                            print("Error getting recipes: \(err)")
+                            recipesGroup.leave()
+                        }
+                        else {
+                            var categoryRecipes = [Recipe]()
+                            let categoryDocs = querySnapshot!.documents
+                            for categoryDoc in categoryDocs {
+                                categoryRecipes.append(Recipe(document: categoryDoc))
+                            }
+                            recipes.append(contentsOf: categoryRecipes)
+                            recipesGroup.leave()
+                        }
+                    }
+                }
+                
+                recipesGroup.notify(queue: .main) {
+                    onRetrieve(recipes)
+                }
+            }
+        }
+    }
+    
     func getIngredients(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
         db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
@@ -300,19 +336,27 @@ class RecipeDB {
                 print("Error getting images: \(err)")
                 onRetrieve(nil)
             } else {
+                let imageGroup = DispatchGroup()
+
                 for document in querySnapshot!.documents {
-//                    print("\(document.documentID) => \(document.data())")
+                    imageGroup.enter()
+                    print("image retrieved id: \(document.documentID)")
                     let recipeImage = RecipeImage(document: document, withData: nil)
                     if recipeImage.type == .uiImage {
                         self.getStorageImage(withName: document.documentID) { data in
                             updatedRecipe.addImage(document: document, withData: data)
+                            imageGroup.leave()
                         }
                     }
                     else {
                         updatedRecipe.addImage(document: document, withData: nil)
+                        imageGroup.leave()
                     }
                 }
-                onRetrieve(updatedRecipe)
+                
+                imageGroup.notify(queue: .main) {
+                    onRetrieve(updatedRecipe)
+                }
             }
         }
     }
@@ -350,20 +394,15 @@ class RecipeDB {
     }
     
     func getStorageImage(withName name: String, onRetrieve: @escaping (Data?) -> Void) {
-        let dataPath = name + ".jpg"
-        // Create a reference to the file you want to download
-        let ref = storage.child("images/\(dataPath)")
+        let ref = storage.child("images/\(name).jpg")
 
         // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
         ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
           if let error = error {
             let message = error.localizedDescription
             print("error: \(message)")
-            // Uh-oh, an error occurred!
             onRetrieve(nil)
           } else {
-            // Data is returned
-//            let image = UIImage(data: data!)
             onRetrieve(data)
           }
         }
@@ -376,13 +415,12 @@ class RecipeDB {
                 onRetrieve(nil)
             } else {
                 for document in querySnapshot!.documents {
-//                    print("\(document.documentID) => \(document.data())")
+                    print("image retrieved id: \(document.documentID)")
                     var recipeImage = RecipeImage(document: document, withData: nil)
                     if recipeImage.type == .uiImage {
                         self.getStorageImageURL(withName: document.documentID) { url in
                             recipeImage.data = url?.absoluteString ?? ""
                             onRetrieve(recipeImage)
-//                            onRetrieve(RecipeImage(document: document, withData: data))
                         }
                     }
                     else {
