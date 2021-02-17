@@ -63,7 +63,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // gets recipes of category from db
     func popullateRecipes() {
         if category.name == "All" {
-            self.recipes = collection.allRecipes
+            collection.popullateAllRecipes() { success in
+                if success {
+                    self.recipes = self.collection.allRecipes
+                }
+            }
         }
         else {
             RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in

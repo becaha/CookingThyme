@@ -268,6 +268,8 @@ class RecipeDB {
             else {
                 var recipes = [Recipe]()
                 let recipesGroup = DispatchGroup()
+                // only uses dispatch group if get all recipes is called, not the add snapshot listener
+                var inRecipesGroup = true
                 
                 for document in querySnapshot!.documents {
                     recipesGroup.enter()
@@ -275,7 +277,9 @@ class RecipeDB {
                     self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).addSnapshotListener { querySnapshot, err in
                         if let err = err {
                             print("Error getting recipes: \(err)")
-                            recipesGroup.leave()
+                            if inRecipesGroup {
+                                recipesGroup.leave()
+                            }
                         }
                         else {
                             var categoryRecipes = [Recipe]()
@@ -284,12 +288,15 @@ class RecipeDB {
                                 categoryRecipes.append(Recipe(document: categoryDoc))
                             }
                             recipes.append(contentsOf: categoryRecipes)
-                            recipesGroup.leave()
+                            if inRecipesGroup {
+                                recipesGroup.leave()
+                            }
                         }
                     }
                 }
                 
                 recipesGroup.notify(queue: .main) {
+                    inRecipesGroup = false
                     onRetrieve(recipes)
                 }
             }
