@@ -370,7 +370,7 @@ class RecipeDB {
     }
     
     func getImage(withCategoryId categoryId: String, onRetrieve: @escaping (RecipeImage?) -> Void) {
-        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting image: \(err)")
                 onRetrieve(nil)

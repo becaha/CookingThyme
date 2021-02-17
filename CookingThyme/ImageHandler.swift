@@ -88,15 +88,15 @@ class ImageHandler: ObservableObject {
     
     // sets image for UI from images pulled from db
     func setImage(_ image: RecipeImage, at index: Int) {
-//        if image.type == ImageType.url {
+        if image.type == ImageType.uiImage && image.id == RecipeImage.defaultId {
+            imageURL = nil
+            if let decodedImage = decodeImage(image.data) {
+                addImage(uiImage: decodedImage, at: index)
+            }
+        }
+        else {
             addImage(url: URL(string: image.data), at: index)
-//        }
-//        else if image.type == ImageType.uiImage {
-//            imageURL = nil
-//            if let decodedImage = decodeImage(image.data) {
-//                addImage(uiImage: decodedImage, at: index)
-//            }
-//        }
+        }
     }
     
     // adds URL image to end of images
