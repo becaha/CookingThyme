@@ -15,6 +15,7 @@ class RecipeCollectionVM: ObservableObject {
     @Published var refreshView: Bool = false
     
     @Published var allRecipes = [Recipe]()
+    var categoryRecipesAdded = 0
 
     private var currentCategoryCancellable: AnyCancellable?
 
@@ -105,17 +106,23 @@ class RecipeCollectionVM: ObservableObject {
             self.categories = popullatedCategories
             self.sortCategories()
             
-            self.popullateAllRecipes()
-            self.resetCurrentCategory()
+            self.popullateAllRecipes() { success in
+                if success {
+                    self.refreshCurrrentCategory()
+                }
+            }
         }
     }
     
-    func popullateAllRecipes() {
+    func popullateAllRecipes(onCompletion: @escaping (Bool) -> Void) {
         allRecipes = [Recipe]()
-//        categoriesAdded = 0 for loading
         for category in categories {
             RecipeDB.shared.getRecipes(byCategoryId: category.id) { recipes in
                 self.allRecipes.append(contentsOf: recipes)
+                self.categoryRecipesAdded += 1
+                if self.categoryRecipesAdded == self.categories.count {
+                    onCompletion(true)
+                }
             }
         }
     }
@@ -139,10 +146,12 @@ class RecipeCollectionVM: ObservableObject {
     
     // to refresh view
     func refreshCurrrentCategory() {
-        refreshView = true
         if let currentCategory = self.currentCategory {
             currentCategory.popullateCategory()
             self.currentCategory = currentCategory
+        }
+        else {
+            resetCurrentCategory()
         }
     }
     
@@ -152,8 +161,9 @@ class RecipeCollectionVM: ObservableObject {
             print("error")
         }
         else if currentCategory == nil {
+            let recipes = allRecipes
+            allCategory!.recipes = allRecipes
             currentCategory = allCategory!
-            currentCategory!.recipes = allRecipes
         }
     }
     
