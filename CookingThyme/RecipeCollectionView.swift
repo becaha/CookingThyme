@@ -8,8 +8,7 @@
 import SwiftUI
 
 // todo: timerv on stop alert, issetting = true
-// todo: settings no heading background
-// todo: text fields all hstack clickable
+// TODO: cache cache cache everything so it doesn't have to load unless it needs to - check if something has changed before calling to refresh it
 
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {

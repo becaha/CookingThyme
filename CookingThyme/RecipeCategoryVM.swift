@@ -156,39 +156,52 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     // updates recipe given temp ingredients
-    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
+    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
-        return updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe)
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe, onCompletion: onCompletion)
     }
     
     // updates recipe given ingredients
-    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) -> Bool {
+    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
         var updateSuccess = true
+        // is this group ok? enter and leave, hits each once?
+        let recipeGroup = DispatchGroup()
+        
+        recipeGroup.enter()
         RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { success in
-            if !success {
-                updateSuccess = false
-            }
+            recipeGroup.leave()
+            onCompletion(success)
         }
         
+        recipeGroup.enter()
         RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { success in
             if !success {
                 updateSuccess = false
             }
+            recipeGroup.leave()
         }
         
+        recipeGroup.enter()
         RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { success in
             if !success {
                 updateSuccess = false
             }
+            recipeGroup.leave()
         }
         
+        recipeGroup.enter()
         RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { success in
             if !success {
                 updateSuccess = false
             }
+            recipeGroup.leave()
         }
         
-        return updateSuccess
+        recipeGroup.notify(queue: .main) {
+            if updateSuccess {
+                onCompletion(updateSuccess)
+            }
+        }
     }
     
     // creates recipe with given parts, called by actually creating new recipe

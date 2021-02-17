@@ -247,7 +247,7 @@ class RecipeDB {
     // MARK: - Read
     
     func getRecipe(byId id: String, onRetrieve: @escaping (Recipe?) -> Void) {
-        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.id, isEqualTo: id).addSnapshotListener { (querySnapshot, err) in
+        db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting recipe: \(err)")
                 onRetrieve(nil)
@@ -261,7 +261,7 @@ class RecipeDB {
     }
     
     func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).addSnapshotListener { querySnapshot, err in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).getDocuments() { querySnapshot, err in
             if let err = err {
                 print("Error getting recipes: \(err)")
             }
@@ -274,7 +274,7 @@ class RecipeDB {
                 for document in querySnapshot!.documents {
                     recipesGroup.enter()
                     let category = document
-                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).addSnapshotListener { querySnapshot, err in
+                    self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).getDocuments() { querySnapshot, err in
                         if let err = err {
                             print("Error getting recipes: \(err)")
                             if inRecipesGroup {
@@ -305,7 +305,7 @@ class RecipeDB {
     
     func getIngredients(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting ingredients: \(err)")
                 onRetrieve(nil)
@@ -321,7 +321,7 @@ class RecipeDB {
     
     func getDirections(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).addSnapshotListener { (querySnapshot, err) in
+        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting directions: \(err)")
                 onRetrieve(nil)
@@ -415,7 +415,7 @@ class RecipeDB {
     
     func getRecipes(byCategoryId categoryId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId).order(by: Recipe.Table.name)
-            .addSnapshotListener { (querySnapshot, err) in
+            .getDocuments() { (querySnapshot, err) in
                 var recipes = [Recipe]()
                 if let err = err {
                     print("Error getting recipes: \(err)")
@@ -431,7 +431,7 @@ class RecipeDB {
     }
     
     func getCategory(withId id: String, onRetrieve: @escaping (RecipeCategory?) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.id, isEqualTo: id).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting category: \(err)")
                 onRetrieve(nil)
@@ -445,7 +445,7 @@ class RecipeDB {
     }
     
     func getCollection(withUsername username: String, onRetrieve: @escaping (RecipeCollection?) -> Void) {
-        db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting collection: \(err)")
                 onRetrieve(nil)
@@ -459,7 +459,7 @@ class RecipeDB {
     }
     
     func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping (Bool, [RecipeCategory]) -> Void) {
-        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).order(by: RecipeCategory.Table.name).addSnapshotListener { (querySnapshot, err) in
+        db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).order(by: RecipeCategory.Table.name).getDocuments() { (querySnapshot, err) in
             var categories = [RecipeCategory]()
             if let err = err {
                 print("Error getting categories: \(err)")
@@ -475,7 +475,7 @@ class RecipeDB {
     }
     
     func getShoppingItems(byCollectionId collectionId: String, onRetrieve: @escaping ([ShoppingItem]) -> Void) {
-        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).order(by: ShoppingItem.Table.name).addSnapshotListener { (querySnapshot, err) in
+        db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).order(by: ShoppingItem.Table.name).getDocuments() { (querySnapshot, err) in
             var items = [ShoppingItem]()
             if let err = err {
                 print("Error getting shopping items: \(err)")

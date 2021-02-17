@@ -50,7 +50,14 @@ class RecipeVM: ObservableObject, Identifiable {
         self.category = category
         setCancellables()
         
-        popullateRecipe()
+        popullateRecipe() { success in
+            if success {
+                self.popullateRecipeTemps()
+            }
+            else {
+                print("error popullating initialized recipe")
+            }
+        }
     }
     
     // inits a create new recipe in a category
@@ -165,17 +172,18 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - DB Loaders
     
     // gets recipe from db
-    func refreshRecipe() {
+    func refreshRecipe(onCompletion: @escaping (Bool) -> Void) {
         RecipeDB.shared.getRecipe(byId: recipe.id) { recipe in
             if let recipe = recipe {
                 self.recipe = recipe
-                self.popullateRecipe()
+                self.popullateRecipe(onCompletion: onCompletion)
             }
+            
         }
     }
     
     // gets recipe, directions, ingredients, and images from db
-    func popullateRecipe() {
+    func popullateRecipe(onCompletion: @escaping (Bool) -> Void) {
         RecipeDB.shared.getDirections(forRecipe: self.recipe, withId: self.recipe.id) { recipeWithDirections in
             if let recipeWithDirections = recipeWithDirections {
                 RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: self.recipe.id) { recipeWithIngredients in
@@ -183,13 +191,16 @@ class RecipeVM: ObservableObject, Identifiable {
                         RecipeDB.shared.getImages(forRecipe: recipeWithIngredients, withRecipeId: self.recipe.id) { recipeWithImages in
                             if let recipeWithImages = recipeWithImages {
                                 self.recipe = recipeWithImages
-                                self.popullateRecipeTemps()
+//                                self.popullateRecipeTemps()
+                                onCompletion(true)
+                                return
                             }
                         }
                     }
                 }
             }
         }
+        onCompletion(false)
     }
     
     func popullateRecipeTemps() {
@@ -211,16 +222,21 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func setRecipe(_ recipe: Recipe) {
         self.recipe = recipe
-        popullateRecipe()
+        popullateRecipe() { success in
+            if !success {
+                print("error setting recipe")
+            }
+        }
     }
     
     
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
-        if RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) {
-//            refreshRecipe()
+        RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
+                self.refreshRecipe() { success in
+                    self.category!.refreshCategory()
+                }
         }
         
-//        category!.refreshCategory()
     }
     
     func moveRecipe(toCategoryId categoryId: String) {
