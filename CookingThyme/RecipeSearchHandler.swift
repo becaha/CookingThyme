@@ -115,6 +115,7 @@ class RecipeSearchHandler: ObservableObject {
     // lists detail for a recipe (gets the parts of the recipe)
     // very deep api result caused a very deep function
     func listRecipeDetail(_ recipe: Recipe) {
+        var recipe = recipe
         recipeDetailError = false
         if recipe.detailId == nil {
             return
@@ -154,8 +155,6 @@ class RecipeSearchHandler: ObservableObject {
                     }
                     
                 }
-
-                var recipe = Recipe()
                 
                 if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     // name

@@ -51,7 +51,7 @@ struct Recipe: Identifiable {
     
     // recipe from api will have a detail id and name
     init(detailId: Int, name: String) {
-        self.id = Recipe.defaultId
+        self.id = detailId.toString()
         self.detailId = detailId
         self.name = name
         self.servings = 0
