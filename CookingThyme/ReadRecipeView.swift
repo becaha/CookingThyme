@@ -25,7 +25,7 @@ struct ReadRecipeView: View {
     
     var body: some View {
         ScrollView(.vertical) {
-            RecipeNameTitle(name: recipe.name)
+            RecipeNameTitle(name: recipe.tempRecipe.name)
             
             getImageView()
             

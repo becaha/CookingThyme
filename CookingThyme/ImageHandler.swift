@@ -22,7 +22,7 @@ class ImageHandler: ObservableObject {
     @Published var zoomScale: CGFloat = 1.0
     @Published var loadingImages: Bool = false
     
-    var imagesGroup = DispatchGroup()
+    var imagesGroup: DispatchGroup?
 
     @Published var imagesCount: Int?
     
@@ -81,12 +81,13 @@ class ImageHandler: ObservableObject {
         DispatchQueue.global(qos: .userInitiated).async {
             self.imagesGroup = DispatchGroup()
             for index in 0..<images.count {
-                self.imagesGroup.enter()
+                self.imagesGroup!.enter()
                 self.setImage(images[index], at: index)
             }
             
-            self.imagesGroup.notify(queue: .main) {
+            self.imagesGroup!.notify(queue: .main) {
                 self.loadingImages = false
+                self.imagesGroup = nil
             }
         }
     }
@@ -140,7 +141,9 @@ class ImageHandler: ObservableObject {
     private func addImage(uiImage: UIImage, at index: Int) {
         DispatchQueue.main.async {
             self.images[index] = uiImage
-            self.imagesGroup.leave()
+            if self.imagesGroup != nil {
+                self.imagesGroup!.leave()
+            }
         }
     }
     
@@ -179,11 +182,15 @@ class ImageHandler: ObservableObject {
                     case .failure(let error):
                         let message = error.localizedDescription
                         print("error: \(message)")
-                        self.imagesGroup.leave()
+                        if self.imagesGroup != nil {
+                            self.imagesGroup!.leave()
+                        }
                     }
                 }, receiveValue: { image in
                     self.images[index] = image
-                    self.imagesGroup.leave()
+                    if self.imagesGroup != nil {
+                        self.imagesGroup!.leave()
+                    }
                 })
             
             self.fetchImageCancellables.append(fetchImageCancellable)

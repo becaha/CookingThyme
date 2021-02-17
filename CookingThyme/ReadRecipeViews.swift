@@ -50,7 +50,7 @@ struct SourceCredit: View {
     var body: some View {
         if recipe.source != "" {
             HStack {
-                Text("Source: \(recipe.source)")
+                Text("Source: \(recipe.tempRecipe.source)")
                     .font(.caption)
             }
             .padding()
@@ -80,9 +80,9 @@ struct IngredientsView: View {
                 Spacer()
                 
                 VStack {
-                    Picker(selection: $recipe.servings, label:
+                    Picker(selection: $recipe.tempRecipe.servings, label:
                             HStack {
-                                Text("Servings: \(recipe.servings) ")
+                                Text("Servings: \(recipe.tempRecipe.servings) ")
                                     .textCase(.uppercase)
                                     .font(.subheadline)
                         
@@ -99,8 +99,9 @@ struct IngredientsView: View {
             }
             .formHeader()
             
+            // TODO have the read recipe just read the temps so it doesn't have to reload from db on the save
             VStack(spacing: 0) {
-                ForEach(recipe.ingredients) { ingredient in
+                ForEach(recipe.tempRecipe.ingredients) { ingredient in
                     VStack(spacing: 0) {
                         HStack {
                             if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
@@ -129,7 +130,7 @@ struct IngredientsView: View {
                             
                             RecipeControls.ReadIngredientText(ingredient)
                         }
-                        .formSectionItem(isLastItem: ingredient.id == recipe.ingredients[recipe.ingredients.count - 1].id)
+                        .formSectionItem(isLastItem: ingredient.id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id)
                         if confirmAddIngredient == ingredient.id {
 
                             HStack {
@@ -154,7 +155,7 @@ struct IngredientsView: View {
                                 }
                             }
                             .foregroundColor(formBackgroundColor())
-                            .formSectionItem(isLastItem: ingredient.id == recipe.ingredients[recipe.ingredients.count - 1].id, backgroundColor: mainColor())
+                            .formSectionItem(isLastItem: ingredient.id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id, backgroundColor: mainColor())
                         }
                     }
                 }
@@ -165,7 +166,7 @@ struct IngredientsView: View {
                 VStack(alignment: .center) {
                     Button(action: {
                         withAnimation {
-                            if addAllToShoppingList(recipe.ingredients.filter({ (ingredient) -> Bool in
+                            if addAllToShoppingList(recipe.tempRecipe.ingredients.filter({ (ingredient) -> Bool in
                                 !addedIngredients.contains(ingredient.id)
                             })) {
                                 addedAllIngredients = true
@@ -200,7 +201,7 @@ struct IngredientsView: View {
         confirmAddIngredient = nil
         addedIngredients.append(ingredient.id)
         addToShoppingList(ingredient)
-        if addedIngredients.count == recipe.ingredients.count {
+        if addedIngredients.count == recipe.tempRecipe.ingredients.count {
             addedAllIngredients = true
         }
     }
@@ -221,9 +222,9 @@ struct DirectionsList: View {
             .formHeader()
 
             VStack(spacing: 0) {
-                ForEach(0..<recipe.directions.count, id: \.self) { index in
-                    RecipeControls.ReadDirection(withIndex: index, direction: recipe.directions[index].direction)
-                        .formSectionItem(isLastItem: index == recipe.directions.count - 1)
+                ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
+                    RecipeControls.ReadDirection(withIndex: index, direction: recipe.tempRecipe.directions[index].direction)
+                        .formSectionItem(isLastItem: index == recipe.tempRecipe.directions.count - 1)
                 }
             }
             .formSection()

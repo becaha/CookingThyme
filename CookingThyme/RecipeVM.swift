@@ -30,6 +30,8 @@ class RecipeVM: ObservableObject, Identifiable {
     @Published var isPopullating = true
     @Published var recipeNotFound = false
     
+    @Published var tempRecipe: Recipe
+    
     private var webHandlerCancellable: AnyCancellable?
     private var recipeDetailCancellable: AnyCancellable?
     private var recipeDetailErrorCancellable: AnyCancellable?
@@ -46,6 +48,7 @@ class RecipeVM: ObservableObject, Identifiable {
     // inits recipe in a category
     init(recipe: Recipe, category: RecipeCategoryVM) {
         self.recipe = recipe
+        self.tempRecipe = recipe
         
         self.category = category
         setCancellables()
@@ -63,6 +66,8 @@ class RecipeVM: ObservableObject, Identifiable {
     // inits a create new recipe in a category
     init(category: RecipeCategoryVM) {
         self.recipe = Recipe()
+        self.tempRecipe = Recipe()
+
         self.category = category
         
         setCancellables()
@@ -71,6 +76,7 @@ class RecipeVM: ObservableObject, Identifiable {
     // inits a public recipe from search
     init(recipe: Recipe) {
         self.recipe = recipe
+        self.tempRecipe = recipe
         
         setCancellables()
     }
@@ -208,6 +214,11 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
+        
+        self.tempRecipe.directions = self.tempDirections
+        self.tempRecipe.ingredients = recipe.ingredients
+        self.tempRecipe.images = recipe.images
+        
         popullateImages()
     }
     
@@ -229,6 +240,10 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
+    func setTempRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) {
+        let ingredients = Ingredient.toIngredients(tempIngredients)
+        tempRecipe = Recipe(name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source)
+    }
     
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
         RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
@@ -236,7 +251,7 @@ class RecipeVM: ObservableObject, Identifiable {
                     self.category!.refreshCategory()
                 }
         }
-        
+        setTempRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source)
     }
     
     func moveRecipe(toCategoryId categoryId: String) {
