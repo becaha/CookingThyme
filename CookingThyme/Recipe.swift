@@ -67,6 +67,18 @@ struct Recipe: Identifiable {
         self.recipeCategoryId = RecipeCategory.defaultId
     }
     
+    // used to create temp recipe from recipe
+    init(id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int, source: String, recipeCategoryId: String) {
+        self.id = id
+        self.name = name.lowercased().capitalized
+        self.ingredients = ingredients
+        self.directions = directions
+        self.images = images
+        self.servings = servings
+        self.source = source
+        self.recipeCategoryId = recipeCategoryId
+    }
+    
     init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int, source: String) {
         self.name = name.lowercased().capitalized
         self.ingredients = ingredients

@@ -256,6 +256,7 @@ class RecipeDB {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(Recipe(document: document))
                 }
+                onRetrieve(nil)
             }
         }
     }
@@ -448,6 +449,7 @@ class RecipeDB {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeCategory(document: document))
                 }
+                onRetrieve(nil)
             }
         }
     }
@@ -462,6 +464,7 @@ class RecipeDB {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeCollection(document: document))
                 }
+                onRetrieve(nil)
             }
         }
     }
@@ -549,7 +552,7 @@ class RecipeDB {
                     updateDirection(direction) { success in
                         if !success {
                             onCompletion(false)
-
+                            return
                         }
                     }
                 }
@@ -596,6 +599,7 @@ class RecipeDB {
                     updateIngredient(ingredient) { success in
                         if !success {
                             onCompletion(false)
+                            return
                         }
                     }
                 }
@@ -612,25 +616,6 @@ class RecipeDB {
         }
     }
     
-    // images are never updated, don't need
-//    func updateImage(_ image: RecipeImage, onCompletion: @escaping (Bool) -> Void) {
-//        let ref = db.collection(RecipeImage.Table.databaseTableName).document(image.id)
-//
-//        ref.updateData([
-//            RecipeImage.Table.type: image.type.rawValue,
-//            RecipeImage.Table.data: image.data
-//        ]) { err in
-//            if let err = err {
-//                print("Error updating image: \(err)")
-//                onCompletion(false)
-//            } else {
-//                print("Image successfully updated")
-//                onCompletion(true)
-//            }
-//        }
-//    }
-    
-    // TODO
     func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
         do {
             var imagesToDelete = recipe.images
@@ -641,11 +626,6 @@ class RecipeDB {
                 else {
                     imagesToDelete.remove(element: image)
                     // images are never updated, so neither creating nor deleting, just leave alone
-//                    updateImage(image) { success in
-//                        if !success {
-//                            onCompletion(false)
-//                        }
-//                    }
                 }
             }
             // delete images
@@ -693,6 +673,7 @@ class RecipeDB {
                     updateShoppingItem(shoppingItem) { success in
                         if !success {
                             onCompletion(false)
+                            return
                         }
                     }
                 }

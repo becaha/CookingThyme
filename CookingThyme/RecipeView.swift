@@ -35,7 +35,7 @@ struct RecipeView: View {
             }
         }
         .onAppear {
-            recipeVM = RecipeVM(recipe: recipe, category: category)
+            recipeVM = RecipeVM(recipe: recipe, category: category, collection: collection)
         }
         .navigationBarColor(offWhiteUIColor())
     }

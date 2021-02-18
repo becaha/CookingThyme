@@ -25,7 +25,7 @@ struct CreateRecipeView: View {
         .environmentObject(category)
         // on appear so not called when parent and child force reinitialization
         .onAppear {
-            recipe = RecipeVM(category: category)
+            recipe = RecipeVM(category: category, collection: collection)
         }
     }
 }

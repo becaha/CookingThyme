@@ -8,6 +8,7 @@
 import SwiftUI
 import GRDB
 
+// TODO change to recipe.tempRecipe.directions
 struct EditableDirection: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int

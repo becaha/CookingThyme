@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: delete recipe not updated
 // todo: timerv on stop alert, issetting = true
 // TODO: cache cache cache everything so it doesn't have to load unless it needs to - check if something has changed before calling to refresh it
 

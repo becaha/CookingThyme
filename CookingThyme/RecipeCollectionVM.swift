@@ -30,6 +30,11 @@ class RecipeCollectionVM: ObservableObject {
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     
+    
+    // stores recipes from db to local storage when recipe is retrieved from db or saved to db
+    // recipeId to RecipeVM
+    var recipesStore = [String: RecipeVM]()
+    
     // MARK: - Init
     
     init(collection: RecipeCollection) {
@@ -121,7 +126,9 @@ class RecipeCollectionVM: ObservableObject {
                     self.refreshCurrrentCategory()
                     onCompletion(true)
                 }
-                onCompletion(false)
+                else {
+                    onCompletion(false)
+                }
             }
         }
     }

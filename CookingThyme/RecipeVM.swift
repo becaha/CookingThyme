@@ -11,6 +11,7 @@ import SwiftUI
 
 // TODO: everything on background threed
 class RecipeVM: ObservableObject, Identifiable {
+    var collection: RecipeCollectionVM?
     var category: RecipeCategoryVM?
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
@@ -49,18 +50,31 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Init
     
     // inits recipe in a category
-    init(recipe: Recipe, category: RecipeCategoryVM) {
+    init(recipe: Recipe, category: RecipeCategoryVM, collection: RecipeCollectionVM) {
         self.isLoading = true
+        self.collection = collection
+        self.category = category
+
         self.recipe = recipe
         self.tempRecipe = recipe
         
-        self.category = category
         setCancellables()
+        
+        if let foundRecipeVM = self.collection?.recipesStore[recipe.id] {
+            self.recipe = foundRecipeVM.tempRecipe
+            
+            self.popullateRecipeTemps()
+            self.imageHandler = foundRecipeVM.imageHandler
+
+            self.isLoading = false
+            return
+        }
         
         popullateRecipe() { success in
             if success {
-                self.popullateRecipeTemps() { success in
+                self.popullateLocalRecipe() { success in
                     self.isLoading = false
+                    self.collection?.recipesStore[recipe.id] = self
                 }
             }
             else {
@@ -70,7 +84,7 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // inits a create new recipe in a category
-    init(category: RecipeCategoryVM) {
+    init(category: RecipeCategoryVM, collection: RecipeCollectionVM) {
         self.isLoading = true
         self.recipe = Recipe()
         self.tempRecipe = Recipe()
@@ -88,7 +102,7 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe = recipe
         
         setCancellables()
-        self.popullateRecipeTemps() { success in
+        self.popullateLocalRecipe() { success in
             self.isLoading = false
         }
     }
@@ -105,7 +119,7 @@ class RecipeVM: ObservableObject, Identifiable {
                     self.importFromURL = false
                     self.invalidURL = false
                     self.recipe = recipe
-                    self.popullateRecipeTemps() { success in
+                    self.popullateLocalRecipe() { success in
                         self.isImportingFromURL = false
                     }
                 }
@@ -128,7 +142,7 @@ class RecipeVM: ObservableObject, Identifiable {
             if let recipe = recipe {
                 self.recipe = recipe
                 self.tempRecipe = recipe
-                self.popullateRecipeTemps() { success in
+                self.popullateLocalRecipe() { success in
                     if !success {
                         print("error popullating images")
                     }
@@ -177,6 +191,10 @@ class RecipeVM: ObservableObject, Identifiable {
         recipe.recipeCategoryId
     }
     
+    func isCreatingRecipe() -> Bool {
+        return recipe.id == Recipe.defaultId
+    }
+    
     // MARK: - Intents
     
     // MARK: - Public Recipe
@@ -186,9 +204,19 @@ class RecipeVM: ObservableObject, Identifiable {
         recipesWebHandler.listRecipeDetail(recipe)
     }
     
-    // copies recipe to category of user's collection
+    // copies recipe to category of user's collection, makes recipe permanent
     func copyRecipe(toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
+    }
+    
+    static func copy(recipe: Recipe, toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
+        if let category = collection.getCategory(withId: categoryId) {
+            let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source)
+            if recipe == nil {
+                print("error copying recipe")
+            }
+            collection.refreshCurrrentCategory()
+        }
     }
     
     // MARK: - Recipe
@@ -202,7 +230,9 @@ class RecipeVM: ObservableObject, Identifiable {
                 self.recipe = recipe
                 self.popullateRecipe(onCompletion: onCompletion)
             }
-            
+            else {
+                onCompletion(false)
+            }
         }
     }
     
@@ -227,16 +257,22 @@ class RecipeVM: ObservableObject, Identifiable {
         onCompletion(false)
     }
     
-    func popullateRecipeTemps(onCompletion: @escaping (Bool) -> Void) {
+    // MARK: - Setters/Popullaters
+    
+    func popullateRecipeTemps() {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
         
         self.tempRecipeOriginalServings = recipe.servings
-        self.tempRecipe.directions = self.tempDirections
+        self.tempRecipe.directions = recipe.directions
         self.tempRecipe.ingredients = recipe.ingredients
         self.tempRecipe.images = recipe.images
+    }
+    
+    func popullateLocalRecipe(onCompletion: @escaping (Bool) -> Void) {
+        self.popullateRecipeTemps()
         
         popullateImages() { success in
             if !success {
@@ -269,27 +305,36 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
+    // called on saving edit recipe to set saved temps
     func setTempRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
-        tempRecipe = Recipe(name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source)
+        tempRecipe = Recipe(id: recipe.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source, recipeCategoryId: recipe.recipeCategoryId)
         tempRecipeOriginalServings = servings.toInt()
     }
     
+    // MARK: - Recipe Modifiers
+    
+    // called by saving an edit recipe, updates recipe in db and in local store
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
-        RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
-                self.refreshRecipe() { success in
-                    self.category!.refreshCategory()
-                }
-        }
         setTempRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source)
+        RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
+            self.category!.refreshCategory()
+            self.collection?.recipesStore[id] = self
+        }
     }
     
+    // called by drag and drop recipe to different category and
+    // moving recipe to different category in recipe view
+    // updates recipe categoryId in db and in local store
     func moveRecipe(toCategoryId categoryId: String) {
         RecipeVM.moveRecipe(self.recipe, toCategoryId: categoryId)
         category?.popullateRecipes() { success in
             if !success {
                 print("error popullating recipes")
             }
+            let movedRecipeVM = self
+            movedRecipeVM.recipe.recipeCategoryId = categoryId
+            self.collection?.recipesStore[self.recipe.id] = movedRecipeVM
         }
         if let category = category?.collection.getCategory(withId: categoryId) {
             category.popullateRecipes() { success in
@@ -300,25 +345,18 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
+    // called by member moveRecipe and moving recipe from public recipe view to permanent recipes
+    // don't need to update local store because the recipe will be put in local store on init in recipe book
     static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: String) {
         RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) { success in
             if !success {
                 print("error moving recipe")
             }
+//            self.collection?.recipesStore[self.recipe.id] = movedRecipeVM
         }
     }
     
-    static func copy(recipe: Recipe, toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
-        if let category = collection.getCategory(withId: categoryId) {
-            let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source)
-            if recipe == nil {
-                print("error copying recipe")
-            }
-            collection.refreshCurrrentCategory()
-        }
-    }
-    
-    // - Temporary for Editing
+    // MARK: - Temporary for Editing
     
     func addTempDirection(_ direction: String) {
         tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
@@ -372,17 +410,13 @@ class RecipeVM: ObservableObject, Identifiable {
         imageHandler.removeImage(at: index)
         imagesChanged = true
     }
-
-    func isCreatingRecipe() -> Bool {
-        return recipe.id == Recipe.defaultId
-    }
     
     // creates ingredient from given name, amount, unit in strings
     func makeIngredient(name: String, amount: String, unit: String) -> Ingredient {
         return Ingredient.makeIngredient(name: name, amount: amount, unit: unit)
     }
     
-    // transcribe images to recipes
+    // MARK: - Transcribe images to recipes
     
     func transcribeRecipe(fromImage image: UIImage) {
         transcriber.createTranscription(fromImage: image)

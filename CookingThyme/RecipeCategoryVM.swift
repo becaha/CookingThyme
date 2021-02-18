@@ -187,7 +187,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         recipeGroup.enter()
         RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { success in
             recipeGroup.leave()
-            onCompletion(success)
         }
         
         recipeGroup.enter()
@@ -217,6 +216,9 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         recipeGroup.notify(queue: .main) {
             if updateSuccess {
                 onCompletion(updateSuccess)
+            }
+            else {
+                onCompletion(false)
             }
         }
     }
