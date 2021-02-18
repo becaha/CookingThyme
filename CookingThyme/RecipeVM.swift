@@ -206,7 +206,7 @@ class RecipeVM: ObservableObject, Identifiable {
         recipesWebHandler.listRecipeDetail(recipe)
     }
     
-    // copies recipe to category of user's collection, makes recipe permanent
+    // copies public recipe to category of user's collection, makes recipe permanent
     func copyRecipe(toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
     }
@@ -318,13 +318,71 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // MARK: - Recipe Modifiers
-    
+        
     // called by saving an edit recipe, updates recipe in db and in local store
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
         setTempRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source)
-        RecipeCategoryVM.updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
-            self.category!.refreshCategory()
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
+            // todo remove
+//            self.category!.refreshCategory()
+            // updates recipe store
             self.collection?.recipesStore[id] = self
+            // updates category store
+            self.collection?.removeRecipeFromStoreCategory(self.recipe)
+            self.collection?.addRecipeToStore(self.recipe, toCategoryId: categoryId)
+        }
+    }
+    
+    // called by updateRecipe above
+    // updates recipe given temp ingredients
+    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+        let ingredients = Ingredient.toIngredients(tempIngredients)
+        
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe, onCompletion: onCompletion)
+    }
+    
+    // called by updateRecipe above, updates recipe given ingredients
+    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+        var updateSuccess = true
+        // is this group ok? enter and leave, hits each once?
+        let recipeGroup = DispatchGroup()
+        
+        recipeGroup.enter()
+        RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { success in
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { success in
+            if !success {
+                updateSuccess = false
+            }
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.notify(queue: .main) {
+            if updateSuccess {
+                onCompletion(updateSuccess)
+            }
+            else {
+                onCompletion(false)
+            }
         }
     }
     
@@ -337,17 +395,18 @@ class RecipeVM: ObservableObject, Identifiable {
             if !success {
                 print("error popullating recipes")
             }
-            let movedRecipeVM = self
-            movedRecipeVM.recipe.recipeCategoryId = categoryId
-            self.collection?.recipesStore[self.recipe.id] = movedRecipeVM
+
+            // update categories and recipes store, moves recipe to new category
+            self.collection?.moveRecipeInStore(self.recipe, toCategoryId: categoryId)
         }
-        if let category = category?.collection.getCategory(withId: categoryId) {
-            category.popullateRecipes() { success in
-                if !success {
-                    print("error popullating recipes")
-                }
-            }
-        }
+        // TODO remove
+//        if let category = category?.collection.getCategory(withId: categoryId) {
+//            category.popullateRecipes() { success in
+//                if !success {
+//                    print("error popullating recipes")
+//                }
+//            }
+//        }
     }
     
     // called by member moveRecipe and moving recipe from public recipe view to permanent recipes
@@ -357,7 +416,6 @@ class RecipeVM: ObservableObject, Identifiable {
             if !success {
                 print("error moving recipe")
             }
-//            self.collection?.recipesStore[self.recipe.id] = movedRecipeVM
         }
     }
     

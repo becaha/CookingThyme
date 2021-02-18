@@ -299,11 +299,11 @@ class RecipeCollectionVM: ObservableObject {
         self.categoriesStore[id] = nil
         
         // TODO take out
-        popullateCategories() { success in
-            if let currentCategory = self.currentCategory, id == currentCategory.id {
-    //            resetCurrentCategory()
-            }
-        }
+//        popullateCategories() { success in
+//            if let currentCategory = self.currentCategory, id == currentCategory.id {
+//    //            resetCurrentCategory()
+//            }
+//        }
     }
     
     // called by ui add category
@@ -314,11 +314,11 @@ class RecipeCollectionVM: ObservableObject {
                 // updates category store
                 self.categoriesStore[category.id] = RecipeCategoryVM(category: category, collection: self)
                 // TODO take out
-                self.popullateCategories() { categoriesSuccess in
-                    if !categoriesSuccess {
-                        print("error populating categories")
-                    }
-                }
+//                self.popullateCategories() { categoriesSuccess in
+//                    if !categoriesSuccess {
+//                        print("error populating categories")
+//                    }
+//                }
             }
         }
     }
@@ -340,9 +340,8 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // MARK: - Recipe
-    
-    // TODO: *
-    
+        
+    // gets recipe by name from current category
     func getRecipe(withName name: String) -> Recipe? {
         if let currentCategory = self.currentCategory {
             for recipe in currentCategory.recipes {
@@ -354,23 +353,82 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
+    // gets recipe by id from all recipes
+    func getRecipe(withId id: String) -> Recipe? {
+        for recipe in self.allRecipes {
+            if recipe.id == id {
+                return recipe
+            }
+        }
+        return nil
+    }
+    
+    // remove recipe with id from old category in category store
+    func removeRecipeFromStoreCategory(withId id: String) {
+        if let recipe = getRecipe(withId: id) {
+            removeRecipeFromStoreCategory(recipe)
+        }
+    }
+    
+    // remove recipe from old category in category store
+    func removeRecipeFromStoreCategory(_ recipe: Recipe) {
+        if let storeCategory = self.categoriesStore[recipe.recipeCategoryId] {
+            let oldCategory = storeCategory
+            var oldCategoryRecipes = oldCategory.recipes
+            oldCategoryRecipes.remove(element: recipe)
+            oldCategory.recipes = oldCategoryRecipes
+            self.categoriesStore[recipe.recipeCategoryId] = oldCategory
+        }
+    }
+    
+    // add recipe to new category in category store
+    func addRecipeToStore(_ recipe: Recipe, toCategoryId categoryId: String) {
+        if let storeCategory = self.categoriesStore[categoryId] {
+            let updatedCategory = storeCategory
+            var updatedRecipe = recipe
+            updatedRecipe.recipeCategoryId = categoryId
+            updatedCategory.recipes.append(updatedRecipe)
+            self.categoriesStore[categoryId] = updatedCategory
+        }
+    }
+    
+    func moveRecipeInStore(_ recipe: Recipe, toCategoryId newCategoryId: String) {
+        // update category store
+        self.removeRecipeFromStoreCategory(recipe)
+        self.addRecipeToStore(recipe, toCategoryId: newCategoryId)
+        // update recipe store
+        if let recipeVM = self.recipesStore[recipe.id] {
+            recipeVM.recipe.recipeCategoryId = newCategoryId
+            self.recipesStore[recipe.id] = recipeVM
+        }
+    }
+    
+    // called by moveRecipe by drag/drop, update store
     func moveRecipe(withName name: String, toCategoryId categoryId: String) {
         if let recipe = getRecipe(withName: name) {
+            // update categories and recipes store, moves recipe to new category
+            moveRecipeInStore(recipe, toCategoryId: categoryId)
+                        
             RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: categoryId) { success in
                 if !success {
                     print("error moving recipe")
                 }
             }
         }
-        refreshView = true
+        // todo: get rid of
+//        refreshView = true
     }
     
     // called by unchecking its own category in move category view
-    // removes recipe from category, if category is all, do not remove TODO: ?
+    // removes recipe from category
     func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: String) {
         if let allCategory = self.allCategory {
             let allCategoryId = allCategory.id
+            // only remove from category if the category is not all
             if categoryId != allCategoryId {
+                // updates category store
+                removeRecipeFromStoreCategory(recipe)
+                
                 RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
                     if !success {
                         print("error moving recipe")
@@ -378,23 +436,28 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
-        self.refreshView = true
+        // TODO remove
+//        self.refreshView = true
 //        self.popullateCategories()
     }
     
-    // deletes recipe and associated parts
+    // called by ui in collection edit, deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
         self.deleteRecipeAndParts(withId: id)
-        // TODO update categories store
+        // update categories store
+        removeRecipeFromStoreCategory(withId: id)
+        
+        // TODO remove
         // need this for recipe on delete to disappear
-        currentCategory?.popullateRecipes() { success in
-            if !success {
-                print("error popullating recipes")
-            }
-        }
+//        currentCategory?.popullateRecipes() { success in
+//            if !success {
+//                print("error popullating recipes")
+//            }
+//        }
 //        refreshCurrrentCategory()
     }
     
+    // called by deleteRecipe above and delete Category
     private func deleteRecipeAndParts(withId id: String) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)

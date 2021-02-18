@@ -71,6 +71,13 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // MARK: - DB Loaders
     
     func popullateCategory(onCompletion: @escaping (Bool) -> Void) {
+        if let foundCategoryVM = self.collection.categoriesStore[category.id] {
+            self.recipes = foundCategoryVM.recipes
+            // popullate image
+            self.imageHandler = foundCategoryVM.imageHandler
+            return
+        }
+        
         var popullateSuccess = true
         self.categoryGroup = DispatchGroup()
         
@@ -157,6 +164,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // MARK: - Intents
     
+    private func updateCategoriesStore() {
+        self.collection.categoriesStore[self.id] = self
+    }
+    
     // updates category name
     func updateCategory(toName name: String) {
         collection.updateCategory(forCategoryId: category.id, toName: name)
@@ -199,7 +210,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
-    // creates image in db and sets images in ui by image handler
+    // creates image in db and sets images in ui by image handler, updates category store
     private func createImage(_ image: RecipeImage) {
         RecipeDB.shared.createImage(image, withCategoryId: id)
         self.imageHandler.setImages([image]) { success in
@@ -209,10 +220,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             // update category store
             self.updateCategoriesStore()
         }
-    }
-    
-    private func updateCategoriesStore() {
-        self.collection.categoriesStore[self.id] = self
     }
     
     // called by ui to remove category image, removes in db and ui by image handler
@@ -236,66 +243,15 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
-    // updates recipe given temp ingredients
-    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
-        let ingredients = Ingredient.toIngredients(tempIngredients)
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe, onCompletion: onCompletion)
-    }
-    
-    // updates recipe given ingredients
-    static func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
-        var updateSuccess = true
-        // is this group ok? enter and leave, hits each once?
-        let recipeGroup = DispatchGroup()
-        
-        recipeGroup.enter()
-        RecipeDB.shared.updateRecipe(withId: id, name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { success in
-            recipeGroup.leave()
-        }
-        
-        recipeGroup.enter()
-        RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { success in
-            if !success {
-                updateSuccess = false
-            }
-            recipeGroup.leave()
-        }
-        
-        recipeGroup.enter()
-        RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { success in
-            if !success {
-                updateSuccess = false
-            }
-            recipeGroup.leave()
-        }
-        
-        recipeGroup.enter()
-        RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { success in
-            if !success {
-                updateSuccess = false
-            }
-            recipeGroup.leave()
-        }
-        
-        recipeGroup.notify(queue: .main) {
-            if updateSuccess {
-                onCompletion(updateSuccess)
-            }
-            else {
-                onCompletion(false)
-            }
-        }
-    }
-    
     // called by ui by saving in edit recipe (by actually creating new recipe)
-    // creates recipe with given parts
+    // creates recipe with given parts in category, updates category store
     func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
-        // update categories store
-//        let updatedCategory = collection.categoriesStore[category.id]
-//        updatedCategory.recipes.append(recipe)
-//        collection.categoriesStore[category.id] = updatedCategory
-        
         RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) { recipe in
+            // updates category store
+            if let recipe = recipe {
+                self.collection.addRecipeToStore(recipe, toCategoryId: self.category.id)
+            }
+            
             onCreation(recipe)
             return
 //            popullateRecipes()
@@ -327,24 +283,4 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             }
         }
     }
-    
-//    // deletes recipe and associated parts
-//    func deleteRecipe(withId id: String) {
-//        RecipeCategoryVM.deleteRecipe(withId: id)
-//        // TODO update categories store
-//        // need this for recipe on delete to disappear
-//        popullateRecipes() { success in
-//            if !success {
-//                print("error popullating recipes")
-//            }
-//        }
-////        popullateImage()
-//    }
-//    
-//    static func deleteRecipe(withId id: String) {
-//        RecipeDB.shared.deleteRecipe(withId: id)
-//        RecipeDB.shared.deleteDirections(withRecipeId: id)
-//        RecipeDB.shared.deleteIngredients(withRecipeId: id)
-//        RecipeDB.shared.deleteImages(withRecipeId: id)
-//    }
 }
