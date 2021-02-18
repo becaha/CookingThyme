@@ -87,6 +87,7 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe = recipe
         
         setCancellables()
+        self.popullateRecipeTemps()
         self.isLoading = false
     }
     
@@ -123,6 +124,8 @@ class RecipeVM: ObservableObject, Identifiable {
         self.recipeDetailCancellable = self.recipesWebHandler.$recipeDetail.sink { (recipe) in
             if let recipe = recipe {
                 self.recipe = recipe
+                self.tempRecipe = recipe
+                self.popullateRecipeTemps()
                 self.imageHandler.setImages(self.recipe.images)
                 self.isPopullating = false
             }

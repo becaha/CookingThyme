@@ -14,8 +14,8 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "moveRecipe(toCategoryId:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -24,6 +24,22 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "7E0C4324-8400-4DDD-ABA1-48BA5DDA4524"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "moveRecipe(toCategoryId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "52943A30-2171-4CE0-8FE4-BD522569FDB1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -39,22 +55,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "52943A30-2171-4CE0-8FE4-BD522569FDB1"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/RecipeVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
-            landmarkName = "moveRecipe(toCategoryId:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8BDFAF60-A303-41E6-8190-AB0B07BAD828"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -62,13 +62,13 @@
             filePath = "CookingThyme/RecipeVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "moveRecipe(_:toCategoryId:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "8BDFAF60-A303-41E6-8190-AB0B07BAD828 - 1cff1a89e9561aca"
+                  uuid = "8BDFAF60-A303-41E6-8190-AB0B07BAD828 - 1cff1a89e9561b6d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -78,12 +78,12 @@
                   urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeVM.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "285"
-                  endingLineNumber = "285"
+                  startingLineNumber = "288"
+                  endingLineNumber = "288"
                   offsetFromSymbolStart = "60">
                </Location>
                <Location
-                  uuid = "8BDFAF60-A303-41E6-8190-AB0B07BAD828 - 5eddb8d058ba5536"
+                  uuid = "8BDFAF60-A303-41E6-8190-AB0B07BAD828 - 5eddb8d058ba5553"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -93,8 +93,8 @@
                   urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeVM.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "286"
-                  endingLineNumber = "286"
+                  startingLineNumber = "289"
+                  endingLineNumber = "289"
                   offsetFromSymbolStart = "43">
                </Location>
             </Locations>
@@ -434,6 +434,38 @@
             endingLineNumber = "90"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AEC91405-AB53-48E3-B708-C43D29C38358"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeSearchHandler.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "238"
+            endingLineNumber = "238"
+            landmarkName = "setRecipeDetail(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FEF06C29-9F5E-4A27-9E76-E0C0FE2D22AD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
+            landmarkName = "popullateRecipeTemps()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

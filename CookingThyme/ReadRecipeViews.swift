@@ -101,7 +101,7 @@ struct IngredientsView: View {
             
             // TODO have the read recipe just read the temps so it doesn't have to reload from db on the save
             VStack(spacing: 0) {
-                ForEach(recipe.tempRecipe.ingredients) { ingredient in
+                ForEach(recipe.tempRecipe.ingredients, id: \.self) { ingredient in
                     VStack(spacing: 0) {
                         HStack {
                             if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {

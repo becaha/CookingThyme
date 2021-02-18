@@ -386,7 +386,7 @@ struct TempIngredient {
     var amount: String
     var unitName: String
     var recipeId: String
-    var id: String?
+    var id: String
     
     var ingredientString: String
     var ingredientStringMeasurement: String
@@ -396,8 +396,10 @@ struct TempIngredient {
         self.amount = amount
         self.unitName = unitName
         self.recipeId = recipeId
-        self.id = id
-        
+        self.id = Ingredient.defaultId
+        if let id = id {
+            self.id = id
+        }
         self.ingredientString = ""
         self.ingredientStringMeasurement = ""
         self.ingredientString = self.toString()
@@ -407,8 +409,10 @@ struct TempIngredient {
     init(ingredientString: String, recipeId: String, id: String?) {
         self.ingredientString = ingredientString
         self.recipeId = recipeId
-        self.id = id
-        
+        self.id = Ingredient.defaultId
+        if let id = id {
+            self.id = id
+        }
         self.name = ""
         self.amount = ""
         self.unitName = ""
