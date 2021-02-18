@@ -101,10 +101,10 @@ struct IngredientsView: View {
             
             // TODO have the read recipe just read the temps so it doesn't have to reload from db on the save
             VStack(spacing: 0) {
-                ForEach(recipe.tempRecipe.ingredients, id: \.self) { ingredient in
+                ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
                     VStack(spacing: 0) {
                         HStack {
-                            if addedIngredients.contains(ingredient.id) || self.addedAllIngredients {
+                            if addedIngredients.contains(recipe.tempRecipe.ingredients[index].id) || self.addedAllIngredients {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(mainColor())
                             }
@@ -114,11 +114,11 @@ struct IngredientsView: View {
                                         if user.isSignedIn {
                                             // for the first added ingredients, confirm
                                             if addedIngredients.count == 0 {
-                                                confirmAddIngredient = ingredient.id
+                                                confirmAddIngredient = recipe.tempRecipe.ingredients[index].id
                                             }
                                             // for the rest, just add
                                             else if addedIngredients.count > 0 {
-                                                callAddToShoppingList(ingredient)
+                                                callAddToShoppingList(recipe.tempRecipe.ingredients[index])
                                             }
                                         }
                                         else {
@@ -128,15 +128,15 @@ struct IngredientsView: View {
                                 })
                             }
                             
-                            RecipeControls.ReadIngredientText(ingredient)
+                            RecipeControls.ReadIngredientText(recipe.tempRecipe.ingredients[index])
                         }
-                        .formSectionItem(isLastItem: ingredient.id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id)
-                        if confirmAddIngredient == ingredient.id {
+                        .formSectionItem(isLastItem: recipe.tempRecipe.ingredients[index].id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id)
+                        if confirmAddIngredient == recipe.tempRecipe.ingredients[index].id {
 
                             HStack {
                                 Button(action: {
                                     withAnimation {
-                                        callAddToShoppingList(ingredient)
+                                        callAddToShoppingList(recipe.tempRecipe.ingredients[index])
                                     }
                                 }) {
                                     Image(systemName: "cart.fill.badge.plus")
@@ -155,7 +155,7 @@ struct IngredientsView: View {
                                 }
                             }
                             .foregroundColor(formBackgroundColor())
-                            .formSectionItem(isLastItem: ingredient.id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id, backgroundColor: mainColor())
+                            .formSectionItem(isLastItem: recipe.tempRecipe.ingredients[index].id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id, backgroundColor: mainColor())
                         }
                     }
                 }

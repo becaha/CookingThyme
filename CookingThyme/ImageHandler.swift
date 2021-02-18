@@ -185,6 +185,7 @@ class ImageHandler: ObservableObject {
                         if self.imagesGroup != nil {
                             self.imagesGroup!.leave()
                         }
+                        return
                     }
                 }, receiveValue: { image in
                     self.images[index] = image
