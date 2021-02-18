@@ -215,7 +215,7 @@ class RecipeVM: ObservableObject, Identifiable {
         if let category = collection.getCategory(withId: categoryId) {
             RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source) { recipe in
                 if recipe != nil {
-                    collection.refreshCurrrentCategory()
+                    collection.refreshCurrentCategory()
                 }
                 else {
                     print("error copying recipe")

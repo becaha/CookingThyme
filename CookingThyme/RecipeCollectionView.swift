@@ -89,7 +89,7 @@ struct RecipeCollectionView: View {
             .loadable(isLoading: $collection.isLoading)
             .onAppear {
                 // reecipes change in category doesnt refresh view
-                collection.refreshCurrrentCategory()
+                collection.refreshCurrentCategory()
             }
         }
         .navigationBarColor(offWhiteUIColor())
@@ -563,7 +563,7 @@ struct RecipeCollectionView: View {
     
     func resetDrag() {
         withAnimation {
-            collection.refreshCurrrentCategory()
+            collection.refreshCurrentCategory()
         }
     }
     

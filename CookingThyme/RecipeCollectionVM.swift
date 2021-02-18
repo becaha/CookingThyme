@@ -117,7 +117,7 @@ class RecipeCollectionVM: ObservableObject {
             // popullates allrecipes -> refreshes current category
             self.popullateAllRecipes() { success in
                 if success {
-                    self.refreshCurrrentCategory()
+                    self.refreshCurrentCategory()
                     onCompletion(true)
                 }
                 else {
@@ -142,7 +142,7 @@ class RecipeCollectionVM: ObservableObject {
             
             self.popullateAllRecipes() { success in
                 if success {
-                    self.refreshCurrrentCategory()
+                    self.refreshCurrentCategory()
                     onCompletion(true)
                 }
                 else {
@@ -188,13 +188,12 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // to refresh view
-    func refreshCurrrentCategory() {
+    func refreshCurrentCategory() {
         if let currentCategory = self.currentCategory {
-//            currentCategory.popullateCategory() { success in
-//                if !success {
-//                    print("error popullating category")
-//                }
-//            }
+            let currentCategoryRecipes = currentCategory.recipes
+            let storeRecipes = self.categoriesStore[currentCategory.id]?.recipes
+
+            currentCategory.recipes = storeRecipes ?? currentCategoryRecipes
             self.currentCategory = currentCategory
         }
         else {
@@ -447,14 +446,8 @@ class RecipeCollectionVM: ObservableObject {
         // update categories store
         removeRecipeFromStoreCategory(withId: id)
         
-        // TODO remove
         // need this for recipe on delete to disappear
-//        currentCategory?.popullateRecipes() { success in
-//            if !success {
-//                print("error popullating recipes")
-//            }
-//        }
-//        refreshCurrrentCategory()
+        refreshCurrentCategory()
     }
     
     // called by deleteRecipe above and delete Category
