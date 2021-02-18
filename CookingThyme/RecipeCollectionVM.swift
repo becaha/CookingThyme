@@ -17,7 +17,6 @@ class RecipeCollectionVM: ObservableObject {
     
     @Published var isLoading: Bool?
 
-    
     @Published var allRecipes = [Recipe]()
     var categoryRecipesAdded = 0
 
@@ -30,10 +29,12 @@ class RecipeCollectionVM: ObservableObject {
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
     
-    
     // stores recipes from db to local storage when recipe is retrieved from db or saved to db
     // recipeId to RecipeVM
     var recipesStore = [String: RecipeVM]()
+    // stores categories from db to local storage when category is retrieved from db or saved to db
+    // recipeCategoryId to RecipeCategoryVM
+    var categoriesStore = [String: RecipeCategoryVM]()
     
     // MARK: - Init
     
@@ -108,8 +109,26 @@ class RecipeCollectionVM: ObservableObject {
     // gets categories from db
     // TODO is it just bad connection that makes a second call to geeet categories with error
     func popullateCategories(onCompletion: @escaping (Bool) -> Void) {
+        if self.categoriesStore.count > 0 {
+            // sets self.categories
+            self.categories = Array(self.categoriesStore.values)
+            // sorts categories
+            self.sortCategories()
+            // popullates allrecipes -> refreshes current category
+            self.popullateAllRecipes() { success in
+                if success {
+                    self.refreshCurrrentCategory()
+                    onCompletion(true)
+                }
+                else {
+                    onCompletion(false)
+                }
+            }
+            return
+        }
         RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
             if !success {
+                onCompletion(false)
                 return 
             }
             var popullatedCategories = [RecipeCategoryVM]()
@@ -171,7 +190,11 @@ class RecipeCollectionVM: ObservableObject {
     // to refresh view
     func refreshCurrrentCategory() {
         if let currentCategory = self.currentCategory {
-            currentCategory.popullateCategory()
+//            currentCategory.popullateCategory() { success in
+//                if !success {
+//                    print("error popullating category")
+//                }
+//            }
             self.currentCategory = currentCategory
         }
         else {
@@ -189,7 +212,7 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // MARK: - Helpers
+    // MARK: - Sorters
     
     // TODO sort with auto all in first place
     func sortCategories() {
@@ -219,21 +242,7 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: Intents
     
-    // removes recipe from category, if category is all, do not remove TODO: ?
-    func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: String) {
-        if let allCategory = self.allCategory {
-            let allCategoryId = allCategory.id
-            if categoryId != allCategoryId {
-                RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
-                    if !success {
-                        print("error moving recipe")
-                    }
-                }
-            }
-        }
-        self.refreshView = true
-//        self.popullateCategories()
-    }
+    // MARK: - Current Category
     
     func filterCurrentCategory(withSearch search: String) {
         if let currentCategory = self.currentCategory {
@@ -243,43 +252,26 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func setCurrentCategory(_ category: RecipeCategoryVM) {
-//        category.popullateRecipes() { success in
-//            if !success {
-//                print("error popullating recipes")
-//            }
-//        }
-        self.currentCategory = category
-    }
-    
-    // deletes recipe and associated parts
-    func deleteRecipe(withId id: String) {
-        self.deleteRecipeAndParts(withId: id)
-        refreshView = true
-//        refreshCurrrentCategory()
-    }
-    
-    private func deleteRecipeAndParts(withId id: String) {
-        RecipeDB.shared.deleteRecipe(withId: id)
-        RecipeDB.shared.deleteDirections(withRecipeId: id)
-        RecipeDB.shared.deleteIngredients(withRecipeId: id)
-        RecipeDB.shared.deleteImages(withRecipeId: id)
-    }
-    
-    // deletes category and its recipes
-    func deleteCategory(withId id: String) {
-        RecipeDB.shared.deleteCategory(withId: id)
-    
-        for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
-            self.deleteRecipeAndParts(withId: categoryRecipe.id)
+        if let foundCategoryVM = self.categoriesStore[category.id] {
+            category.recipes = foundCategoryVM.recipes
+            category.imageHandler = foundCategoryVM.imageHandler
+            self.currentCategory = category
+            return
         }
-        
-        popullateCategories() { success in
-            if let currentCategory = self.currentCategory, id == currentCategory.id {
-    //            resetCurrentCategory()
+        else {
+//            category.popullateRecipes()
+            category.popullateCategory() { success in
+                if !success {
+                    print("error popullating category")
+                }
             }
+            self.currentCategory = category
         }
     }
     
+    // MARK: - Collection
+    
+    // called by user delete
     // deletes all collection, categories, shopping items
     func delete() {
         RecipeDB.shared.deleteCollection(withId: self.id)
@@ -287,14 +279,43 @@ class RecipeCollectionVM: ObservableObject {
         for category in self.categories {
             self.deleteCategory(withId: category.id)
         }
+        // resets store
+        self.categoriesStore = [String: RecipeCategoryVM]()
+        self.recipesStore = [String: RecipeVM]()
     }
     
-    // adds new category to collection
+    // MARK: - Category
+    
+    // called by delete above and ui delete category
+    // deletes category and its recipes, udpates category store
+    func deleteCategory(withId id: String) {
+        RecipeDB.shared.deleteCategory(withId: id)
+    
+        for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
+            self.deleteRecipeAndParts(withId: categoryRecipe.id)
+        }
+        
+        // updates category store
+        self.categoriesStore[id] = nil
+        
+        // TODO take out
+        popullateCategories() { success in
+            if let currentCategory = self.currentCategory, id == currentCategory.id {
+    //            resetCurrentCategory()
+            }
+        }
+    }
+    
+    // called by ui add category
+    // adds new category to collection, udpates category store
     func addCategory(_ category: String) -> Void {
-        RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { success in
-            if success {
+        RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { category in
+            if let category = category {
+                // updates category store
+                self.categoriesStore[category.id] = RecipeCategoryVM(category: category, collection: self)
+                // TODO take out
                 self.popullateCategories() { categoriesSuccess in
-                    if !success {
+                    if !categoriesSuccess {
                         print("error populating categories")
                     }
                 }
@@ -302,14 +323,25 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    // updates name of category
+    // updates name of category, updates category store
     func updateCategory(forCategoryId categoryId: String, toName categoryName: String) {
+        // updates category store
+        let updatedCategory = self.categoriesStore[categoryId]
+        if updatedCategory != nil {
+            updatedCategory!.category.name = categoryName
+            self.categoriesStore[categoryId] = updatedCategory!
+        }
+        
         RecipeDB.shared.updateCategory(withId: categoryId, name: categoryName, recipeCollectionId: collection.id) { success in
             if !success {
                 print("error updating category")
             }
         }
     }
+    
+    // MARK: - Recipe
+    
+    // TODO: *
     
     func getRecipe(withName name: String) -> Recipe? {
         if let currentCategory = self.currentCategory {
@@ -331,6 +363,43 @@ class RecipeCollectionVM: ObservableObject {
             }
         }
         refreshView = true
+    }
+    
+    // called by unchecking its own category in move category view
+    // removes recipe from category, if category is all, do not remove TODO: ?
+    func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: String) {
+        if let allCategory = self.allCategory {
+            let allCategoryId = allCategory.id
+            if categoryId != allCategoryId {
+                RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
+                    if !success {
+                        print("error moving recipe")
+                    }
+                }
+            }
+        }
+        self.refreshView = true
+//        self.popullateCategories()
+    }
+    
+    // deletes recipe and associated parts
+    func deleteRecipe(withId id: String) {
+        self.deleteRecipeAndParts(withId: id)
+        // TODO update categories store
+        // need this for recipe on delete to disappear
+        currentCategory?.popullateRecipes() { success in
+            if !success {
+                print("error popullating recipes")
+            }
+        }
+//        refreshCurrrentCategory()
+    }
+    
+    private func deleteRecipeAndParts(withId id: String) {
+        RecipeDB.shared.deleteRecipe(withId: id)
+        RecipeDB.shared.deleteDirections(withRecipeId: id)
+        RecipeDB.shared.deleteIngredients(withRecipeId: id)
+        RecipeDB.shared.deleteImages(withRecipeId: id)
     }
     
     // MARK: - Shopping List

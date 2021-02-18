@@ -60,6 +60,7 @@ class RecipeVM: ObservableObject, Identifiable {
         
         setCancellables()
         
+        // checks if recipe is in recipe store
         if let foundRecipeVM = self.collection?.recipesStore[recipe.id] {
             self.recipe = foundRecipeVM.tempRecipe
             
@@ -74,6 +75,7 @@ class RecipeVM: ObservableObject, Identifiable {
             if success {
                 self.popullateLocalRecipe() { success in
                     self.isLoading = false
+                    // sets initialized recipe to the recipe store
                     self.collection?.recipesStore[recipe.id] = self
                 }
             }
@@ -211,11 +213,14 @@ class RecipeVM: ObservableObject, Identifiable {
     
     static func copy(recipe: Recipe, toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         if let category = collection.getCategory(withId: categoryId) {
-            let recipe = RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source)
-            if recipe == nil {
-                print("error copying recipe")
+            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source) { recipe in
+                if recipe != nil {
+                    collection.refreshCurrrentCategory()
+                }
+                else {
+                    print("error copying recipe")
+                }
             }
-            collection.refreshCurrrentCategory()
         }
     }
     

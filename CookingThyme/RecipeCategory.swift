@@ -24,6 +24,13 @@ struct RecipeCategory: Hashable {
     var name: String
     var recipeCollectionId: String
     
+    // called by create category in db
+    init(id: String, name: String, recipeCollectionId: String) {
+        self.id = id
+        self.name = name
+        self.recipeCollectionId = recipeCollectionId
+    }
+    
     init(name: String, recipeCollectionId: String) {
         self.name = name
         self.recipeCollectionId = recipeCollectionId

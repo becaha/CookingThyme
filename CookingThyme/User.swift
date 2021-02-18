@@ -137,8 +137,8 @@ struct User {
         RecipeDB.shared.createCollection(withUsername: username) { collection in
             if let collection = collection {
                 RecipeDB.shared.createCategory(withName: "All", forCollectionId: collection.id) {
-                    success in
-                    onCompletion(success)
+                    category in
+                    onCompletion(category != nil)
                 }
             }
         }

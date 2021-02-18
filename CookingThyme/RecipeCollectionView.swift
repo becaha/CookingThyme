@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-// TODO: delete recipe not updated
+// TODO: delete recipe not updated, added recipes not updated in category list recipes
 // todo: timerv on stop alert, issetting = true
-// TODO: cache cache cache everything so it doesn't have to load unless it needs to - check if something has changed before calling to refresh it
+// TODO: cache images
+// TODO: on drag and drop drag, category image flashes
 
 // TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
