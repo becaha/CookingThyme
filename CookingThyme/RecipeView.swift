@@ -14,7 +14,7 @@ struct RecipeView: View {
     
     var recipe: Recipe
     @State var isEditingRecipe: Bool
-    
+        
 //    init(recipe: Recipe, isEditingRecipe: Bool) {
 //        self.recipe = recipe
 //        self.isEditingRecipe = isEditingRecipe

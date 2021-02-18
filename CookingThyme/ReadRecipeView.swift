@@ -40,6 +40,7 @@ struct ReadRecipeView: View {
             )
             .environmentObject(recipe)
         }
+        .loadable(isLoading: $recipe.isLoading)
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented, onAction: { categoryId in

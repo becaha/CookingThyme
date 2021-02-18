@@ -32,6 +32,8 @@ class RecipeVM: ObservableObject, Identifiable {
     
     @Published var tempRecipe: Recipe
     
+    @Published var isLoading: Bool?
+    
     private var webHandlerCancellable: AnyCancellable?
     private var recipeDetailCancellable: AnyCancellable?
     private var recipeDetailErrorCancellable: AnyCancellable?
@@ -48,6 +50,7 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // inits recipe in a category
     init(recipe: Recipe, category: RecipeCategoryVM) {
+        self.isLoading = true
         self.recipe = recipe
         self.tempRecipe = recipe
         
@@ -57,6 +60,7 @@ class RecipeVM: ObservableObject, Identifiable {
         popullateRecipe() { success in
             if success {
                 self.popullateRecipeTemps()
+                self.isLoading = false
             }
             else {
                 print("error popullating initialized recipe")
@@ -66,20 +70,24 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // inits a create new recipe in a category
     init(category: RecipeCategoryVM) {
+        self.isLoading = true
         self.recipe = Recipe()
         self.tempRecipe = Recipe()
 
         self.category = category
         
         setCancellables()
+        self.isLoading = false
     }
     
     // inits a public recipe from search
     init(recipe: Recipe) {
+        self.isLoading = true
         self.recipe = recipe
         self.tempRecipe = recipe
         
         setCancellables()
+        self.isLoading = false
     }
     
     func setCancellables() {
