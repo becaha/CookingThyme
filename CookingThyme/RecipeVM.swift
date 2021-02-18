@@ -37,6 +37,7 @@ class RecipeVM: ObservableObject, Identifiable {
     private var recipeDetailErrorCancellable: AnyCancellable?
     
     var originalServings: Int = 0
+    var tempRecipeOriginalServings: Int = 0
 
     private var recipeTranscriberCancellable: AnyCancellable?
     private var recipeTextTranscriberCancellable: AnyCancellable?
@@ -215,6 +216,7 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
         
+        self.tempRecipeOriginalServings = recipe.servings
         self.tempRecipe.directions = self.tempDirections
         self.tempRecipe.ingredients = recipe.ingredients
         self.tempRecipe.images = recipe.images
@@ -243,6 +245,7 @@ class RecipeVM: ObservableObject, Identifiable {
     func setTempRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         tempRecipe = Recipe(name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source)
+        tempRecipeOriginalServings = servings.toInt()
     }
     
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {

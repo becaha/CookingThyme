@@ -247,12 +247,13 @@ struct EditRecipeView: View {
     
     private func setRecipe() {
         if name == "" || name == nameFieldPlaceholder {
-            name = recipe.name
+            name = recipe.tempRecipe.name
             if name.isOnlyWhitespace() {
                 name = nameFieldPlaceholder
             }
-            servings = recipe.originalServings.toString()
-            source = recipe.source
+            // was original servings
+            servings = recipe.tempRecipeOriginalServings.toString()
+            source = recipe.tempRecipe.source
         }
     }
     
