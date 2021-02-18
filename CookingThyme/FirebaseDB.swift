@@ -297,6 +297,9 @@ class RecipeDB {
                 
                 recipesGroup.notify(queue: .main) {
                     inRecipesGroup = false
+                    recipes.sort { (recipeA, recipeB) -> Bool in
+                        recipeA.name < recipeB.name
+                    }
                     onRetrieve(recipes)
                 }
             }
@@ -395,6 +398,7 @@ class RecipeDB {
             if let err = err {
                 print("Error getting image: \(err)")
                 onRetrieve(nil)
+                return
             } else {
                 for document in querySnapshot!.documents {
                     print("image retrieved id: \(document.documentID)")
@@ -403,12 +407,16 @@ class RecipeDB {
                         self.getStorageImageURL(withName: document.documentID) { url in
                             recipeImage.data = url?.absoluteString ?? ""
                             onRetrieve(recipeImage)
+                            return
                         }
                     }
                     else {
                         onRetrieve(recipeImage)
+                        return
                     }
                 }
+                onRetrieve(nil)
+                return
             }
         }
     }

@@ -58,7 +58,7 @@ struct RecipeCollectionView: View {
     @State private var searchMinY: CGFloat = 0
     
     @State private var search: String = ""
-    
+
     let categoryNameMaxCount = 15
             
     var body: some View {
@@ -84,6 +84,7 @@ struct RecipeCollectionView: View {
                     unfocusEditable()
                 }
             )
+            .loadable(isLoading: $collection.isLoading)
             .onAppear {
                 // reecipes change in category doesnt refresh view
                 collection.refreshCurrrentCategory()
@@ -98,7 +99,12 @@ struct RecipeCollectionView: View {
                     if !isEditing {
                         unfocusEditable()
                         withAnimation {
-                            collection.popullateCategories()
+                            collection.popullateCategories() {
+                                success in
+                                if !success {
+                                    print("error populating categories")
+                                }
+                            }
                         }
                     }
                 },

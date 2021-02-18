@@ -56,16 +56,24 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // MARK: - DB Loaders
     
     func popullateCategory() {
-        popullateRecipes()
+        popullateRecipes() { success in
+            if !success {
+                print("error popullating recipe")
+            }
+        }
         popullateImage()
     }
 
     // gets recipes of category from db
-    func popullateRecipes() {
+    func popullateRecipes(onCompletion: @escaping (Bool) -> Void) {
         if category.name == "All" {
             collection.popullateAllRecipes() { success in
                 if success {
                     self.recipes = self.collection.allRecipes
+                    onCompletion(true)
+                }
+                else {
+                    onCompletion(false)
                 }
             }
         }
@@ -78,6 +86,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
                 }
                 
                 self.recipes = sortedRecipes
+                onCompletion(true)
             }
         }
     }
@@ -240,7 +249,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     func deleteRecipe(withId id: String) {
         RecipeCategoryVM.deleteRecipe(withId: id)
         // need this for recipe on delete to disappear
-        popullateRecipes()
+        popullateRecipes() { success in
+            if !success {
+                print("error popullating recipes")
+            }
+        }
 //        popullateImage()
     }
     

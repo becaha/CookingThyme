@@ -259,6 +259,18 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func moveRecipe(toCategoryId categoryId: String) {
         RecipeVM.moveRecipe(self.recipe, toCategoryId: categoryId)
+        category?.popullateRecipes() { success in
+            if !success {
+                print("error popullating recipes")
+            }
+        }
+        if let category = category?.collection.getCategory(withId: categoryId) {
+            category.popullateRecipes() { success in
+                if !success {
+                    print("error popullating recipes")
+                }
+            }
+        }
     }
     
     static func moveRecipe(_ recipe: Recipe, toCategoryId categoryId: String) {

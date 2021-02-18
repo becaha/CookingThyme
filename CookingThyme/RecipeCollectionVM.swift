@@ -14,6 +14,8 @@ class RecipeCollectionVM: ObservableObject {
     @Published var categories: [RecipeCategoryVM]
     @Published var currentCategory: RecipeCategoryVM?
     @Published var refreshView: Bool = false
+    
+    @Published var isLoading: Bool?
 
     
     @Published var allRecipes = [Recipe]()
@@ -31,6 +33,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: - Init
     
     init(collection: RecipeCollection) {
+        self.isLoading = true
         self.collection = collection
         self.categories = [RecipeCategoryVM]()
         self.popullateShoppingItems()
@@ -45,9 +48,14 @@ class RecipeCollectionVM: ObservableObject {
             self.objectWillChange.send()
         }
         
-        self.sortShoppingList()
-        self.popullateCategories()
-        self.popullateImages()
+//        self.sortShoppingList()
+        self.popullateCategories() { success in
+            if success {
+                self.popullateImages() { imagesSuccess in
+                    self.isLoading = false
+                }
+            }
+        }
 //        self.resetCurrentCategory()
     }
     
@@ -94,7 +102,7 @@ class RecipeCollectionVM: ObservableObject {
     
     // gets categories from db
     // TODO is it just bad connection that makes a second call to geeet categories with error
-    func popullateCategories() {
+    func popullateCategories(onCompletion: @escaping (Bool) -> Void) {
         RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
             if !success {
                 return 
@@ -111,7 +119,9 @@ class RecipeCollectionVM: ObservableObject {
             self.popullateAllRecipes() { success in
                 if success {
                     self.refreshCurrrentCategory()
+                    onCompletion(true)
                 }
+                onCompletion(false)
             }
         }
     }
@@ -123,12 +133,23 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    func popullateImages() {
+    func popullateImages(onCompletion: @escaping (Bool) -> Void) {
+        let imagesGroup = DispatchGroup()
         for category in self.categories {
+            imagesGroup.enter()
+            
             RecipeDB.shared.getImage(withCategoryId: category.id) { image in
                 if let image = image {
                     self.imageHandler.setImage(image, at: 0)
+                    imagesGroup.leave()
                 }
+                else {
+                    imagesGroup.leave()
+                }
+            }
+            
+            imagesGroup.notify(queue: .main) {
+                onCompletion(true)
             }
         }
     }
@@ -215,8 +236,12 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     func setCurrentCategory(_ category: RecipeCategoryVM) {
-        category.popullateRecipes()
-        currentCategory = category
+//        category.popullateRecipes() { success in
+//            if !success {
+//                print("error popullating recipes")
+//            }
+//        }
+        self.currentCategory = category
     }
     
     // deletes recipe and associated parts
@@ -241,9 +266,10 @@ class RecipeCollectionVM: ObservableObject {
             self.deleteRecipeAndParts(withId: categoryRecipe.id)
         }
         
-        popullateCategories()
-        if let currentCategory = self.currentCategory, id == currentCategory.id {
-//            resetCurrentCategory()
+        popullateCategories() { success in
+            if let currentCategory = self.currentCategory, id == currentCategory.id {
+    //            resetCurrentCategory()
+            }
         }
     }
     
@@ -260,7 +286,11 @@ class RecipeCollectionVM: ObservableObject {
     func addCategory(_ category: String) -> Void {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { success in
             if success {
-                self.popullateCategories()
+                self.popullateCategories() { categoriesSuccess in
+                    if !success {
+                        print("error populating categories")
+                    }
+                }
             }
         }
     }
