@@ -72,7 +72,7 @@ class ImageHandler: ObservableObject {
     }
     
     // sets images for UI from images pulled from db
-    func setImages(_ images: [RecipeImage]) {
+    func setImages(_ images: [RecipeImage], onCompletion: @escaping (Bool) -> Void) {
         if images.count > 0 {
             self.loadingImages = true
             imagesCount = images.count
@@ -88,6 +88,7 @@ class ImageHandler: ObservableObject {
             self.imagesGroup!.notify(queue: .main) {
                 self.loadingImages = false
                 self.imagesGroup = nil
+                onCompletion(true)
             }
         }
     }

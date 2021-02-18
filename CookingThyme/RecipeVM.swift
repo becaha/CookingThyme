@@ -59,8 +59,9 @@ class RecipeVM: ObservableObject, Identifiable {
         
         popullateRecipe() { success in
             if success {
-                self.popullateRecipeTemps()
-                self.isLoading = false
+                self.popullateRecipeTemps() { success in
+                    self.isLoading = false
+                }
             }
             else {
                 print("error popullating initialized recipe")
@@ -87,8 +88,9 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe = recipe
         
         setCancellables()
-        self.popullateRecipeTemps()
-        self.isLoading = false
+        self.popullateRecipeTemps() { success in
+            self.isLoading = false
+        }
     }
     
     func setCancellables() {
@@ -103,8 +105,9 @@ class RecipeVM: ObservableObject, Identifiable {
                     self.importFromURL = false
                     self.invalidURL = false
                     self.recipe = recipe
-                    self.popullateRecipeTemps()
-                    self.isImportingFromURL = false
+                    self.popullateRecipeTemps() { success in
+                        self.isImportingFromURL = false
+                    }
                 }
                 else if self.isImportingFromURL {
                     self.invalidURL = true
@@ -125,9 +128,12 @@ class RecipeVM: ObservableObject, Identifiable {
             if let recipe = recipe {
                 self.recipe = recipe
                 self.tempRecipe = recipe
-                self.popullateRecipeTemps()
-                self.imageHandler.setImages(self.recipe.images)
-                self.isPopullating = false
+                self.popullateRecipeTemps() { success in
+                    if !success {
+                        print("error popullating images")
+                    }
+                    self.isPopullating = false
+                }
             }
         }
         
@@ -221,7 +227,7 @@ class RecipeVM: ObservableObject, Identifiable {
         onCompletion(false)
     }
     
-    func popullateRecipeTemps() {
+    func popullateRecipeTemps(onCompletion: @escaping (Bool) -> Void) {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
         self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
@@ -232,15 +238,25 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe.ingredients = recipe.ingredients
         self.tempRecipe.images = recipe.images
         
-        popullateImages()
+        popullateImages() { success in
+            if !success {
+                print("error popullating images")
+            }
+            onCompletion(success)
+        }
     }
     
     // sends images to image handler to prep for ui
-    func popullateImages() {
+    func popullateImages(onCompletion: @escaping (Bool) -> Void) {
         // only update images if they have been (added to/deleted from) or image handler count is wrong
         if imagesChanged || imageHandler.images.count != tempImages.count {
-            imageHandler.setImages(tempImages)
+            imageHandler.setImages(tempImages) { success in
+                onCompletion(success)
+            }
             imagesChanged = false
+        }
+        else {
+            onCompletion(true)
         }
     }
     

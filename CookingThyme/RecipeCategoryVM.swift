@@ -94,7 +94,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     func popullateImage() {
         RecipeDB.shared.getImage(withCategoryId: id) { image in
             if let image = image {
-                self.imageHandler.setImages([image])
+                self.imageHandler.setImages([image]) { success in
+                    if !success {
+                        print("error popullating image")
+                    }
+                }
             }
         }
     }
@@ -145,7 +149,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     func createImage(_ image: RecipeImage) {
         RecipeDB.shared.createImage(image, withCategoryId: id)
-        self.imageHandler.setImages([image])
+        self.imageHandler.setImages([image]) { success in
+            if !success {
+                print("error creating image")
+            }
+        }
     }
     
     func removeImage() {
