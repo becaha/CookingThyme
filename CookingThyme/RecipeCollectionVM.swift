@@ -397,11 +397,34 @@ class RecipeCollectionVM: ObservableObject {
     // remove recipe from old category in category store
     func removeRecipeFromStoreCategory(_ recipe: Recipe) {
         if let storeCategory = self.categoriesStore[recipe.recipeCategoryId] {
-            let oldCategory = storeCategory
-            var oldCategoryRecipes = oldCategory.recipes
+            var oldCategoryRecipes = storeCategory.recipes
             oldCategoryRecipes.remove(element: recipe)
-            oldCategory.recipes = oldCategoryRecipes
-            self.categoriesStore[recipe.recipeCategoryId] = oldCategory
+            storeCategory.recipes = oldCategoryRecipes
+            self.categoriesStore[recipe.recipeCategoryId] = storeCategory
+        }
+    }
+    
+    // adds recipe to all recipes
+    func addToAllRecipes(_ recipe: Recipe) {
+        if let allCategory = self.allCategory {
+            let allCategoryId = allCategory.id
+            self.categoriesStore[allCategoryId]?.recipes.append(recipe)
+        }
+    }
+    
+    // adds recipe to all recipes
+    func removeFromAllRecipes(withId id: String) {
+        if let recipe = getRecipe(withId: id) {
+            if let allCategory = self.allCategory {
+                let allCategoryId = allCategory.id
+                
+                if let storeAllCategory = self.categoriesStore[allCategoryId] {
+                    var oldAllRecipes = storeAllCategory.recipes
+                    oldAllRecipes.remove(element: recipe)
+                    storeAllCategory.recipes = oldAllRecipes
+                    self.categoriesStore[allCategoryId] = storeAllCategory
+                }
+            }
         }
     }
     
@@ -470,6 +493,7 @@ class RecipeCollectionVM: ObservableObject {
         self.deleteRecipeAndParts(withId: id)
         // update categories store
         removeRecipeFromStoreCategory(withId: id)
+        removeFromAllRecipes(withId: id)
         
         // need this for recipe on delete to disappear
         refreshCurrentCategory()
