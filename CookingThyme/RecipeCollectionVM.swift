@@ -17,8 +17,8 @@ class RecipeCollectionVM: ObservableObject {
     
     @Published var isLoading: Bool?
 
-    @Published var allRecipes = [Recipe]()
-    var categoryRecipesAdded = 0
+//    @Published var allRecipes = [Recipe]()
+//    var categoryRecipesAdded = 0
 
     private var currentCategoryCancellable: AnyCancellable?
 
@@ -35,7 +35,7 @@ class RecipeCollectionVM: ObservableObject {
     // stores categories from db to local storage when category is retrieved from db or saved to db
     // recipeCategoryId to RecipeCategoryVM
     var categoriesStore = [String: RecipeCategoryVM]()
-    
+        
     // MARK: - Init
     
     init(collection: RecipeCollection) {
@@ -84,6 +84,10 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
+    var allRecipes: [Recipe] {
+        allCategory?.recipes ?? []
+    }
+    
     func isAddable(recipe: Recipe?, toCategory category: RecipeCategoryVM) -> Bool {
         return category.name != "All" && recipe?.recipeCategoryId != category.id
     }
@@ -107,7 +111,7 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: - DB Loaders
     
     // gets categories from db
-    // TODO is it just bad connection that makes a second call to geeet categories with error
+    // TODO is it just bad connection that makes a second call to geeet categories with error?
     func popullateCategories(onCompletion: @escaping (Bool) -> Void) {
         if self.categoriesStore.count > 0 {
             // sets self.categories
@@ -115,16 +119,21 @@ class RecipeCollectionVM: ObservableObject {
             // sorts categories
             self.sortCategories()
             // popullates allrecipes -> refreshes current category
-            self.popullateAllRecipes() { success in
-                if success {
-                    self.refreshCurrentCategory()
-                    onCompletion(true)
-                }
-                else {
-                    onCompletion(false)
-                }
-            }
-            return
+//            if let allCategory = self.allCategory {
+//                let allCategoryId = allCategory.id
+//
+//            }
+//
+//            self.popullateAllRecipes() { success in
+//                if success {
+//                    self.refreshCurrentCategory()
+//                    onCompletion(true)
+//                }
+//                else {
+//                    onCompletion(false)
+//                }
+//            }
+//            return
         }
         RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
             if !success {
@@ -132,29 +141,40 @@ class RecipeCollectionVM: ObservableObject {
                 return 
             }
             var popullatedCategories = [RecipeCategoryVM]()
+            let categoriesGroup = DispatchGroup()
             
             for category in categories {
-                popullatedCategories.append(RecipeCategoryVM(category: category, collection: self))
+                categoriesGroup.enter()
+                // initializing recipeCategoryVM adds that category to the category store
+                popullatedCategories.append(RecipeCategoryVM(category: category, collection: self) { success in
+                    categoriesGroup.leave()
+                })
             }
             
-            self.categories = popullatedCategories
-            self.sortCategories()
-            
-            self.popullateAllRecipes() { success in
-                if success {
-                    self.refreshCurrentCategory()
-                    onCompletion(true)
-                }
-                else {
-                    onCompletion(false)
+            categoriesGroup.notify(queue: .main) {
+                self.categories = popullatedCategories
+                self.sortCategories()
+                
+                self.popullateAllRecipes() { success in
+                    if success {
+                        self.refreshCurrentCategory()
+                        onCompletion(true)
+                    }
+                    else {
+                        onCompletion(false)
+                    }
                 }
             }
         }
     }
     
     func popullateAllRecipes(onCompletion: @escaping (Bool) -> Void) {
-        RecipeDB.shared.getAllRecipes(withCollectionId: id) { recipes in
-            self.allRecipes = recipes
+        RecipeDB.shared.getAllRecipes(withCollectionId: id) { allRecipes in
+            // sets all category with all recipes in category store
+            if let allCategory = self.allCategory {
+                let allCategoryId = allCategory.id
+                self.categoriesStore[allCategoryId]?.recipes = allRecipes
+            }
             onCompletion(true)
         }
     }
@@ -311,7 +331,12 @@ class RecipeCollectionVM: ObservableObject {
         RecipeDB.shared.createCategory(withName: category, forCollectionId: collection.id) { category in
             if let category = category {
                 // updates category store
-                self.categoriesStore[category.id] = RecipeCategoryVM(category: category, collection: self)
+                self.categoriesStore[category.id] = RecipeCategoryVM(category: category, collection: self) {
+                    success in
+                    if !success {
+                        print("error adding category to store")
+                    }
+                }
                 // TODO take out
 //                self.popullateCategories() { categoriesSuccess in
 //                    if !categoriesSuccess {

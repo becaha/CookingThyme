@@ -34,7 +34,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     private var categoryGroup: DispatchGroup?
 
-    init(category: RecipeCategory, collection: RecipeCollectionVM) {
+    init(category: RecipeCategory, collection: RecipeCollectionVM, onCompletion: @escaping (Bool) -> Void) {
         self.category = category
         self.collection = collection
         recipes = []
@@ -54,6 +54,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         popullateCategory() { success in
             if success {
                 collection.categoriesStore[category.id] = self
+                onCompletion(true)
+            }
+            else {
+                onCompletion(false)
             }
         }
     }
@@ -71,6 +75,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // MARK: - DB Loaders
     
     func popullateCategory(onCompletion: @escaping (Bool) -> Void) {
+        // check for category in category store
         if let foundCategoryVM = self.collection.categoriesStore[category.id] {
             self.recipes = foundCategoryVM.recipes
             // popullate image
