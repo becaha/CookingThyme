@@ -7,13 +7,11 @@
 
 import SwiftUI
 
-// TODO: delete recipe not updated, added recipes not updated in category list recipes
+// TODO: on signout then sign back in the collection shows up and then reloads
 // todo: timerv on stop alert, issetting = true
-// TODO: cache images
 // TODO: on drag and drop drag, category image flashes
 // TODO: should not be able to deleteee all category, shoulld not be able to delete photo if not there
 
-// TODO: measurement page to ask how many tbsp in an ounce
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed
     @Environment(\.presentationMode) var presentation

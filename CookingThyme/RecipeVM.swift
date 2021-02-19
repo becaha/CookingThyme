@@ -75,8 +75,10 @@ class RecipeVM: ObservableObject, Identifiable {
             if success {
                 self.popullateLocalRecipe() { success in
                     self.isLoading = false
-                    // sets initialized recipe to the recipe store
-                    self.collection?.recipesStore[recipe.id] = self
+                    // sets initialized recipe to the recipe store, if not on create new recipe
+                    if recipe.id != Recipe.defaultId {
+                        self.collection?.recipesStore[recipe.id] = self
+                    }
                 }
             }
             else {

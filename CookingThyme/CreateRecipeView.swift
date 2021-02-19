@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO old creaated recipe is there
 struct CreateRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @ObservedObject var category: RecipeCategoryVM
