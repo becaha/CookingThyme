@@ -21,8 +21,7 @@ class RecipeCollectionVM: ObservableObject {
     private var currentCategoryCancellable: AnyCancellable?
 
     
-    @Published var tempShoppingList: [ShoppingItem] = []
-    var permShoppingList: [ShoppingItem] = []
+    @Published var shoppingListStore: [ShoppingItem] = []
     
     // stores recipes from db to local storage when recipe is retrieved from db or saved to db
     // recipeId to RecipeVM
@@ -165,8 +164,7 @@ class RecipeCollectionVM: ObservableObject {
     
     func popullateShoppingItems() {
         RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
-            self.permShoppingList = shoppingList
-            self.tempShoppingList = shoppingList
+            self.shoppingListStore = shoppingList
         }
     }
     
@@ -213,13 +211,13 @@ class RecipeCollectionVM: ObservableObject {
     
     // sorts shopping list by alphabetical order
     func sortShoppingList() {
-//        let sortedTempShoppingList = self.tempShoppingList.sorted(by: { (itemA, itemB) -> Bool in
-//            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
-//                return true
-//            }
-//            return false
-//        })
-//        self.tempShoppingList = sortedTempShoppingList
+        let sortedTempShoppingList = self.shoppingListStore.sorted(by: { (itemA, itemB) -> Bool in
+            if itemA.name.compare(itemB.name) == ComparisonResult.orderedAscending {
+                return true
+            }
+            return false
+        })
+        self.shoppingListStore = sortedTempShoppingList
     }
     
     // MARK: Intents
@@ -462,7 +460,7 @@ class RecipeCollectionVM: ObservableObject {
     // items checked off/bought
     var completedItems: [ShoppingItem] {
         var items = [ShoppingItem]()
-        for item in tempShoppingList {
+        for item in shoppingListStore {
             if item.completed {
                 items.append(item)
             }
@@ -473,7 +471,7 @@ class RecipeCollectionVM: ObservableObject {
     // items not checked off/bought
     var notCompletedItems: [ShoppingItem] {
         var items = [ShoppingItem]()
-        for item in tempShoppingList {
+        for item in shoppingListStore {
             if !item.completed {
                 items.append(item)
             }
@@ -483,98 +481,82 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: - Intents
     
-    // adds given ingredients to shopping items
+    // called by ui's addAllIngredients
+    // adds multiple ingredients to shopping items
     func addIngredientShoppingItems(ingredients: [Ingredient]) {
         for ingredient in ingredients {
             addIngredientShoppingItem(ingredient)
         }
-        saveShoppingList()
     }
     
+    // called by addIngredientShoppingItems above
     // adds given ingredient to shopping items
-    private func addIngredientShoppingItem(_ ingredient: Ingredient) {
-        let item: ShoppingItem = ShoppingItem(name: ingredient.name, amount: ingredient.amount, unitName: ingredient.unitName, collectionId: collection.id, completed: false)
-        tempShoppingList.append(item)
-        sortShoppingList()
+    func addIngredientShoppingItem(_ ingredient: Ingredient) {
+        let item: ShoppingItem = ShoppingItem(name: ingredient.name, amount: ingredient.amount, unitName: ingredient.unitName, collectionId: self.id, completed: false)
+        createShoppingItem(item)
     }
     
+    // called in shopping list view, add a new item
     // adds to shopping items, temporary until saved
     func addTempShoppingItem(name: String, completed: Bool = false) {
         let item: ShoppingItem = ShoppingItem(name: name, amount: nil, unitName: UnitOfMeasurement.none, collectionId: collection.id, completed: completed)
-        tempShoppingList.append(item)
-        sortShoppingList()
-        saveShoppingList()
+        createShoppingItem(item)
     }
     
-    private func removeTempShoppingItem(at index: Int) {
-        tempShoppingList.remove(at: index)
-    }
-    
-    func removeTempShoppingItem(_ item: ShoppingItem) {
-        if let index = tempShoppingList.indexOf(element: item) {
-            tempShoppingList.remove(at: index)
+    // creates shopping item in store and db
+    private func createShoppingItem(_ item: ShoppingItem) {
+        RecipeDB.shared.createShoppingItem(item, withCollectionId: self.id) { newItem in
+            if let newItem = newItem {
+                self.shoppingListStore.append(newItem)
+                self.sortShoppingList()
+            }
         }
-        saveShoppingList()
     }
     
+    
+    // called by shopping list view
     // removes all completed shopping items
     func removeShoppingItems(completed: Bool) {
-        for item in tempShoppingList {
+        for item in shoppingListStore {
             if item.completed == completed {
-                if let index = tempShoppingList.indexOf(element: item) {
+                if let index = shoppingListStore.indexOf(element: item) {
                     removeTempShoppingItem(at: index)
                 }
             }
         }
-        saveShoppingList()
     }
     
-    func removeAllShoppingItems() {
-        for item in tempShoppingList {
-            if let index = tempShoppingList.indexOf(element: item) {
-                removeTempShoppingItem(at: index)
-            }
+    // called by shopping list view, removes shopping item
+    func removeTempShoppingItem(_ item: ShoppingItem) {
+        if let index = shoppingListStore.indexOf(element: item) {
+            removeTempShoppingItem(at: index)
         }
-        saveShoppingList()
     }
     
+    // called by removeShoppingItems and removeTempShoppingItem above
+    // removes item from store and db
+    private func removeTempShoppingItem(at index: Int) {
+        let itemId = shoppingListStore[index].id
+        shoppingListStore.remove(at: index)
+        RecipeDB.shared.deleteShoppingItem(withId: itemId)
+    }
+    
+    
+    // called by shopping list view
     func completeAllShoppingItems(_ complete: Bool = true) {
-        for index in 0..<tempShoppingList.count {
-            tempShoppingList[index].completed = complete
+        for index in 0..<shoppingListStore.count {
+            shoppingListStore[index].completed = complete
+            RecipeDB.shared.updateShoppingItem(shoppingListStore[index])
         }
-        saveShoppingList()
     }
     
+    // called by shopping list item view
     // toggles completion/checked off of an item
     func toggleCompleted(_ item: ShoppingItem) {
-        if let index = tempShoppingList.indexOf(element: item) {
-            tempShoppingList[index].completed.toggle()
+        if let index = shoppingListStore.indexOf(element: item) {
+            shoppingListStore[index].completed.toggle()
+            RecipeDB.shared.updateShoppingItem(shoppingListStore[index])
         }
-        saveShoppingList()
-    }
-    
-    // saves temp shopping list to db
-    func saveShoppingList() {
-        RecipeDB.shared.updateShoppingItems(withCollectionId: collection.id, shoppingItems: tempShoppingList, oldItems: permShoppingList) { success in
-            if !success {
-                print("error updating shopping list")
-            }
-            else {
-//                self.popullateShoppingItems()
-            }
-        }
-        
-    }
-    
-    // adds all ingredients of given recipe to shopping list
-    func addToShoppingList(fromRecipe recipe: Recipe) {
-        addIngredientShoppingItems(ingredients: recipe.ingredients)
-    }
-    
-    // adds ingredient to shopping list
-    func addToShoppingList(_ ingredient: Ingredient) {
-        addIngredientShoppingItem(ingredient)
-        saveShoppingList()
     }
 }
 

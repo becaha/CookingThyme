@@ -43,6 +43,7 @@ class RecipeDB {
                 print("Recipe added with ID: \(ref!.documentID)")
             }
         }
+        // TODO should this be in callback?
         if let ref = ref {
             onCompletion(Recipe(id: ref.documentID, name: name, servings: servings, source: source, recipeCategoryId: recipeCategoryId))
         }
@@ -234,7 +235,7 @@ class RecipeDB {
         }
     }
     
-    func createShoppingItem(_ item: ShoppingItem, withCollectionId collectionId: String) throws {
+    func createShoppingItem(_ item: ShoppingItem, withCollectionId collectionId: String, onCompletion: @escaping (ShoppingItem?) -> Void) {
         var ref: DocumentReference? = nil
         ref = db.collection(ShoppingItem.Table.databaseTableName).addDocument(data: [
             ShoppingItem.Table.name: item.name,
@@ -245,24 +246,29 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error adding shopping item: \(err)")
+                onCompletion(nil)
             } else {
                 print("Shopping item added with ID: \(ref!.documentID)")
+                var newItem = item
+                newItem.collectionId = collectionId
+                newItem.id = ref!.documentID
+                onCompletion(newItem)
             }
         }
     }
     
-    func createShoppingItems(items: [ShoppingItem], withCollectionId collectionId: String) {
-        do {
-            for item in items {
-                try createShoppingItem(item, withCollectionId: collectionId)
-            }
-
-            return
-        } catch {
-            print("Error creating shopping items")
-            return
-        }
-    }
+//    func createShoppingItems(items: [ShoppingItem], withCollectionId collectionId: String) {
+//        do {
+//            for item in items {
+//                try createShoppingItem(item, withCollectionId: collectionId)
+//            }
+//
+//            return
+//        } catch {
+//            print("Error creating shopping items")
+//            return
+//        }
+//    }
     
     // MARK: - Read
     
@@ -686,7 +692,7 @@ class RecipeDB {
         }
     }
     
-    func updateShoppingItem(_ item: ShoppingItem, onCompletion: @escaping (Bool) -> Void) {
+    func updateShoppingItem(_ item: ShoppingItem) {
         let ref = db.collection(ShoppingItem.Table.databaseTableName).document(item.id)
 
         ref.updateData([
@@ -698,41 +704,9 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error updating shopping item: \(err)")
-                onCompletion(false)
             } else {
                 print("Shopping item successfully updated")
-                onCompletion(true)
             }
-        }
-    }
-    
-    
-    func updateShoppingItems(withCollectionId collectionId: String, shoppingItems: [ShoppingItem], oldItems items: [ShoppingItem], onCompletion: @escaping (Bool) -> Void) {
-        do {
-            var itemsToDelete = items
-            for shoppingItem in shoppingItems {
-                if shoppingItem.id == shoppingItem.defaultId {
-                    try createShoppingItem(shoppingItem, withCollectionId: collectionId)
-                }
-                else {
-                    itemsToDelete.remove(element: shoppingItem)
-                    updateShoppingItem(shoppingItem) { success in
-                        if !success {
-                            onCompletion(false)
-                            return
-                        }
-                    }
-                }
-            }
-            // delete direction
-            for item in itemsToDelete {
-                deleteShoppingItem(withId: item.id)
-            }
-            
-            onCompletion(true)
-        } catch {
-            print("Error updating shopping items")
-            onCompletion(false)
         }
     }
     

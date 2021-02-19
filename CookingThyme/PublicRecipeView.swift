@@ -53,7 +53,7 @@ struct PublicRecipeView: View {
                     
                     RecipeLists(
                         addToShoppingList: { ingredient in
-                            user.collection!.addToShoppingList(ingredient)
+                            user.collection!.addIngredientShoppingItem(ingredient)
                         },
                         addAllToShoppingList: { ingredients in
                             addAllIngredients(ingredients)

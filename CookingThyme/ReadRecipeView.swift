@@ -31,7 +31,7 @@ struct ReadRecipeView: View {
             
             RecipeLists(
                         addToShoppingList: { ingredient in
-                            collection.addToShoppingList(ingredient)
+                            collection.addIngredientShoppingItem(ingredient)
                         },
                         addAllToShoppingList: { ingredients in
                             addAllIngredients(ingredients)
