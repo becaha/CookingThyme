@@ -125,6 +125,8 @@ class RecipeCollectionVM: ObservableObject {
             self.categories = Array(self.categoriesStore.values)
             // sorts categories
             self.sortCategories()
+            onCompletion(true)
+            return
             // popullates allrecipes -> refreshes current category
 //            if let allCategory = self.allCategory {
 //                let allCategoryId = allCategory.id

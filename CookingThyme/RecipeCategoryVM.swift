@@ -98,15 +98,15 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             }
         }
         
-        categoryGroup!.enter()
+//        categoryGroup!.enter()
         popullateImage() { success in
             if !success {
                 print("error popullating image")
                 popullateSuccess = false
             }
-            if self.categoryGroup != nil {
-                self.categoryGroup!.leave()
-            }
+//            if self.categoryGroup != nil {
+//                self.categoryGroup!.leave()
+//            }
         }
         
         categoryGroup!.notify(queue: .main) {
