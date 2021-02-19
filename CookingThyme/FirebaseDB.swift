@@ -108,53 +108,40 @@ class RecipeDB {
         }
     }
     
-    func createStorageImage(_ image: RecipeImage, withName name: String) {
-        let ref = getStorageImageRef(withName: name)
+    func createStorageImage(_ image: RecipeImage, withId id: String) {
+        let ref = getStorageImageRef(withId: id)
 
         if let imageData = ImageHandler.decodeImageToData(image.data) {
             // Upload the file to the path
-//            let uploadTask =
-            ref.putData(imageData, metadata: nil) { (metadata, error) in
+            let uploadTask = ref.putData(imageData, metadata: nil) { (metadata, error) in
 //                guard let metadata = metadata else { return }
                 // Metadata contains file metadata such as size, content-type.
 //                let size = metadata.size
                 // You can also access to download URL after upload.
 //                ref.downloadURL { (url, error) in
-//                    guard let downloadURL = url else { return }
+//                    guard let downloadURL = url else {
+//                        return
+//                    }
+                    // gets url of storage image and changes recipe image to type url
+//                    var storageImage = image
+//                    storageImage.id = id
+//                    storageImage.type = ImageType.url
+//                    storageImage.data = downloadURL.absoluteString
+//                    self.updateImage(storageImage)
 //                }
             }
-        }
-    }
-    
-    func createImage(_ image: RecipeImage, withRecipeId recipeId: String) throws {
-        var ref: DocumentReference? = nil
-        var imageData = image.data
-        if image.type == .uiImage {
-            imageData = ""
-        }
-        ref = db.collection(RecipeImage.Table.databaseTableName).addDocument(data: [
-            RecipeImage.Table.type: image.type.rawValue,
-            RecipeImage.Table.data: imageData,
-            RecipeImage.Table.recipeId: recipeId
-        ]) { err in
-            if let err = err {
-                print("Error adding image: \(err)")
-            } else {
-                print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withName: ref!.documentID)
+            
+            uploadTask.observe(.success) { snapshot in
+              // Upload completed successfully
+                print("image stored successfully")
             }
-        }
-    }
-    
-    func createImages(images: [RecipeImage], withRecipeId recipeId: String) {
-        do {
-            for image in images {
-                try createImage(image, withRecipeId: recipeId)
+
+            uploadTask.observe(.failure) { snapshot in
+              if let error = snapshot.error as NSError? {
+                let message = error.localizedDescription
+                print("error: \(message)")
+              }
             }
-            return
-        } catch {
-            print("Error creating images")
-            return
         }
     }
     
@@ -174,8 +161,40 @@ class RecipeDB {
                 print("Error adding image: \(message)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withName: ref!.documentID)
+                self.createStorageImage(image, withId: ref!.documentID)
             }
+        }
+    }
+    
+    func createImage(_ image: RecipeImage, withRecipeId recipeId: String) throws {
+        var ref: DocumentReference? = nil
+        var imageData = image.data
+        if image.type == .uiImage {
+            imageData = ""
+        }
+        ref = db.collection(RecipeImage.Table.databaseTableName).addDocument(data: [
+            RecipeImage.Table.type: image.type.rawValue,
+            RecipeImage.Table.data: imageData,
+            RecipeImage.Table.recipeId: recipeId
+        ]) { err in
+            if let err = err {
+                print("Error adding image: \(err)")
+            } else {
+                print("Image added with ID: \(ref!.documentID)")
+                self.createStorageImage(image, withId: ref!.documentID)
+            }
+        }
+    }
+    
+    func createImages(images: [RecipeImage], withRecipeId recipeId: String) {
+        do {
+            for image in images {
+                try createImage(image, withRecipeId: recipeId)
+            }
+            return
+        } catch {
+            print("Error creating images")
+            return
         }
     }
     
@@ -377,7 +396,7 @@ class RecipeDB {
     }
     
     func getStorageImageURL(withName name: String, onRetrieve: @escaping (URL?) -> Void) {
-        let ref = getStorageImageRef(withName: name)
+        let ref = getStorageImageRef(withId: name)
 
         if let documentDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             // creates local filesystem url
@@ -628,6 +647,21 @@ class RecipeDB {
         }
     }
     
+//    func updateImage(_ image: RecipeImage) {
+//        let ref = db.collection(RecipeImage.Table.databaseTableName).document(image.id)
+//
+//        ref.updateData([
+//            RecipeImage.Table.type: image.type.rawValue,
+//            RecipeImage.Table.data: image.data
+//        ]) { err in
+//            if let err = err {
+//                print("Error updating image: \(err)")
+//            } else {
+//                print("Image successfully updated")
+//            }
+//        }
+//    }
+    
     func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
         do {
             var imagesToDelete = recipe.images
@@ -637,7 +671,7 @@ class RecipeDB {
                 }
                 else {
                     imagesToDelete.remove(element: image)
-                    // images are never updated, so neither creating nor deleting, just leave alone
+                    // images are never updated in editing, so neither creating nor deleting, just leave alone
                 }
             }
             // delete images
@@ -825,12 +859,12 @@ class RecipeDB {
         }
     }
     
-    func getStorageImageRef(withName name: String) -> StorageReference {
-        return storage.child("images/\(name).jpg")
+    func getStorageImageRef(withId id: String) -> StorageReference {
+        return storage.child("images/\(id).jpg")
     }
     
     func deleteStorageImage(withId id: String) {
-        let ref = getStorageImageRef(withName: id)
+        let ref = getStorageImageRef(withId: id)
 
         ref.delete { error in
             if let error = error {

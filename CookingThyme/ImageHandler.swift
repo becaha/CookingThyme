@@ -29,6 +29,9 @@ class ImageHandler: ObservableObject {
     var imageURL: URL?
     private var fetchImageCancellables = [AnyCancellable]()
     
+    static let pictureWidth: CGFloat = 200
+    static let pictureHeight: CGFloat = 150
+    
     // encodes uiImage into string to be put in db
     static func encodeImage(_ image: UIImage) -> String? {
         if let imageData = image.pngData() {
@@ -51,7 +54,7 @@ class ImageHandler: ObservableObject {
     }
     
     // decodes image string into uiImage to be used in UI
-    func decodeImage(_ imageString: String) -> UIImage? {
+    static func decodeImage(_ imageString: String) -> UIImage? {
         if let decodedData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
             return UIImage(data: decodedData)
         }
@@ -97,7 +100,7 @@ class ImageHandler: ObservableObject {
     func setImage(_ image: RecipeImage, at index: Int) {
         if image.type == ImageType.uiImage && image.id == RecipeImage.defaultId {
             imageURL = nil
-            if let decodedImage = decodeImage(image.data) {
+            if let decodedImage = ImageHandler.decodeImage(image.data) {
                 addImage(uiImage: decodedImage, at: index)
             }
         }
@@ -229,5 +232,26 @@ extension URL {
         }
 
         return self.baseURL ?? self
+    }
+}
+
+
+extension UIImage {
+    func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
+    }
+    
+    func resized(toWidth width: CGFloat, toHeight height: CGFloat, isOpaque: Bool = true) -> UIImage? {
+        let canvas = CGSize(width: width, height: height)
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
+        }
     }
 }

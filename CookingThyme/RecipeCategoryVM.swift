@@ -197,11 +197,14 @@ class RecipeCategoryVM: ObservableObject, Hashable {
 
     // called from ui to set category image from selected ui image
     func setImage(uiImage: UIImage) {
-        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: Recipe.defaultId) {
-            var recipeImage = image
-            recipeImage.recipeId = nil
-            recipeImage.categoryId = id
-            setImage(recipeImage, replace: true)
+        // reduce size
+        if let resizedImage = uiImage.resized(toWidth: ImageHandler.pictureWidth, toHeight: ImageHandler.pictureHeight) {
+            if let image = RecipeVM.toRecipeImage(fromUIImage: resizedImage, withRecipeId: Recipe.defaultId) {
+                var recipeImage = image
+                recipeImage.recipeId = nil
+                recipeImage.categoryId = id
+                setImage(recipeImage, replace: true)
+            }
         }
     }
     

@@ -329,12 +329,11 @@ class RecipeCollectionVM: ObservableObject {
         // updates category store
         self.categoriesStore[id] = nil
         
-        // TODO take out
-//        popullateCategories() { success in
-//            if let currentCategory = self.currentCategory, id == currentCategory.id {
-//    //            resetCurrentCategory()
-//            }
-//        }
+        popullateCategories() { success in
+            if let currentCategory = self.currentCategory, id == currentCategory.id {
+                self.resetCurrentCategory()
+            }
+        }
     }
     
     // called by ui add category
@@ -349,12 +348,12 @@ class RecipeCollectionVM: ObservableObject {
                         print("error adding category to store")
                     }
                 }
-                // TODO take out
-//                self.popullateCategories() { categoriesSuccess in
-//                    if !categoriesSuccess {
-//                        print("error populating categories")
-//                    }
-//                }
+                
+                self.popullateCategories() { categoriesSuccess in
+                    if !categoriesSuccess {
+                        print("error populating categories")
+                    }
+                }
             }
         }
     }

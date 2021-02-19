@@ -276,14 +276,16 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe.images = recipe.images
     }
     
+    // changed so doesn't wait for pictures
     func popullateLocalRecipe(onCompletion: @escaping (Bool) -> Void) {
         self.popullateRecipeTemps()
+        onCompletion(true)
         
         popullateImages() { success in
             if !success {
                 print("error popullating images")
             }
-            onCompletion(success)
+//            onCompletion(success)
         }
     }
     
@@ -461,10 +463,13 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     func addTempImage(uiImage: UIImage) {
-        if let image = RecipeVM.toRecipeImage(fromUIImage: uiImage, withRecipeId: recipe.id) {
-            tempImages.append(image)
-            imageHandler.addImage(uiImage: uiImage)
-            imagesChanged = true
+        // resize image
+        if let resizedImage = uiImage.resized(toWidth: ImageHandler.pictureWidth, toHeight: ImageHandler.pictureHeight) {
+            if let image = RecipeVM.toRecipeImage(fromUIImage: resizedImage, withRecipeId: recipe.id) {
+                tempImages.append(image)
+                imageHandler.addImage(uiImage: uiImage)
+                imagesChanged = true
+            }
         }
     }
     
