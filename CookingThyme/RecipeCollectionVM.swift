@@ -26,8 +26,8 @@ class RecipeCollectionVM: ObservableObject {
     @Published var tempShoppingList: [ShoppingItem] = []
     var permShoppingList: [ShoppingItem] = []
 
-    @Published var imageHandler = ImageHandler()
-    private var imageHandlerCancellable: AnyCancellable?
+//    @Published var imageHandler = ImageHandler()
+//    private var imageHandlerCancellable: AnyCancellable?
     
     // stores recipes from db to local storage when recipe is retrieved from db or saved to db
     // recipeId to RecipeVM
@@ -44,10 +44,10 @@ class RecipeCollectionVM: ObservableObject {
         self.categories = [RecipeCategoryVM]()
         self.popullateShoppingItems()
         
-        self.imageHandlerCancellable = self.imageHandler.objectWillChange
-            .sink { _ in
-                self.objectWillChange.send()
-            }
+//        self.imageHandlerCancellable = self.imageHandler.objectWillChange
+//            .sink { _ in
+//                self.objectWillChange.send()
+//            }
         
         self.currentCategoryCancellable = self.currentCategory?.objectWillChange.sink {
             _ in
@@ -57,9 +57,16 @@ class RecipeCollectionVM: ObservableObject {
 //        self.sortShoppingList()
         self.popullateCategories() { success in
             if success {
-                self.popullateImages() { imagesSuccess in
-                    self.isLoading = false
-                }
+                self.isLoading = false
+//                self.popullateImages() { imagesSuccess in
+//                    if !imagesSuccess {
+//                        print("error loading images")
+//                    }
+//                }
+            }
+            else {
+                // TODO change to error
+                self.isLoading = false
             }
         }
 //        self.resetCurrentCategory()
@@ -179,26 +186,29 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-    func popullateImages(onCompletion: @escaping (Bool) -> Void) {
-        let imagesGroup = DispatchGroup()
-        for category in self.categories {
-            imagesGroup.enter()
-            
-            RecipeDB.shared.getImage(withCategoryId: category.id) { image in
-                if let image = image {
-                    self.imageHandler.setImage(image, at: 0)
-                    imagesGroup.leave()
-                }
-                else {
-                    imagesGroup.leave()
-                }
-            }
-            
-            imagesGroup.notify(queue: .main) {
-                onCompletion(true)
-            }
-        }
-    }
+//    func popullateImages(onCompletion: @escaping (Bool) -> Void) {
+//        let imagesGroup = DispatchGroup()
+//        if self.categories.count == 0 {
+//            onCompletion(false)
+//        }
+//        for category in self.categories {
+//            imagesGroup.enter()
+//
+//            RecipeDB.shared.getImage(withCategoryId: category.id) { image in
+//                if let image = image {
+//                    self.imageHandler.setImage(image, at: 0)
+//                    imagesGroup.leave()
+//                }
+//                else {
+//                    imagesGroup.leave()
+//                }
+//            }
+//        }
+//
+//        imagesGroup.notify(queue: .main) {
+//            onCompletion(true)
+//        }
+//    }
     
     func popullateShoppingItems() {
         RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
@@ -408,7 +418,9 @@ class RecipeCollectionVM: ObservableObject {
     func addToAllRecipes(_ recipe: Recipe) {
         if let allCategory = self.allCategory {
             let allCategoryId = allCategory.id
-            self.categoriesStore[allCategoryId]?.recipes.append(recipe)
+            if recipe.recipeCategoryId != allCategoryId {
+                self.categoriesStore[allCategoryId]?.recipes.append(recipe)
+            }
         }
     }
     

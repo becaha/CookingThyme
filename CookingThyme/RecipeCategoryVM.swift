@@ -80,6 +80,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             self.recipes = foundCategoryVM.recipes
             // popullate image
             self.imageHandler = foundCategoryVM.imageHandler
+            onCompletion(true)
             return
         }
         

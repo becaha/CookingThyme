@@ -253,11 +253,14 @@ class RecipeDB {
                 print("Error getting recipe: \(err)")
                 onRetrieve(nil)
             } else {
+                if querySnapshot!.documents.count == 0 {
+                    onRetrieve(nil)
+                    return
+                }
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(Recipe(document: document))
                 }
-                onRetrieve(nil)
             }
         }
     }
@@ -402,6 +405,10 @@ class RecipeDB {
                 onRetrieve(nil)
                 return
             } else {
+                if querySnapshot!.documents.count == 0 {
+                    onRetrieve(nil)
+                    return
+                }
                 for document in querySnapshot!.documents {
                     print("image retrieved id: \(document.documentID)")
                     var recipeImage = RecipeImage(document: document)
@@ -417,8 +424,6 @@ class RecipeDB {
                         return
                     }
                 }
-                onRetrieve(nil)
-                return
             }
         }
     }
@@ -446,11 +451,14 @@ class RecipeDB {
                 print("Error getting category: \(err)")
                 onRetrieve(nil)
             } else {
+                if querySnapshot!.documents.count == 0 {
+                    onRetrieve(nil)
+                    return
+                }
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeCategory(document: document))
                 }
-                onRetrieve(nil)
             }
         }
     }
@@ -461,11 +469,14 @@ class RecipeDB {
                 print("Error getting collection: \(err)")
                 onRetrieve(nil)
             } else {
+                if querySnapshot!.documents.count == 0 {
+                    onRetrieve(nil)
+                    return
+                }
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     onRetrieve(RecipeCollection(document: document))
                 }
-                onRetrieve(nil)
             }
         }
     }
