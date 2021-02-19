@@ -27,6 +27,9 @@ struct HomeView: View {
                         .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
                         .environmentObject(sheetNavigator)
                 }
+                else if user.isSignedIn && user.collection == nil {
+                    UIControls.Loading()
+                }
                 else if user.collection != nil {
                     RecipeCollectionView()
                         .environmentObject(user.collection!)
@@ -52,6 +55,10 @@ struct HomeView: View {
                     SigninPromptView(message: "to start creating a shopping list.")
                         .environmentObject(sheetNavigator)
                 }
+                else if user.isSignedIn && user.collection == nil {
+                    UIControls.Loading()
+                }
+
                 else if user.collection != nil {
                     ShoppingListView()
                         .environmentObject(user.collection!)

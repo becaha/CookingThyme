@@ -175,6 +175,7 @@ class UserVM: ObservableObject {
         
         try! Firebase.Auth.auth().signOut()
         user.setSignedOut()
+        self.collection = nil
         
 //        if userErrors.count == 0 {
             status = false

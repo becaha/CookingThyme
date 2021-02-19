@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: on signout then sign back in the collection shows up and then reloads
 // todo: timerv on stop alert, issetting = true
 // TODO: on drag and drop drag, category image flashes
 // TODO: should not be able to deleteee all category, shoulld not be able to delete photo if not there
@@ -86,10 +85,6 @@ struct RecipeCollectionView: View {
                 }
             )
             .loadable(isLoading: $collection.isLoading)
-            .onAppear {
-                // reecipes change in category doesnt refresh view
-//                collection.refreshCurrentCategory()
-            }
         }
         .navigationBarColor(offWhiteUIColor())
         .navigationBarTitle("Recipe Book", displayMode: .inline)

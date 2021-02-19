@@ -77,7 +77,6 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     var allRecipes: [Recipe] {
-//        allCategory?.recipes ?? []
         let allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
             if recipeCategoryVM.name != "All" {
                 var currentRecipes = recipes
