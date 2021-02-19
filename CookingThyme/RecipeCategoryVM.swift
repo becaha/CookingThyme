@@ -259,7 +259,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             // updates category store
             if let recipe = recipe {
                 self.collection.addRecipeToStore(recipe, toCategoryId: self.category.id)
-                self.collection.addToAllRecipes(recipe)
+                self.collection.updateAllRecipes()
             }
             
             onCreation(recipe)

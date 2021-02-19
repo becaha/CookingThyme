@@ -88,7 +88,7 @@ struct RecipeCollectionView: View {
             .loadable(isLoading: $collection.isLoading)
             .onAppear {
                 // reecipes change in category doesnt refresh view
-                collection.refreshCurrentCategory()
+//                collection.refreshCurrentCategory()
             }
         }
         .navigationBarColor(offWhiteUIColor())

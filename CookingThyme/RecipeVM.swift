@@ -326,23 +326,31 @@ class RecipeVM: ObservableObject, Identifiable {
     // called by saving an edit recipe, updates recipe in db and in local store
     func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
         setTempRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source)
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { success in
-            // todo remove
-//            self.category!.refreshCategory()
-            // updates recipe store
-            self.collection?.recipesStore[id] = self
-            // updates category store
-            self.collection?.removeRecipeFromStoreCategory(self.recipe)
-            self.collection?.addRecipeToStore(self.recipe, toCategoryId: categoryId)
-        }
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe)
+//        { success in
+//            // todo remove
+////            self.category!.refreshCategory()
+//
+//        }
     }
     
     // called by updateRecipe above
     // updates recipe given temp ingredients
-    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe, onCompletion: onCompletion)
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe) { success in
+            if success {
+                let updatedRecipe = Recipe(id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source, recipeCategoryId: categoryId)
+                let updatedRecipeVM = self
+                updatedRecipeVM.recipe = updatedRecipe
+                // updates recipe store
+                self.collection?.recipesStore[id] = updatedRecipeVM
+                // updates category store
+                self.collection?.removeRecipeFromStoreCategory(updatedRecipe)
+                self.collection?.addRecipeToStore(updatedRecipe, toCategoryId: categoryId)
+            }
+        }
     }
     
     // called by updateRecipe above, updates recipe given ingredients

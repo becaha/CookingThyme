@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// TODO AttributeGraph: cycle detected through attribute 3286136, on sign in
 // TODO photos reload too much
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
@@ -17,17 +18,11 @@ class RecipeCollectionVM: ObservableObject {
     
     @Published var isLoading: Bool?
 
-//    @Published var allRecipes = [Recipe]()
-//    var categoryRecipesAdded = 0
-
     private var currentCategoryCancellable: AnyCancellable?
 
     
     @Published var tempShoppingList: [ShoppingItem] = []
     var permShoppingList: [ShoppingItem] = []
-
-//    @Published var imageHandler = ImageHandler()
-//    private var imageHandlerCancellable: AnyCancellable?
     
     // stores recipes from db to local storage when recipe is retrieved from db or saved to db
     // recipeId to RecipeVM
@@ -44,11 +39,6 @@ class RecipeCollectionVM: ObservableObject {
         self.categories = [RecipeCategoryVM]()
         self.popullateShoppingItems()
         
-//        self.imageHandlerCancellable = self.imageHandler.objectWillChange
-//            .sink { _ in
-//                self.objectWillChange.send()
-//            }
-        
         self.currentCategoryCancellable = self.currentCategory?.objectWillChange.sink {
             _ in
             self.objectWillChange.send()
@@ -58,11 +48,6 @@ class RecipeCollectionVM: ObservableObject {
         self.popullateCategories() { success in
             if success {
                 self.isLoading = false
-//                self.popullateImages() { imagesSuccess in
-//                    if !imagesSuccess {
-//                        print("error loading images")
-//                    }
-//                }
             }
             else {
                 // TODO change to error
@@ -92,7 +77,16 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     var allRecipes: [Recipe] {
-        allCategory?.recipes ?? []
+//        allCategory?.recipes ?? []
+        let allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
+            if recipeCategoryVM.name != "All" {
+                var currentRecipes = recipes
+                currentRecipes.append(contentsOf: recipeCategoryVM.recipes)
+                return currentRecipes
+            }
+            return recipes
+        }
+        return allRecipes
     }
     
     func isAddable(recipe: Recipe?, toCategory category: RecipeCategoryVM) -> Bool {
@@ -118,31 +112,13 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: - DB Loaders
     
     // gets categories from db
-    // TODO is it just bad connection that makes a second call to geeet categories with error?
+    // TODO is it just bad connection that makes a second call to get categories with error?
     func popullateCategories(onCompletion: @escaping (Bool) -> Void) {
         if self.categoriesStore.count > 0 {
-            // sets self.categories
             self.categories = Array(self.categoriesStore.values)
-            // sorts categories
             self.sortCategories()
             onCompletion(true)
             return
-            // popullates allrecipes -> refreshes current category
-//            if let allCategory = self.allCategory {
-//                let allCategoryId = allCategory.id
-//
-//            }
-//
-//            self.popullateAllRecipes() { success in
-//                if success {
-//                    self.refreshCurrentCategory()
-//                    onCompletion(true)
-//                }
-//                else {
-//                    onCompletion(false)
-//                }
-//            }
-//            return
         }
         RecipeDB.shared.getCategories(byCollectionId: collection.id) { success, categories in
             if !success {
@@ -188,30 +164,6 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
-//    func popullateImages(onCompletion: @escaping (Bool) -> Void) {
-//        let imagesGroup = DispatchGroup()
-//        if self.categories.count == 0 {
-//            onCompletion(false)
-//        }
-//        for category in self.categories {
-//            imagesGroup.enter()
-//
-//            RecipeDB.shared.getImage(withCategoryId: category.id) { image in
-//                if let image = image {
-//                    self.imageHandler.setImage(image, at: 0)
-//                    imagesGroup.leave()
-//                }
-//                else {
-//                    imagesGroup.leave()
-//                }
-//            }
-//        }
-//
-//        imagesGroup.notify(queue: .main) {
-//            onCompletion(true)
-//        }
-//    }
-    
     func popullateShoppingItems() {
         RecipeDB.shared.getShoppingItems(byCollectionId: collection.id) { shoppingList in
             self.permShoppingList = shoppingList
@@ -229,11 +181,11 @@ class RecipeCollectionVM: ObservableObject {
             self.currentCategory = currentCategory
         }
         else {
-            resetCurrentCategory()
+            resetCurrentCategoryToAllCategory()
         }
     }
     
-    func resetCurrentCategory() {
+    func resetCurrentCategoryToAllCategory() {
         if allCategory == nil {
             print("error")
         }
@@ -331,7 +283,7 @@ class RecipeCollectionVM: ObservableObject {
         
         popullateCategories() { success in
             if let currentCategory = self.currentCategory, id == currentCategory.id {
-                self.resetCurrentCategory()
+                self.resetCurrentCategoryToAllCategory()
             }
         }
     }
@@ -357,7 +309,8 @@ class RecipeCollectionVM: ObservableObject {
             }
         }
     }
-    
+
+    // TODO only refresh image if it has changed
     // updates name of category, updates category store
     func updateCategory(forCategoryId categoryId: String, toName categoryName: String) {
         // updates category store
@@ -398,71 +351,6 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
-    // remove recipe with id from old category in category store
-    func removeRecipeFromStoreCategory(withId id: String) {
-        if let recipe = getRecipe(withId: id) {
-            removeRecipeFromStoreCategory(recipe)
-        }
-    }
-    
-    // remove recipe from old category in category store
-    func removeRecipeFromStoreCategory(_ recipe: Recipe) {
-        if let storeCategory = self.categoriesStore[recipe.recipeCategoryId] {
-            var oldCategoryRecipes = storeCategory.recipes
-            oldCategoryRecipes.remove(element: recipe)
-            storeCategory.recipes = oldCategoryRecipes
-            self.categoriesStore[recipe.recipeCategoryId] = storeCategory
-        }
-    }
-    
-    // adds recipe to all recipes
-    func addToAllRecipes(_ recipe: Recipe) {
-        if let allCategory = self.allCategory {
-            let allCategoryId = allCategory.id
-            if recipe.recipeCategoryId != allCategoryId {
-                self.categoriesStore[allCategoryId]?.recipes.append(recipe)
-            }
-        }
-    }
-    
-    // adds recipe to all recipes
-    func removeFromAllRecipes(withId id: String) {
-        if let recipe = getRecipe(withId: id) {
-            if let allCategory = self.allCategory {
-                let allCategoryId = allCategory.id
-                
-                if let storeAllCategory = self.categoriesStore[allCategoryId] {
-                    var oldAllRecipes = storeAllCategory.recipes
-                    oldAllRecipes.remove(element: recipe)
-                    storeAllCategory.recipes = oldAllRecipes
-                    self.categoriesStore[allCategoryId] = storeAllCategory
-                }
-            }
-        }
-    }
-    
-    // add recipe to new category in category store
-    func addRecipeToStore(_ recipe: Recipe, toCategoryId categoryId: String) {
-        if let storeCategory = self.categoriesStore[categoryId] {
-            let updatedCategory = storeCategory
-            var updatedRecipe = recipe
-            updatedRecipe.recipeCategoryId = categoryId
-            updatedCategory.recipes.append(updatedRecipe)
-            self.categoriesStore[categoryId] = updatedCategory
-        }
-    }
-    
-    func moveRecipeInStore(_ recipe: Recipe, toCategoryId newCategoryId: String) {
-        // update category store
-        self.removeRecipeFromStoreCategory(recipe)
-        self.addRecipeToStore(recipe, toCategoryId: newCategoryId)
-        // update recipe store
-        if let recipeVM = self.recipesStore[recipe.id] {
-            recipeVM.recipe.recipeCategoryId = newCategoryId
-            self.recipesStore[recipe.id] = recipeVM
-        }
-    }
-    
     // called by moveRecipe by drag/drop, update store
     func moveRecipe(withName name: String, toCategoryId categoryId: String) {
         if let recipe = getRecipe(withName: name) {
@@ -475,8 +363,6 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
-        // todo: get rid of
-//        refreshView = true
     }
     
     // called by unchecking its own category in move category view
@@ -506,7 +392,7 @@ class RecipeCollectionVM: ObservableObject {
         self.deleteRecipeAndParts(withId: id)
         // update categories store
         removeRecipeFromStoreCategory(withId: id)
-        removeFromAllRecipes(withId: id)
+        updateAllRecipes()
         
         // need this for recipe on delete to disappear
         refreshCurrentCategory()
@@ -518,6 +404,55 @@ class RecipeCollectionVM: ObservableObject {
         RecipeDB.shared.deleteDirections(withRecipeId: id)
         RecipeDB.shared.deleteIngredients(withRecipeId: id)
         RecipeDB.shared.deleteImages(withRecipeId: id)
+    }
+    
+    // MARK: Stores
+    
+    func updateAllRecipes() {
+        self.allCategory?.recipes = allRecipes
+    }
+    
+    // add recipe to new category in category store
+    func addRecipeToStore(_ recipe: Recipe, toCategoryId categoryId: String) {
+        if let storeCategory = self.categoriesStore[categoryId] {
+            let updatedCategory = storeCategory
+            var updatedRecipe = recipe
+            updatedRecipe.recipeCategoryId = categoryId
+            updatedCategory.recipes.append(updatedRecipe)
+            self.categoriesStore[categoryId] = updatedCategory
+            self.updateAllRecipes()
+            // updates current category
+            self.refreshCurrentCategory()
+        }
+    }
+    
+    func moveRecipeInStore(_ recipe: Recipe, toCategoryId newCategoryId: String) {
+        // update category store
+        self.removeRecipeFromStoreCategory(recipe)
+        self.addRecipeToStore(recipe, toCategoryId: newCategoryId)
+        // update recipe store
+        if let recipeVM = self.recipesStore[recipe.id] {
+            recipeVM.recipe.recipeCategoryId = newCategoryId
+            self.recipesStore[recipe.id] = recipeVM
+        }
+    }
+    
+    // remove recipe with id from old category in category store
+    func removeRecipeFromStoreCategory(withId id: String) {
+        if let recipe = getRecipe(withId: id) {
+            removeRecipeFromStoreCategory(recipe)
+        }
+    }
+    
+    // remove recipe from old category in category store
+    func removeRecipeFromStoreCategory(_ recipe: Recipe) {
+        if let storeCategory = self.categoriesStore[recipe.recipeCategoryId] {
+            var oldCategoryRecipes = storeCategory.recipes
+            oldCategoryRecipes.remove(element: recipe)
+            storeCategory.recipes = oldCategoryRecipes
+            self.categoriesStore[recipe.recipeCategoryId] = storeCategory
+            self.updateAllRecipes()
+        }
     }
     
     // MARK: - Shopping List
