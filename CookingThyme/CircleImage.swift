@@ -33,12 +33,6 @@ struct CircleImage: View {
                             .scaleEffect(ImageHandler.getZoomScale(category.imageHandler.images[0]!, in: CGSize(width: width, height: height)))
                             .frame(width: width, height: height, alignment: .center)
                             .clipShape(Circle())
-                            .opacity(opacity)
-                            .onAppear {
-                                withAnimation(Animation.easeInOut(duration: 1.5)) {
-                                    self.opacity = 1
-                                }
-                            }
                     }
                 }
             }
@@ -50,13 +44,6 @@ struct CircleImage: View {
     }
     
     func getCategoryColor() -> Color {
-//        return Color.green.opacity(isSelected ? 1 : 0.5)
         return Color.green.opacity(0.8)
     }
 }
-
-//struct CircleImage_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CircleImage(width: 60, height: 60)
-//    }
-//}
