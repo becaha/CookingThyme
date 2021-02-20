@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 //TODO history of shopping items
@@ -39,30 +38,8 @@ struct ShoppingItem: Identifiable {
         self.unitName = unitName
         // temp, TODO no dupllicates addable
         self.id = name
-        // wonky when no id
-//        self.id = UUID().uuidString
-//        let id = Double.random(in: 1..<2000) * Double.random(in: 1..<2000) + Double.random(in: 1..<2000)
-//        if let uuid = Int(UUID().uuidString) {
-//            self.id = uuid
-//        }
-//        else {
-//            self.id = Int(id)
-//        }
         self.collectionId = collectionId
         self.completed = completed
-        self.defaultId = name
-    }
-    
-    init(row: Row) {
-        id = row[Table.id]
-        name = row[Table.name]
-        amount = row[Table.amount]
-        let completedInt: Int = row[Table.completed]
-        completed = completedInt.toBool()
-        collectionId = row[Table.collectionId]
-        
-        let unitString: String = row[Table.unitName]
-        unitName = UnitOfMeasurement.fromString(unitString: unitString)
         self.defaultId = name
     }
     

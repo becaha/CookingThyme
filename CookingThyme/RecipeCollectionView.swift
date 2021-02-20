@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// todo: timerv on stop alert, issetting = true
-// TODO: on drag and drop drag, category image flashes
-
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed
     @Environment(\.presentationMode) var presentation

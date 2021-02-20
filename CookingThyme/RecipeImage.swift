@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 
@@ -42,20 +41,6 @@ struct RecipeImage: Identifiable {
         self.data = data
         self.categoryId = categoryId
         self.id = RecipeImage.defaultId
-    }
-    
-    init(row: Row) {
-        id = row[Table.id]
-        if let type = ImageType.init(rawValue: row[Table.type]) {
-            self.type = type
-        }
-        else {
-            print("error getting image type")
-            self.type = ImageType.error
-        }
-        data = row[Table.data]
-        recipeId = row[Table.recipeId]
-        categoryId = row[Table.categoryId]
     }
     
     init(document: DocumentSnapshot) {

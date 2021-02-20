@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 
@@ -98,14 +97,6 @@ struct Recipe: Identifiable {
         self.recipeCategoryId = recipeCategoryId
     }
     
-    init(row: Row) {
-        id = row[Table.id]
-        name = String(row[Table.name]).lowercased().capitalized
-        servings = row[Table.servings]
-        source = row[Table.source]
-        recipeCategoryId = row[Table.recipeCategoryId]
-    }
-    
     init(document: DocumentSnapshot) {
         self.id = document.documentID
         self.name = document.get(Table.name) as? String ?? ""
@@ -124,18 +115,6 @@ struct Recipe: Identifiable {
     
     mutating func addImage(_ image: RecipeImage) {
         images.append(image)
-    }
-    
-    mutating func addIngredient(row: Row) {
-        ingredients.append(Ingredient(row: row))
-    }
-    
-    mutating func addDirection(row: Row) {
-        directions.append(Direction(row: row))
-    }
-    
-    mutating func addImage(row: Row) {
-        images.append(RecipeImage(row: row))
     }
     
     // change ingredient amounts according to the serving size change

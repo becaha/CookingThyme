@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-// TODO flashes when stopped on other screen and you go to timer
+// TODO timer on stop alert: flashes when stopped on other screen and you go to timer
+// on appear gets called on ondisappear aand doesnt get callled when timer view tab is pressed, shows old screen (prev one where we left the animation), then view changes
 struct TimerView: View {
     // portrait or landscape
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
@@ -27,7 +28,7 @@ struct TimerView: View {
     
     @State var buttonFlashOpacity: Double = 0.6
     @State var buttonScale: CGFloat = 0.9
-
+    
     var body: some View {
         GeometryReader { geometry in
             HStack {
@@ -94,8 +95,6 @@ struct TimerView: View {
                         timer.cancel()
                     }
                 })
-                
-//                Spacer()
                 
                 TimerButton(timer.isPaused && !timer.timerAlert ? "Resume" : "Pause", width: width, height: height, action : {
                     timer.pause()

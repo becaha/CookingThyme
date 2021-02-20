@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 struct RecipeCollection {
@@ -21,11 +20,6 @@ struct RecipeCollection {
     
     var id: String
     var name: String
-    
-    init(row: Row) {
-        id = row[Table.id]
-        name = row[Table.name]
-    }
     
     init(id: String, name: String) {
         self.id = id

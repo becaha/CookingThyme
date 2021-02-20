@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 
@@ -33,13 +32,6 @@ struct Direction: Identifiable {
         self.direction = direction
         // temporary until id is created in db
         self.id = Direction.defaultId
-    }
-    
-    init(row: Row) {
-        id = row[Table.id]
-        step = row[Table.step]
-        recipeId = row[Table.recipeId]
-        direction = row[Table.direction]
     }
     
     init(document: DocumentSnapshot) {

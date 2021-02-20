@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 
@@ -54,16 +53,6 @@ struct Ingredient: Identifiable, Equatable {
         }
         // is temporary, will be replaced when saved with recipe
         self.recipeId = Recipe.defaultId
-    }
-    
-    init(row: Row) {
-        id = row[Table.id]
-        name = row[Table.name]
-        amount = row[Table.amount]
-        recipeId = row[Table.recipeId]
-        
-        let unitString: String = row[Table.unitName]
-        unitName = UnitOfMeasurement.fromString(unitString: unitString)
     }
     
     init(document: DocumentSnapshot) {

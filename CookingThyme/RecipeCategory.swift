@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GRDB
 import Firebase
 
 struct RecipeCategory: Hashable {
@@ -35,12 +34,6 @@ struct RecipeCategory: Hashable {
         self.name = name
         self.recipeCollectionId = recipeCollectionId
         self.id = RecipeCategory.defaultId
-    }
-    
-    init(row: Row) {
-        id = row[Table.id]
-        name = row[Table.name]
-        recipeCollectionId = row[Table.recipeCollectionId]
     }
     
     init(document: DocumentSnapshot) {
