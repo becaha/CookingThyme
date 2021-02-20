@@ -9,7 +9,6 @@ import SwiftUI
 
 // todo: timerv on stop alert, issetting = true
 // TODO: on drag and drop drag, category image flashes
-// TODO: should not be able to deleteee all category, shoulld not be able to delete photo if not there
 
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed
@@ -483,12 +482,14 @@ struct RecipeCollectionView: View {
                         Label("Paste", systemImage: "doc.on.clipboard")
                     }
                     
-                    Button(action: {
-                        editCategory = category
-                        photoEditAlert = true
-                        presentAlert = true
-                    }) {
-                        Label("Delete", systemImage: "trash")
+                    if category.imageHandler.images.count > 0 {
+                        Button(action: {
+                            editCategory = category
+                            photoEditAlert = true
+                            presentAlert = true
+                        }) {
+                            Label("Delete", systemImage: "trash")
+                        }
                     }
                     
                     Button(action: {
@@ -499,12 +500,14 @@ struct RecipeCollectionView: View {
                     Label("Edit Photo", systemImage: "camera")
                 }
                 
-                Button(action: {
-                    deleteCategoryId = category.id
-                    deleteCategoryAlert = true
-                    presentAlert = true
-                }) {
-                    Label("Delete Category", systemImage: "trash")
+                if category.name != "All" {
+                    Button(action: {
+                        deleteCategoryId = category.id
+                        deleteCategoryAlert = true
+                        presentAlert = true
+                    }) {
+                        Label("Delete Category", systemImage: "trash")
+                    }
                 }
                 
                 Button(action: {

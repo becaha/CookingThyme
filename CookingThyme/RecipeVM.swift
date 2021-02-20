@@ -216,9 +216,9 @@ class RecipeVM: ObservableObject, Identifiable {
                     // todo store
                     let updatedRecipeVM = self
                     updatedRecipeVM.recipe = createdRecipe
-//                    // updates recipe store
+                    // updates recipe store
                     collection.recipesStore[createdRecipe.id] = updatedRecipeVM
-//                    // updates category store
+                    // updates category store
                     collection.addRecipeToStore(createdRecipe, toCategoryId: categoryId)
                     
                     collection.refreshCurrentCategory()
