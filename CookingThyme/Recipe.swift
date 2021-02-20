@@ -56,7 +56,9 @@ struct Recipe: Identifiable, Hashable {
     // when servings change, change the amounts of all ingredients to reflect it
     var ratioServings: Int = 0 {
         willSet {
-            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.ratioServings))
+            if newValue != 0 {
+                changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
+            }
         }
     }
     var ratioIngredients: [Ingredient] = []
