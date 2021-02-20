@@ -136,6 +136,8 @@ struct EditRecipeView: View {
                 Button(action: {
                     withAnimation {
                         if recipe.isCreatingRecipe() {
+                            // clear search/filters
+                            clearSearchFilters()
                             self.presentationMode.wrappedValue.dismiss()
                         }
                         else {
@@ -255,6 +257,11 @@ struct EditRecipeView: View {
             servings = recipe.tempRecipeOriginalServings.toString()
             source = recipe.tempRecipe.source
         }
+    }
+    
+    func clearSearchFilters() {
+        category.collection.search = ""
+        category.collection.currentCategory?.filteredRecipes = category.collection.currentCategory?.recipes ?? []
     }
     
     func resetErrors() {

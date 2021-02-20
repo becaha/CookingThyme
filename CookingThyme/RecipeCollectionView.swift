@@ -56,7 +56,7 @@ struct RecipeCollectionView: View {
     
     @State private var searchMinY: CGFloat = 0
     
-    @State private var search: String = ""
+//    @State private var search: String = ""
 
     let categoryNameMaxCount = 15
             
@@ -145,7 +145,7 @@ struct RecipeCollectionView: View {
             VStack(spacing: 0) {
                 GeometryReader { geometry in
                     HStack {
-                        AutoSearchBar(search: $search) { result in
+                        AutoSearchBar(search: $collection.search) { result in
                             searchRecipes(result)
                         }
                         .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
@@ -220,6 +220,14 @@ struct RecipeCollectionView: View {
                 ) {
                     UIControls.AddView(withLabel: "New Recipe")
                 }
+                // when change view to create new recipe, clear search
+                .simultaneousGesture(
+                    TapGesture(count: 1).onEnded { _ in
+                        withAnimation {
+                            collection.search = ""
+                        }
+                    }
+                )
                 
                 if !isLandscape {
                     Spacer()
@@ -240,7 +248,7 @@ struct RecipeCollectionView: View {
         ZStack {
             Button(action: {
                 collection.setCurrentCategory(category)
-                search = ""
+                collection.search = ""
             }) {
                 CircleImage()
                     .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)

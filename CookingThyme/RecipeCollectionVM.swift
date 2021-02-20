@@ -19,7 +19,8 @@ class RecipeCollectionVM: ObservableObject {
     @Published var isLoading: Bool?
 
     private var currentCategoryCancellable: AnyCancellable?
-
+    
+    @Published var search: String = ""
     
     @Published var shoppingListStore: [ShoppingItem] = []
     
