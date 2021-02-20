@@ -32,6 +32,10 @@ struct Ingredient: Identifiable, Equatable {
     var id: String
     var recipeId: String
     
+    // temp strings
+    var ingredientString: String
+    var ingredientStringMeasurement: String
+    
     init(name: String, amount: Double, unitName: UnitOfMeasurement) {
         self.name = name
         self.amount = amount
@@ -40,6 +44,51 @@ struct Ingredient: Identifiable, Equatable {
         self.id = Ingredient.defaultId
         // is temporary, will be replaced when saved with recipe
         self.recipeId = Recipe.defaultId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
+    }
+    
+    // called in edit recipe, an ingredient before saved in db
+    init(name: String, amount: String, unitName: String, recipeId: String) {
+        self.name = name
+        self.amount = Fraction.toDouble(fromString: amount)
+        self.unitName = Ingredient.makeUnit(fromUnit: unitName)
+        // temporary until id is created in db
+        self.id = Ingredient.defaultId
+        self.recipeId = recipeId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
+    }
+    
+    init(name: String, amount: Double, unitName: UnitOfMeasurement, recipeId: String) {
+        self.name = name
+        self.amount = amount
+        self.unitName = unitName
+        // temporary until id is created in db
+        self.id = Ingredient.defaultId
+        self.recipeId = recipeId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
+    }
+    
+    // called in edit recipe, an ingredient before saved in db
+    init(ingredientString: String, recipeId: String) {
+        self.recipeId = recipeId
+        // temporary until id is created in db
+        self.id = Ingredient.defaultId
+        
+        self.ingredientString = ingredientString
+        self.name = ""
+        self.amount = 0
+        self.unitName = UnitOfMeasurement.unknown("")
+        self.ingredientStringMeasurement = ""
+        self.setIngredientParts()
     }
     
     init(id: String?, name: String, amount: Double, unitName: UnitOfMeasurement) {
@@ -53,6 +102,23 @@ struct Ingredient: Identifiable, Equatable {
         }
         // is temporary, will be replaced when saved with recipe
         self.recipeId = Recipe.defaultId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
+    }
+    
+    // called from create ingredient to return created
+    init(id: String, name: String, amount: Double, unitName: UnitOfMeasurement, recipeId: String) {
+        self.name = name
+        self.amount = amount
+        self.unitName = unitName
+        self.id = id
+        self.recipeId = recipeId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
     }
     
     init(document: DocumentSnapshot) {
@@ -62,6 +128,15 @@ struct Ingredient: Identifiable, Equatable {
         self.unitName = UnitOfMeasurement.fromString(unitString: unitName)
         self.id = document.documentID
         self.recipeId = document.get(Table.recipeId) as? String ?? Recipe.defaultId
+        
+        self.ingredientString = ""
+        self.ingredientStringMeasurement = ""
+        self.setTempStrings()
+    }
+    
+    mutating func setTempStrings() {
+        self.ingredientString = self.toString()
+        self.ingredientStringMeasurement = self.toStringMeasurement()
     }
     
     // gets the string value of the ingredient amount
@@ -214,7 +289,24 @@ struct Ingredient: Identifiable, Equatable {
     static func toIngredient(_ temp: TempIngredient) -> Ingredient {
         var setTemp = temp
         setTemp.setIngredientParts()
-        return Ingredient(id: setTemp.id, name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName))
+        return Ingredient(id: setTemp.id, name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName), recipeId: temp.recipeId)
+    }
+    
+    // takes temporary ingredients (made in edit recipe) and turns into ingredients ready to be put in db
+    static func toIngredients(_ temps: [Ingredient]) -> [Ingredient] {
+        var ingredients = [Ingredient]()
+        for temp in temps {
+            ingredients.append(Ingredient.toIngredient(temp))
+        }
+        return ingredients
+    }
+    
+    // to ingredient from temp ingredient, keeps id
+    static func toIngredient(_ temp: Ingredient) -> Ingredient {
+        var setTemp = temp
+        setTemp.setIngredientParts()
+        return setTemp
+//        return Ingredient(id: setTemp.id, name: setTemp.name, amount: setTemp.amount, unitName: setTemp.unitName, recipeId: temp.recipeId)
     }
     
     // takes ingredients and turns into temp ingredients for use in edit recipe
@@ -262,6 +354,11 @@ struct Ingredient: Identifiable, Equatable {
                     if amount != "" {
                         amount += " "
                     }
+                    amount += word
+                    continue
+                }
+                // double
+                else if Double(word) != nil {
                     amount += word
                     continue
                 }
@@ -331,6 +428,7 @@ struct Ingredient: Identifiable, Equatable {
         if unit == nil {
             unit = UnitOfMeasurement.none
         }
+        
         let doubleAmount = Fraction.toDouble(fromString: amount)
         // unit is always made
         return Ingredient(name: name, amount: doubleAmount, unitName: unit!)
@@ -365,6 +463,16 @@ struct Ingredient: Identifiable, Equatable {
         }
         string += self.name
         return string
+    }
+    
+    mutating func setIngredientParts() {
+        if ingredientString != "" {
+            let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
+            self.name = ingredient.name
+            self.amount = ingredient.amount
+            self.unitName = ingredient.unitName
+            self.ingredientStringMeasurement = ingredient.getMeasurementString()
+        }
     }
 }
 

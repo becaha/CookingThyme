@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-import GRDB
 
-// TODO change to recipe.tempRecipe.directions
 struct EditableDirection: View {
     @EnvironmentObject var recipe: RecipeVM
     var index: Int
@@ -47,22 +45,22 @@ struct EditableDirection: View {
     }
     
     func commitDirection() {
-        if index < recipe.tempDirections.count {
-            recipe.tempDirections[index].direction.removeLast(1)
+        if index < recipe.tempRecipe.directions.count {
+            recipe.tempRecipe.directions[index].direction.removeLast(1)
         }
     }
     
     
     func getDirectionBinding() -> Binding<String> {
-        if index < recipe.tempDirections.count {
-            return $recipe.tempDirections[index].direction
+        if index < recipe.tempRecipe.directions.count {
+            return $recipe.tempRecipe.directions[index].direction
         }
         return $dummyBinding
     }
     
     func getDirectionString() -> String {
-        if index < recipe.tempDirections.count {
-            return recipe.tempDirections[index].direction
+        if index < recipe.tempRecipe.directions.count {
+            return recipe.tempRecipe.directions[index].direction
         }
         return ""
     }
@@ -70,6 +68,7 @@ struct EditableDirection: View {
     @ViewBuilder
     func SpaceKeeper(text: String) -> some View {
         HStack {
+            // keep this as read ingredient text
             RecipeControls.ReadIngredientText(text)
                 .padding()
 

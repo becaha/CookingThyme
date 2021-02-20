@@ -283,10 +283,13 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     static func createRecipe(forCategoryId categoryId: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
         RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { recipe in
             if let recipe = recipe {
+                var updatedRecipe = recipe
                 RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
-                RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id)
+                RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id) { createdIngredients in
+                    updatedRecipe.ingredients = createdIngredients
+                }
                 RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
-                onCreation(recipe)
+                onCreation(updatedRecipe)
             }
             else {
                 onCreation(nil)

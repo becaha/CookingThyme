@@ -46,21 +46,22 @@ struct EditableIngredient: View {
     }
     
     func commitIngredient() {
-        if index < recipe.tempIngredients.count {
-            recipe.tempIngredients[index].ingredientString.removeLast(1)
+        if index < recipe.tempRecipe.ingredients.count {
+            recipe.tempRecipe.ingredients[index].ingredientString.removeLast(1)
+            recipe.tempRecipe.ingredients[index].setIngredientParts()
         }
     }
     
     func getIngredientString() -> String {
-        if index < recipe.tempIngredients.count {
-            return recipe.tempIngredients[index].ingredientString
+        if index < recipe.tempRecipe.ingredients.count {
+            return recipe.tempRecipe.ingredients[index].ingredientString
         }
         return ""
     }
     
     func getIngredientBinding() -> Binding<String> {
-        if index < recipe.tempIngredients.count {
-            return $recipe.tempIngredients[index].ingredientString
+        if index < recipe.tempRecipe.ingredients.count {
+            return $recipe.tempRecipe.ingredients[index].ingredientString
         }
         return $dummyBinding
     }

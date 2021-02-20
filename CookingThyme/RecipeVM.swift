@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
+// TODO: when update, must return id
 // TODO: everything on background threed
 class RecipeVM: ObservableObject, Identifiable {
     var collection: RecipeCollectionVM?
@@ -280,6 +281,7 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe.directions = recipe.directions
         self.tempRecipe.ingredients = recipe.ingredients
         self.tempRecipe.images = recipe.images
+        
     }
     
     // changed so doesn't wait for pictures
@@ -319,6 +321,12 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // called on saving edit recipe to set saved temps
+    func setTempRecipe(_ recipe: Recipe) {
+        tempRecipe = recipe
+        tempRecipeOriginalServings = recipe.servings
+    }
+    
+    // called on saving edit recipe to set saved temps
     func setTempRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         tempRecipe = Recipe(id: recipe.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source, recipeCategoryId: recipe.recipeCategoryId)
@@ -328,24 +336,19 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Recipe Modifiers
         
     // called by saving an edit recipe, updates recipe in db and in local store
-    func updateRecipe(withId id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
-        setTempRecipe(name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source)
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe)
-//        { success in
-//            // todo remove
-////            self.category!.refreshCategory()
-//
-//        }
+    func updateRecipe(withId id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String, onCompletion: @escaping (Bool) -> Void) {
+        updateRecipeMiddle(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe, onCompletion: onCompletion)
     }
     
     // called by updateRecipe above
     // updates recipe given temp ingredients
-    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe) {
-        let ingredients = Ingredient.toIngredients(tempIngredients)
+    func updateRecipeMiddle(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+        let ingredients = Ingredient.toIngredients(ingredients)
         
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe) { success in
-            if success {
-                let updatedRecipe = Recipe(id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source, recipeCategoryId: categoryId)
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe) { updatedRecipe in
+            if let updatedRecipe = updatedRecipe {
+                self.setTempRecipe(updatedRecipe)
+                
                 let updatedRecipeVM = self
                 updatedRecipeVM.recipe = updatedRecipe
                 // updates recipe store
@@ -353,13 +356,18 @@ class RecipeVM: ObservableObject, Identifiable {
                 // updates category store
                 self.collection?.removeRecipeFromStoreCategory(updatedRecipe)
                 self.collection?.addRecipeToStore(updatedRecipe, toCategoryId: categoryId)
+                onCompletion(true)
+            }
+            else {
+                onCompletion(false)
             }
         }
     }
     
     // called by updateRecipe above, updates recipe given ingredients
-    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+    func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Recipe?) -> Void) {
         var updateSuccess = true
+        var updatedRecipe = recipe
         // is this group ok? enter and leave, hits each once?
         let recipeGroup = DispatchGroup()
         
@@ -377,9 +385,12 @@ class RecipeVM: ObservableObject, Identifiable {
         }
         
         recipeGroup.enter()
-        RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { success in
-            if !success {
+        RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { updatedIngredients in
+            if updatedIngredients.count == 0 {
                 updateSuccess = false
+            }
+            else {
+                updatedRecipe.ingredients = updatedIngredients
             }
             recipeGroup.leave()
         }
@@ -394,10 +405,10 @@ class RecipeVM: ObservableObject, Identifiable {
         
         recipeGroup.notify(queue: .main) {
             if updateSuccess {
-                onCompletion(updateSuccess)
+                onCompletion(updatedRecipe)
             }
             else {
-                onCompletion(false)
+                onCompletion(nil)
             }
         }
     }
@@ -439,22 +450,28 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func addTempDirection(_ direction: String) {
         tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
+        tempRecipe.directions.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
     }
     
     func removeTempDirection(at index: Int) {
         tempDirections.remove(at: index)
+        tempRecipe.directions.remove(at: index)
     }
     
     func addTempIngredient(_ ingredientString: String) {
         tempIngredients.append(TempIngredient(ingredientString: ingredientString, recipeId: recipe.id, id: nil))
+        tempRecipe.ingredients.append(Ingredient(ingredientString: ingredientString, recipeId: recipe.id))
     }
     
     func addTempIngredient(name: String, amount: String, unit: String) {
         tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
+        let ing = Ingredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id)
+        tempRecipe.ingredients.append(ing)
     }
     
     func removeTempIngredient(at index: Int) {
         tempIngredients.remove(at: index)
+        tempRecipe.ingredients.remove(at: index)
     }
     
     static func toRecipeImage(fromURL url: URL, withRecipeId recipeId: String) -> RecipeImage {
@@ -465,6 +482,7 @@ class RecipeVM: ObservableObject, Identifiable {
         if let url = url {
             let image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: recipe.id)
             tempImages.append(image)
+            tempRecipe.images.append(image)
             imageHandler.addImage(url: url)
         }
     }
@@ -481,6 +499,7 @@ class RecipeVM: ObservableObject, Identifiable {
         if let resizedImage = uiImage.resized(toWidth: ImageHandler.pictureWidth, toHeight: ImageHandler.pictureHeight) {
             if let image = RecipeVM.toRecipeImage(fromUIImage: resizedImage, withRecipeId: recipe.id) {
                 tempImages.append(image)
+                tempRecipe.images.append(image)
                 imageHandler.addImage(uiImage: uiImage)
                 imagesChanged = true
             }
@@ -489,6 +508,7 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func removeTempImage(at index: Int) {
         tempImages.remove(at: index)
+        tempRecipe.images.remove(at: index)
         imageHandler.removeImage(at: index)
         imagesChanged = true
     }

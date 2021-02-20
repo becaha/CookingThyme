@@ -301,24 +301,31 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                recipe.setTempRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source)
                 category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
                     if let createdRecipe = createdRecipe {
+                        recipe.setTempRecipe(createdRecipe)
                         recipe.setRecipe(createdRecipe)
                     }
                     else {
                         print("error creating recipe")
                     }
+                    withAnimation {
+                        isEditingRecipe = false
+                    }
                 }
             }
             else {
-                recipe.updateRecipe(withId: recipe.id, name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source, categoryId: recipe.categoryId)
+                recipe.updateRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId) { success in
+                    withAnimation {
+                        isEditingRecipe = false
+                    }
+                }
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-            withAnimation {
-                isEditingRecipe = false
-            }
+//            withAnimation {
+//                isEditingRecipe = false
+//            }
         }
         else {
             presentErrorAlert = true

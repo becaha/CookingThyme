@@ -75,7 +75,7 @@ class RecipeDB {
         }
     }
     
-    func createIngredient(_ ingredient: Ingredient, withRecipeId recipeId: String) throws {
+    func createIngredient(_ ingredient: Ingredient, withRecipeId recipeId: String, onCompletion: @escaping (Ingredient?) -> Void) {
         var ref: DocumentReference? = nil
         ref = db.collection(Ingredient.Table.databaseTableName).addDocument(data: [
             Ingredient.Table.name: ingredient.name,
@@ -85,22 +85,33 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error adding ingredient: \(err)")
+                onCompletion(nil)
             } else {
                 print("Ingredient added with ID: \(ref!.documentID)")
+                onCompletion(Ingredient(id: ref!.documentID, name: ingredient.name, amount: ingredient.amount, unitName: ingredient.unitName, recipeId: recipeId))
             }
         }
     }
     
-    func createIngredients(ingredients: [Ingredient], withRecipeId recipeId: String) {
-        do {
-            for ingredient in ingredients {
-                try createIngredient(ingredient, withRecipeId: recipeId)
-            }
+    func createIngredients(ingredients: [Ingredient], withRecipeId recipeId: String, onCompletion: @escaping ([Ingredient]) -> Void) {
+        var createdIngredients = [Ingredient]()
+        let ingredientGroup = DispatchGroup()
 
-            return
-        } catch {
-            print("Error creating ingredients")
-            return
+        for ingredient in ingredients {
+            ingredientGroup.enter()
+            createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
+                if let createdIngredient = createdIngredient {
+                    createdIngredients.append(createdIngredient)
+                    ingredientGroup.leave()
+                }
+                else {
+                    ingredientGroup.leave()
+                }
+            }
+        }
+        
+        ingredientGroup.notify(queue: .main) {
+            onCompletion(createdIngredients)
         }
     }
     
@@ -587,20 +598,31 @@ class RecipeDB {
         }
     }
     
-    func updateIngredients(withRecipeId recipeId: String, ingredients: [Ingredient], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+    // TODO need to put id in a newly created item so it can be updated later
+    func updateIngredients(withRecipeId recipeId: String, ingredients: [Ingredient], oldRecipe recipe: Recipe, onCompletion: @escaping ([Ingredient]) -> Void) {
         do {
+            var updatedIngredients = [Ingredient]()
+            let ingredientGroup = DispatchGroup()
+            
             var ingredientsToDelete = recipe.ingredients
             for ingredient in ingredients {
+                ingredientGroup.enter()
                 if ingredient.id == Ingredient.defaultId {
-                    try createIngredient(ingredient, withRecipeId: recipeId)
+                    createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
+                        if let createdIngredient = createdIngredient {
+                            updatedIngredients.append(createdIngredient)
+                            ingredientGroup.leave()
+                        }
+                        else {
+                            ingredientGroup.leave()
+                        }
+                    }
                 }
                 else {
                     ingredientsToDelete.remove(element: ingredient)
                     updateIngredient(ingredient) { success in
-                        if !success {
-                            onCompletion(false)
-                            return
-                        }
+                        updatedIngredients.append(ingredient)
+                        ingredientGroup.leave()
                     }
                 }
             }
@@ -608,11 +630,13 @@ class RecipeDB {
             for ingredient in ingredientsToDelete {
                 deleteIngredient(withId: ingredient.id)
             }
-
-            onCompletion(true)
+            
+            ingredientGroup.notify(queue: .main) {
+                onCompletion(updatedIngredients)
+            }
         } catch {
             print("Error updating ingredients")
-            onCompletion(false)
+            onCompletion([])
         }
     }
     
