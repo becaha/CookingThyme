@@ -191,6 +191,7 @@ class RecipeSearchHandler: ObservableObject {
 
                         for ingredient in ingredients {
                             if let ingredient = ingredient as? [String: Any] {
+                                var id = recipeIngredients.count
                                 var amount = 1.0
                                 var unitName =  ""
                                 var name = ""
@@ -213,7 +214,7 @@ class RecipeSearchHandler: ObservableObject {
                                         }
                                     }
                                 }
-                                let recipeIngredient = Ingredient(name: name, amount: amount, unitName: Ingredient.makeUnit(fromUnit: unitName))
+                                let recipeIngredient = Ingredient(id: id.toString(), name: name, amount: amount, unitName: Ingredient.makeUnit(fromUnit: unitName))
                                 recipeIngredients.append(recipeIngredient)
                             }
                         }
