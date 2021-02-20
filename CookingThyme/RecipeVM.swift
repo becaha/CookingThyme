@@ -251,6 +251,9 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // gets recipe, directions, ingredients, and images from db
     func popullateRecipe(onCompletion: @escaping (Bool) -> Void) {
+        self.recipe.ingredients = []
+        self.recipe.directions = []
+        self.recipe.images = []
         RecipeDB.shared.getDirections(forRecipe: self.recipe, withId: self.recipe.id) { recipeWithDirections in
             if let recipeWithDirections = recipeWithDirections {
                 RecipeDB.shared.getIngredients(forRecipe: recipeWithDirections, withId: self.recipe.id) { recipeWithIngredients in
@@ -352,16 +355,11 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Recipe Modifiers
         
     // called by saving an edit recipe, updates recipe in db and in local store
-    func updateRecipe(withId id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String, onCompletion: @escaping (Bool) -> Void) {
-        updateRecipeMiddle(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe, onCompletion: onCompletion)
-    }
-    
-    // called by updateRecipe above
     // updates recipe given temp ingredients
-    func updateRecipeMiddle(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
+    func updateRecipe(withId id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String, onCompletion: @escaping (Bool) -> Void) {
         let ingredients = Ingredient.toIngredients(ingredients)
         
-        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: recipe) { updatedRecipe in
+        updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { updatedRecipe in
             if let updatedRecipe = updatedRecipe {
                 self.setTempRecipe(updatedRecipe)
                 

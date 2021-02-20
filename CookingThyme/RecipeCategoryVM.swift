@@ -258,6 +258,10 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) { recipe in
             // updates category store
             if let recipe = recipe {
+                // saves new recipe to recipe store
+                self.collection.recipesStore[recipe.id] = RecipeVM(recipe: recipe, category: self, collection: self.collection)
+                
+                // saves new recipe to category in category store
                 self.collection.addRecipeToStore(recipe, toCategoryId: self.category.id)
                 self.collection.updateAllRecipes()
             }
