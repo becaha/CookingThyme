@@ -210,13 +210,17 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // copies public recipe to category of user's collection, makes recipe permanent
     func copyRecipe(toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
-        RecipeVM.copy(recipe: self.recipe, toCategoryId: categoryId, inCollection: collection)
-    }
-    
-    static func copy(recipe: Recipe, toCategoryId categoryId: String, inCollection collection: RecipeCollectionVM) {
         if let category = collection.getCategory(withId: categoryId) {
-            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source) { recipe in
-                if recipe != nil {
+            RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source) { createdRecipe in
+                if let createdRecipe = createdRecipe {
+                    // todo store
+                    let updatedRecipeVM = self
+                    updatedRecipeVM.recipe = createdRecipe
+//                    // updates recipe store
+                    collection.recipesStore[createdRecipe.id] = updatedRecipeVM
+//                    // updates category store
+                    collection.addRecipeToStore(createdRecipe, toCategoryId: categoryId)
+                    
                     collection.refreshCurrentCategory()
                 }
                 else {
