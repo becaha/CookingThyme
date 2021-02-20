@@ -254,7 +254,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // called by ui by saving in edit recipe (by actually creating new recipe)
     // creates recipe with given parts in category, updates category store
-    func createRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
+    func createRecipe(name: String, tempIngredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
         RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) { recipe in
             // updates category store
             if let recipe = recipe {
@@ -273,7 +273,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // called by createRecipe above
     // creates recipe given temp ingredients
-    static func createRecipe(forCategoryId categoryId: String, name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
+    static func createRecipe(forCategoryId categoryId: String, name: String, tempIngredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
         let ingredients = Ingredient.toIngredients(tempIngredients)
         return createRecipe(forCategoryId: categoryId, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, onCreation: onCreation)
     }
@@ -283,13 +283,21 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     static func createRecipe(forCategoryId categoryId: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
         RecipeDB.shared.createRecipe(name: name, servings: servings.toInt(), source: source, recipeCategoryId: categoryId) { recipe in
             if let recipe = recipe {
+                let recipeGroup = DispatchGroup()
                 var updatedRecipe = recipe
+                
                 RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
+                
+                recipeGroup.enter()
                 RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id) { createdIngredients in
                     updatedRecipe.ingredients = createdIngredients
+                    recipeGroup.leave()
                 }
                 RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
-                onCreation(updatedRecipe)
+                
+                recipeGroup.notify(queue: .main) {
+                    onCreation(updatedRecipe)
+                }
             }
             else {
                 onCreation(nil)

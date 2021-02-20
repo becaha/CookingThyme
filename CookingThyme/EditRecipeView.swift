@@ -275,7 +275,7 @@ struct EditRecipeView: View {
     
     // TODO: save should be not on main thread
     private func saveRecipe() {
-        recipe.tempIngredients = recipe.tempIngredients.filter { (ingredient) -> Bool in
+        recipe.tempRecipe.ingredients = recipe.tempRecipe.ingredients.filter { (ingredient) -> Bool in
             !ingredient.ingredientString.isOnlyWhitespace()
         }
         
@@ -290,7 +290,7 @@ struct EditRecipeView: View {
             nameFieldMissing = true
             name = nameFieldPlaceholder
         }
-        if recipe.tempIngredients.count == 0 {
+        if recipe.tempRecipe.ingredients.count == 0 {
             ingredientsFieldMissing = true
         }
         if recipe.tempDirections.count == 0 {
@@ -301,7 +301,7 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipe.tempIngredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
+                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
                     if let createdRecipe = createdRecipe {
                         recipe.setTempRecipe(createdRecipe)
                         recipe.setRecipe(createdRecipe)
@@ -355,7 +355,7 @@ struct EditRecipeView: View {
         else {
             newIngredientFieldMissing = true
         }
-        if recipe.tempIngredients.count > 0 {
+        if recipe.tempRecipe.ingredients.count > 0 {
             ingredientsFieldMissing = false
         }
     }
@@ -489,7 +489,7 @@ struct EditRecipeView: View {
                     .formHeader()
                             
                     VStack(spacing: 0) {
-                        ForEach(0..<recipe.tempIngredients.count, id: \.self) { index in
+                        ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
                             HStack {
                                 EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
                                     .environmentObject(recipe)
