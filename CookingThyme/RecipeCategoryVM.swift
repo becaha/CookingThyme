@@ -263,12 +263,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             }
             
             onCreation(recipe)
-            return
 //            popullateRecipes()
 //            popullateImage()
         }
 //        collection.refreshCurrrentCategory()
-        onCreation(nil)
+//        onCreation(nil)
     }
     
     // called by createRecipe above
@@ -286,14 +285,24 @@ class RecipeCategoryVM: ObservableObject, Hashable {
                 let recipeGroup = DispatchGroup()
                 var updatedRecipe = recipe
                 
-                RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id)
+                recipeGroup.enter()
+                RecipeDB.shared.createDirections(directions: directions, withRecipeId: recipe.id) {
+                    createdDirections in
+                    updatedRecipe.directions = createdDirections
+                    recipeGroup.leave()
+                }
                 
                 recipeGroup.enter()
                 RecipeDB.shared.createIngredients(ingredients: ingredients, withRecipeId: recipe.id) { createdIngredients in
                     updatedRecipe.ingredients = createdIngredients
                     recipeGroup.leave()
                 }
-                RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id)
+                
+                recipeGroup.enter()
+                RecipeDB.shared.createImages(images: images, withRecipeId: recipe.id) { createdImages in
+                    updatedRecipe.images = createdImages
+                    recipeGroup.leave()
+                }
                 
                 recipeGroup.notify(queue: .main) {
                     onCreation(updatedRecipe)

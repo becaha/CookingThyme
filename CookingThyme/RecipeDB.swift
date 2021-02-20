@@ -47,7 +47,7 @@ class RecipeDB {
         }
     }
     
-    func createDirection(_ direction: Direction, withRecipeId recipeId: String) throws {
+    func createDirection(_ direction: Direction, withRecipeId recipeId: String, onCompletion: @escaping (Direction?) -> Void) {
         var ref: DocumentReference? = nil
         ref = db.collection(Direction.Table.databaseTableName).addDocument(data: [
             Direction.Table.step: direction.step,
@@ -56,22 +56,33 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error adding direction: \(err)")
+                onCompletion(nil)
             } else {
                 print("Direction added with ID: \(ref!.documentID)")
+                onCompletion(Direction(id: ref!.documentID, step: direction.step, recipeId: recipeId, direction: direction.direction))
             }
         }
     }
     
-    func createDirections(directions: [Direction], withRecipeId recipeId: String) {
-        do {
-            for direction in directions {
-                try createDirection(direction, withRecipeId: recipeId)
+    func createDirections(directions: [Direction], withRecipeId recipeId: String, onCompletion: @escaping ([Direction]) -> Void) {
+        var createdDirections = [Direction]()
+        let directionGroup = DispatchGroup()
+
+        for direction in directions {
+            directionGroup.enter()
+            createDirection(direction, withRecipeId: recipeId) { createdDirection in
+                if let createdDirection = createdDirection {
+                    createdDirections.append(createdDirection)
+                    directionGroup.leave()
+                }
+                else {
+                    directionGroup.leave()
+                }
             }
-            
-            return
-        } catch {
-            print("Error creating directions")
-            return
+        }
+        
+        directionGroup.notify(queue: .main) {
+            onCompletion(createdDirections)
         }
     }
     
@@ -158,7 +169,7 @@ class RecipeDB {
         }
     }
     
-    func createImage(_ image: RecipeImage, withRecipeId recipeId: String) throws {
+    func createImage(_ image: RecipeImage, withRecipeId recipeId: String, onCompletion: @escaping (RecipeImage?) -> Void) {
         var ref: DocumentReference? = nil
         var imageData = image.data
         if image.type == .uiImage {
@@ -171,22 +182,34 @@ class RecipeDB {
         ]) { err in
             if let err = err {
                 print("Error adding image: \(err)")
+                onCompletion(nil)
             } else {
                 print("Image added with ID: \(ref!.documentID)")
                 self.createStorageImage(image, withId: ref!.documentID)
+                onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: imageData, recipeId: recipeId))
             }
         }
     }
     
-    func createImages(images: [RecipeImage], withRecipeId recipeId: String) {
-        do {
-            for image in images {
-                try createImage(image, withRecipeId: recipeId)
+    func createImages(images: [RecipeImage], withRecipeId recipeId: String, onCompletion: @escaping ([RecipeImage]) -> Void) {
+        var createdImages = [RecipeImage]()
+        let imageGroup = DispatchGroup()
+
+        for image in images {
+            imageGroup.enter()
+            createImage(image, withRecipeId: recipeId) { createdImage in
+                if let createdImage = createdImage {
+                    createdImages.append(createdImage)
+                    imageGroup.leave()
+                }
+                else {
+                    imageGroup.leave()
+                }
             }
-            return
-        } catch {
-            print("Error creating images")
-            return
+        }
+        
+        imageGroup.notify(queue: .main) {
+            onCompletion(createdImages)
         }
     }
     
@@ -551,32 +574,41 @@ class RecipeDB {
         }
     }
     
-    func updateDirections(withRecipeId recipeId: String, directions: [Direction], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
-        do {
-            var directionsToDelete = recipe.directions
-            for direction in directions {
-                if direction.id == Direction.defaultId {
-                    try createDirection(direction, withRecipeId: recipeId)
-                }
-                else {
-                    directionsToDelete.remove(element: direction)
-                    updateDirection(direction) { success in
-                        if !success {
-                            onCompletion(false)
-                            return
-                        }
+    func updateDirections(withRecipeId recipeId: String, directions: [Direction], oldRecipe recipe: Recipe, onCompletion: @escaping ([Direction]) -> Void) {
+        var updatedDirections = [Direction]()
+        let directionGroup = DispatchGroup()
+        
+        var directionsToDelete = recipe.directions
+        
+        for direction in directions {
+            directionGroup.enter()
+            if direction.id == Direction.defaultId {
+                createDirection(direction, withRecipeId: recipeId) { createdDirection in
+                    if let createdDirection = createdDirection {
+                        updatedDirections.append(createdDirection)
+                        directionGroup.leave()
+                    }
+                    else {
+                        directionGroup.leave()
                     }
                 }
             }
-            // delete direction
-            for direction in directionsToDelete {
-                deleteDirection(withId: direction.id)
+            else {
+                directionsToDelete.remove(element: direction)
+                updateDirection(direction) { success in
+                    updatedDirections.append(direction)
+                    directionGroup.leave()
+                }
             }
-            
-            onCompletion(true)
-        } catch {
-            print("Error updating directions")
-            onCompletion(false)
+        }
+        
+        // delete directions
+        for direction in directionsToDelete {
+            deleteDirection(withId: direction.id)
+        }
+        
+        directionGroup.notify(queue: .main) {
+            onCompletion(updatedDirections)
         }
     }
     
@@ -600,43 +632,38 @@ class RecipeDB {
     
     // TODO need to put id in a newly created item so it can be updated later
     func updateIngredients(withRecipeId recipeId: String, ingredients: [Ingredient], oldRecipe recipe: Recipe, onCompletion: @escaping ([Ingredient]) -> Void) {
-        do {
-            var updatedIngredients = [Ingredient]()
-            let ingredientGroup = DispatchGroup()
-            
-            var ingredientsToDelete = recipe.ingredients
-            for ingredient in ingredients {
-                ingredientGroup.enter()
-                if ingredient.id == Ingredient.defaultId {
-                    createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
-                        if let createdIngredient = createdIngredient {
-                            updatedIngredients.append(createdIngredient)
-                            ingredientGroup.leave()
-                        }
-                        else {
-                            ingredientGroup.leave()
-                        }
+        var updatedIngredients = [Ingredient]()
+        let ingredientGroup = DispatchGroup()
+        
+        var ingredientsToDelete = recipe.ingredients
+        for ingredient in ingredients {
+            ingredientGroup.enter()
+            if ingredient.id == Ingredient.defaultId {
+                createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
+                    if let createdIngredient = createdIngredient {
+                        updatedIngredients.append(createdIngredient)
+                        ingredientGroup.leave()
                     }
-                }
-                else {
-                    ingredientsToDelete.remove(element: ingredient)
-                    updateIngredient(ingredient) { success in
-                        updatedIngredients.append(ingredient)
+                    else {
                         ingredientGroup.leave()
                     }
                 }
             }
-            // delete ingredients
-            for ingredient in ingredientsToDelete {
-                deleteIngredient(withId: ingredient.id)
+            else {
+                ingredientsToDelete.remove(element: ingredient)
+                updateIngredient(ingredient) { success in
+                    updatedIngredients.append(ingredient)
+                    ingredientGroup.leave()
+                }
             }
-            
-            ingredientGroup.notify(queue: .main) {
-                onCompletion(updatedIngredients)
-            }
-        } catch {
-            print("Error updating ingredients")
-            onCompletion([])
+        }
+        // delete ingredients
+        for ingredient in ingredientsToDelete {
+            deleteIngredient(withId: ingredient.id)
+        }
+        
+        ingredientGroup.notify(queue: .main) {
+            onCompletion(updatedIngredients)
         }
     }
     
@@ -655,27 +682,38 @@ class RecipeDB {
 //        }
 //    }
     
-    func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping (Bool) -> Void) {
-        do {
-            var imagesToDelete = recipe.images
-            for image in images {
-                if image.id == RecipeImage.defaultId {
-                    try createImage(image, withRecipeId: recipeId)
-                }
-                else {
-                    imagesToDelete.remove(element: image)
-                    // images are never updated in editing, so neither creating nor deleting, just leave alone
+    func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping ([RecipeImage]) -> Void) {
+        var updatedImages = [RecipeImage]()
+        let imageGroup = DispatchGroup()
+        
+        var imagesToDelete = recipe.images
+        for image in images {
+            imageGroup.enter()
+            if image.id == RecipeImage.defaultId {
+                createImage(image, withRecipeId: recipeId) { createdImage in
+                    if let createdImage = createdImage {
+                        updatedImages.append(createdImage)
+                        imageGroup.leave()
+                    }
+                    else {
+                        imageGroup.leave()
+                    }
                 }
             }
-            // delete images
-            for image in imagesToDelete {
-                deleteImage(withId: image.id)
+            else {
+                imagesToDelete.remove(element: image)
+                // images are never updated in editing, so neither creating nor deleting, just leave as is
+                updatedImages.append(image)
+                imageGroup.leave()
             }
-
-            onCompletion(true)
-        } catch {
-            print("Error updating images")
-            onCompletion(false)
+        }
+        // delete images
+        for image in imagesToDelete {
+            deleteImage(withId: image.id)
+        }
+        
+        imageGroup.notify(queue: .main) {
+            onCompletion(updatedImages)
         }
     }
     

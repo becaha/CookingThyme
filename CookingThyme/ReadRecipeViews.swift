@@ -80,11 +80,12 @@ struct IngredientsView: View {
                 Spacer()
                 
                 VStack {
-                    Picker(selection: $recipe.tempRecipe.servings, label:
+                    Picker(selection: $recipe.tempRecipe.ratioServings, label:
                             HStack {
-                                Text("Servings: \(recipe.tempRecipe.servings) ")
+                                Text("Servings: \(recipe.tempRecipe.ratioServings) ")
                                     .textCase(.uppercase)
                                     .font(.subheadline)
+                                    .fixedSize()
                         
                                 Image(systemName: "chevron.down")
                             }
@@ -101,10 +102,10 @@ struct IngredientsView: View {
             
             // TODO have the read recipe just read the temps so it doesn't have to reload from db on the save
             VStack(spacing: 0) {
-                ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
+                ForEach(0..<recipe.tempRecipe.ratioIngredients.count, id: \.self) { index in
                     VStack(spacing: 0) {
                         HStack {
-                            if addedIngredients.contains(recipe.tempRecipe.ingredients[index].id) || self.addedAllIngredients {
+                            if addedIngredients.contains(recipe.tempRecipe.ratioIngredients[index].id) || self.addedAllIngredients {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(mainColor())
                             }
@@ -114,11 +115,11 @@ struct IngredientsView: View {
                                         if user.isSignedIn {
                                             // for the first added ingredients, confirm
                                             if addedIngredients.count == 0 {
-                                                confirmAddIngredient = recipe.tempRecipe.ingredients[index].id
+                                                confirmAddIngredient = recipe.tempRecipe.ratioIngredients[index].id
                                             }
                                             // for the rest, just add
                                             else if addedIngredients.count > 0 {
-                                                callAddToShoppingList(recipe.tempRecipe.ingredients[index])
+                                                callAddToShoppingList(recipe.tempRecipe.ratioIngredients[index])
                                             }
                                         }
                                         else {
@@ -128,15 +129,15 @@ struct IngredientsView: View {
                                 })
                             }
                             
-                            RecipeControls.ReadIngredientText(recipe.tempRecipe.ingredients[index])
+                            RecipeControls.ReadIngredientText(recipe.tempRecipe.ratioIngredients[index])
                         }
-                        .formSectionItem(isLastItem: recipe.tempRecipe.ingredients[index].id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id)
-                        if confirmAddIngredient == recipe.tempRecipe.ingredients[index].id {
+                        .formSectionItem(isLastItem: recipe.tempRecipe.ratioIngredients[index].id == recipe.tempRecipe.ratioIngredients[recipe.tempRecipe.ratioIngredients.count - 1].id)
+                        if confirmAddIngredient == recipe.tempRecipe.ratioIngredients[index].id {
 
                             HStack {
                                 Button(action: {
                                     withAnimation {
-                                        callAddToShoppingList(recipe.tempRecipe.ingredients[index])
+                                        callAddToShoppingList(recipe.tempRecipe.ratioIngredients[index])
                                     }
                                 }) {
                                     Image(systemName: "cart.fill.badge.plus")
@@ -155,7 +156,7 @@ struct IngredientsView: View {
                                 }
                             }
                             .foregroundColor(formBackgroundColor())
-                            .formSectionItem(isLastItem: recipe.tempRecipe.ingredients[index].id == recipe.tempRecipe.ingredients[recipe.tempRecipe.ingredients.count - 1].id, backgroundColor: mainColor())
+                            .formSectionItem(isLastItem: recipe.tempRecipe.ratioIngredients[index].id == recipe.tempRecipe.ratioIngredients[recipe.tempRecipe.ratioIngredients.count - 1].id, backgroundColor: mainColor())
                         }
                     }
                 }
@@ -166,7 +167,7 @@ struct IngredientsView: View {
                 VStack(alignment: .center) {
                     Button(action: {
                         withAnimation {
-                            if addAllToShoppingList(recipe.tempRecipe.ingredients.filter({ (ingredient) -> Bool in
+                            if addAllToShoppingList(recipe.tempRecipe.ratioIngredients.filter({ (ingredient) -> Bool in
                                 !addedIngredients.contains(ingredient.id)
                             })) {
                                 addedAllIngredients = true
@@ -190,6 +191,15 @@ struct IngredientsView: View {
                                     .fill(Color(UIColor.tertiarySystemFill)))
                     }
                     .disabled(addedAllIngredients)
+                }
+            }
+            .onAppear {
+                // sets ratio servings and ingredients
+                if recipe.tempRecipe.servings != 0 {
+                    recipe.tempRecipe.ratioServings = recipe.tempRecipe.servings
+                }
+                if recipe.tempRecipe.ratioIngredients.count > 0 {
+                    recipe.tempRecipe.ratioIngredients = recipe.tempRecipe.ingredients
                 }
             }
             .padding([.horizontal, .bottom])

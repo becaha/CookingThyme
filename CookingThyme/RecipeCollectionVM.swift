@@ -76,15 +76,17 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
+    // TODO all recipes
     var allRecipes: [Recipe] {
-        let allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
-            if recipeCategoryVM.name != "All" {
+        var allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
+//            if recipeCategoryVM.name != "All" {
                 var currentRecipes = recipes
                 currentRecipes.append(contentsOf: recipeCategoryVM.recipes)
                 return currentRecipes
-            }
-            return recipes
+//            }
+//            return recipes
         }
+        allRecipes.removeDuplicates()
         return allRecipes
     }
     
@@ -152,6 +154,7 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
     
+    // puts all recipes into the all recipes store
     func popullateAllRecipes(onCompletion: @escaping (Bool) -> Void) {
         RecipeDB.shared.getAllRecipes(withCollectionId: id) { allRecipes in
             // sets all category with all recipes in category store
@@ -558,6 +561,21 @@ class RecipeCollectionVM: ObservableObject {
             shoppingListStore[index].completed.toggle()
             RecipeDB.shared.updateShoppingItem(shoppingListStore[index])
         }
+    }
+}
+
+// TODO this is a hack for all recipes
+extension Array where Element: Hashable {
+    func removingDuplicates() -> [Element] {
+        var addedDict = [Element: Bool]()
+
+        return filter {
+            addedDict.updateValue(true, forKey: $0) == nil
+        }
+    }
+
+    mutating func removeDuplicates() {
+        self = self.removingDuplicates()
     }
 }
 

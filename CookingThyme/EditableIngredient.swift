@@ -48,7 +48,7 @@ struct EditableIngredient: View {
     func commitIngredient() {
         if index < recipe.tempRecipe.ingredients.count {
             recipe.tempRecipe.ingredients[index].ingredientString.removeLast(1)
-            recipe.tempRecipe.ingredients[index].setIngredientParts()
+//            recipe.tempRecipe.ingredients[index].setIngredientParts()
         }
     }
     

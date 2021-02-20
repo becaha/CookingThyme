@@ -15,7 +15,7 @@ enum UnitType {
 
 // TODO: localization for unit names
 // used for representing a unit of measurement for ingredients
-enum UnitOfMeasurement: CaseIterable {
+enum UnitOfMeasurement: CaseIterable, Hashable {
     case cup
     case pint
     case quart

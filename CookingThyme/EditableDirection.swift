@@ -47,6 +47,7 @@ struct EditableDirection: View {
     func commitDirection() {
         if index < recipe.tempRecipe.directions.count {
             recipe.tempRecipe.directions[index].direction.removeLast(1)
+//            recipe.tempRecipe.ingredients[index].setIngredientParts()
         }
     }
     

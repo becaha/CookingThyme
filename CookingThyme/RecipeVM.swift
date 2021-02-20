@@ -9,7 +9,8 @@ import Foundation
 import Combine
 import SwiftUI
 
-// TODO: when update, must return id
+// todo create, done, open, eeveerything is dooubled
+// TODO delete rcipe update
 // TODO: everything on background threed
 class RecipeVM: ObservableObject, Identifiable {
     var collection: RecipeCollectionVM?
@@ -259,18 +260,29 @@ class RecipeVM: ObservableObject, Identifiable {
                                 self.recipe = recipeWithImages
 //                                self.popullateRecipeTemps()
                                 onCompletion(true)
-                                return
+                            }
+                            else {
+                                onCompletion(false)
                             }
                         }
                     }
+                    else {
+                        onCompletion(false)
+                    }
                 }
             }
+            else {
+                onCompletion(false)
+            }
         }
-        onCompletion(false)
     }
     
     // MARK: - Setters/Popullaters
     
+    // TODO original ingredient according to servings
+    // haave ingredientsByServings shown in reaad recipe, this caan cahnge with the serevings
+    // have ingredients in edit recipe which actually change
+    // on oopen reaad, ingredientsByServings = ingredients
     func popullateRecipeTemps() {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
@@ -278,8 +290,12 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempImages = recipe.images
         
         self.tempRecipeOriginalServings = recipe.servings
+        
+        self.tempRecipe.servings = recipe.servings
+        self.tempRecipe.ratioServings = recipe.servings
         self.tempRecipe.directions = recipe.directions
         self.tempRecipe.ingredients = recipe.ingredients
+        self.tempRecipe.ratioIngredients = recipe.ingredients
         self.tempRecipe.images = recipe.images
         
     }
@@ -364,10 +380,14 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
+    // TODO image loading, image remove
     // called by updateRecipe above, updates recipe given ingredients
     func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Recipe?) -> Void) {
         var updateSuccess = true
         var updatedRecipe = recipe
+        updatedRecipe.name = name
+        updatedRecipe.servings = servings.toInt()
+        updatedRecipe.source = source
         // is this group ok? enter and leave, hits each once?
         let recipeGroup = DispatchGroup()
         
@@ -377,16 +397,19 @@ class RecipeVM: ObservableObject, Identifiable {
         }
         
         recipeGroup.enter()
-        RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { success in
-            if !success {
+        RecipeDB.shared.updateDirections(withRecipeId: id, directions: directions, oldRecipe: recipe) { updatedDirections in
+            if updatedDirections.count != directions.count {
                 updateSuccess = false
+            }
+            else {
+                updatedRecipe.directions = updatedDirections
             }
             recipeGroup.leave()
         }
         
         recipeGroup.enter()
         RecipeDB.shared.updateIngredients(withRecipeId: id, ingredients: ingredients, oldRecipe: recipe) { updatedIngredients in
-            if updatedIngredients.count == 0 {
+            if updatedIngredients.count != ingredients.count {
                 updateSuccess = false
             }
             else {
@@ -396,9 +419,12 @@ class RecipeVM: ObservableObject, Identifiable {
         }
         
         recipeGroup.enter()
-        RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { success in
-            if !success {
+        RecipeDB.shared.updateImages(withRecipeId: id, images: images, oldRecipe: recipe) { updatedImages in
+            if updatedImages.count != images.count {
                 updateSuccess = false
+            }
+            else {
+                updatedRecipe.images = updatedImages
             }
             recipeGroup.leave()
         }
@@ -408,7 +434,8 @@ class RecipeVM: ObservableObject, Identifiable {
                 onCompletion(updatedRecipe)
             }
             else {
-                onCompletion(nil)
+                // TODO error
+                onCompletion(updatedRecipe)
             }
         }
     }

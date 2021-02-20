@@ -9,7 +9,11 @@ import Foundation
 import Firebase
 
 
-struct Recipe: Identifiable {
+struct Recipe: Identifiable, Hashable {
+    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     // MARK: - Constants
     
     struct Table {
@@ -33,12 +37,12 @@ struct Recipe: Identifiable {
         }
     }
 
-    // when servings change, change the amounts of all ingredients to reflect it
-    var servings: Int {
-        willSet {
-            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
-        }
-    }
+    var servings: Int
+//    {
+//        willSet {
+//            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
+//        }
+//    }
     var ingredients: [Ingredient] = []
     var directions: [Direction] = []
     var images: [RecipeImage] = []
@@ -47,6 +51,15 @@ struct Recipe: Identifiable {
     
     // for search recipes
     var detailId: Int?
+    
+    // for servings ratio
+    // when servings change, change the amounts of all ingredients to reflect it
+    var ratioServings: Int = 0 {
+        willSet {
+            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.ratioServings))
+        }
+    }
+    var ratioIngredients: [Ingredient] = []
     
     // recipe from api will have a detail id and name
     init(detailId: Int, name: String) {
@@ -117,12 +130,12 @@ struct Recipe: Identifiable {
         images.append(image)
     }
     
-    // change ingredient amounts according to the serving size change
+    // change ratio ingredient amounts according to the serving size change
     mutating func changeIngredientAmounts(withRatio ratio: Double) {
         var newIngredients = [Ingredient]()
         for ingredient in ingredients {
             newIngredients.append(Ingredient(name: ingredient.name, amount: ingredient.amount * ratio, unitName: ingredient.unitName))
         }
-        ingredients = newIngredients
+        ratioIngredients = newIngredients
     }
 }

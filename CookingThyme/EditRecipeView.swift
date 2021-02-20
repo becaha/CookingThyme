@@ -128,7 +128,6 @@ struct EditRecipeView: View {
                 })
             }
         }
-        // TODO: errors go away on new upload of recipe
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
@@ -254,7 +253,7 @@ struct EditRecipeView: View {
                 name = nameFieldPlaceholder
             }
             // was original servings
-            servings = recipe.tempRecipeOriginalServings.toString()
+            servings = recipe.tempRecipe.servings.toString()
             source = recipe.tempRecipe.source
         }
     }
@@ -279,7 +278,7 @@ struct EditRecipeView: View {
             !ingredient.ingredientString.isOnlyWhitespace()
         }
         
-        recipe.tempDirections = recipe.tempDirections.filter { (direction) -> Bool in
+        recipe.tempRecipe.directions = recipe.tempRecipe.directions.filter { (direction) -> Bool in
             !direction.direction.isOnlyWhitespace()
         }
         resetErrors()
@@ -293,7 +292,7 @@ struct EditRecipeView: View {
         if recipe.tempRecipe.ingredients.count == 0 {
             ingredientsFieldMissing = true
         }
-        if recipe.tempDirections.count == 0 {
+        if recipe.tempRecipe.directions.count == 0 {
             directionsFieldMissing = true
         }
         if servings.toInt() < 1 {
@@ -301,7 +300,7 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempDirections, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
+                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
                     if let createdRecipe = createdRecipe {
                         recipe.setTempRecipe(createdRecipe)
                         recipe.setRecipe(createdRecipe)
@@ -341,7 +340,7 @@ struct EditRecipeView: View {
         else {
             newDirectionFieldMissing = true
         }
-        if recipe.tempDirections.count > 0 {
+        if recipe.tempRecipe.directions.count > 0 {
             directionsFieldMissing = false
         }
     }
@@ -584,7 +583,7 @@ struct EditRecipeView: View {
                     .formHeader()
                     
                     VStack(spacing: 0) {
-                        ForEach(0..<recipe.tempDirections.count, id: \.self) { index in
+                        ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
                             HStack(alignment: .center, spacing: 20) {
                                 Text("\(index + 1)")
                                 
@@ -613,7 +612,7 @@ struct EditRecipeView: View {
                                             
                         VStack(alignment: .leading) {
                             HStack(alignment: .center, spacing: 20) {
-                                Text("\(recipe.tempDirections.count + 1)")
+                                Text("\(recipe.tempRecipe.directions.count + 1)")
                                 
                                 ZStack {
                                     HStack(spacing: 0) {

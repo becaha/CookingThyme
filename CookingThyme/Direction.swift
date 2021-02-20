@@ -9,7 +9,7 @@ import Foundation
 import Firebase
 
 
-struct Direction: Identifiable {
+struct Direction: Identifiable, Hashable {
     struct Table {
         static let databaseTableName = "Direction"
         
@@ -32,6 +32,14 @@ struct Direction: Identifiable {
         self.direction = direction
         // temporary until id is created in db
         self.id = Direction.defaultId
+    }
+    
+    // called by create direction in db
+    init(id: String, step: Int, recipeId: String, direction: String) {
+        self.id = id
+        self.step = step
+        self.recipeId = recipeId
+        self.direction = direction
     }
     
     init(document: DocumentSnapshot) {

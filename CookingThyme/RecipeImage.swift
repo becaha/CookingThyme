@@ -9,7 +9,7 @@ import Foundation
 import Firebase
 
 
-struct RecipeImage: Identifiable {
+struct RecipeImage: Identifiable, Hashable {
     struct Table {
         static let databaseTableName = "RecipeImage"
         
@@ -34,6 +34,14 @@ struct RecipeImage: Identifiable {
         self.data = data
         self.recipeId = recipeId
         self.id = RecipeImage.defaultId
+    }
+    
+    // called by create image in db
+    init(id: String, type: ImageType, data: String, recipeId: String) {
+        self.id = id
+        self.type = type
+        self.data = data
+        self.recipeId = recipeId
     }
     
     init(type: ImageType, data: String, categoryId: String) {

@@ -9,7 +9,7 @@ import Foundation
 import Firebase
 
 
-struct Ingredient: Identifiable, Equatable {
+struct Ingredient: Identifiable, Equatable, Hashable {
     static func == (lhs: Ingredient, rhs: Ingredient) -> Bool {
         lhs.id == rhs.id
     }
