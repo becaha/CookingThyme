@@ -70,8 +70,7 @@ struct HomeView: View {
                 Text("Shopping List")
             }
 
-//            TimerView()
-                Test()
+            TimerView()
             .homeNavigationBar(settingsAction: settingsAction)
             .tabItem {
                 Image(systemName: "timer")

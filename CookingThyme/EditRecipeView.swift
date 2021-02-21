@@ -8,8 +8,19 @@
 import SwiftUI
 import Combine
 
-// TODO: keyboard is lower than line typing in
-// TODO: cannot doublle click save?
+// TODO: directions and ingredients to stay in order
+// TODO: dark mode
+// tODO: sign in / sign up off center
+// TODO: click delete account whole hstaack
+// TODO: add category button, lots of space
+// tODO: edit recipe edits are scrollable
+// TODo: off click sends awaay keyboard
+// TODO: touchy self-plus buttons i want to click
+// TODO: add new category goes away when leave view
+// TODO: plus in add ing to shopp list too big, not bold?
+// TODO: make whole plus box clickable to add to shopp list
+// TODO: should swipe left to cancel create recipe view
+// TODO: should not be able to doublle click save?
 // TODO: category name ...
 // TODO: don't cllear ing/dir if not entered but clicked away from
 
@@ -547,6 +558,7 @@ struct EditRecipeView: View {
 
                                             PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
                                                 .onChange(of: ingredient) { value in
+                                                    print("")
                                                     if value.hasSuffix("\n") {
                                                         ingredient.removeLast(1)
                                                         withAnimation {
@@ -562,6 +574,13 @@ struct EditRecipeView: View {
                                         .padding(.horizontal)
                                     }
                                     .autocapitalization(.none)
+                                    .simultaneousGesture(
+                                        TapGesture(count: 1).onEnded { _ in
+                                            unfocusEditable()
+                                            unfocusMultilineTexts()
+                                            editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                        }
+                                    )
                                     
                                     UIControls.AddButton(action: {
                                         withAnimation {
@@ -569,6 +588,7 @@ struct EditRecipeView: View {
                                         }
                                     })
                                 }
+                                .id(recipe.tempRecipe.ingredients.count)
                                 .formSectionItem(padding: false)
                             }
                         }
@@ -600,7 +620,7 @@ struct EditRecipeView: View {
                                     EditableDirection(index: index, editingIndex: $editingDirectionIndex)
                                         .environmentObject(recipe)
                                 }
-                                .id(index + recipe.tempRecipe.directions.count)
+                                .id(recipe.tempRecipe.ingredients.count + 1 + index)
                                 .deletable(isDeleting: true, onDelete: {
                                     withAnimation {
                                         recipe.removeTempDirection(at: index)
@@ -662,6 +682,13 @@ struct EditRecipeView: View {
                                         .padding(.horizontal)
                                     }
                                     .autocapitalization(.none)
+                                    .simultaneousGesture(
+                                        TapGesture(count: 1).onEnded { _ in
+                                            unfocusEditable()
+                                            unfocusMultilineTexts()
+                                            editingDirectionIndex = recipe.tempRecipe.directions.count
+                                        }
+                                    )
 
                                     UIControls.AddButton(action: {
                                         withAnimation {
@@ -669,6 +696,7 @@ struct EditRecipeView: View {
                                         }
                                     })
                                 }
+                                .id(recipe.tempRecipe.ingredients.count + recipe.tempRecipe.directions.count + 1)
                                 .formSectionItem(padding: false)
                             }
                         }
@@ -695,7 +723,7 @@ struct EditRecipeView: View {
                 .onChange(of: editingDirectionIndex) { index in
                     if let index = index {
                         withAnimation {
-                            proxy.scrollTo(index + recipe.tempRecipe.directions.count, anchor: .bottomTrailing)
+                            proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
                         }
                     }
                 }

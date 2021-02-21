@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: focus new category
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed
     @Environment(\.presentationMode) var presentation
@@ -272,8 +273,7 @@ struct RecipeCollectionView: View {
             })
             .lineLimit(2)
             .multilineTextAlignment(.center)
-            .font(.subheadline)
-            .foregroundColor(.black)
+            .font(.caption2)
             .lineSpacing(0)
             .frame(width: 80, height: 40)
         }

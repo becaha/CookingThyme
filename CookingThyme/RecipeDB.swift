@@ -351,7 +351,7 @@ class RecipeDB {
     
     func getDirections(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
+        db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId)/*.order(by: Direction.Table.step)*/.getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting directions: \(err)")
                 onRetrieve(nil)
