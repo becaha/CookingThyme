@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// TODO: everything alphabetically sorted, including ingredients
 // TODO AttributeGraph: cycle detected through attribute 3286136, on sign in
 // TODO photos reload too much
 class RecipeCollectionVM: ObservableObject {
@@ -87,6 +88,9 @@ class RecipeCollectionVM: ObservableObject {
 //            return recipes
         }
         allRecipes.removeDuplicates()
+        allRecipes.sort { (recipeA, recipeB) -> Bool in
+            recipeA.name < recipeB.name
+        }
         return allRecipes
     }
     
@@ -391,8 +395,11 @@ class RecipeCollectionVM: ObservableObject {
     // called by ui in collection edit, deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
         self.deleteRecipeAndParts(withId: id)
+        // update recipes store
+        self.recipesStore[id] = nil
         // update categories store
         removeRecipeFromStoreCategory(withId: id)
+        removeRecipeFromStoreAllCategory(withId: id)
         updateAllRecipes()
         
         // need this for recipe on delete to disappear
@@ -453,6 +460,21 @@ class RecipeCollectionVM: ObservableObject {
             storeCategory.recipes = oldCategoryRecipes
             self.categoriesStore[recipe.recipeCategoryId] = storeCategory
             self.updateAllRecipes()
+        }
+    }
+    
+    // remove recipe from all category in category store
+    func removeRecipeFromStoreAllCategory(withId id: String) {
+        if let recipe = getRecipe(withId: id) {
+            if let allCategory = allCategory {
+                if let storeCategory = self.categoriesStore[allCategory.id] {
+                    var oldCategoryRecipes = storeCategory.recipes
+                    oldCategoryRecipes.remove(element: recipe)
+                    storeCategory.recipes = oldCategoryRecipes
+                    self.categoriesStore[allCategory.id] = storeCategory
+                    self.updateAllRecipes()
+                }
+            }
         }
     }
     

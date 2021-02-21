@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO new ingredient pllaceholder is filled in
+// TODO: keyboard is lower than line typing in
 // TODO: have cursor go to next item in list after one is entered https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode

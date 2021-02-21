@@ -74,10 +74,16 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // MARK: - DB Loaders
     
+    func sortRecipes(recipeA: Recipe, _ recipeB: Recipe) -> Bool {
+        recipeA.name < recipeB.name
+    }
+    
     func popullateCategory(onCompletion: @escaping (Bool) -> Void) {
         // check for category in category store
         if let foundCategoryVM = self.collection.categoriesStore[category.id] {
-            self.recipes = foundCategoryVM.recipes
+            self.recipes = foundCategoryVM.recipes.sorted(by: { (recipeA, recipeB) -> Bool in
+                recipeA.name < recipeB.name
+            })
             // popullate image
             self.imageHandler = foundCategoryVM.imageHandler
             onCompletion(true)
