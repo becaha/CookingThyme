@@ -79,6 +79,9 @@ struct RecipeCollectionView: View {
             .simultaneousGesture(
                 TapGesture().onEnded { _ in
                     unfocusEditable()
+                    withAnimation {
+                        addCategoryExpanded = false
+                    }
                 }
             )
             .loadable(isLoading: $collection.isLoading)

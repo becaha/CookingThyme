@@ -86,12 +86,13 @@ class RecipeDB {
         }
     }
     
-    func createIngredient(_ ingredient: Ingredient, withRecipeId recipeId: String, onCompletion: @escaping (Ingredient?) -> Void) {
+    func createIngredient(_ ingredient: Ingredient, order: Int, withRecipeId recipeId: String, onCompletion: @escaping (Ingredient?) -> Void) {
         var ref: DocumentReference? = nil
         ref = db.collection(Ingredient.Table.databaseTableName).addDocument(data: [
             Ingredient.Table.name: ingredient.name,
             Ingredient.Table.amount: ingredient.amount,
             Ingredient.Table.unitName: ingredient.unitName.getName(),
+            Ingredient.Table.order: order,
             Ingredient.Table.recipeId: recipeId
         ]) { err in
             if let err = err {
@@ -110,7 +111,7 @@ class RecipeDB {
 
         for ingredient in ingredients {
             ingredientGroup.enter()
-            createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
+            createIngredient(ingredient, order: createdIngredients.count, withRecipeId: recipeId) { createdIngredient in
                 if let createdIngredient = createdIngredient {
                     createdIngredients.append(createdIngredient)
                     ingredientGroup.leave()
@@ -335,7 +336,7 @@ class RecipeDB {
     
     func getIngredients(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
-        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
+        db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).order(by: Ingredient.Table.order).getDocuments() { (querySnapshot, err) in
             if let err = err {
                 print("Error getting ingredients: \(err)")
                 onRetrieve(nil)
@@ -612,13 +613,14 @@ class RecipeDB {
         }
     }
     
-    func updateIngredient(_ ingredient: Ingredient, onCompletion: @escaping (Bool) -> Void) {
+    func updateIngredient(_ ingredient: Ingredient, order: Int, onCompletion: @escaping (Bool) -> Void) {
         let ref = db.collection(Ingredient.Table.databaseTableName).document(ingredient.id)
 
         ref.updateData([
             Ingredient.Table.name: ingredient.name,
             Ingredient.Table.amount: ingredient.amount,
-            Ingredient.Table.unitName: ingredient.unitName.getName()
+            Ingredient.Table.unitName: ingredient.unitName.getName(),
+            Ingredient.Table.order: order
         ]) { err in
             if let err = err {
                 print("Error updating ingredient: \(err)")
@@ -639,7 +641,7 @@ class RecipeDB {
         for ingredient in ingredients {
             ingredientGroup.enter()
             if ingredient.id == Ingredient.defaultId {
-                createIngredient(ingredient, withRecipeId: recipeId) { createdIngredient in
+                createIngredient(ingredient, order: updatedIngredients.count, withRecipeId: recipeId) { createdIngredient in
                     if let createdIngredient = createdIngredient {
                         updatedIngredients.append(createdIngredient)
                         ingredientGroup.leave()
@@ -651,7 +653,7 @@ class RecipeDB {
             }
             else {
                 ingredientsToDelete.remove(element: ingredient)
-                updateIngredient(ingredient) { success in
+                updateIngredient(ingredient, order: updatedIngredients.count) { success in
                     updatedIngredients.append(ingredient)
                     ingredientGroup.leave()
                 }

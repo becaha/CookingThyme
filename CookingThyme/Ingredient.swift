@@ -22,6 +22,7 @@ struct Ingredient: Identifiable, Equatable, Hashable {
         static let amount = "Amount"
         static let unitName = "UnitName"
         static let recipeId = "RecipeId"
+        static let order = "Order"
     }
     
     static let defaultId = ""
@@ -31,6 +32,8 @@ struct Ingredient: Identifiable, Equatable, Hashable {
     var unitName: UnitOfMeasurement
     var id: String
     var recipeId: String
+    
+    var order: Int?
     
     // temp strings
     var ingredientString: String
