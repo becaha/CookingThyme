@@ -89,6 +89,7 @@
 		DB88CD4625C0B47500A7F32C /* HomeSheetNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */; };
 		DB88CD4825C0E2B000A7F32C /* ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */; };
 		DB88CD4A25C1225E00A7F32C /* ReadRecipeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */; };
+		DB9862B025E2083000767F99 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9862AF25E2083000767F99 /* KeyboardAdaptive.swift */; };
 		DBCDE775258A8F9B003DC95F /* ImageTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */; };
 		DBCDE781258D5F55003DC95F /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE780258D5F55003DC95F /* SearchTest.swift */; };
 		DBCDE783258D63C8003DC95F /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCDE782258D63C8003DC95F /* CircleImage.swift */; };
@@ -190,6 +191,7 @@
 		DB88CD4525C0B47500A7F32C /* HomeSheetNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSheetNavigator.swift; sourceTree = "<group>"; };
 		DB88CD4725C0E2B000A7F32C /* ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePassword.swift; sourceTree = "<group>"; };
 		DB88CD4925C1225E00A7F32C /* ReadRecipeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadRecipeViews.swift; sourceTree = "<group>"; };
+		DB9862AF25E2083000767F99 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		DBCDE774258A8F9B003DC95F /* ImageTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTranscriber.swift; sourceTree = "<group>"; };
 		DBCDE780258D5F55003DC95F /* SearchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
 		DBCDE782258D63C8003DC95F /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
@@ -287,8 +289,8 @@
 		DB49B4D82565E4D300808CC8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DB83F6B525B0C7270041DAA7 /* Settings */,
 				DB83F6B425B0BA8D0041DAA7 /* Home */,
+				DB83F6B525B0C7270041DAA7 /* Settings */,
 				DB83F6B325B0BA7A0041DAA7 /* Signin */,
 				DB49B57025833F6B00808CC8 /* RecipeSearch */,
 				DB49B5572581BAED00808CC8 /* Editable */,
@@ -342,6 +344,7 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB9862AF25E2083000767F99 /* KeyboardAdaptive.swift */,
 				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
 				DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */,
 				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
@@ -698,6 +701,7 @@
 				DBEF371625DACDF000ED83D4 /* Keys.swift in Sources */,
 				DB49B5192579F1B300808CC8 /* ImageHandler.swift in Sources */,
 				DBCDE78B25A3B057003DC95F /* Transcription.swift in Sources */,
+				DB9862B025E2083000767F99 /* KeyboardAdaptive.swift in Sources */,
 				DB88CD2B25BB64A500A7F32C /* RecipeTextView.swift in Sources */,
 				DB49B54125801B4600808CC8 /* IsActive.swift in Sources */,
 				DB49B52C257EF64500808CC8 /* ShoppingListView.swift in Sources */,

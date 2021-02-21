@@ -6,72 +6,39 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Test: View {
-    
-    @State var email: String = "email"
-    @State var username: String = """
-                                    turn off the heat and add cooked chicken and stir until well mixed. you have have to add some more corn starch to get the suace to thicken up a bit.
-                                    """
-    @State var password: String = ""
-    @State var isSigningIn: Bool = false
-    
-    @State var signinErrorMessage = ""
-    @State var signupErrorMessage = ""
-    
-    var list = ["at as teh one has multililne efforts to make it into a full two lines instead of one","b", "c", "D", "e"]
-    
-    @State var editingIndex: Int = 1
+    @State var test = ""
     
     var body: some View {
-        VStack {
-            HStack {
-        HStack {
-            ZStack {
-                HStack {
-                    RecipeControls.ReadIngredientText(email)
-                        .padding()
+//        ScrollViewReader { proxy in
+            ScrollView(.vertical) {
+                VStack {
+//                    Button("Scroll to 50") {
+//                        withAnimation {
+//                            proxy.scrollTo(50, anchor: .center)
+//                        }
+//                    }
 
-                    Spacer()
-                }
-                .opacity(editingIndex != 0 ? 1 : 0)
-
-                if editingIndex == 0 {
-                    VStack {
-                        Spacer()
-                        
-                        EditableTextView(textBinding: $email, isFirstResponder: true)
-                            .onChange(of: email) { value in
-                                if value.hasSuffix("\n") {
-//                                    commitIngredient()
-                                    withAnimation {
-                                        // unfocus
-//                                        unfocusEditable()
-//                                        editingIndex = nil
-                                    }
-                                }
-                            }
-     
-                        Spacer()
+                    VStack(spacing: 0) {
+                        ForEach(0..<50) { i in
+                            TextField("move me", text: $test)
+//                                .id(i)
+//                                .frame(height: 32)
+                        }
                     }
-                    .padding(.horizontal)
+
+                    
+//                    Button("Top 20") {
+//                        withAnimation {
+//                            proxy.scrollTo(20, anchor: .center)
+//                        }
+//                    }
                 }
+                .background(Color.blue)
             }
-            
-            Spacer()
-        }
-            }
-        .background(Color.gray)
-        .simultaneousGesture(
-            TapGesture(count: 1).onEnded { _ in
-                editingIndex = 0
-//                unfocusEditable()
-//                editingIndex = index
-            }
-        )
-            Spacer()
-        }
-        .formSectionItem()
+//        }
     }
         
 }

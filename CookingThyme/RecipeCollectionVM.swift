@@ -11,6 +11,7 @@ import Combine
 // TODO: everything alphabetically sorted, including ingredients
 // TODO AttributeGraph: cycle detected through attribute 3286136, on sign in
 // TODO photos reload too much
+// TODO: sound on timer
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
