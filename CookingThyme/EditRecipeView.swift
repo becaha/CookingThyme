@@ -8,18 +8,12 @@
 import SwiftUI
 import Combine
 
-// TODO: make import button bigger
-// TODO: add nav bars to/backgrounds to make signed out views look good
 // TODO: category name font https://www.simpleswiftguide.com/how-to-use-custom-fonts-in-swift-ios-app-using-swiftui/
 
-// TODO: click delete account whole hstaack
 // tODO: sign in / sign up off center
 // TODO: dark mode
-// TODO: have cursor go to next item in list after one is entered
 
 // TODO: touchy self-plus buttons i want to click
-// TODO: plus in add ing to shopp list too big, not bold?
-// TODO: make whole plus box clickable to add to shopp list
 // TODO: add category button, lots of space
 
 // TODO: don't cllear ing/dir if not entered but clicked away from

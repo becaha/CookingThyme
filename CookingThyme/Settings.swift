@@ -108,13 +108,16 @@ struct Settings: View {
                             }
                         }) {
                             if !deleteSuccessful && !presentDeleteAlert {
-                                Spacer()
-                                
-                                Text("Delete Account")
-                                    .bold()
-                                    .foregroundColor(.red)
-                                
-                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    
+                                    Text("Delete Account")
+                                        .bold()
+                                        .foregroundColor(.red)
+                                    
+                                    Spacer()
+                                }
+                                .background(Color.white)
                             }
                             else if !deleteSuccessful && presentDeleteAlert {
                                 Text("Delete Account")
