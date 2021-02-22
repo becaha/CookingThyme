@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 // tODO: edit recipe edits are scrollable
-// TODO: should not be able to doublle click save?
 // TODO: category name font
 
 // TODO: don't cllear ing/dir if not entered but clicked away from
@@ -86,7 +85,9 @@ struct EditRecipeView: View {
     @State var buttonScale: CGFloat = 1 // 0.9
     
     @State var startPos : CGPoint = .zero
-   @State var isSwipping = true
+    @State var isSwipping = true
+    
+    @State var isSaving = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -313,6 +314,10 @@ struct EditRecipeView: View {
     
     // TODO: save should be not on main thread
     private func saveRecipe() {
+        if isSaving {
+            return
+        }
+        isSaving = true
         recipe.tempRecipe.ingredients = recipe.tempRecipe.ingredients.filter { (ingredient) -> Bool in
             !ingredient.ingredientString.isOnlyWhitespace()
         }
@@ -347,6 +352,7 @@ struct EditRecipeView: View {
                     else {
                         print("error creating recipe")
                     }
+                    isSaving = false
                     withAnimation {
                         isEditingRecipe = false
                     }
@@ -354,6 +360,7 @@ struct EditRecipeView: View {
             }
             else {
                 recipe.updateRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId) { success in
+                    isSaving = false
                     withAnimation {
                         isEditingRecipe = false
                     }
@@ -367,6 +374,7 @@ struct EditRecipeView: View {
         }
         else {
             presentErrorAlert = true
+            isSaving = false
         }
     }
     
