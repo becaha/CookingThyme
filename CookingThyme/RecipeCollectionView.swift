@@ -79,9 +79,6 @@ struct RecipeCollectionView: View {
             .simultaneousGesture(
                 TapGesture().onEnded { _ in
                     unfocusEditable()
-                    withAnimation {
-                        addCategoryExpanded = false
-                    }
                 }
             )
             .loadable(isLoading: $collection.isLoading)
@@ -276,7 +273,8 @@ struct RecipeCollectionView: View {
             })
             .lineLimit(2)
             .multilineTextAlignment(.center)
-            .font(.caption2)
+//            .font(.caption2)
+            .font(Font.custom("Thonburi", size: 20))
             .lineSpacing(0)
             .frame(width: 80, height: 40)
         }
@@ -441,6 +439,7 @@ struct RecipeCollectionView: View {
                         .font(Font.subheadline.weight(.bold))
                 }
             }
+            .onTapGesture(count: 1, perform: {})
         }
         else {
             ZStack {

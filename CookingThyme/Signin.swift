@@ -51,7 +51,7 @@ struct Signin: View {
                 Spacer()
             }
         }
-        .formItem(backgroundColor: mainColor())
+        .formItem(centered: true, backgroundColor: mainColor())
         .onTapGesture(count: 1, perform: {})
     }
 }

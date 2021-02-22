@@ -10,11 +10,10 @@ import Combine
 
 // TODO: category name font https://www.simpleswiftguide.com/how-to-use-custom-fonts-in-swift-ios-app-using-swiftui/
 
-// tODO: sign in / sign up off center
 // TODO: dark mode
 
 // TODO: touchy self-plus buttons i want to click
-// TODO: add category button, lots of space
+// TODO: add category button, lots of space, do i want it there only when isediting?
 
 // TODO: don't cllear ing/dir if not entered but clicked away from
 

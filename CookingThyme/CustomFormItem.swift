@@ -14,6 +14,7 @@ struct CustomFormItem: ViewModifier {
     var height: CGFloat = 40
     var isSearchBar: Bool = false
     var padding: Bool = false
+    var centered: Bool = false
     
     init() {
         self.backgroundColor = Color.white
@@ -25,6 +26,13 @@ struct CustomFormItem: ViewModifier {
         self.backgroundColor = backgroundColor
         self.isNavLink = false
         self.padding = true
+    }
+    
+    init(centered: Bool, backgroundColor: Color) {
+        self.backgroundColor = backgroundColor
+        self.isNavLink = false
+        self.padding = true
+        self.centered = centered
     }
     
     init(isNavLink: Bool) {
@@ -61,7 +69,9 @@ struct CustomFormItem: ViewModifier {
                 content
                     .foregroundColor(.black)
              
-                Spacer()
+                if !centered {
+                    Spacer()
+                }
                 
                 if isNavLink {
                     Image(systemName: "chevron.right")
@@ -116,5 +126,9 @@ extension View {
     
     func formItem(padding: Bool) -> some View {
         modifier(CustomFormItem(padding: padding))
+    }
+    
+    func formItem(centered: Bool, backgroundColor: Color) -> some View {
+        modifier(CustomFormItem(centered: centered, backgroundColor: backgroundColor))
     }
 }

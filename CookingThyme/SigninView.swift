@@ -36,7 +36,13 @@ struct SigninView: View {
                         reset()
                     }
                 }) {
-                    Text("Sign Up")
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign Up")
+
+                        Spacer()
+                    }
                 }
                 .onTapGesture(count: 1, perform: {})
             }
@@ -76,7 +82,7 @@ struct SigninView: View {
                         Spacer()
                     }
                 }
-                .formItem(backgroundColor: mainColor())
+                .formItem(centered: true, backgroundColor: mainColor())
                 .onTapGesture(count: 1, perform: {})
 
                 Button(action: {
@@ -85,7 +91,13 @@ struct SigninView: View {
                         reset()
                     }
                 }) {
-                    Text("Sign In")
+                    HStack {
+                        Spacer()
+                        
+                        Text("Sign In")
+                        
+                        Spacer()
+                    }
                 }
                 .onTapGesture(count: 1, perform: {})
             }
