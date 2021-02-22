@@ -120,7 +120,9 @@ class UserVM: ObservableObject {
     }
     
     func signin(email: String, password: String) {
-        
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         self.isLoading = true
         clearErrors()
         
@@ -163,6 +165,9 @@ class UserVM: ObservableObject {
     }
     
     func signup(email: String, password: String) {
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         clearErrors()
         self.isLoading = true
 
@@ -170,6 +175,9 @@ class UserVM: ObservableObject {
     }
     
     func signout() {
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         self.isLoading = true
         clearErrors()
         
@@ -199,6 +207,9 @@ class UserVM: ObservableObject {
     }
     
     func changePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         self.isLoading = true
         clearErrors()
         
@@ -235,6 +246,9 @@ class UserVM: ObservableObject {
     }
     
     func delete(password: String) {
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         clearErrors()
         self.isLoading = true
         
@@ -307,6 +321,9 @@ class UserVM: ObservableObject {
     }
     
     func reauthenticate(email: String, password: String) {
+        if let loading = self.isLoading, loading == true {
+            return
+        }
         clearErrors()
         self.isLoading = true
         
@@ -377,17 +394,14 @@ class UserVM: ObservableObject {
         // delete user, change password
         case .requiresRecentLogin:
               // FIRAuthErrorCodeRequiresRecentLogin: Updating a user’s password is a security sensitive operation that requires a recent login from the user. This error indicates the user has not signed in recently enough. To resolve, reauthenticate the user by invoking reauthenticateWithCredential:completion: on FIRUser.
-//            self.userErrors.append("Must confirm sign in to delete the account.")
             self.isReauthenticating = true
             
         case .userTokenExpired:
             // user credential is no longer valid, must sign in again
-//            self.userErrors.append("Must sign in again.")
             self.isReauthenticating = true
             
         case .keychainError:
             // FIRAuthErrorCodeKeychainError
-//            self.userErrors.append("Must sign in again.")
             self.isReauthenticating = true
 
         default:
