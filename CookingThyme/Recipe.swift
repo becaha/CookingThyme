@@ -38,11 +38,6 @@ struct Recipe: Identifiable, Hashable {
     }
 
     var servings: Int
-//    {
-//        willSet {
-//            changeIngredientAmounts(withRatio: Double(newValue) / Double(self.servings))
-//        }
-//    }
     var ingredients: [Ingredient] = []
     var directions: [Direction] = []
     var images: [RecipeImage] = []
@@ -93,6 +88,7 @@ struct Recipe: Identifiable, Hashable {
         self.recipeCategoryId = recipeCategoryId
     }
     
+    // DAN's recipe init, images [], servings 0, source: ""
     init(name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: Int, source: String) {
         self.name = name.lowercased().capitalized
         self.ingredients = ingredients

@@ -13,7 +13,7 @@ import Combine
 // TODO**: fix index keyboard avoid
 
 
-
+// TODO: make import button 
 // TODO: dark mode
 // tODO: sign in / sign up off center
 // TODO: click delete account whole hstaack
@@ -265,7 +265,6 @@ struct EditRecipeView: View {
     private func transcribeImage() {
         guard let inputImage = selectedImage else { return }
         recipe.transcribeRecipe(fromImage: inputImage)
-        isImportingRecipe = true
     }
     
     private func setRecipe() {

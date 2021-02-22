@@ -154,7 +154,7 @@ class HTMLTranscriber: ObservableObject {
                 !line.trimmingCharacters(in: .whitespaces).isEmpty && line != ""
             }
             for line in lines {
-                let cleanLine = removeFormat(line)
+                let cleanLine = HTMLTranscriber.removeFormat(line)
                 let cleanLineHeader = removeAll(line)
                 // look for new part of recipe
                 if currentPart != CurrentPart.ingredient && currentPart != CurrentPart.direction && servings == 0 && (cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield")) {
@@ -269,7 +269,7 @@ class HTMLTranscriber: ObservableObject {
     
     // remove puncutation at beginning like bullet point
     // removes "\t" but not " "
-    func removeFormat(_ line: String) -> String {
+    static func removeFormat(_ line: String) -> String {
         var cleanLine = ""
         for char in line {
             if !char.isWhitespace || char == " " || char.isPunctuation {

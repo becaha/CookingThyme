@@ -34,6 +34,15 @@ struct Direction: Identifiable, Hashable {
         self.id = Direction.defaultId
     }
     
+    // DANS called in recipe transcriber
+    init(step: Int, direction: String) {
+        self.step = step
+        self.direction = direction
+        // temporary until id is created in db
+        self.id = Direction.defaultId
+        self.recipeId = Recipe.defaultId
+    }
+    
     // called by create direction in db
     init(id: String, step: Int, recipeId: String, direction: String) {
         self.id = id

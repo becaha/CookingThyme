@@ -294,6 +294,7 @@ class RecipeVM: ObservableObject, Identifiable {
         
         self.tempRecipeOriginalServings = recipe.servings
         
+        self.tempRecipe.name = recipe.name
         self.tempRecipe.servings = recipe.servings
         self.tempRecipe.ratioServings = recipe.servings
         self.tempRecipe.directions = recipe.directions
@@ -546,6 +547,7 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Transcribe images to recipes
     
     func transcribeRecipe(fromImage image: UIImage) {
+        self.isImportingFromURL = true
         transcriber.createTranscription(fromImage: image)
     }
     
