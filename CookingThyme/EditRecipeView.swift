@@ -11,10 +11,9 @@ import Combine
 // tODO: edit recipe edits are scrollable
 // TODO: should swipe left to cancel create recipe view
 // TODO: should not be able to doublle click save?
-// TODO: don't cllear ing/dir if not entered but clicked away from
 // TODO: category name font
-// TODO new ingredient pllaceholder is filled in
 
+// TODO: don't cllear ing/dir if not entered but clicked away from
 // TODO: click delete account whole hstaack
 // tODO: sign in / sign up off center
 // TODO: dark mode
@@ -565,6 +564,7 @@ struct EditRecipeView: View {
                                                         withAnimation {
                                                             // unfocus
                                                             unfocusEditable()
+                                                            unfocusMultilineTexts()
                                                             addIngredient()
                                                         }
                                                     }
@@ -585,6 +585,8 @@ struct EditRecipeView: View {
                                     
                                     UIControls.AddButton(action: {
                                         withAnimation {
+                                            unfocusEditable()
+                                            unfocusMultilineTexts()
                                             addIngredient()
                                         }
                                     })
@@ -673,6 +675,7 @@ struct EditRecipeView: View {
                                                         withAnimation {
                                                             // unfocus
                                                             unfocusEditable()
+                                                            unfocusMultilineTexts()
                                                             addDirection()
                                                         }
                                                     }
@@ -693,6 +696,9 @@ struct EditRecipeView: View {
 
                                     UIControls.AddButton(action: {
                                         withAnimation {
+                                            // unfocus
+                                            unfocusEditable()
+                                            unfocusMultilineTexts()
                                             addDirection()
                                         }
                                     })
