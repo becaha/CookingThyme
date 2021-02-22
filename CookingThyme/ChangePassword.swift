@@ -80,6 +80,11 @@ struct ChangePassword: View {
                 }
             }
         })
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
         .formed()
         .navigationBarTitle("Change Password")
     }

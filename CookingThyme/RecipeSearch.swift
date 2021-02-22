@@ -78,6 +78,11 @@ struct RecipeSearch: View {
             .navigationBarColor(offWhiteUIColor())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
     }
 }
 

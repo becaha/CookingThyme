@@ -144,6 +144,11 @@ struct Settings: View {
                 onLoadingComplete()
             }
         })
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
         .navigationBarColor(offWhiteUIColor())
     }

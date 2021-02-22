@@ -98,6 +98,11 @@ struct SigninView: View {
                 onLoadingComplete()
             }
         })
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
         .accentColor(mainColor())
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarColor(offWhiteUIColor())

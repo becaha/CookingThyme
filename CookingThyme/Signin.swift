@@ -49,6 +49,11 @@ struct Signin: View {
                 Spacer()
             }
         }
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
         .formItem(backgroundColor: mainColor())
     }
 }

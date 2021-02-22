@@ -9,14 +9,17 @@ import SwiftUI
 import Combine
 
 // TODO: directions and ingredients to stay in order
+// TODo**: off click sends awaay keyboard, simultan makes things not clickable
+// TODO**: fix index keyboard avoid
+
+
+
 // TODO: dark mode
 // tODO: sign in / sign up off center
 // TODO: click delete account whole hstaack
 // TODO: add category button, lots of space
 // tODO: edit recipe edits are scrollable
-// TODo: off click sends awaay keyboard
 // TODO: touchy self-plus buttons i want to click
-// TODO: add new category goes away when leave view
 // TODO: plus in add ing to shopp list too big, not bold?
 // TODO: make whole plus box clickable to add to shopp list
 // TODO: should swipe left to cancel create recipe view
@@ -723,13 +726,19 @@ struct EditRecipeView: View {
                 .onChange(of: editingDirectionIndex) { index in
                     if let index = index {
                         withAnimation {
-                            proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
+                            // tODO index off
+                            proxy.scrollTo(index, anchor: .bottomTrailing)
                         }
                     }
                 }
                 .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
                     unfocusMultilineTexts()
                 } : nil)
+                .simultaneousGesture(
+                    TapGesture().onEnded { _ in
+                        unfocusEditable()
+                    }
+                )
             }
             .onAppear {
                 if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {

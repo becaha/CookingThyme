@@ -90,6 +90,11 @@ struct ShoppingListView: View {
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
         .listStyle(InsetGroupedListStyle())
+        .simultaneousGesture(
+            TapGesture().onEnded { _ in
+                unfocusEditable()
+            }
+        )
     }
     
     @ViewBuilder
