@@ -8,25 +8,24 @@
 import SwiftUI
 import Combine
 
-// TODo**: off click sends awaay keyboard, simultan makes things not clickable
-
-
-// TODO: make import button 
-// TODO: dark mode
-// tODO: sign in / sign up off center
-// TODO: click delete account whole hstaack
-// TODO: add category button, lots of space
 // tODO: edit recipe edits are scrollable
+// TODO: should swipe left to cancel create recipe view
+// TODO: should not be able to doublle click save?
+// TODO: don't cllear ing/dir if not entered but clicked away from
+// TODO: category name font
+// TODO new ingredient pllaceholder is filled in
+
+// TODO: click delete account whole hstaack
+// tODO: sign in / sign up off center
+// TODO: dark mode
+// TODO: have cursor go to next item in list after one is entered
+// TODO: make import button bigger
+
 // TODO: touchy self-plus buttons i want to click
 // TODO: plus in add ing to shopp list too big, not bold?
 // TODO: make whole plus box clickable to add to shopp list
-// TODO: should swipe left to cancel create recipe view
-// TODO: should not be able to doublle click save?
-// TODO: category name ...
-// TODO: don't cllear ing/dir if not entered but clicked away from
+// TODO: add category button, lots of space
 
-// TODO: have cursor go to next item in list after one is entered
-// TODO new ingredient pllaceholder is filled in
 
 // TODO: keyboard avoid dont move scroll up, just down
 // https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
