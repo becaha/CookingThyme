@@ -91,4 +91,25 @@ struct UIControls {
             }
         }
     }
+    
+    @ViewBuilder
+    static func AddButtonSmall(action: @escaping () -> Void, isPlain: Bool = true) -> some View {
+        if isPlain {
+            Button(action: action) {
+                Image(systemName: "plus")
+                    .font(Font.subheadline.weight(.semibold))
+                    .frame(width: 20, height: 20, alignment: .center)
+            }
+//            .frame(minWidth: 44, minHeight: 44)
+            .buttonStyle(PlainButtonStyle())
+        }
+        else {
+            Button(action: action) {
+                Image(systemName: "plus")
+                    .font(Font.subheadline.weight(.semibold))
+                    .frame(width: 20, height: 20, alignment: .center)
+            }
+//            .frame(minWidth: 44, minHeight: 44)
+        }
+    }
 }

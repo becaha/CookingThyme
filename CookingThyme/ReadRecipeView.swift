@@ -60,6 +60,7 @@ struct ReadRecipeView: View {
                         Image(systemName: "square.and.arrow.up")
                     }
                     .padding(.trailing)
+                    .frame(minWidth: 44, minHeight: 44)
                                     
                     Button(action: {
                         withAnimation {
@@ -69,6 +70,7 @@ struct ReadRecipeView: View {
                     {
                         Text("Edit")
                     }
+                    .frame(minWidth: 44, minHeight: 44)
                 }
         )
     }

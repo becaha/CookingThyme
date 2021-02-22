@@ -10,7 +10,7 @@ import SwiftUI
 struct CustomFormSectionItem: ViewModifier {
     var isLastItem: Bool = false
     var backgroundColor: Color = Color.white
-    var padding: Bool = true
+    var padding: Edge.Set = .all
     
     init() {}
     
@@ -27,21 +27,20 @@ struct CustomFormSectionItem: ViewModifier {
         self.backgroundColor = backgroundColor
     }
     
-    init(padding: Bool) {
+    init(padding: Edge.Set) {
         self.padding = padding
+    }
+    
+    init(padding: Edge.Set, isLastItem: Bool) {
+        self.padding = padding
+        self.isLastItem = isLastItem
     }
     
     func body(content: Content) -> some View {
         VStack(spacing: 0) {
             HStack {
-                if padding {
-                    content
-                        .padding()
-                }
-                else {
-                    content
-                        .padding(.horizontal)
-                }
+                content
+                    .padding(padding)
 
                 Spacer()
             }
@@ -75,12 +74,16 @@ extension View {
         modifier(CustomFormSectionItem())
     }
     
-    func formSectionItem(padding: Bool) -> some View {
+    func formSectionItem(padding: Edge.Set) -> some View {
         modifier(CustomFormSectionItem(padding: padding))
     }
     
     func formSectionItem(isLastItem: Bool) -> some View {
         modifier(CustomFormSectionItem(isLastItem: isLastItem))
+    }
+    
+    func formSectionItem(padding: Edge.Set, isLastItem: Bool) -> some View {
+        modifier(CustomFormSectionItem(padding: padding, isLastItem: isLastItem))
     }
     
     func formSectionItem(backgroundColor: Color) -> some View {

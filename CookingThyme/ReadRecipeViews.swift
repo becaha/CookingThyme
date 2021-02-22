@@ -100,40 +100,53 @@ struct IngredientsView: View {
             }
             .formHeader()
             
-            // TODO have the read recipe just read the temps so it doesn't have to reload from db on the save
             VStack(spacing: 0) {
                 ForEach(0..<recipe.tempRecipe.ratioIngredients.count, id: \.self) { index in
                     VStack(spacing: 0) {
-                        HStack {
-                            if addedIngredients.contains(recipe.tempRecipe.ratioIngredients[index].id) || self.addedAllIngredients {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(mainColor())
+                        Button(action: {
+                            if confirmAddIngredient == recipe.tempRecipe.ratioIngredients[index].id {
+                                withAnimation {
+                                    confirmAddIngredient = nil
+                                }
                             }
                             else {
-                                UIControls.AddButton(action: {
-                                    withAnimation {
-                                        if user.isSignedIn {
-                                            // for the first added ingredients, confirm
-                                            if addedIngredients.count == 0 {
-                                                confirmAddIngredient = recipe.tempRecipe.ratioIngredients[index].id
-                                            }
-                                            // for the rest, just add
-                                            else if addedIngredients.count > 0 {
-                                                callAddToShoppingList(recipe.tempRecipe.ratioIngredients[index])
-                                            }
+                                withAnimation {
+                                    if user.isSignedIn {
+                                        // for the first added ingredients, confirm
+                                        if addedIngredients.count == 0 {
+                                            confirmAddIngredient = recipe.tempRecipe.ratioIngredients[index].id
                                         }
-                                        else {
-                                            onNotSignedIn()
+                                        // for the rest, just add
+                                        else if addedIngredients.count > 0 {
+                                            callAddToShoppingList(recipe.tempRecipe.ratioIngredients[index])
                                         }
                                     }
-                                })
+                                    else {
+                                        onNotSignedIn()
+                                    }
+                                }
                             }
-                            
-                            RecipeControls.ReadIngredientText(recipe.tempRecipe.ratioIngredients[index])
-                        }
-                        .formSectionItem(isLastItem: recipe.tempRecipe.ratioIngredients[index].id == recipe.tempRecipe.ratioIngredients[recipe.tempRecipe.ratioIngredients.count - 1].id)
-                        if confirmAddIngredient == recipe.tempRecipe.ratioIngredients[index].id {
+                        }) {
+                            HStack {
+                                if addedIngredients.contains(recipe.tempRecipe.ratioIngredients[index].id) || self.addedAllIngredients {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(mainColor())
 
+                                }
+                                else {
+                                    Image(systemName: "plus")
+                                        .font(Font.subheadline.weight(.semibold))
+                                        .frame(width: 20, height: 20, alignment: .center)
+                                        .foregroundColor(.black)
+                                }
+                                
+                                RecipeControls.ReadIngredientText(recipe.tempRecipe.ratioIngredients[index])
+                                    .foregroundColor(.black)
+                            }
+                            .formSectionItem(isLastItem: recipe.tempRecipe.ratioIngredients[index].id == recipe.tempRecipe.ratioIngredients[recipe.tempRecipe.ratioIngredients.count - 1].id)
+                        }
+                        
+                        if confirmAddIngredient == recipe.tempRecipe.ratioIngredients[index].id {
                             HStack {
                                 Button(action: {
                                     withAnimation {

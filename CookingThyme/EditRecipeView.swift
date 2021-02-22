@@ -8,20 +8,21 @@
 import SwiftUI
 import Combine
 
-// tODO: edit recipe edits are scrollable
-// TODO: category name font
+// TODO: make import button bigger
+// TODO: add nav bars to/backgrounds to make signed out views look good
+// TODO: category name font https://www.simpleswiftguide.com/how-to-use-custom-fonts-in-swift-ios-app-using-swiftui/
 
-// TODO: don't cllear ing/dir if not entered but clicked away from
 // TODO: click delete account whole hstaack
 // tODO: sign in / sign up off center
 // TODO: dark mode
 // TODO: have cursor go to next item in list after one is entered
-// TODO: make import button bigger
 
 // TODO: touchy self-plus buttons i want to click
 // TODO: plus in add ing to shopp list too big, not bold?
 // TODO: make whole plus box clickable to add to shopp list
 // TODO: add category button, lots of space
+
+// TODO: don't cllear ing/dir if not entered but clicked away from
 
 
 // TODO: keyboard avoid dont move scroll up, just down
@@ -189,9 +190,10 @@ struct EditRecipeView: View {
                 }
                 .padding(.leading, 0)
                 .foregroundColor(mainColor())
+                .frame(minWidth: 44, minHeight: 44)
             ,
             trailing:
-                HStack(spacing: 20) {
+                HStack { //}(spacing: 20) {
 //                     TODO: animate, cannot animate items in nav bar
                     if recipe.recipeText != nil {
                         Button(action: {
@@ -213,11 +215,15 @@ struct EditRecipeView: View {
                                     .scaleEffect(buttonScale)
                             }
                         }
+                        .padding(.horizontal)
+                        .frame(minWidth: 44, minHeight: 44)
                     }
                     
                     if recipe.isCreatingRecipe() {
                         Menu {
                             Text("Import Recipe")
+                                .font(.title)
+                                .foregroundColor(.black)
                             
                             Button(action: {
                                 cameraRollSheetPresented = true
@@ -238,6 +244,8 @@ struct EditRecipeView: View {
                             }
                         } label: {
                             Image(systemName: "square.and.arrow.down")
+                                .padding(.horizontal)
+                                .frame(minWidth: 44, minHeight: 44)
                         }
                         .disabled(recipe.isImportingFromURL)
                         .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
@@ -260,6 +268,7 @@ struct EditRecipeView: View {
                     {
                         Text("Done")
                     }
+                    .frame(minWidth: 44, minHeight: 44)
                     .alert(isPresented: $presentErrorAlert) {
                         Alert(title: Text("Save Failed"),
                               message: Text("\(getErrorMessages())")
@@ -547,7 +556,7 @@ struct EditRecipeView: View {
                                         recipe.removeTempIngredient(at: index)
                                     }
                                 })
-                                .formSectionItem(padding: false)
+                                .formSectionItem(padding: .horizontal)
                                 .simultaneousGesture(
                                     TapGesture(count: 1).onEnded { _ in
                                         unfocusEditable()
@@ -620,7 +629,7 @@ struct EditRecipeView: View {
                                     })
                                 }
                                 .id(recipe.tempRecipe.ingredients.count)
-                                .formSectionItem(padding: false)
+                                .formSectionItem(padding: .horizontal)
                             }
                         }
                         .formSection()
@@ -657,7 +666,7 @@ struct EditRecipeView: View {
                                         recipe.removeTempDirection(at: index)
                                     }
                                 })
-                                .formSectionItem(padding: false)
+                                .formSectionItem(padding: .horizontal)
                                 .simultaneousGesture(
                                     TapGesture(count: 1).onEnded { _ in
                                         unfocusEditable()
@@ -732,7 +741,7 @@ struct EditRecipeView: View {
                                     })
                                 }
                                 .id(recipe.tempRecipe.ingredients.count + recipe.tempRecipe.directions.count + 1)
-                                .formSectionItem(padding: false)
+                                .formSectionItem(padding: .horizontal)
                             }
                         }
                         .formSection()
