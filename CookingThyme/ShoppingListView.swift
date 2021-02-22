@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ShoppingListView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
 
     @State var completeAll = false
     @State var newName = ""
+    
+    @State var keyboardPresented = false
+
     
     var body: some View {
         List {
@@ -30,6 +34,7 @@ struct ShoppingListView: View {
                         }
                     })
                     .foregroundColor(mainColor())
+                    .onTapGesture(count: 1, perform: {})
                 }
             }
 
@@ -90,11 +95,15 @@ struct ShoppingListView: View {
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
         .listStyle(InsetGroupedListStyle())
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
+        }
+        .gesture(keyboardPresented ?
+                    TapGesture(count: 1).onEnded {
+            withAnimation {
                 unfocusEditable()
             }
-        )
+        } : nil)
     }
     
     @ViewBuilder

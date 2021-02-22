@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D8F3C6BBF2B91674BF4E021A /* Pods_CookingThyme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */; };
+		DB2ABC5C25E427D000FFF459 /* KeyboardDismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */; };
 		DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */; };
 		DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AB2565E47400808CC8 /* Assets.xcassets */; };
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
@@ -107,6 +108,7 @@
 		1CAF1BE34A8D9295A5993979 /* Pods-CookingThyme.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingThyme.debug.xcconfig"; path = "Target Support Files/Pods-CookingThyme/Pods-CookingThyme.debug.xcconfig"; sourceTree = "<group>"; };
 		5A898F6E6CEBFADFB87FACC4 /* Pods-CookingThyme.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingThyme.release.xcconfig"; path = "Target Support Files/Pods-CookingThyme/Pods-CookingThyme.release.xcconfig"; sourceTree = "<group>"; };
 		90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CookingThyme.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismissal.swift; sourceTree = "<group>"; };
 		DB49B4A42565E47300808CC8 /* CookingThyme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingThyme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingThymeApp.swift; sourceTree = "<group>"; };
 		DB49B4AB2565E47400808CC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */,
 				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
 				DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */,
 				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
@@ -677,6 +680,7 @@
 				DB49B547258070C400808CC8 /* AnimatableCircleStroke.swift in Sources */,
 				DB49B4CD2565E49F00808CC8 /* Ingredient.swift in Sources */,
 				DB49B54525806B8300808CC8 /* SimpleTimer.swift in Sources */,
+				DB2ABC5C25E427D000FFF459 /* KeyboardDismissal.swift in Sources */,
 				DB49B53D2580163500808CC8 /* TimerView.swift in Sources */,
 				DB49B55D2581E63000808CC8 /* WebMeasurement.swift in Sources */,
 				DB83F6BB25B682CA0041DAA7 /* CustomForm.swift in Sources */,

@@ -8,9 +8,7 @@
 import SwiftUI
 import Combine
 
-// TODO: directions and ingredients to stay in order
 // TODo**: off click sends awaay keyboard, simultan makes things not clickable
-// TODO**: fix index keyboard avoid
 
 
 // TODO: make import button 
@@ -29,6 +27,8 @@ import Combine
 
 // TODO: have cursor go to next item in list after one is entered
 // TODO new ingredient pllaceholder is filled in
+
+// TODO: keyboard avoid dont move scroll up, just down
 // https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -725,8 +725,7 @@ struct EditRecipeView: View {
                 .onChange(of: editingDirectionIndex) { index in
                     if let index = index {
                         withAnimation {
-                            // tODO index off
-                            proxy.scrollTo(index, anchor: .bottomTrailing)
+                            proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
                         }
                     }
                 }

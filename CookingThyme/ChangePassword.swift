@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ChangePassword: View {
     @Environment(\.presentationMode) var presentationMode
@@ -21,22 +22,27 @@ struct ChangePassword: View {
     
     @State var success = false
     
+    @State var keyboardPresented = false
+    
     var body: some View {
         VStack {
             SecureField("Current Password", text: $oldPassword)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
+                .onTapGesture(count: 1, perform: {})
             
             SecureField("New Password", text: $newPassword)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
+                .onTapGesture(count: 1, perform: {})
             
             SecureField("Confirm Password", text: $confirmPassword)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
+                .onTapGesture(count: 1, perform: {})
             
             UserErrorsView(userErrors: user.userErrors)
 
@@ -59,8 +65,10 @@ struct ChangePassword: View {
                     Spacer()
                 }
             }
+            .onTapGesture(count: 1, perform: {})
             .formItem(backgroundColor: mainColor())
         }
+        .formed()
         .loadable(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
@@ -80,12 +88,15 @@ struct ChangePassword: View {
                 }
             }
         })
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
+        }
+        .gesture(keyboardPresented ?
+                    TapGesture(count: 1).onEnded {
+            withAnimation {
                 unfocusEditable()
             }
-        )
-        .formed()
+        } : nil)
         .navigationBarTitle("Change Password")
     }
     

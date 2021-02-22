@@ -3,7 +3,7 @@
 //  CookingThyme
 //
 //  Created by Rebecca Nybo on 12/16/20.
-//
+//  Coded by Daniel Nybo
 
 import Foundation
 import SwiftyJSON

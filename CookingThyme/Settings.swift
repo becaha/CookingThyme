@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
-// TODO: edit account settings like email
 struct Settings: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
     
     @State var presentDeleteAlert = false
+    @State var keyboardPresented = false
 
     @State var isEditing = false
     
@@ -57,6 +58,7 @@ struct Settings: View {
                         
                         Button(action: {
                             withAnimation {
+                                presentDeleteAlert = false
                                 user.signout()
                             }
                         }) {
@@ -76,17 +78,20 @@ struct Settings: View {
                                 .disableAutocorrection(true)
                                 .formItem(padding: false)
                         }
+                        .onTapGesture(count: 1, perform: {})
                     }
                     
                     HStack {
                         if presentDeleteAlert && !deleteSuccessful {
                             Button(action: {
+                                user.clearErrors()
                                 presentDeleteAlert = false
                             }) {
                                 Text("Cancel")
                                     .foregroundColor(mainColor())
                                     .bold()
                             }
+                            .onTapGesture(count: 1, perform: {})
                             .buttonStyle(PlainButtonStyle())
                             
                             Spacer()
@@ -116,7 +121,7 @@ struct Settings: View {
                                     .bold()
                                     .foregroundColor(.red)
                             }
-                            else {
+                            else if deleteSuccessful {
                                 Spacer()
                                 
                                 Text("Successfully Deleted Account")
@@ -134,6 +139,15 @@ struct Settings: View {
 
         }
         .loadable(isLoading: $user.isLoading)
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
+        }
+        .gesture(keyboardPresented ?
+                    TapGesture(count: 1).onEnded {
+            withAnimation {
+                unfocusEditable()
+            }
+        } : nil)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil
@@ -144,11 +158,6 @@ struct Settings: View {
                 onLoadingComplete()
             }
         })
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
-                unfocusEditable()
-            }
-        )
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
         .navigationBarColor(offWhiteUIColor())
     }
@@ -172,3 +181,4 @@ struct Settings: View {
         }
     }
 }
+

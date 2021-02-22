@@ -37,6 +37,7 @@ struct SearchBar: View {
                     .foregroundColor(searchFontColor())
             }
             .buttonStyle(PlainButtonStyle())
+            
         }
     }
 }

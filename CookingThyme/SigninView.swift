@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Firebase
+import Combine
 
 struct SigninView: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
@@ -15,6 +15,8 @@ struct SigninView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var isSignIn: Bool = true
+    
+    @State var keyboardPresented = false
         
     var body: some View {
         VStack(spacing: 0) {
@@ -36,6 +38,7 @@ struct SigninView: View {
                 }) {
                     Text("Sign Up")
                 }
+                .onTapGesture(count: 1, perform: {})
             }
             else {
                 Group {
@@ -44,6 +47,7 @@ struct SigninView: View {
                         .disableAutocorrection(true)
                         .keyboardType(.emailAddress)
                         .formItem()
+                        .onTapGesture(count: 1, perform: {})
 
                     SecureField("Password", text: $password) {
                         withAnimation {
@@ -53,6 +57,7 @@ struct SigninView: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .formItem()
+                    .onTapGesture(count: 1, perform: {})
                 }
 
                 UserErrorsView(userErrors: user.userErrors)
@@ -72,6 +77,7 @@ struct SigninView: View {
                     }
                 }
                 .formItem(backgroundColor: mainColor())
+                .onTapGesture(count: 1, perform: {})
 
                 Button(action: {
                     withAnimation {
@@ -81,12 +87,14 @@ struct SigninView: View {
                 }) {
                     Text("Sign In")
                 }
+                .onTapGesture(count: 1, perform: {})
             }
             
             Spacer()
             
         }
         .padding()
+        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .loadable(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
@@ -98,13 +106,16 @@ struct SigninView: View {
                 onLoadingComplete()
             }
         })
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
+        }
+        .gesture(keyboardPresented ?
+                    TapGesture(count: 1).onEnded {
+            withAnimation {
                 unfocusEditable()
             }
-        )
+        } : nil)
         .accentColor(mainColor())
-        .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarColor(offWhiteUIColor())
     }
     

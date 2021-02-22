@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // TODO: no nav bar
 struct RecipeSearch: View {
@@ -15,7 +16,8 @@ struct RecipeSearch: View {
     @ObservedObject var recipeWebHandler = RecipeSearchHandler()
     
     @State var hasSearched = false
-        
+    @State var keyboardPresented = false
+
     private var isLoading: Bool {
         return recipeWebHandler.listingRecipes && hasSearched
     }
@@ -66,6 +68,7 @@ struct RecipeSearch: View {
                                     Spacer()
                                 }
                             }
+                            .onTapGesture(count: 1, perform: {})
                         }
                     }
                 }
@@ -78,11 +81,15 @@ struct RecipeSearch: View {
             .navigationBarColor(offWhiteUIColor())
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
+        }
+        .gesture(keyboardPresented ?
+                    TapGesture(count: 1).onEnded {
+            withAnimation {
                 unfocusEditable()
             }
-        )
+        } : nil)
     }
 }
 

@@ -22,6 +22,7 @@ struct Signin: View {
                 .disableAutocorrection(true)
                 .keyboardType(.emailAddress)
                 .formItem()
+                .onTapGesture(count: 1, perform: {})
 
             SecureField("Password", text: $password) {
                 withAnimation {
@@ -31,6 +32,7 @@ struct Signin: View {
             .autocapitalization(.none)
             .disableAutocorrection(true)
             .formItem()
+            .onTapGesture(count: 1, perform: {})
         }
         
         UserErrorsView(userErrors: user.userErrors)
@@ -49,12 +51,8 @@ struct Signin: View {
                 Spacer()
             }
         }
-        .simultaneousGesture(
-            TapGesture().onEnded { _ in
-                unfocusEditable()
-            }
-        )
         .formItem(backgroundColor: mainColor())
+        .onTapGesture(count: 1, perform: {})
     }
 }
 
