@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 // tODO: edit recipe edits are scrollable
-// TODO: should swipe left to cancel create recipe view
 // TODO: should not be able to doublle click save?
 // TODO: category name font
 
@@ -86,6 +85,9 @@ struct EditRecipeView: View {
     @State var buttonFlashOpacity: Double = 1 // 0.6
     @State var buttonScale: CGFloat = 1 // 0.9
     
+    @State var startPos : CGPoint = .zero
+   @State var isSwipping = true
+    
     var body: some View {
         VStack(spacing: 0) {
             if recipe.isImportingFromURL && !recipe.invalidURL {
@@ -148,6 +150,24 @@ struct EditRecipeView: View {
                 })
             }
         }
+        .gesture(DragGesture()
+                .onChanged { gesture in
+                    if self.isSwipping {
+                       self.startPos = gesture.location
+                       self.isSwipping.toggle()
+                   }
+                }
+                .onEnded { gesture in
+                    let xDist =  abs(gesture.location.x - self.startPos.x)
+                    let yDist =  abs(gesture.location.y - self.startPos.y)
+                    if self.startPos.x < gesture.location.x && yDist < xDist {
+                        // clear search/filters
+                        clearSearchFilters()
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                    self.isSwipping.toggle()
+                }
+             )
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
