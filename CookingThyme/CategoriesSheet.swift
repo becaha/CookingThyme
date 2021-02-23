@@ -26,6 +26,7 @@ struct CategoriesSheet: View {
                         Spacer()
                         
                         Text("No Categories Found.")
+                            .customFont(style: .subheadline)
                         
                         Spacer()
                     }
@@ -59,6 +60,7 @@ struct CategoriesSheet: View {
                                         .environmentObject(category)
                                 
                                     Text("\(category.name)")
+                                        .customFont(style: .subheadline)
                                         .foregroundColor(.black)
                                     
                                     Spacer()

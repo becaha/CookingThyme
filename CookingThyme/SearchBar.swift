@@ -26,7 +26,7 @@ struct SearchBar: View {
             TextField("Search", text: isAutoSearch ? searchBinding: $search, onCommit: {
                 onCommit(search)
             })
-            .font(Font.body.weight(.regular))
+            .customFont(style: .subheadline)
             .foregroundColor(.black)
             
             Button(action: {

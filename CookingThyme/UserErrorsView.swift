@@ -13,7 +13,7 @@ func UserErrorsView(userErrors: [String], padding: Bool = true) -> some View {
         ForEach(userErrors, id: \.self) { message in
             HStack {
                 Text("\(message)")
-                    .font(.footnote)
+                    .customFont(style: .footnote)
                     .foregroundColor(.red)
                     .padding(0)
 

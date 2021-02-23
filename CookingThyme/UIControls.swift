@@ -25,7 +25,7 @@ struct UIControls {
                 }
                 
                 Text("\(label)")
-                    .bold()
+                    .customFont(style: .subheadline, weight: .bold)
             }
         }
     }
@@ -44,7 +44,7 @@ struct UIControls {
             }
             
             Text("\(label)")
-                .bold()
+                .font(Font.subheadline.weight(.bold))
         }
     }
     

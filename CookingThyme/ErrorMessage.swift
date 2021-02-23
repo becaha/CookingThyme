@@ -34,7 +34,7 @@ struct ErrorMessage: View {
                 Button(action: {isError = false}) {
                     Text("\(message)")
                         .foregroundColor(.red)
-                        .font(.footnote)
+                        .customFont(style: .footnote)
                 }
                 
                 Spacer()

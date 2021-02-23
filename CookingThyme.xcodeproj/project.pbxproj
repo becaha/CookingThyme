@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D8F3C6BBF2B91674BF4E021A /* Pods_CookingThyme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */; };
 		DB2ABC5C25E427D000FFF459 /* KeyboardDismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */; };
+		DB2ABC6025E46A5F00FFF459 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC5F25E46A5F00FFF459 /* CustomFont.swift */; };
 		DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */; };
 		DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AB2565E47400808CC8 /* Assets.xcassets */; };
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
@@ -109,6 +110,7 @@
 		5A898F6E6CEBFADFB87FACC4 /* Pods-CookingThyme.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CookingThyme.release.xcconfig"; path = "Target Support Files/Pods-CookingThyme/Pods-CookingThyme.release.xcconfig"; sourceTree = "<group>"; };
 		90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CookingThyme.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismissal.swift; sourceTree = "<group>"; };
+		DB2ABC5F25E46A5F00FFF459 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
 		DB49B4A42565E47300808CC8 /* CookingThyme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingThyme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingThymeApp.swift; sourceTree = "<group>"; };
 		DB49B4AB2565E47400808CC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -235,6 +237,19 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DB2ABC6325E475D400FFF459 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */,
+				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
+				DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */,
+				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
+				DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */,
+				DB2ABC5F25E46A5F00FFF459 /* CustomFont.swift */,
+			);
+			name = Text;
+			sourceTree = "<group>";
+		};
 		DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,11 +359,7 @@
 		DB49B520257ABF6C00808CC8 /* ViewHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */,
-				DB6EFA8625C89F440060B2B4 /* SelectableTextView.swift */,
-				DB6EFA8A25CA7DA30060B2B4 /* PlaceholderTextView.swift */,
-				DB6EFA8425C8978C0060B2B4 /* EditableTextView.swift */,
-				DB6EFA8825CA37490060B2B4 /* FocusableTextField.swift */,
+				DB2ABC6325E475D400FFF459 /* Text */,
 				DB2DCE4825C1DB94008E5E99 /* CustomFormModifiers */,
 				DB49B51225794B7400808CC8 /* ErrorMessage.swift */,
 				DB49B521257AF94D00808CC8 /* ImagePicker.swift */,
@@ -729,6 +740,7 @@
 				DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */,
 				DB6EFA9125CD0A040060B2B4 /* HomeNavigationBar.swift in Sources */,
 				DB49B56B2582CEF400808CC8 /* SearchBar.swift in Sources */,
+				DB2ABC6025E46A5F00FFF459 /* CustomFont.swift in Sources */,
 				DB49B4F9256DED3700808CC8 /* ReadRecipeView.swift in Sources */,
 				DBEF371425D836B800ED83D4 /* UserErrorsView.swift in Sources */,
 				DB49B4ED2568B15B00808CC8 /* Direction.swift in Sources */,

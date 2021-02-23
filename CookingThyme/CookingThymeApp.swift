@@ -15,7 +15,8 @@ struct CookingThymeApp: App {
     @ObservedObject var user = UserVM()
     @ObservedObject var timer = TimerHandler()
     @ObservedObject var sheetNavigator = SheetNavigator()
-    
+    @ObservedObject var recipeSearchHandler = RecipeSearchHandler()
+
     @UIApplicationDelegateAdaptor(Delegate.self) var delegate
     
     init() {
@@ -33,6 +34,7 @@ struct CookingThymeApp: App {
                 .environmentObject(user)
                 .environmentObject(sheetNavigator)
                 .environmentObject(timer)
+                .environmentObject(recipeSearchHandler)
         }
     }
 }
@@ -52,6 +54,10 @@ func unfocusEditable() {
 }
 
 // MARK: - ASSETS
+
+func mainFont() -> String {
+    return "Thonburi"
+}
 
 func mainColor() -> Color {
     return Color(UIColor.systemGreen)

@@ -108,7 +108,9 @@ class RecipeSearchHandler: ObservableObject {
     
     // sets list of recipes
     func setRecipeList(_ recipeList: [Recipe]) {
-        self.recipeList.append(contentsOf: recipeList)
+        var updatedList = self.recipeList
+        updatedList.append(contentsOf: recipeList)
+        self.recipeList = updatedList
         listingRecipes = false
     }
     

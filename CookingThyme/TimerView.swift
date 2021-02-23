@@ -183,7 +183,7 @@ struct TimerView: View {
             ZStack {
                 HStack(spacing: 0) {
                     HStack(spacing: 0) {
-                        Picker("\(hours) hours", selection: $hours)
+                        Picker(selection: $hours, label: Text("\(hours) hours"))
                         {
                             ForEach(0..<24, id: \.self) { num in
                                 Text("\(num)").tag(num)
@@ -250,6 +250,7 @@ struct TimerView: View {
 
 
                 Text("\(text)")
+                    .customFont(style: .subheadline)
             }
         }
         .frame(width: width / 4, height: isLandscape ? height / 7 : height / 13)

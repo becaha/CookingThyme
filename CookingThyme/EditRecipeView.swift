@@ -8,8 +8,6 @@
 import SwiftUI
 import Combine
 
-// TODO: category name font https://www.simpleswiftguide.com/how-to-use-custom-fonts-in-swift-ios-app-using-swiftui/
-
 // TODO: dark mode
 
 // TODO: touchy self-plus buttons i want to click
@@ -95,10 +93,12 @@ struct EditRecipeView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("Import from:")
+                            .customFont(style: .subheadline)
                         
                         TextField("URL", text: $urlString, onCommit: {
                             transcribeWeb()
                         })
+                        .customFont(style: .subheadline)
                         .foregroundColor(nil)
                     }
                     .formItem()
@@ -115,6 +115,7 @@ struct EditRecipeView: View {
                             }
                         }) {
                             Text("Cancel")
+                                .customFont(style: .subheadline)
                         }
                         
                         Spacer()
@@ -125,6 +126,7 @@ struct EditRecipeView: View {
                             }
                         }) {
                             Text("Import")
+                                .customFont(style: .subheadline)
                         }
                     }
                     .padding()
@@ -186,7 +188,7 @@ struct EditRecipeView: View {
                 .frame(minWidth: 44, minHeight: 44)
             ,
             trailing:
-                HStack { //}(spacing: 20) {
+                HStack {
 //                     TODO: animate, cannot animate items in nav bar
                     if recipe.recipeText != nil {
                         Button(action: {
@@ -252,7 +254,7 @@ struct EditRecipeView: View {
                         }
                     }
             
-                
+                    // TODO: done is way far from side
                     Button(action: {
                         saveRecipe()
                         unfocusEditable()
@@ -261,13 +263,13 @@ struct EditRecipeView: View {
                     {
                         Text("Done")
                     }
-                    .frame(minWidth: 44, minHeight: 44)
                     .alert(isPresented: $presentErrorAlert) {
                         Alert(title: Text("Save Failed"),
                               message: Text("\(getErrorMessages())")
                         )
                     }
                 }
+//                .padding(.trailing, 0)
                 .foregroundColor(mainColor())
         )
     }
@@ -423,7 +425,7 @@ struct EditRecipeView: View {
     //                    }) {
                             HStack {
                                 (Text("Missing fields? Reference the full recipe text by clicking ") +  Text(Image(systemName: "doc.plaintext")) + Text(" above."))
-                                    .font(.caption)
+                                    .customFont(style: .caption1)
                             }
                             .formHeader()
     //                    }
@@ -509,9 +511,9 @@ struct EditRecipeView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Text("Ingredients")
+                                .customFont(style: .subheadline)
                                 .textCase(.uppercase)
-                                .font(.subheadline)
-                            
+
                             Spacer()
                             
                             VStack {
@@ -519,7 +521,7 @@ struct EditRecipeView: View {
                                         HStack {
                                             Text("Servings: \(servings)")
                                                 .textCase(.uppercase)
-                                                .font(.subheadline)
+                                                .customFont(style: .subheadline)
                                                 // can't remember why this was a problem
                                                 .fixedSize(horizontal: true, vertical: false)
                                     
@@ -530,6 +532,7 @@ struct EditRecipeView: View {
                                 {
                                     ForEach(1..<101, id: \.self) { num in
                                         Text("\(num.toString())").tag(num.toString())
+                                            .customFont(style: .subheadline)
                                     }
                                 }
                                 .pickerStyle(MenuPickerStyle())
@@ -587,6 +590,7 @@ struct EditRecipeView: View {
                                             Spacer()
 
                                             PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
+                                                .customFont(style: .subheadline)
                                                 .onChange(of: ingredient) { value in
                                                     print("")
                                                     if value.hasSuffix("\n") {
@@ -639,8 +643,8 @@ struct EditRecipeView: View {
                         HStack {
                             Text("Directions")
                                 .textCase(.uppercase)
-                                .font(.subheadline)
-                            
+                                .customFont(style: .subheadline)
+
                             Spacer()
                         }
                         .formHeader()
@@ -649,6 +653,7 @@ struct EditRecipeView: View {
                             ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
                                 HStack(alignment: .center, spacing: 20) {
                                     Text("\(index + 1)")
+                                        .customFont(style: .subheadline)
                                     
                                     EditableDirection(index: index, editingIndex: $editingDirectionIndex)
                                         .environmentObject(recipe)
@@ -677,6 +682,7 @@ struct EditRecipeView: View {
                             VStack(alignment: .leading) {
                                 HStack(alignment: .center, spacing: 20) {
                                     Text("\(recipe.tempRecipe.directions.count + 1)")
+                                        .customFont(style: .subheadline)
                                     
                                     ZStack {
                                         HStack(spacing: 0) {
@@ -699,6 +705,7 @@ struct EditRecipeView: View {
                                             Spacer()
 
                                             PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
+                                                .customFont(style: .subheadline)
                                                 .onChange(of: direction) { value in
                                                     if value.hasSuffix("\n") {
                                                         direction.removeLast(1)

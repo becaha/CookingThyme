@@ -156,12 +156,14 @@ struct RecipeCollectionView: View {
 
                 if collection.currentCategory!.filteredRecipes.count == 0 {
                     Text("No recipes found.")
+                        .customFont(style: .subheadline)
                 }
 
                 ForEach(collection.currentCategory!.filteredRecipes) { recipe in
                     Group {
                         if isEditing {
                             Text("\(recipe.name)")
+                                .customFont(style: .subheadline)
                                 .deletable(isDeleting: true, onDelete: {
                                     withAnimation {
                                         collection.deleteRecipe(withId: recipe.id)
@@ -176,7 +178,7 @@ struct RecipeCollectionView: View {
                                     .environmentObject(collection)
                             ) {
                                 Text("\(recipe.name)")
-                                    .fontWeight(.regular)
+                                    .customFont(style: .subheadline)
                                     .formItem(isNavLink: true)
                             }
                         }
@@ -273,8 +275,7 @@ struct RecipeCollectionView: View {
             })
             .lineLimit(2)
             .multilineTextAlignment(.center)
-//            .font(.caption2)
-            .font(Font.custom("Thonburi", size: 20))
+            .customFont(style: .subheadline)
             .lineSpacing(0)
             .frame(width: 80, height: 40)
         }
@@ -451,6 +452,7 @@ struct RecipeCollectionView: View {
                     TextField("New Category", text: $newCategory, onCommit: {
                         addCategory()
                     })
+                    .customFont(style: .subheadline)
 
                     Spacer()
 
@@ -467,6 +469,7 @@ struct RecipeCollectionView: View {
     @ViewBuilder
     func CategoryEditMenu(_ category: RecipeCategoryVM) -> some View {
         if isEditing {
+            // TODO: edit menu color and font of text
             Menu {
                 Menu {
                     Button(action: {
@@ -474,6 +477,7 @@ struct RecipeCollectionView: View {
                         cameraRollSheetPresented = true
                     }) {
                         Label("Pick from camera roll", systemImage: "photo.on.rectangle")
+                            .customFont(style: .subheadline)
                     }
 
                     Button(action: {
@@ -487,6 +491,7 @@ struct RecipeCollectionView: View {
                         }
                     }) {
                         Label("Paste", systemImage: "doc.on.clipboard")
+                            .customFont(style: .subheadline)
                     }
                     
                     if category.imageHandler.images.count > 0 {
@@ -496,15 +501,19 @@ struct RecipeCollectionView: View {
                             presentAlert = true
                         }) {
                             Label("Delete", systemImage: "trash")
+                                .customFont(style: .subheadline)
                         }
                     }
                     
                     Button(action: {
                     }) {
                         Text("Cancel")
+                            .customFont(style: .subheadline)
+                            .foregroundColor(mainColor())
                     }
                 } label: {
                     Label("Edit Photo", systemImage: "camera")
+                        .customFont(style: .subheadline)
                 }
                 
                 if category.name != "All" {
@@ -514,12 +523,15 @@ struct RecipeCollectionView: View {
                         presentAlert = true
                     }) {
                         Label("Delete Category", systemImage: "trash")
+                            .customFont(style: .subheadline)
                     }
                 }
                 
                 Button(action: {
                 }) {
-                    Label("Cancel", systemImage: "")
+                    Text("Cancel")
+                        .customFont(style: .subheadline)
+                        .foregroundColor(mainColor())
                 }
             } label: {
                 ZStack {

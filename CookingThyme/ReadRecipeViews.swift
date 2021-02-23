@@ -51,7 +51,7 @@ struct SourceCredit: View {
         if recipe.source != "" {
             HStack {
                 Text("Source: \(recipe.tempRecipe.source)")
-                    .font(.caption)
+                    .customFont(style: .caption1)
             }
             .padding()
         }
@@ -75,8 +75,8 @@ struct IngredientsView: View {
             HStack {
                 Text("Ingredients")
                     .textCase(.uppercase)
-                    .font(.subheadline)
-                
+                    .customFont(style: .subheadline)
+
                 Spacer()
                 
                 VStack {
@@ -84,7 +84,7 @@ struct IngredientsView: View {
                             HStack {
                                 Text("Servings: \(recipe.tempRecipe.ratioServings) ")
                                     .textCase(.uppercase)
-                                    .font(.subheadline)
+                                    .customFont(style: .subheadline)
                                     .fixedSize()
                         
                                 Image(systemName: "chevron.down")
@@ -93,6 +93,7 @@ struct IngredientsView: View {
                     {
                         ForEach(1..<101, id: \.self) { num in
                             Text("\(num.toString())").tag(num.toString())
+                                .customFont(style: .subheadline)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
@@ -156,6 +157,7 @@ struct IngredientsView: View {
                                     Image(systemName: "cart.fill.badge.plus")
 
                                     Text("Add to Shopping List")
+                                        .customFont(style: .subheadline)
                                 }
                                 
                                 Spacer()
@@ -196,6 +198,7 @@ struct IngredientsView: View {
                             Image(systemName: "cart.fill.badge.plus")
                             
                             Text("Add All to Shopping List")
+                                .customFont(style: .subheadline)
                                 .padding(.vertical)
                             
                             Spacer()
@@ -238,8 +241,8 @@ struct DirectionsList: View {
             HStack {
                 Text("Directions")
                     .textCase(.uppercase)
-                    .font(.subheadline)
-                
+                    .customFont(style: .subheadline)
+
                 Spacer()
             }
             .formHeader()

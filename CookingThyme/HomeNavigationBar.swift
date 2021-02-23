@@ -13,7 +13,7 @@ struct HomeNavigationBar: ViewModifier {
     func body(content: Content) -> some View {
         NavigationView {
             content
-            .font(.headline)
+            .customFont(style: .headline)
             .navigationBarTitle("Cooking Thyme", displayMode: .inline)
             .navigationBarItems(trailing:
                 Button(action: settingsAction) {

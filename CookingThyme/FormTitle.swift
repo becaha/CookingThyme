@@ -15,7 +15,7 @@ struct FormTitle: ViewModifier {
             VStack {
                 HStack {
                     Text("")
-                        .font(.title)
+                        .customFont(style: .title1)
                         .multilineTextAlignment(.center)
                 }
                 .padding()
@@ -26,7 +26,7 @@ struct FormTitle: ViewModifier {
             VStack {
                 HStack {
                     Text("\(title)")
-                        .font(.title)
+                        .customFont(style: .title1)
                         .multilineTextAlignment(.center)
                 }
                 .padding()

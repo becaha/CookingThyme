@@ -20,8 +20,10 @@ struct RecipeTextView: View {
         VStack {
             if recipe.recipeText != nil {
                     Text("Recipe Text")
+                        .customFont(style: .subheadline)
                                         
                     SelectableTextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
+                        .customFont(style: .subheadline)
             }
         }
         .onAppear {

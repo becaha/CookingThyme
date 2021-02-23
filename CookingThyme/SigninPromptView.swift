@@ -22,8 +22,10 @@ struct SigninPromptView: View {
                 sheetNavigator.sheetDestination = .signin
             }) {
                 Text("Sign in")
+                    .customFont(style: .subheadline)
                 
                 Text("\(message)")
+                    .customFont(style: .subheadline)
                     .foregroundColor(.black)
             }
             

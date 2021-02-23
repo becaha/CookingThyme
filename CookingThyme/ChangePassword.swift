@@ -27,18 +27,21 @@ struct ChangePassword: View {
     var body: some View {
         VStack {
             SecureField("Current Password", text: $oldPassword)
+                .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
                 .onTapGesture(count: 1, perform: {})
             
             SecureField("New Password", text: $newPassword)
+                .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
                 .onTapGesture(count: 1, perform: {})
             
             SecureField("Confirm Password", text: $confirmPassword)
+                .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
@@ -55,9 +58,11 @@ struct ChangePassword: View {
                     Group {
                         if !success {
                             Text("Save Changes")
+                                .bold()
                         }
                         else {
                             Text("Password Changed Successfully")
+                                .bold()
                         }
                     }
                         .foregroundColor(.white)

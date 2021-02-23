@@ -29,8 +29,3 @@ extension View {
     }
 }
 
-//struct Loadable_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Loadable()
-//    }
-//}

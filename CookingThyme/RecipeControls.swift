@@ -13,38 +13,22 @@ struct RecipeControls {
     
     @ViewBuilder
     static func ReadDirection(withIndex index: Int, direction: String) -> some View {
-//        Button(action: {
-//            withAnimation {
-//                directionIndicesCompleted.toggleElement(index)
-//            }
-//        }) {
-            HStack(alignment: .top, spacing: 20) {
-//                if directionIndicesCompleted.contains(index) {
-//                    HStack(alignment: .center) {
-//                        Text("\(index + 1)")
-//
-//                        Spacer()
-//
-//                        Image(systemName: "plus").imageScale(.medium)
-//                    }
-//                }
-//                else {
-                    Group {
-                        Text("\(index + 1)")
+        HStack(alignment: .top, spacing: 20) {
+            Group {
+                Text("\(index + 1)")
+                    .customFont(style: .subheadline)
 
-                        Text("\(direction)")
-                            .font(.body)
-                    }
-//                }
+                Text("\(direction)")
+                    .customFont(style: .body)
             }
-            .foregroundColor(.black)
-//        }
+        }
+        .foregroundColor(.black)
     }
     
     @ViewBuilder
     static func ReadDirection(direction: String) -> some View {
         Text("\(direction)")
-            .font(.body)
+            .customFont(style: .body)
     }
     
     // on click to edit an ingredient, this will be added to that ingredient, off click will save that to
@@ -57,7 +41,7 @@ struct RecipeControls {
     @ViewBuilder
     static func ReadIngredientText(_ ingredientString: String) -> some View {
         Text("\(ingredientString)")
-            .font(.body)
+            .customFont(style: .body)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

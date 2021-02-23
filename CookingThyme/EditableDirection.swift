@@ -26,6 +26,7 @@ struct EditableDirection: View {
                     Spacer()
                     
                     EditableTextView(textBinding: getDirectionBinding(), isFirstResponder: true)
+                        .customFont(style: .subheadline)
                         .onChange(of: getDirectionString()) { value in
                             if value.hasSuffix("\n") {
                                 commitDirection()

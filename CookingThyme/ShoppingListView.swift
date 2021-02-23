@@ -27,6 +27,7 @@ struct ShoppingListView: View {
                                     addItem()
                                 }
                               })
+                        .customFont(style: .subheadline)
 
                     UIControls.AddButton(action: {
                         withAnimation {
@@ -127,6 +128,7 @@ struct ShoppingListView: View {
             }
 
             Text("\(item.toString())")
+                .customFont(style: .subheadline)
         }
     }
 

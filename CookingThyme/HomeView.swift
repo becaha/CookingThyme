@@ -15,12 +15,22 @@ struct HomeView: View {
     @EnvironmentObject var user: UserVM
     @EnvironmentObject var timer: TimerHandler
     @EnvironmentObject var sheetNavigator: SheetNavigator
-            
+    @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
+
     @AppStorage("log_status") var status = false
 
     
     var body: some View {
         TabView {
+            RecipeSearch()
+                .homeNavigationBar(settingsAction: settingsAction)
+                .environmentObject(sheetNavigator)
+                .environmentObject(recipeSearchHandler)
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                Text("Recipe Search")
+            }
+            
             NavigationView {
                 if !user.isSignedIn {
                     SigninPromptView(message: "to start creating a recipe book.")
@@ -41,14 +51,6 @@ struct HomeView: View {
             .tabItem {
                 Image(systemName: "book.fill")
                 Text("Recipe Book")
-            }
-            
-            RecipeSearch()
-            .homeNavigationBar(settingsAction: settingsAction)
-            .environmentObject(sheetNavigator)
-            .tabItem {
-                Image(systemName: "magnifyingglass")
-                Text("Recipe Search")
             }
 
             VStack {

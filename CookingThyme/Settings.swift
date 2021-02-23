@@ -27,7 +27,7 @@ struct Settings: View {
     var body: some View {
         VStack {
             List {
-                Section(header: Text("Account Details")) {
+                Section(header: Text("Account Details").customFont(style: .subheadline)) {
                     HStack {
                         Text("Email")
                             .bold()
@@ -35,7 +35,7 @@ struct Settings: View {
                         Spacer()
 
                         Text("\(email)")
-                            .fontWeight(.regular)
+                            .customFont(style: .subheadline)
                             .onAppear {
                                 email = user.email
                             }
@@ -74,6 +74,7 @@ struct Settings: View {
                     if presentDeleteAlert {
                         HStack {
                             SecureField("Confirm Password", text: $password)
+                                .customFont(style: .subheadline)
                                 .autocapitalization(.none)
                                 .disableAutocorrection(true)
                                 .formItem(padding: false)

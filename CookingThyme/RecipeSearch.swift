@@ -12,71 +12,85 @@ import Combine
 struct RecipeSearch: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
-    
-    @ObservedObject var recipeWebHandler = RecipeSearchHandler()
+    @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
     
     @State var hasSearched = false
     @State var keyboardPresented = false
 
+    @State var receivedRecipes = false
+
     private var isLoading: Bool {
-        return recipeWebHandler.listingRecipes && hasSearched
+        return recipeSearchHandler.listingRecipes && hasSearched
     }
     
     var body: some View {
         NavigationView {
-            Form {                
-                Section {
-                    SearchBar(isAutoSearch: false)  { result in
-                        hasSearched = true
-                        recipeWebHandler.listRecipes(withQuery: result)
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    HStack {
+                        SearchBar(isAutoSearch: false)  { result in
+                            hasSearched = true
+                            recipeSearchHandler.listRecipes(withQuery: result)
+                        }
                     }
-                }
+                    .formItem(isSearchBar: true)
+                    .padding(.top)
 
-                if recipeWebHandler.recipeList.count == 0 && !isLoading && hasSearched {
-                    Section(header:
+                    if recipeSearchHandler.recipeList.count == 0 && !isLoading && hasSearched {
                         HStack {
                             Spacer()
 
-                            Text("No Results")
+                            Text("No Results.")
 
                             Spacer()
                         }
-                    ) {}
-                }
-
-                if recipeWebHandler.recipeList.count > 0 {
-                    List {
-                        ForEach(recipeWebHandler.recipeList) { recipe in
-                            NavigationLink ("\(recipe.name)", destination:
-                                                PublicRecipeView(recipe: RecipeVM(recipe: recipe))
-                            )
-                        }
+                        .formItem()
                     }
 
-                    if !isLoading && recipeWebHandler.isMore {
-                        Section {
+                    if recipeSearchHandler.recipeList.count > 0 {
+                        VStack(spacing: 0) {
+                            ForEach(recipeSearchHandler.recipeList, id: \.self) { recipe in
+                                NavigationLink(destination:
+                                    PublicRecipeView(recipe: RecipeVM(recipe: recipe))
+                                ) {
+                                    Text("\(recipe.name)")
+                                        .customFont(style: .subheadline)
+                                        .formItem(isNavLink: true)
+                                }
+                            }
+                        }
+
+                        if !isLoading && recipeSearchHandler.isMore {
                             Button(action: {
                                 withAnimation {
-                                    recipeWebHandler.listMoreRecipes()
+                                    recipeSearchHandler.listMoreRecipes()
                                 }
                             }) {
                                 HStack {
                                     Spacer()
 
                                     Text("More")
+                                        .bold()
+                                        .foregroundColor(.white)
 
                                     Spacer()
                                 }
+                                .formItem(backgroundColor: mainColor())
                             }
+                            .padding(.vertical)
                             .onTapGesture(count: 1, perform: {})
                         }
                     }
-                }
 
-                if isLoading {
-                    Section(header: UIControls.Loading()) {}
+                    if isLoading {
+                        UIControls.Loading()
+                            .padding()
+                    }
+                    
                 }
+                Spacer()
             }
+            .background(formBackgroundColor())
             .navigationBarTitle("Recipe Search", displayMode: .inline)
             .navigationBarColor(offWhiteUIColor())
         }
@@ -93,8 +107,3 @@ struct RecipeSearch: View {
     }
 }
 
-struct RecipeSearch_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeSearch()
-    }
-}

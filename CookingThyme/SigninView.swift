@@ -40,6 +40,7 @@ struct SigninView: View {
                         Spacer()
                         
                         Text("Sign Up")
+                            .customFont(style: .subheadline)
 
                         Spacer()
                     }
@@ -49,6 +50,7 @@ struct SigninView: View {
             else {
                 Group {
                     TextField("Email", text: $email)
+                        .customFont(style: .subheadline)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .keyboardType(.emailAddress)
@@ -60,6 +62,7 @@ struct SigninView: View {
                             signup()
                         }
                     }
+                    .customFont(style: .subheadline)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .formItem()
@@ -77,6 +80,7 @@ struct SigninView: View {
                         Spacer()
                         
                         Text("Sign Up")
+                            .customFont(style: .subheadline)
                             .foregroundColor(.white)
                         
                         Spacer()
@@ -95,6 +99,7 @@ struct SigninView: View {
                         Spacer()
                         
                         Text("Sign In")
+                            .customFont(style: .subheadline)
                         
                         Spacer()
                     }

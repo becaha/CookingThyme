@@ -24,7 +24,7 @@ struct AutoSearchBar: View {
             TextField("Search", text: searchBinding, onCommit: {
                 onCommit(search)
             })
-            .font(Font.body.weight(.regular))
+            .customFont(style: .subheadline)
             .foregroundColor(.black)
             
             Button(action: {

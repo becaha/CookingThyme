@@ -18,6 +18,7 @@ struct Signin: View {
     var body: some View {
         Group {
             TextField("Email", text: $email)
+                .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .keyboardType(.emailAddress)
@@ -29,6 +30,7 @@ struct Signin: View {
                     signin(email, password)
                 }
             }
+            .customFont(style: .subheadline)
             .autocapitalization(.none)
             .disableAutocorrection(true)
             .formItem()
@@ -46,6 +48,7 @@ struct Signin: View {
                 Spacer()
                 
                 Text("Sign In")
+                    .customFont(style: .subheadline)
                     .foregroundColor(.white)
                 
                 Spacer()

@@ -62,7 +62,7 @@ struct EditableText: View {
         ZStack {
             if !isEditing {
                 Text(text)
-                    .fontWeight(isSelected ? .bold : .none)
+                    .customFont(style: .subheadline, weight: isSelected ? .bold : .regular)
                     .opacity(isEditing ? 0 : 1)
                     .onAppear {
                         callOnChanged(false)
@@ -72,6 +72,7 @@ struct EditableText: View {
                 TextField(text, text: $editableText, onEditingChanged: { begin in
                     callOnChanged(begin)
                 })
+                .customFont(style: .subheadline)
                 .autocapitalization(autocapitalization)
                 .opacity(isEditing ? 1 : 0)
             }
