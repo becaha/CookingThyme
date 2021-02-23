@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomFormSectionItem: ViewModifier {
     var isLastItem: Bool = false
-    var backgroundColor: Color = Color.white
+    var backgroundColor: Color = formItem()
     var padding: Edge.Set = .all
     
     init() {}
@@ -48,6 +48,7 @@ struct CustomFormSectionItem: ViewModifier {
             
             if !isLastItem {
                 Divider()
+                    .foregroundColor(formBorderColor())
             }
         }
         .padding(0)

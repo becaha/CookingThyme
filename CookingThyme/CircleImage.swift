@@ -13,7 +13,7 @@ struct CircleImage: View {
     @EnvironmentObject var category: RecipeCategoryVM
     var width: CGFloat = 60
     var height: CGFloat = 60
-    var strokeColor: Color = Color.white
+    var strokeColor: Color = borderColor()
     
     var isLoading: Bool {
         return category.imageHandler.loadingImages && category.imageHandler.images.count == 0

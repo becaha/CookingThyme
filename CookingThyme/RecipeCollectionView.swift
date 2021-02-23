@@ -83,8 +83,8 @@ struct RecipeCollectionView: View {
             )
             .loadable(isLoading: $collection.isLoading)
         }
-        .navigationBarColor(offWhiteUIColor())
-        .navigationBarTitle("Recipe Book", displayMode: .inline)
+        .navigationBarColor(UIColor(navBarColor()))
+        .navigationBarTitle(Text("Recipe Book"), displayMode: .inline)
         .navigationBarItems(trailing:
             UIControls.EditButton(
                 action: {

@@ -133,7 +133,7 @@ struct SigninView: View {
             }
         } : nil)
         .accentColor(mainColor())
-        .navigationBarColor(offWhiteUIColor())
+        .navigationBarColor(UIColor(navBarColor()))
     }
     
     func reset() {

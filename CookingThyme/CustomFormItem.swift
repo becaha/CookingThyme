@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomFormItem: ViewModifier {
-    var backgroundColor: Color
+    var backgroundColor: Color = formItem()
     var isNavLink: Bool
     var cornerRadius: CGFloat = 7
     var height: CGFloat = 40
@@ -17,7 +17,6 @@ struct CustomFormItem: ViewModifier {
     var centered: Bool = false
     
     init() {
-        self.backgroundColor = Color.white
         self.isNavLink = false
         self.padding = true
     }
@@ -36,13 +35,11 @@ struct CustomFormItem: ViewModifier {
     }
     
     init(isNavLink: Bool) {
-        self.backgroundColor = Color.white
         self.isNavLink = isNavLink
         self.padding = true
     }
     
     init(padding: Bool) {
-        self.backgroundColor = Color.white
         self.isNavLink = false
         self.padding = padding
     }
@@ -67,7 +64,7 @@ struct CustomFormItem: ViewModifier {
             
             HStack {
                 content
-                    .foregroundColor(.black)
+                    .foregroundColor(formItemFont())
              
                 if !centered {
                     Spacer()

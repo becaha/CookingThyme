@@ -92,7 +92,7 @@ struct RecipeSearch: View {
             }
             .background(formBackgroundColor())
             .navigationBarTitle("Recipe Search", displayMode: .inline)
-            .navigationBarColor(offWhiteUIColor())
+            .navigationBarColor(UIColor(navBarColor()))
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onReceive(Publishers.keyboardHeight) { height in

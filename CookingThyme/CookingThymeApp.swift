@@ -71,6 +71,22 @@ func lightFormBackgroundColor() -> Color {
     return getAssetColor(withName: "FormBackgroundLight")
 }
 
+func navBarFont() -> Color {
+    return getAssetColor(withName: "NavBarFont")
+}
+
+func navBarColor() -> Color {
+    return getAssetColor(withName: "NavBar")
+}
+
+func formItem() -> Color {
+    return getAssetColor(withName: "FormItem")
+}
+
+func formItemFont() -> Color {
+    return getAssetColor(withName: "FormItemFont")
+}
+
 func formBackgroundColor() -> Color {
     return getAssetColor(withName: "FormBackground")
 }
@@ -93,10 +109,6 @@ func searchFontColor() -> Color {
 
 func placeholderFontColor() -> Color {
     return getAssetColor(withName: "Placeholder")
-}
-
-func offWhiteUIColor() -> UIColor {
-    return UIColor(getAssetColor(withName: "OffWhite"))
 }
 
 func getAssetColor(withName name: String) -> Color {

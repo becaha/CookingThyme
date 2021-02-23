@@ -35,7 +35,7 @@ struct UIControls {
             ZStack {
                 Circle()
                     .frame(width: 25, height: 25)
-                    .foregroundColor(.white)
+                    .foregroundColor(formItem())
                     .shadow(radius: 1)
 
                 Image(systemName: "plus")

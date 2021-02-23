@@ -90,7 +90,7 @@ struct CategoriesSheet: View {
                         Text("Cancel")
                     }
             )
-            .navigationBarColor(offWhiteUIColor())
+            .navigationBarColor(UIColor(navBarColor()))
         }
     }
 }

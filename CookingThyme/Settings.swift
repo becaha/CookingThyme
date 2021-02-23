@@ -163,7 +163,7 @@ struct Settings: View {
             }
         })
         .navigationBarTitle(Text("Settings"), displayMode: .inline)
-        .navigationBarColor(offWhiteUIColor())
+        .navigationBarColor(UIColor(navBarColor()))
     }
     
     func onLoadingComplete() {

@@ -11,7 +11,7 @@ struct CustomFormSection: ViewModifier {
     var backgroundColor: Color
     
     init() {
-        self.backgroundColor = Color.white
+        self.backgroundColor = formItem()
     }
     
     init(backgroundColor: Color) {
@@ -21,7 +21,7 @@ struct CustomFormSection: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(RoundedRectangle(cornerRadius: 7).stroke(formBorderColor()))
-            .background(RoundedRectangle(cornerRadius: 7).fill(Color.white))
+            .background(RoundedRectangle(cornerRadius: 7).fill(backgroundColor))
             .padding([.horizontal])
     }
 }
