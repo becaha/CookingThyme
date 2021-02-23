@@ -31,7 +31,7 @@ struct RecipeTextView: View {
                 recipeText = text
             }
         }
-        .foregroundColor(.black)
+        .foregroundColor(formItemFont())
         .padding()
     }
 }

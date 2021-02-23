@@ -26,7 +26,7 @@ struct SigninPromptView: View {
                 
                 Text("\(message)")
                     .customFont(style: .subheadline)
-                    .foregroundColor(.black)
+//                    .foregroundColor(.black)
             }
             
             Spacer()

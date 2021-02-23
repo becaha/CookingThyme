@@ -63,7 +63,7 @@ struct ScrollableImagesView: View {
                                             .opacity(0.8)
 
                                         Circle()
-                                            .stroke(Color.black)
+                                            .stroke(borderColor())
                                             .frame(width: 40, height: 40)
 
                                         Image(systemName: "trash")
@@ -76,7 +76,7 @@ struct ScrollableImagesView: View {
                                 .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: height)))
                                 .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                                 .clipped()
-                                .border(Color.black, width: borderWidth)
+                                .border(borderColor(), width: borderWidth)
                                 .animation(.easeInOut(duration: 1.0))
                                 .transition(.slide)
                             

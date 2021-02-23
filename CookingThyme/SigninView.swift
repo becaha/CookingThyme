@@ -99,7 +99,7 @@ struct SigninView: View {
                         Spacer()
                         
                         Text("Sign In")
-                            .customFont(style: .subheadline)
+                            .customFont(style: .subheadline, weight: .bold)
                         
                         Spacer()
                     }

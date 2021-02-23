@@ -17,8 +17,8 @@ struct NavigationBarColor: ViewModifier {
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = .clear
         coloredAppearance.shadowColor = UIColor(borderColor())
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor(navBarFont())]
+        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(navBarFont())]
         
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().compactAppearance = coloredAppearance

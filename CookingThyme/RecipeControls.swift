@@ -22,7 +22,7 @@ struct RecipeControls {
                     .customFont(style: .body)
             }
         }
-        .foregroundColor(.black)
+        .foregroundColor(formItemFont())
     }
     
     @ViewBuilder

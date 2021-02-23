@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-// TODO: dark mode
+// TODO: dark mode - logo in white, nav bar blaack and then white for smaller nav bar
 
 // TODO: touchy self-plus buttons i want to click
 // TODO: add category button, lots of space, do i want it there only when isediting?
@@ -217,8 +217,6 @@ struct EditRecipeView: View {
                     if recipe.isCreatingRecipe() {
                         Menu {
                             Text("Import Recipe")
-                                .font(.title)
-                                .foregroundColor(.black)
                             
                             Button(action: {
                                 cameraRollSheetPresented = true
@@ -447,7 +445,7 @@ struct EditRecipeView: View {
                                     Spacer()
                                     
                                     RecipeNameTitle(name: "\(name)")
-                                        .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : .black)
+                                        .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : formItemFont())
                                     
                                     Spacer()
                                 }

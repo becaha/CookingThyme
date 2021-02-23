@@ -95,6 +95,10 @@ func formBorderColor() -> Color {
     return getAssetColor(withName: "FormBorder")
 }
 
+func buttonColor() -> Color {
+    return getAssetColor(withName: "Button")
+}
+
 func borderColor() -> Color {
     return getAssetColor(withName: "Border")
 }

@@ -25,8 +25,9 @@ struct PlaceholderTextView: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            if textView.textColor == UIColor.lightGray {
-                textView.textColor = UIColor.black
+            if textView.textColor == UIColor(placeholderFontColor()) {
+                textView.textColor =  UIColor(formItemFont())
+
             }
             if textView.text == placeholderText {
                 textView.text = nil
@@ -35,7 +36,7 @@ struct PlaceholderTextView: UIViewRepresentable {
         
         // on user end, set back to placeholder
         func textViewDidEndEditing(_ textView: UITextView) {
-            textView.textColor = UIColor.lightGray
+            textView.textColor = UIColor(placeholderFontColor())
             textView.text = placeholderText
         }
 

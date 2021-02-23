@@ -36,11 +36,9 @@ struct SearchTest: View {
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
                         HStack {
-                            TextField("Search", text: $search, onCommit: {
-                                print("\(search)")
-                            })
+                            TextField("Search", text: $search)
                             .font(Font.body.weight(.regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(searchFontColor())
                             .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, scrollMinY: geometry.frame(in: .global).minY))
                             
                             Button(action: {

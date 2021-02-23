@@ -61,7 +61,7 @@ struct CategoriesSheet: View {
                                 
                                     Text("\(category.name)")
                                         .customFont(style: .subheadline)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(formItemFont())
                                     
                                     Spacer()
                                     

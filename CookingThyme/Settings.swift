@@ -118,7 +118,7 @@ struct Settings: View {
                                     
                                     Spacer()
                                 }
-                                .background(Color.white)
+                                .background(formItem())
                             }
                             else if !deleteSuccessful && presentDeleteAlert {
                                 Text("Delete Account")

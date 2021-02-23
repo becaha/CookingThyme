@@ -541,7 +541,7 @@ struct RecipeCollectionView: View {
                         .opacity(0.8)
 
                     Image(systemName: "pencil")
-                        .foregroundColor(.black)
+                        .foregroundColor(formItemFont())
                 }
             }
         }

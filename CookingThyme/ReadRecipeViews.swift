@@ -138,11 +138,11 @@ struct IngredientsView: View {
                                     Image(systemName: "plus")
                                         .font(Font.subheadline.weight(.semibold))
                                         .frame(width: 20, height: 20, alignment: .center)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(formItemFont())
                                 }
                                 
                                 RecipeControls.ReadIngredientText(recipe.tempRecipe.ratioIngredients[index])
-                                    .foregroundColor(.black)
+                                    .foregroundColor(formItemFont())
                             }
                             .formSectionItem(isLastItem: recipe.tempRecipe.ratioIngredients[index].id == recipe.tempRecipe.ratioIngredients[recipe.tempRecipe.ratioIngredients.count - 1].id)
                         }
