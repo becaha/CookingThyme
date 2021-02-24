@@ -273,6 +273,7 @@ struct EditRecipeView: View {
         if urlString != "" {
             recipe.invalidURL = false
             resetErrors()
+            resetRecipe()
             recipe.transcribeRecipe(fromUrlString: urlString)
         }
         else {
@@ -282,7 +283,14 @@ struct EditRecipeView: View {
     
     private func transcribeImage() {
         guard let inputImage = selectedImage else { return }
+        resetErrors()
+        resetRecipe()
         recipe.transcribeRecipe(fromImage: inputImage)
+    }
+    
+    private func resetRecipe() {
+        name = ""
+        servings = "0"
     }
     
     private func setRecipe() {

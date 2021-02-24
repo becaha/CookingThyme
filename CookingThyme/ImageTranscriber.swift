@@ -283,7 +283,10 @@ class ImageTranscriber: ObservableObject {
         
         var ingredients = [Ingredient]()
         var directions = [Direction]()
-        let recipe_title = sections["title"]?[0] ?? ""
+        var recipe_title = ""
+        if let title = sections["title"], title.count > 0 {
+            recipe_title = title[0]
+        }
         
         for ing in (sections["ingredients"] ?? []) {
             ingredients.append(Ingredient(ingredientString: ing))

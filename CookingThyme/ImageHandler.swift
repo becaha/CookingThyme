@@ -170,6 +170,7 @@ class ImageHandler: ObservableObject {
         }
     }
     
+    // TODO: error here on .leaave()
     // sets image data for a imageURL
     private func setImageData(at index: Int) {
         if let imageUrl = imageURL {
