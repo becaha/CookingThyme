@@ -51,7 +51,7 @@ struct PlaceholderTextView: UIViewRepresentable {
         textView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
         textView.delegate = context.coordinator
         textView.isEditable = true
-        textView.backgroundColor = UIColor(named: "FormItem")
+        textView.backgroundColor = UIColor.clear
         
         textView.text = placeholderText
         textView.textColor = UIColor(placeholderFontColor())

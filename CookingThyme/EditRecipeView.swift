@@ -11,8 +11,6 @@ import Combine
 
 // TODO: don't cllear ing/dir if not entered but clicked away from
 
-// TODO: keyboard avoid dont move scroll up, just down
-
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
 
@@ -64,6 +62,8 @@ struct EditRecipeView: View {
     @State private var editingDirectionIndex: Int?
     @State private var deletingIndex: Int?
     @State private var editingPosition: CGFloat?
+    @State private var newIngredientPosition: CGFloat?
+    @State private var newDirectionPosition: CGFloat?
     @State private var globalHeight: CGFloat?
     @State private var keyboardHeight: CGFloat = 0
 //    @State private var ingredientHeights =
@@ -542,6 +542,10 @@ struct EditRecipeView: View {
                                             Color("FormItem")
                                                 .simultaneousGesture(
                                                 TapGesture(count: 1).onEnded { _ in
+                                                    // is currently editing, now is unclicking to stop editing
+                                                    if editingIngredientIndex == index {
+                                                        print("")
+                                                    }
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
@@ -587,36 +591,40 @@ struct EditRecipeView: View {
                                             }
                                             .opacity(0)
                                             
-                                            VStack {
-                                                Spacer()
+                                            GeometryReader { ingredientGeometry in
+                                            
+                                                VStack {
+                                                    Spacer()
 
-                                                PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
-                                                    .customFont(style: .subheadline)
-                                                    .onChange(of: ingredient) { value in
-                                                        print("")
-                                                        if value.hasSuffix("\n") {
-                                                            ingredient.removeLast(1)
-                                                            withAnimation {
-                                                                // unfocus
-                                                                unfocusEditable()
-                                                                unfocusMultilineTexts()
-                                                                addIngredient()
+                                                    PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
+                                                        .customFont(style: .subheadline)
+                                                        .onChange(of: ingredient) { value in
+                                                            print("")
+                                                            if value.hasSuffix("\n") {
+                                                                ingredient.removeLast(1)
+                                                                withAnimation {
+                                                                    // unfocus
+                                                                    unfocusEditable()
+                                                                    unfocusMultilineTexts()
+                                                                    addIngredient()
+                                                                }
                                                             }
                                                         }
-                                                    }
 
-                                                Spacer()
+                                                    Spacer()
+                                                }
+                                                .simultaneousGesture(
+                                                    TapGesture(count: 1).onEnded { _ in
+                                                        unfocusEditable()
+                                                        unfocusMultilineTexts()
+                                                        editingPosition = ingredientGeometry.frame(in: .global).maxY
+                                                        editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                                    }
+                                                )
+                                                .padding(.horizontal)
                                             }
-                                            .padding(.horizontal)
                                         }
                                         .autocapitalization(.none)
-                                        .simultaneousGesture(
-                                            TapGesture(count: 1).onEnded { _ in
-                                                unfocusEditable()
-                                                unfocusMultilineTexts()
-                                                editingIngredientIndex = recipe.tempRecipe.ingredients.count
-                                            }
-                                        )
                                         
                                         UIControls.AddButton(action: {
                                             withAnimation {
@@ -712,33 +720,50 @@ struct EditRecipeView: View {
                                             }
                                             .opacity(0)
                                             
-                                            VStack {
-                                                Spacer()
+                                            GeometryReader { directionGeometry in
+                                            
+                                                VStack {
+                                                    Spacer()
 
-                                                PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
-                                                    .customFont(style: .subheadline)
-                                                    .onChange(of: direction) { value in
-                                                        if value.hasSuffix("\n") {
-                                                            direction.removeLast(1)
-                                                            withAnimation {
-                                                                // unfocus
-                                                                unfocusEditable()
-                                                                unfocusMultilineTexts()
-                                                                addDirection()
+                                                    PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
+                                                        .customFont(style: .subheadline)
+                                                        .onChange(of: direction) { value in
+                                                            if value.hasSuffix("\n") {
+                                                                direction.removeLast(1)
+                                                                withAnimation {
+                                                                    // unfocus
+                                                                    unfocusEditable()
+                                                                    unfocusMultilineTexts()
+                                                                    addDirection()
+                                                                }
                                                             }
                                                         }
-                                                    }
 
-                                                Spacer()
+                                                    Spacer()
+                                                }
+                                                .simultaneousGesture(
+                                                    TapGesture(count: 1).onEnded { _ in
+                                                        unfocusEditable()
+                                                        unfocusMultilineTexts()
+                                                        editingPosition = directionGeometry.frame(in: .global).maxY
+                                                        editingDirectionIndex = recipe.tempRecipe.directions.count
+                                                    }
+                                                )
+                                                .padding(.horizontal)
                                             }
-                                            .padding(.horizontal)
                                         }
                                         .autocapitalization(.none)
-                                        .simultaneousGesture(
-                                            TapGesture(count: 1).onEnded { _ in
-                                                unfocusEditable()
-                                                unfocusMultilineTexts()
-                                                editingDirectionIndex = recipe.tempRecipe.directions.count
+                                        .background(
+                                            GeometryReader { directionGeometry in
+                                                Color("FormItem")
+                                                    .simultaneousGesture(
+                                                    TapGesture(count: 1).onEnded { _ in
+                                                        unfocusEditable()
+                                                        unfocusMultilineTexts()
+                                                        editingPosition = directionGeometry.frame(in: .global).maxY
+                                                        editingDirectionIndex = recipe.tempRecipe.directions.count
+                                                    }
+                                                )
                                             }
                                         )
 
@@ -778,6 +803,7 @@ struct EditRecipeView: View {
                                    editingPosition > globalHeight + tabBarHeight - height {
                                     proxy.scrollTo(index, anchor: .bottomTrailing)
                                 }
+                                self.editingPosition = nil
                             }
                         }
                         else if let index = editingDirectionIndex, height != 0 {
@@ -789,6 +815,7 @@ struct EditRecipeView: View {
                                    editingPosition > globalHeight + tabBarHeight - height {
                                     proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
                                 }
+                                self.editingPosition = nil
                             }
                         }
                     }
