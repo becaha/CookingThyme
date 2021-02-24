@@ -81,7 +81,7 @@ struct CategoriesSheet: View {
                     selectedId = currentCategoryId
                 }
             }
-            .navigationBarTitle("\(actionWord) to Category", displayMode: .inline)
+            .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(
                 leading:
                     Button(action: {
@@ -90,7 +90,7 @@ struct CategoriesSheet: View {
                         Text("Cancel")
                     }
             )
-            .navigationBarColor(UIColor(navBarColor()))
+            .navigationBarColor(UIColor(navBarColor()), text: "\(actionWord) to Category", style: .headline, textColor: UIColor(formItemFont()))
         }
     }
 }

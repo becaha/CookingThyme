@@ -51,7 +51,7 @@ struct EditPhotoMenu: ViewModifier {
             ZStack {
                 NavigationView {
                 }
-                .background(Color.white.edgesIgnoringSafeArea(.all))
+                .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
                 
                 ImagePicker(image: self.$selectedImage)
             }

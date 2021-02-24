@@ -79,6 +79,18 @@ func navBarColor() -> Color {
     return getAssetColor(withName: "NavBar")
 }
 
+func background() -> Color {
+    return getAssetColor(withName: "Background")
+}
+
+func buttonBorder() -> Color {
+    return getAssetColor(withName: "ButtonBorder")
+}
+
+func item() -> Color {
+    return getAssetColor(withName: "Item")
+}
+
 func formItem() -> Color {
     return getAssetColor(withName: "FormItem")
 }
@@ -93,6 +105,10 @@ func formBackgroundColor() -> Color {
 
 func formBorderColor() -> Color {
     return getAssetColor(withName: "FormBorder")
+}
+
+func selectedShadowColor() -> Color {
+    return getAssetColor(withName: "SelectedShadow")
 }
 
 func buttonColor() -> Color {

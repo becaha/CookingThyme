@@ -65,7 +65,7 @@ struct ChangePassword: View {
                                 .bold()
                         }
                     }
-                        .foregroundColor(.white)
+                    .foregroundColor(.black)
                     
                     Spacer()
                 }

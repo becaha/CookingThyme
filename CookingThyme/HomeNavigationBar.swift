@@ -14,14 +14,14 @@ struct HomeNavigationBar: ViewModifier {
         NavigationView {
             content
             .customFont(style: .headline)
-            .navigationBarTitle("Cooking Thyme", displayMode: .inline)
+            .navigationBarTitle("", displayMode: .inline)
             .navigationBarItems(trailing:
                 Button(action: settingsAction) {
                     Image(systemName: "gear")
                         .foregroundColor(.black)
                 }
             )
-            .navigationBarColor(mainUIColor())
+                .navigationBarColor(mainUIColor(), text: "Cooking Thyme", style: nil, textColor: UIColor(Color.black))
         }
         // make sure all navigation is shown in stacks (one at a time, no sidebar)
         .navigationViewStyle(StackNavigationViewStyle())

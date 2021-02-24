@@ -17,20 +17,28 @@ struct SigninPromptView: View {
         VStack {
             Spacer()
             
-            Button(action: {
-                sheetNavigator.showSheet = true
-                sheetNavigator.sheetDestination = .signin
-            }) {
-                Text("Sign in")
-                    .customFont(style: .subheadline)
+            HStack {
+                Spacer()
                 
-                Text("\(message)")
-                    .customFont(style: .subheadline)
-//                    .foregroundColor(.black)
+                Button(action: {
+                    sheetNavigator.showSheet = true
+                    sheetNavigator.sheetDestination = .signin
+                }) {
+                    Text("Sign in")
+                        .bold()
+                        .font(.subheadline)
+                    
+                    Text("\(message)")
+                        .font(.subheadline)
+                        .foregroundColor(formItemFont())
+                }
+                
+                Spacer()
             }
             
             Spacer()
         }
+        .background(formBackgroundColor())
         .foregroundColor(mainColor())
     }
 }

@@ -32,6 +32,5 @@ struct RecipeView: View {
         .onAppear {
             recipeVM = RecipeVM(recipe: recipe, category: category, collection: collection)
         }
-        .navigationBarColor(UIColor(navBarColor()))
-    }
+        .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))    }
 }

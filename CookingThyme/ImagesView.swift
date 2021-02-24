@@ -34,14 +34,14 @@ struct ImagesView: View {
                             VStack(alignment: .center) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.white)
+                                        .fill(Color("ButtonLight"))
                                     
                                     VStack {
                                         ZStack {
                                             Circle()
                                                 .frame(width: 25, height: 25)
-                                                .foregroundColor(.white)
-                                                .shadow(radius: 1)
+                                                .foregroundColor(buttonColor())
+                                                .shadow(color: buttonBorder(), radius: 1)
 
                                             Image(systemName: "plus")
                                                 .font(Font.subheadline.weight(.bold))

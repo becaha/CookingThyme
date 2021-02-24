@@ -12,31 +12,17 @@ struct UIControls {
     @ViewBuilder
     static func AddButtonVertical(withLabel label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            VStack {
-                ZStack {
-                    Circle()
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(.white)
-                        .shadow(radius: 1)
-
-                    Image(systemName: "plus")
-                        .font(Font.subheadline.weight(.bold))
-                        .foregroundColor(mainColor())
-                }
-                
-                Text("\(label)")
-                    .customFont(style: .subheadline, weight: .bold)
-            }
+            AddViewVertical(withLabel: label)
         }
     }
     
-    static func AddView(withLabel label: String) -> some View {
-        HStack {
+    static func AddViewVertical(withLabel label: String) -> some View {
+        VStack {
             ZStack {
                 Circle()
                     .frame(width: 25, height: 25)
-                    .foregroundColor(formItem())
-                    .shadow(radius: 1)
+                    .foregroundColor(buttonColor())
+                    .shadow(color: buttonBorder(), radius: 1)
 
                 Image(systemName: "plus")
                     .font(Font.subheadline.weight(.bold))
@@ -48,10 +34,46 @@ struct UIControls {
         }
     }
     
+    static func AddViewHorizontal(withLabel label: String) -> some View {
+        HStack {
+            AddView(withLabel: label)
+        }
+    }
+    
+    static func AddView(withLabel label: String) -> some View {
+        Group {
+            ZStack {
+                Circle()
+                    .frame(width: 25, height: 25)
+                    .foregroundColor(buttonColor())
+                    .shadow(color: buttonBorder(), radius: 1)
+
+                Image(systemName: "plus")
+                    .font(Font.subheadline.weight(.bold))
+                    .foregroundColor(mainColor())
+            }
+
+            Text("\(label)")
+                .font(Font.subheadline.weight(.bold))
+        }
+    }
+    
+    static func AddButtonView() -> some View {
+        ZStack {
+            Circle()
+                .frame(width: 30, height: 30)
+                .foregroundColor(buttonColor())
+                .shadow(color: buttonBorder(), radius: 1)
+
+            Image(systemName: "plus")
+                .font(Font.subheadline.weight(.bold))
+        }
+    }
+    
     @ViewBuilder
     static func AddButton(withLabel label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            AddView(withLabel: label)
+            AddViewHorizontal(withLabel: label)
         }
     }
     

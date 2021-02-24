@@ -83,8 +83,8 @@ struct RecipeCollectionView: View {
             )
             .loadable(isLoading: $collection.isLoading)
         }
-        .navigationBarColor(UIColor(navBarColor()))
-        .navigationBarTitle(Text("Recipe Book"), displayMode: .inline)
+        .navigationBarColor(UIColor(navBarColor()), text: "Recipe Book", style: .headline, textColor: UIColor(formItemFont()))
+        .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(trailing:
             UIControls.EditButton(
                 action: {
@@ -218,7 +218,7 @@ struct RecipeCollectionView: View {
                     CreateRecipeView(category: collection.currentCategory!)
                         .environmentObject(collection)
                 ) {
-                    UIControls.AddView(withLabel: "New Recipe")
+                    UIControls.AddViewHorizontal(withLabel: "New Recipe")
                 }
                 // when change view to create new recipe, clear search
                 .simultaneousGesture(
@@ -251,7 +251,7 @@ struct RecipeCollectionView: View {
                 collection.search = ""
             }) {
                 CircleImage()
-                    .shadow(color: Color.gray, radius: collection.currentCategory?.id == category.id ? 5 : 1)
+                    .shadow(color: selectedShadowColor(), radius: collection.currentCategory?.id == category.id ? 5 : 1)
             }
             .disabled(isEditing ? true : false)
             
@@ -430,29 +430,22 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = true
                 }
             }) {
-                ZStack {
-                    Circle()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.white)
-                        .shadow(radius: 1)
-
-                    Image(systemName: "plus")
-                        .font(Font.subheadline.weight(.bold))
-                }
+                UIControls.AddButtonView()
             }
             .onTapGesture(count: 1, perform: {})
         }
         else {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.white)
-                    .shadow(radius: 10)
+                    .fill(Color("FormItem"))
+                    .shadow(color: buttonBorder(), radius: 10)
 
                 HStack {
                     TextField("New Category", text: $newCategory, onCommit: {
                         addCategory()
                     })
                     .customFont(style: .subheadline)
+                    .foregroundColor(formItemFont())
 
                     Spacer()
 

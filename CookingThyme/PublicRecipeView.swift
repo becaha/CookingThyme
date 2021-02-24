@@ -66,7 +66,7 @@ struct PublicRecipeView: View {
             }
             .environmentObject(recipe)
         }
-        .navigationBarColor(UIColor(navBarColor()))
+        .navigationBarColor(UIColor(navBarColor()), text: "Settings", style: .headline, textColor: UIColor(formItemFont()))
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .onAppear {
             withAnimation {

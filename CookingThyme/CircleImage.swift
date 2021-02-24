@@ -13,7 +13,7 @@ struct CircleImage: View {
     @EnvironmentObject var category: RecipeCategoryVM
     var width: CGFloat = 60
     var height: CGFloat = 60
-    var strokeColor: Color = borderColor()
+    var strokeColor: Color = formBorderColor()
     
     var isLoading: Bool {
         return category.imageHandler.loadingImages && category.imageHandler.images.count == 0
@@ -26,7 +26,7 @@ struct CircleImage: View {
             VStack {
                 ZStack {
                     Circle()
-                        .foregroundColor(getCategoryColor())
+                        .fill(mainColor())
                     
                     if category.imageHandler.images.count > 0, category.imageHandler.images[0] != nil {
                         Image(uiImage: category.imageHandler.images[0]!)
@@ -44,6 +44,6 @@ struct CircleImage: View {
     }
     
     func getCategoryColor() -> Color {
-        return Color.green.opacity(0.8)
+        return mainColor()
     }
 }

@@ -91,8 +91,8 @@ struct RecipeSearch: View {
                 Spacer()
             }
             .background(formBackgroundColor())
-            .navigationBarTitle("Recipe Search", displayMode: .inline)
-            .navigationBarColor(UIColor(navBarColor()))
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarColor(UIColor(navBarColor()), text: "Spoonacular Recipe Search", style: .headline, textColor: UIColor(formItemFont()))
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onReceive(Publishers.keyboardHeight) { height in

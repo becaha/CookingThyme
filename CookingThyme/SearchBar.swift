@@ -27,7 +27,7 @@ struct SearchBar: View {
                 onCommit(search)
             })
             .customFont(style: .subheadline)
-            .foregroundColor(searchFontColor())
+            .foregroundColor(formItemFont())
             
             Button(action: {
                 onCommit(search)

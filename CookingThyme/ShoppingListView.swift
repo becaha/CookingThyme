@@ -18,29 +18,28 @@ struct ShoppingListView: View {
 
     
     var body: some View {
-        List {
-            Section {
-                HStack {
-                    TextField("Add item", text: $newName,
-                              onCommit: {
-                                withAnimation {
-                                    addItem()
-                                }
-                              })
-                        .customFont(style: .subheadline)
+        VStack(spacing: 0) {
+            HStack {
+                TextField("Add item", text: $newName,
+                          onCommit: {
+                            withAnimation {
+                                addItem()
+                            }
+                          })
+                    .customFont(style: .subheadline)
 
-                    UIControls.AddButton(action: {
-                        withAnimation {
-                            addItem()
-                        }
-                    })
-                    .foregroundColor(mainColor())
-                    .onTapGesture(count: 1, perform: {})
-                }
+                UIControls.AddButton(action: {
+                    withAnimation {
+                        addItem()
+                    }
+                })
+                .foregroundColor(mainColor())
+                .onTapGesture(count: 1, perform: {})
             }
+            .formItem(isSearchBar: true)
 
             if collection.notCompletedItems.count > 0 {
-                Section {
+                VStack(spacing: 0) {
                     ForEach(collection.notCompletedItems) { item in
                         ItemView(item: item)
                     }
@@ -50,51 +49,64 @@ struct ShoppingListView: View {
                         }
                     }
                 }
+                .formSection()
             }
+            
+            VStack(spacing: 0) {
+                HStack {
+                    Text("Completed Items")
+                        .textCase(.uppercase)
+                        .customFont(style: .subheadline)
 
-            Section(header:
-                    HStack {
-                        Text("Completed Items")
-
-                        Spacer()
-                        
-                        Button(action: {
-                            collection.completeAllShoppingItems(false)
-                        }) {
-                            Text("Uncheck All")
-                                .padding(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .fill(Color(UIColor.tertiarySystemFill))
-                                )
-                        }
-
-                        Button(action: {
-                            withAnimation {
-                                collection.removeShoppingItems(completed: true)
-                            }
-                        }) {
-                            Image(systemName: "trash")
-                                .padding(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .fill(Color(UIColor.tertiarySystemFill))
-                                )
-                        }
+                    Spacer()
+                    
+                    Button(action: {
+                        collection.completeAllShoppingItems(false)
+                    }) {
+                        Text("Uncheck All")
+                            .textCase(.uppercase)
+                            .customFont(style: .caption1)
+                            .padding(5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7)
+                                    .fill(Color(UIColor.tertiarySystemFill))
+                            )
                     }
-            ) {
-                ForEach(collection.completedItems) { item in
-                    ItemView(item: item)
-                }
-                .onDelete { indexSet in
-                    indexSet.forEach { index in
-                        collection.removeTempShoppingItem(collection.completedItems[index])
+
+                    Button(action: {
+                        withAnimation {
+                            collection.removeShoppingItems(completed: true)
+                        }
+                    }) {
+                        Image(systemName: "trash")
+                            .padding(.vertical, 2)
+                            .padding(.horizontal, 5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 7)
+                                    .fill(Color(UIColor.tertiarySystemFill))
+                            )
                     }
                 }
+                .formHeader()
+                
+                VStack(spacing: 0) {
+                    ForEach(collection.completedItems) { item in
+                        ItemView(item: item)
+                    }
+                    .onDelete { indexSet in
+                        indexSet.forEach { index in
+                            collection.removeTempShoppingItem(collection.completedItems[index])
+                        }
+                    }
+                }
+                .formSection()
 
             }
             .opacity(collection.completedItems.count > 0 ? 1 : 0)
         }
+        .formed()
+//        .navigationBarHidden(true)
+        .background(formBackgroundColor())
         .listStyle(InsetGroupedListStyle())
         .onReceive(Publishers.keyboardHeight) { height in
             keyboardPresented = height == 0 ? false : true
@@ -130,6 +142,7 @@ struct ShoppingListView: View {
             Text("\(item.toString())")
                 .customFont(style: .subheadline)
         }
+        .formSectionItem()
     }
 
     func addItem() {

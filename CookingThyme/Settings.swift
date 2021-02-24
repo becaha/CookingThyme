@@ -118,7 +118,7 @@ struct Settings: View {
                                     
                                     Spacer()
                                 }
-                                .background(formItem())
+                                .background(item())
                             }
                             else if !deleteSuccessful && presentDeleteAlert {
                                 Text("Delete Account")
@@ -162,8 +162,8 @@ struct Settings: View {
                 onLoadingComplete()
             }
         })
-        .navigationBarTitle(Text("Settings"), displayMode: .inline)
-        .navigationBarColor(UIColor(navBarColor()))
+        .navigationBarTitle(Text(""), displayMode: .inline)
+        .navigationBarColor(UIColor(navBarColor()), text: "Settings", style: .headline, textColor: UIColor(formItemFont()))
     }
     
     func onLoadingComplete() {

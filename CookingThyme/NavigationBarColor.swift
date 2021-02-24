@@ -10,15 +10,22 @@ import SwiftUI
 struct NavigationBarColor: ViewModifier {
         
     var backgroundColor: UIColor?
+    var textColor: UIColor
+    var text: String
+    var style: UIFont.TextStyle
     
-    init(backgroundColor: UIColor?) {
+    init(backgroundColor: UIColor?, text: String, style: UIFont.TextStyle?, textColor: UIColor?) {
         self.backgroundColor = backgroundColor
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = .clear
         coloredAppearance.shadowColor = UIColor(borderColor())
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor(navBarFont())]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(navBarFont())]
+        
+        self.textColor = textColor ?? UIColor(navBarFont())
+        self.text = text
+        self.style =  style ?? UIFont.TextStyle.title2
+//        coloredAppearance.titleTextAttributes = [.foregroundColor: textColor]
+//        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
         
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().compactAppearance = coloredAppearance
@@ -32,9 +39,21 @@ struct NavigationBarColor: ViewModifier {
             content
             VStack {
                 GeometryReader { geometry in
-                    Color(self.backgroundColor ?? .clear)
-                        .frame(height: geometry.safeAreaInsets.top)
-                        .edgesIgnoringSafeArea(.all)
+                    ZStack {
+                        Color(self.backgroundColor ?? .clear)
+                        
+                        VStack {
+                            Spacer()
+                            
+                            Text("\(self.text)")
+                                .customFont(style: self.style, weight: .bold)
+                                .foregroundColor(Color(textColor))
+                                .padding(.bottom, 10)
+                        }
+                    }
+                    .frame(height: geometry.safeAreaInsets.top)
+                    .edgesIgnoringSafeArea(.all)
+                    
                     Spacer()
                 }
             }
@@ -44,7 +63,11 @@ struct NavigationBarColor: ViewModifier {
 
 
 extension View {
-    func navigationBarColor(_ backgroundColor: UIColor?) -> some View {
-        modifier(NavigationBarColor(backgroundColor: backgroundColor))
+    func navigationBarColor(_ backgroundColor: UIColor?, text: String, style: UIFont.TextStyle?, textColor: UIColor?) -> some View {
+        modifier(NavigationBarColor(backgroundColor: backgroundColor, text: text, style: style, textColor: textColor))
+    }
+    
+    func navigationBarColor(_ backgroundColor: UIColor?, text: String, style: UIFont.TextStyle?) -> some View {
+        modifier(NavigationBarColor(backgroundColor: backgroundColor, text: text, style: style, textColor: nil))
     }
 }
