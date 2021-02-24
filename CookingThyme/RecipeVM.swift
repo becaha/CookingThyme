@@ -215,12 +215,7 @@ class RecipeVM: ObservableObject, Identifiable {
         if let category = collection.getCategory(withId: categoryId) {
             RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: recipe.name, ingredients: recipe.ingredients, directions: recipe.directions, images: recipe.images, servings: recipe.servings.toString(), source: recipe.source) { createdRecipe in
                 if let createdRecipe = createdRecipe {
-                    // todo store
-                    let updatedRecipeVM = self
-                    updatedRecipeVM.recipe = createdRecipe
-                    // updates recipe store
-                    collection.recipesStore[createdRecipe.id] = updatedRecipeVM
-                    // updates category store
+                    // updates category store, doesnt create in recipe store, will be created on init
                     collection.addRecipeToStore(createdRecipe, toCategoryId: categoryId)
                     
                     collection.refreshCurrentCategory()

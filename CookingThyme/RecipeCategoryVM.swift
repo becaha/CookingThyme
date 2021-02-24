@@ -93,14 +93,14 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         var popullateSuccess = true
         self.categoryGroup = DispatchGroup()
         
-        categoryGroup!.enter()
+        categoryGroup?.enter()
         popullateRecipes() { success in
             if !success {
                 print("error popullating recipe")
                 popullateSuccess = false
             }
             if self.categoryGroup != nil {
-                self.categoryGroup!.leave()
+                self.categoryGroup?.leave()
             }
         }
         
@@ -115,7 +115,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
 //            }
         }
         
-        categoryGroup!.notify(queue: .main) {
+        categoryGroup?.notify(queue: .main) {
             onCompletion(popullateSuccess)
             self.categoryGroup = nil
         }

@@ -146,7 +146,7 @@ class ImageHandler: ObservableObject {
         DispatchQueue.main.async {
             self.images[index] = uiImage
             if self.imagesGroup != nil {
-                self.imagesGroup!.leave()
+                self.imagesGroup?.leave()
             }
         }
     }
@@ -173,8 +173,6 @@ class ImageHandler: ObservableObject {
     // sets image data for a imageURL
     private func setImageData(at index: Int) {
         if let imageUrl = imageURL {
-            // TODO is being called async but it will cancel the prev async set image
-//            fetchImageCancellable?.cancel()
             let fetchImageCancellable = URLSession.shared
                 .dataTaskPublisher(for: imageUrl)
                 .map { data, response in UIImage(data: data) }
@@ -187,14 +185,14 @@ class ImageHandler: ObservableObject {
                         let message = error.localizedDescription
                         print("error: \(message)")
                         if self.imagesGroup != nil {
-                            self.imagesGroup!.leave()
+                            self.imagesGroup?.leave()
                         }
                         return
                     }
                 }, receiveValue: { image in
                     self.images[index] = image
                     if self.imagesGroup != nil {
-                        self.imagesGroup!.leave()
+                        self.imagesGroup?.leave()
                     }
                 })
             
