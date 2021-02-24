@@ -23,7 +23,7 @@ struct NavigationBarColor: ViewModifier {
         
         self.textColor = textColor ?? UIColor(navBarFont())
         self.text = text
-        self.style =  style ?? UIFont.TextStyle.title2
+        self.style =  style ?? UIFont.TextStyle.headline
 //        coloredAppearance.titleTextAttributes = [.foregroundColor: textColor]
 //        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
         

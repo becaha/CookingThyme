@@ -250,7 +250,7 @@ struct TimerView: View {
 
 
                 Text("\(text)")
-                    .customFont(style: .subheadline)
+                    .customFont(style: .subheadline, weight: .bold)
             }
         }
         .frame(width: width / 4, height: isLandscape ? height / 7 : height / 13)

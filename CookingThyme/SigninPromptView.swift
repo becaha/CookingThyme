@@ -26,10 +26,10 @@ struct SigninPromptView: View {
                 }) {
                     Text("Sign in")
                         .bold()
-                        .font(.subheadline)
+                        .font(.headline)
                     
                     Text("\(message)")
-                        .font(.subheadline)
+                        .font(.headline)
                         .foregroundColor(formItemFont())
                 }
                 

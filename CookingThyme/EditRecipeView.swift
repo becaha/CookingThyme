@@ -8,14 +8,11 @@
 import SwiftUI
 import Combine
 
-// TODO: touchy self-plus buttons i want to click
-// TODO: add category button, lots of space, do i want it there only when isediting?
 
 // TODO: don't cllear ing/dir if not entered but clicked away from
 
-
 // TODO: keyboard avoid dont move scroll up, just down
-// https://www.hackingwithswift.com/forums/100-days-of-swiftui/jump-focus-between-a-series-of-textfields-pin-code-style-entry-widget/765
+
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
 
@@ -65,7 +62,12 @@ struct EditRecipeView: View {
     
     @State private var editingIngredientIndex: Int?
     @State private var editingDirectionIndex: Int?
-    
+    @State private var deletingIndex: Int?
+    @State private var editingPosition: CGFloat?
+    @State private var globalHeight: CGFloat?
+    @State private var keyboardHeight: CGFloat = 0
+//    @State private var ingredientHeights =
+
     @State private var editingName = false
     
     @State private var partialRecipeAlert = false
@@ -408,382 +410,405 @@ struct EditRecipeView: View {
     
     @ViewBuilder
     func EditableRecipe() -> some View {
-        ScrollViewReader { proxy in
-            ScrollView(.vertical) {
-                VStack(spacing: 0) {
-                    if partialRecipeAlert {
-    //                    Button(action: {
-    //                        withAnimation {
-    //                            // save stuff
-    //                            unfocusEditable()
-    //                            presentRecipeText = true
-    //                        }
-    //                    }) {
+        GeometryReader { frameGeometry in
+            ScrollViewReader { proxy in
+                ScrollView(.vertical) {
+                    VStack(spacing: 0) {
+                        if partialRecipeAlert {
                             HStack {
                                 (Text("Missing fields? Reference the full recipe text by clicking ") +  Text(Image(systemName: "doc.plaintext")) + Text(" above."))
                                     .customFont(style: .caption1)
                             }
                             .formHeader()
-    //                    }
-                    }
-                    
-                    HStack {
-                        VStack(alignment: .leading) {
-                            ZStack {
-                                HStack {
-                                    Spacer()
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading) {
+                                ZStack {
+                                    HStack {
+                                        Spacer()
 
-                                    RecipeNameTitle(name: " ")
+                                        RecipeNameTitle(name: " ")
 
-                                    Spacer()
-                                }
-                                .opacity(!editingName ? 1 : 0)
-                                
-                                HStack {
-                                    Spacer()
+                                        Spacer()
+                                    }
+                                    .opacity(!editingName ? 1 : 0)
                                     
-                                    RecipeNameTitle(name: "\(name)")
-                                        .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : formItemFont())
-                                    
-                                    Spacer()
-                                }
-                                .opacity(!editingName ? 1 : 0)
-
-                                if editingName {
-                                    VStack {
+                                    HStack {
                                         Spacer()
                                         
-                                        EditableTextView(textBinding: $name, isFirstResponder: true, textStyle:  UIFont.TextStyle.largeTitle, textAlignment: NSTextAlignment.center)
-                                            .onChange(of: name) { value in
-                                                // on commit by enter
-                                                if value.hasSuffix("\n") {
-                                                    editingName = false
-                                                    name.removeLast(1)
-                                                    withAnimation {
-                                                        // unfocus
-                                                        unfocusEditable()
-                                                        
-                                                        if name.isOnlyWhitespace() {
-                                                            name = nameFieldPlaceholder
+                                        RecipeNameTitle(name: "\(name)")
+                                            .foregroundColor(name == nameFieldPlaceholder ? placeholderFontColor() : formItemFont())
+                                        
+                                        Spacer()
+                                    }
+                                    .opacity(!editingName ? 1 : 0)
+
+                                    if editingName {
+                                        VStack {
+                                            Spacer()
+                                            
+                                            EditableTextView(textBinding: $name, isFirstResponder: true, textStyle:  UIFont.TextStyle.largeTitle, textAlignment: NSTextAlignment.center)
+                                                .onChange(of: name) { value in
+                                                    // on commit by enter
+                                                    if value.hasSuffix("\n") {
+                                                        editingName = false
+                                                        name.removeLast(1)
+                                                        withAnimation {
+                                                            // unfocus
+                                                            unfocusEditable()
+                                                            
+                                                            if name.isOnlyWhitespace() {
+                                                                name = nameFieldPlaceholder
+                                                            }
+                                                        }
+                                                    }
+                                                    if name != "" && name != nameFieldPlaceholder {
+                                                        withAnimation {
+                                                            nameFieldMissing = false
                                                         }
                                                     }
                                                 }
-                                                if name != "" && name != nameFieldPlaceholder {
-                                                    withAnimation {
-                                                        nameFieldMissing = false
-                                                    }
-                                                }
-                                            }
-                                            .recipeTitle()
-                     
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal)
-                                }
-                            }
-                            .simultaneousGesture(
-                                TapGesture(count: 1).onEnded { _ in
-                                    // if not editing name currently
-                                    if !editingName {
-                                        unfocusEditable()
-                                        unfocusMultilineTexts()
-                                    }
-                                    editingName = true
-                                    if name == nameFieldPlaceholder {
-                                        name = ""
-                                    }
-                                }
-                            )
-                            
-                            ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
-                                .padding(0)
-                        }
-                        .padding(.bottom, 0)
-                    }
-                    .formHeader()
-                    
-                    ImagesView()
-                    
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text("Ingredients")
-                                .customFont(style: .subheadline)
-                                .textCase(.uppercase)
-
-                            Spacer()
-                            
-                            VStack {
-                                Picker(selection: $servings, label:
-                                        HStack {
-                                            Text("Servings: \(servings)")
-                                                .textCase(.uppercase)
-                                                .customFont(style: .subheadline)
-                                                // can't remember why this was a problem
-                                                .fixedSize(horizontal: true, vertical: false)
-                                    
-                                            Image(systemName: "chevron.down")
+                                                .recipeTitle()
+                         
+                                            Spacer()
                                         }
-                                        .foregroundColor(servingsFieldMissing && servings == "0" ? .red : Color.gray)
-                                )
-                                {
-                                    ForEach(1..<101, id: \.self) { num in
-                                        Text("\(num.toString())").tag(num.toString())
-                                            .customFont(style: .subheadline)
+                                        .padding(.horizontal)
                                     }
                                 }
-                                .pickerStyle(MenuPickerStyle())
+                                .simultaneousGesture(
+                                    TapGesture(count: 1).onEnded { _ in
+                                        // if not editing name currently
+                                        if !editingName {
+                                            unfocusEditable()
+                                            unfocusMultilineTexts()
+                                        }
+                                        editingName = true
+                                        if name == nameFieldPlaceholder {
+                                            name = ""
+                                        }
+                                    }
+                                )
+                                
+                                ErrorMessage("\(nameFieldMissingMessage)", isError: $nameFieldMissing, isCentered: true)
+                                    .padding(0)
                             }
+                            .padding(.bottom, 0)
                         }
                         .formHeader()
-                                
+                        
+                        ImagesView()
+                        
                         VStack(spacing: 0) {
-                            ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
-                                HStack {
-                                    EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
-                                        .environmentObject(recipe)
+                            HStack {
+                                Text("Ingredients")
+                                    .customFont(style: .subheadline)
+                                    .textCase(.uppercase)
+
+                                Spacer()
+                                
+                                VStack {
+                                    Picker(selection: $servings, label:
+                                            HStack {
+                                                Text("Servings: \(servings)")
+                                                    .textCase(.uppercase)
+                                                    .customFont(style: .subheadline)
+                                                    // can't remember why this was a problem
+                                                    .fixedSize(horizontal: true, vertical: false)
+                                        
+                                                Image(systemName: "chevron.down")
+                                            }
+                                            .foregroundColor(servingsFieldMissing && servings == "0" ? .red : Color.gray)
+                                    )
+                                    {
+                                        ForEach(1..<101, id: \.self) { num in
+                                            Text("\(num.toString())").tag(num.toString())
+                                                .customFont(style: .subheadline)
+                                        }
+                                    }
+                                    .pickerStyle(MenuPickerStyle())
                                 }
-                                .id(index)
-                                .deletable(isDeleting: true, onDelete: {
-                                    withAnimation {
+                            }
+                            .formHeader()
+                                    
+                            VStack(spacing: 0) {
+                                ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
+                                    HStack {
+                                        EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
+                                            .environmentObject(recipe)
+                                    }
+                                    .background(
+                                        GeometryReader { ingredientGeometry in
+                                            Color("FormItem")
+                                                .simultaneousGesture(
+                                                TapGesture(count: 1).onEnded { _ in
+                                                    unfocusEditable()
+                                                    unfocusMultilineTexts()
+                                                    if deletingIndex != index {
+                                                        editingPosition = ingredientGeometry.frame(in: .global).maxY
+                                                        editingIngredientIndex = index
+                                                    }
+                                                    deletingIndex = nil
+                                                }
+                                            )
+                                        }
+                                    )
+                                    .id(index)
+                                    .deletable(isDeleting: true, onDelete: {
+                                        withAnimation {
+                                            deletingIndex = index
+                                            recipe.removeTempIngredient(at: index)
+                                        }
+                                    })
+                                    .formSectionItem(padding: .horizontal)
+                                }
+                                .onDelete { indexSet in
+                                    indexSet.map{ $0 }.forEach { index in
                                         recipe.removeTempIngredient(at: index)
                                     }
-                                })
-                                .formSectionItem(padding: .horizontal)
-                                .simultaneousGesture(
-                                    TapGesture(count: 1).onEnded { _ in
-                                        unfocusEditable()
-                                        unfocusMultilineTexts()
-                                        editingIngredientIndex = index
-                                    }
-                                )
-                            }
-                            .onDelete { indexSet in
-                                indexSet.map{ $0 }.forEach { index in
-                                    recipe.removeTempIngredient(at: index)
                                 }
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    ZStack {
-                                        HStack {
-                                            RecipeControls.ReadIngredientText(" ")
-                                                .padding()
+                                
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        ZStack {
+                                            HStack {
+                                                RecipeControls.ReadIngredientText(" ")
+                                                    .padding()
 
-                                            Spacer()
-                                        }
-                                        .opacity(0)
-                                        
-                                        HStack {
-                                            RecipeControls.ReadIngredientText(ingredient)
-                                                .padding()
+                                                Spacer()
+                                            }
+                                            .opacity(0)
+                                            
+                                            HStack {
+                                                RecipeControls.ReadIngredientText(ingredient)
+                                                    .padding()
 
-                                            Spacer()
-                                        }
-                                        .opacity(0)
-                                        
-                                        VStack {
-                                            Spacer()
+                                                Spacer()
+                                            }
+                                            .opacity(0)
+                                            
+                                            VStack {
+                                                Spacer()
 
-                                            PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
-                                                .customFont(style: .subheadline)
-                                                .onChange(of: ingredient) { value in
-                                                    print("")
-                                                    if value.hasSuffix("\n") {
-                                                        ingredient.removeLast(1)
-                                                        withAnimation {
-                                                            // unfocus
-                                                            unfocusEditable()
-                                                            unfocusMultilineTexts()
-                                                            addIngredient()
+                                                PlaceholderTextView(placeholderText: ingredientPlaceholder, textBinding: $ingredient, isFirstResponder: false)
+                                                    .customFont(style: .subheadline)
+                                                    .onChange(of: ingredient) { value in
+                                                        print("")
+                                                        if value.hasSuffix("\n") {
+                                                            ingredient.removeLast(1)
+                                                            withAnimation {
+                                                                // unfocus
+                                                                unfocusEditable()
+                                                                unfocusMultilineTexts()
+                                                                addIngredient()
+                                                            }
                                                         }
                                                     }
-                                                }
 
-                                            Spacer()
+                                                Spacer()
+                                            }
+                                            .padding(.horizontal)
                                         }
-//                                        .background(formItem())
-                                        .padding(.horizontal)
+                                        .autocapitalization(.none)
+                                        .simultaneousGesture(
+                                            TapGesture(count: 1).onEnded { _ in
+                                                unfocusEditable()
+                                                unfocusMultilineTexts()
+                                                editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                            }
+                                        )
+                                        
+                                        UIControls.AddButton(action: {
+                                            withAnimation {
+                                                unfocusEditable()
+                                                unfocusMultilineTexts()
+                                                addIngredient()
+                                            }
+                                        })
                                     }
-                                    .autocapitalization(.none)
-                                    .simultaneousGesture(
-                                        TapGesture(count: 1).onEnded { _ in
-                                            unfocusEditable()
-                                            unfocusMultilineTexts()
-                                            editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                    .id(recipe.tempRecipe.ingredients.count)
+                                    .formSectionItem(padding: .horizontal)
+                                }
+                            }
+                            .formSection()
+                        
+                            VStack(alignment: .leading) {
+                                ErrorMessage("\(newIngredientFieldMissingMessage)", isError: $newIngredientFieldMissing)
+
+                                ErrorMessage("\(ingredientsFieldMissingMessage)", isError: $ingredientsFieldMissing)
+                            }
+                            .formFooter()
+                        }
+                    
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("Directions")
+                                    .textCase(.uppercase)
+                                    .customFont(style: .subheadline)
+
+                                Spacer()
+                            }
+                            .formHeader()
+                            
+                            VStack(spacing: 0) {
+                                ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
+                                    HStack(alignment: .center, spacing: 20) {
+                                        Text("\(index + 1)")
+                                            .customFont(style: .subheadline)
+                                        
+                                        EditableDirection(index: index, editingIndex: $editingDirectionIndex)
+                                            .environmentObject(recipe)
+                                    }
+                                    .background(
+                                        GeometryReader { directionGeometry in
+                                            Color("FormItem")
+                                                .simultaneousGesture(
+                                                TapGesture(count: 1).onEnded { _ in
+                                                    unfocusEditable()
+                                                    unfocusMultilineTexts()
+                                                    if deletingIndex != index {
+                                                        editingPosition = directionGeometry.frame(in: .global).maxY
+                                                        editingDirectionIndex = index
+                                                    }
+                                                    deletingIndex = nil
+                                                }
+                                            )
                                         }
                                     )
-                                    
-                                    UIControls.AddButton(action: {
+                                    .id(recipe.tempRecipe.ingredients.count + 1 + index)
+                                    .deletable(isDeleting: true, onDelete: {
                                         withAnimation {
-                                            unfocusEditable()
-                                            unfocusMultilineTexts()
-                                            addIngredient()
+                                            recipe.removeTempDirection(at: index)
+                                            deletingIndex = index
                                         }
                                     })
+                                    .formSectionItem(padding: .horizontal)
                                 }
-                                .id(recipe.tempRecipe.ingredients.count)
-                                .formSectionItem(padding: .horizontal)
-                            }
-                        }
-                        .formSection()
-                    
-                        VStack(alignment: .leading) {
-                            ErrorMessage("\(newIngredientFieldMissingMessage)", isError: $newIngredientFieldMissing)
-
-                            ErrorMessage("\(ingredientsFieldMissingMessage)", isError: $ingredientsFieldMissing)
-                        }
-                        .formFooter()
-                    }
-                
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text("Directions")
-                                .textCase(.uppercase)
-                                .customFont(style: .subheadline)
-
-                            Spacer()
-                        }
-                        .formHeader()
-                        
-                        VStack(spacing: 0) {
-                            ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
-                                HStack(alignment: .center, spacing: 20) {
-                                    Text("\(index + 1)")
-                                        .customFont(style: .subheadline)
-                                    
-                                    EditableDirection(index: index, editingIndex: $editingDirectionIndex)
-                                        .environmentObject(recipe)
-                                }
-                                .id(recipe.tempRecipe.ingredients.count + 1 + index)
-                                .deletable(isDeleting: true, onDelete: {
-                                    withAnimation {
+                                .onDelete { indexSet in
+                                    indexSet.map{ $0 }.forEach { index in
                                         recipe.removeTempDirection(at: index)
                                     }
-                                })
-                                .formSectionItem(padding: .horizontal)
-                                .simultaneousGesture(
-                                    TapGesture(count: 1).onEnded { _ in
-                                        unfocusEditable()
-                                        unfocusMultilineTexts()
-                                        editingDirectionIndex = index
-                                    }
-                                )
-                            }
-                            .onDelete { indexSet in
-                                indexSet.map{ $0 }.forEach { index in
-                                    recipe.removeTempDirection(at: index)
                                 }
-                            }
-                                                
-                            VStack(alignment: .leading) {
-                                HStack(alignment: .center, spacing: 20) {
-                                    Text("\(recipe.tempRecipe.directions.count + 1)")
-                                        .customFont(style: .subheadline)
-                                    
-                                    ZStack {
-                                        HStack(spacing: 0) {
-                                            RecipeControls.ReadDirection(direction: " ")
-                                                .padding()
-
-                                            Spacer()
-                                        }
-                                        .opacity(0)
+                                                    
+                                VStack(alignment: .leading) {
+                                    HStack(alignment: .center, spacing: 20) {
+                                        Text("\(recipe.tempRecipe.directions.count + 1)")
+                                            .customFont(style: .subheadline)
                                         
-                                        HStack(spacing: 0) {
-                                            RecipeControls.ReadDirection(direction: direction)
-                                                .padding()
+                                        ZStack {
+                                            HStack(spacing: 0) {
+                                                RecipeControls.ReadDirection(direction: " ")
+                                                    .padding()
 
-                                            Spacer()
-                                        }
-                                        .opacity(0)
-                                        
-                                        VStack {
-                                            Spacer()
+                                                Spacer()
+                                            }
+                                            .opacity(0)
+                                            
+                                            HStack(spacing: 0) {
+                                                RecipeControls.ReadDirection(direction: direction)
+                                                    .padding()
 
-                                            PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
-                                                .customFont(style: .subheadline)
-                                                .onChange(of: direction) { value in
-                                                    if value.hasSuffix("\n") {
-                                                        direction.removeLast(1)
-                                                        withAnimation {
-                                                            // unfocus
-                                                            unfocusEditable()
-                                                            unfocusMultilineTexts()
-                                                            addDirection()
+                                                Spacer()
+                                            }
+                                            .opacity(0)
+                                            
+                                            VStack {
+                                                Spacer()
+
+                                                PlaceholderTextView(placeholderText: directionPlaceholder, textBinding: $direction, isFirstResponder: false)
+                                                    .customFont(style: .subheadline)
+                                                    .onChange(of: direction) { value in
+                                                        if value.hasSuffix("\n") {
+                                                            direction.removeLast(1)
+                                                            withAnimation {
+                                                                // unfocus
+                                                                unfocusEditable()
+                                                                unfocusMultilineTexts()
+                                                                addDirection()
+                                                            }
                                                         }
                                                     }
-                                                }
 
-                                            Spacer()
+                                                Spacer()
+                                            }
+                                            .padding(.horizontal)
                                         }
-                                        .padding(.horizontal)
+                                        .autocapitalization(.none)
+                                        .simultaneousGesture(
+                                            TapGesture(count: 1).onEnded { _ in
+                                                unfocusEditable()
+                                                unfocusMultilineTexts()
+                                                editingDirectionIndex = recipe.tempRecipe.directions.count
+                                            }
+                                        )
+
+                                        UIControls.AddButton(action: {
+                                            withAnimation {
+                                                // unfocus
+                                                unfocusEditable()
+                                                unfocusMultilineTexts()
+                                                addDirection()
+                                            }
+                                        })
                                     }
-                                    .autocapitalization(.none)
-                                    .simultaneousGesture(
-                                        TapGesture(count: 1).onEnded { _ in
-                                            unfocusEditable()
-                                            unfocusMultilineTexts()
-                                            editingDirectionIndex = recipe.tempRecipe.directions.count
-                                        }
-                                    )
-
-                                    UIControls.AddButton(action: {
-                                        withAnimation {
-                                            // unfocus
-                                            unfocusEditable()
-                                            unfocusMultilineTexts()
-                                            addDirection()
-                                        }
-                                    })
+                                    .id(recipe.tempRecipe.ingredients.count + recipe.tempRecipe.directions.count + 1)
+                                    .formSectionItem(padding: .horizontal)
                                 }
-                                .id(recipe.tempRecipe.ingredients.count + recipe.tempRecipe.directions.count + 1)
-                                .formSectionItem(padding: .horizontal)
                             }
-                        }
-                        .formSection()
-                    
+                            .formSection()
                         
-                        VStack {
-                            Group {
-                                ErrorMessage("\(newDirectionFieldMissingMessage)", isError: $newDirectionFieldMissing)
+                            
+                            VStack {
+                                Group {
+                                    ErrorMessage("\(newDirectionFieldMissingMessage)", isError: $newDirectionFieldMissing)
 
-                                ErrorMessage("\(directionsFieldMissingMessage)", isError: $directionsFieldMissing)
+                                    ErrorMessage("\(directionsFieldMissingMessage)", isError: $directionsFieldMissing)
+                                }
+                            }
+                            .formFooter()
+                        }
+                    }
+                    .onReceive(Publishers.keyboardHeight) { height in
+                        if let index = editingIngredientIndex, height != 0 {
+                            withAnimation {
+                                let globalHeight = frameGeometry.frame(in: .global).maxY
+                                let tabBarHeight = frameGeometry.safeAreaInsets.bottom
+                                // only scrolls up if item is covered by keyboard
+                                if let editingPosition = self.editingPosition,
+                                   editingPosition > globalHeight + tabBarHeight - height {
+                                    proxy.scrollTo(index, anchor: .bottomTrailing)
+                                }
                             }
                         }
-                        .formFooter()
-                    }
-                }
-                .onChange(of: editingIngredientIndex) { index in
-                    if let index = index {
-                        withAnimation {
-                            proxy.scrollTo(index, anchor: .bottomTrailing)
+                        else if let index = editingDirectionIndex, height != 0 {
+                            withAnimation {
+                                let globalHeight = frameGeometry.frame(in: .global).maxY
+                                let tabBarHeight = frameGeometry.safeAreaInsets.bottom
+                                // only scrolls up if item is covered by keyboard
+                                if let editingPosition = self.editingPosition,
+                                   editingPosition > globalHeight + tabBarHeight - height {
+                                    proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
+                                }
+                            }
                         }
                     }
-                }
-                .onChange(of: editingDirectionIndex) { index in
-                    if let index = index {
-                        withAnimation {
-                            proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
+                    .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
+                        unfocusMultilineTexts()
+                    } : nil)
+                    .simultaneousGesture(
+                        TapGesture().onEnded { _ in
+                            unfocusEditable()
                         }
-                    }
+                    )
                 }
-                .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
-                    unfocusMultilineTexts()
-                } : nil)
-                .simultaneousGesture(
-                    TapGesture().onEnded { _ in
-                        unfocusEditable()
+                .onAppear {
+                    if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {
+                        alertShown = true
+                        partialRecipeAlert = true
                     }
-                )
-            }
-            .onAppear {
-                if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {
-                    alertShown = true
-                    partialRecipeAlert = true
-                }
-                else if alertShown {
-                    partialRecipeAlert = false
+                    else if alertShown {
+                        partialRecipeAlert = false
+                    }
                 }
             }
         }
@@ -794,6 +819,7 @@ struct EditRecipeView: View {
         withAnimation {
             editingIngredientIndex = nil
             editingDirectionIndex = nil
+            editingPosition = nil
             if name.isOnlyWhitespace() {
                 name = nameFieldPlaceholder
             }
