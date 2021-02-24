@@ -22,7 +22,7 @@ struct EditRecipeView: View {
     @State var presentErrorAlert = false
     
     var nameFieldMissingMessage = "Must have a name."
-    var newIngredientFieldMissingMessage = "Must fill in an ingredient slot."
+    var newIngredientFieldMissingMessage = "Must fill in an ingredient."
     var newDirectionFieldMissingMessage = "Must fill in a direction."
     var ingredientsFieldMissingMessage = "Must have at least one ingredient."
     var directionsFieldMissingMessage = "Must have at least one direction."
