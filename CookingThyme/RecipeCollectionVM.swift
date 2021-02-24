@@ -81,14 +81,17 @@ class RecipeCollectionVM: ObservableObject {
     // TODO all recipes
     var allRecipes: [Recipe] {
         var allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
-//            if recipeCategoryVM.name != "All" {
-                var currentRecipes = recipes
-                currentRecipes.append(contentsOf: recipeCategoryVM.recipes)
-                return currentRecipes
-//            }
-//            return recipes
+            var currentRecipes = recipes
+            var categoryRecipes = recipeCategoryVM.recipes
+            // only add the recipes in all recipes if only in All Category
+            if recipeCategoryVM.name == "All" {
+                categoryRecipes = categoryRecipes.filter { (recipe) -> Bool in
+                    recipe.recipeCategoryId == recipeCategoryVM.id
+                }
+            }
+            currentRecipes.append(contentsOf: categoryRecipes)
+            return currentRecipes
         }
-        allRecipes.removeDuplicates()
         allRecipes.sort { (recipeA, recipeB) -> Bool in
             recipeA.name < recipeB.name
         }
@@ -198,6 +201,7 @@ class RecipeCollectionVM: ObservableObject {
         else if currentCategory == nil {
             allCategory!.recipes = allRecipes
             currentCategory = allCategory!
+            setCurrentCategory(allCategory!)
         }
     }
     
@@ -281,7 +285,7 @@ class RecipeCollectionVM: ObservableObject {
         RecipeDB.shared.deleteCategory(withId: id)
     
         for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
-            self.deleteRecipeAndParts(withId: categoryRecipe.id)
+            self.deleteRecipe(withId: categoryRecipe.id)
         }
         
         // updates category store
@@ -289,6 +293,7 @@ class RecipeCollectionVM: ObservableObject {
         
         popullateCategories() { success in
             if let currentCategory = self.currentCategory, id == currentCategory.id {
+                self.currentCategory = nil
                 self.resetCurrentCategoryToAllCategory()
             }
         }
@@ -393,21 +398,20 @@ class RecipeCollectionVM: ObservableObject {
 //        self.popullateCategories()
     }
     
-    // called by ui in collection edit, deletes recipe and associated parts
+    // called by ui in collection edit and delete Category, deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
         self.deleteRecipeAndParts(withId: id)
         // update recipes store
         self.recipesStore[id] = nil
         // update categories store
         removeRecipeFromStoreCategory(withId: id)
-        removeRecipeFromStoreAllCategory(withId: id)
         updateAllRecipes()
         
         // need this for recipe on delete to disappear
         refreshCurrentCategory()
     }
     
-    // called by deleteRecipe above and delete Category
+    // called by deleteRecipe above
     private func deleteRecipeAndParts(withId id: String) {
         RecipeDB.shared.deleteRecipe(withId: id)
         RecipeDB.shared.deleteDirections(withRecipeId: id)
@@ -438,7 +442,9 @@ class RecipeCollectionVM: ObservableObject {
     func moveRecipeInStore(_ recipe: Recipe, toCategoryId newCategoryId: String) {
         // update category store
         self.removeRecipeFromStoreCategory(recipe)
+        let ar = allRecipes
         self.addRecipeToStore(recipe, toCategoryId: newCategoryId)
+        let arnew = allRecipes
         // update recipe store
         if let recipeVM = self.recipesStore[recipe.id] {
             recipeVM.recipe.recipeCategoryId = newCategoryId
@@ -461,21 +467,6 @@ class RecipeCollectionVM: ObservableObject {
             storeCategory.recipes = oldCategoryRecipes
             self.categoriesStore[recipe.recipeCategoryId] = storeCategory
             self.updateAllRecipes()
-        }
-    }
-    
-    // remove recipe from all category in category store
-    func removeRecipeFromStoreAllCategory(withId id: String) {
-        if let recipe = getRecipe(withId: id) {
-            if let allCategory = allCategory {
-                if let storeCategory = self.categoriesStore[allCategory.id] {
-                    var oldCategoryRecipes = storeCategory.recipes
-                    oldCategoryRecipes.remove(element: recipe)
-                    storeCategory.recipes = oldCategoryRecipes
-                    self.categoriesStore[allCategory.id] = storeCategory
-                    self.updateAllRecipes()
-                }
-            }
         }
     }
     

@@ -8,9 +8,6 @@
 import SwiftUI
 import Combine
 
-
-// TODO: don't cllear ing/dir if not entered but clicked away from
-
 struct EditRecipeView: View {
     @Environment(\.presentationMode) var presentationMode
 
