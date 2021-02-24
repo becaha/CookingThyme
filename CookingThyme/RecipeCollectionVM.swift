@@ -377,15 +377,16 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // called by unchecking its own category in move category view
-    // removes recipe from category
+    // removes recipe from category if category is not all and puts it into all category
     func removeRecipe(_ recipe: Recipe, fromCategoryId categoryId: String) {
         if let allCategory = self.allCategory {
             let allCategoryId = allCategory.id
             // only remove from category if the category is not all
             if categoryId != allCategoryId {
                 // updates category store
-                removeRecipeFromStoreCategory(recipe)
-                
+//                removeRecipeFromStoreCategory(recipe)
+                moveRecipeInStore(recipe, toCategoryId: allCategoryId)
+
                 RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
                     if !success {
                         print("error moving recipe")
@@ -442,12 +443,11 @@ class RecipeCollectionVM: ObservableObject {
     func moveRecipeInStore(_ recipe: Recipe, toCategoryId newCategoryId: String) {
         // update category store
         self.removeRecipeFromStoreCategory(recipe)
-        let ar = allRecipes
         self.addRecipeToStore(recipe, toCategoryId: newCategoryId)
-        let arnew = allRecipes
         // update recipe store
         if let recipeVM = self.recipesStore[recipe.id] {
             recipeVM.recipe.recipeCategoryId = newCategoryId
+            recipeVM.tempRecipe.recipeCategoryId = newCategoryId
             self.recipesStore[recipe.id] = recipeVM
         }
     }
