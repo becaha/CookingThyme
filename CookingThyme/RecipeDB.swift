@@ -657,7 +657,7 @@ class RecipeDB {
             }
             else {
                 ingredientsToDelete.remove(element: ingredient)
-                updateIngredient(ingredient, order: updatedIngredients.count) { success in
+                updateIngredient(ingredient, order: count) { success in
                     updatedIngredients.append(ingredient)
                     ingredientGroup.leave()
                 }
