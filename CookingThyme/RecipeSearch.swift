@@ -51,7 +51,7 @@ struct RecipeSearch: View {
                         VStack(spacing: 0) {
                             ForEach(recipeSearchHandler.recipeList, id: \.self) { recipe in
                                 NavigationLink(destination:
-                                    PublicRecipeView(recipe: RecipeVM(recipe: recipe))
+                                    PublicRecipeView(recipe: recipe)
                                 ) {
                                     Text("\(recipe.name)")
                                         .customFont(style: .subheadline)

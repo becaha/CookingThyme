@@ -11,10 +11,6 @@ struct CreateRecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @ObservedObject var category: RecipeCategoryVM
     @State var recipe: RecipeVM?
-    
-    init(category: RecipeCategoryVM) {
-        self.category = category
-    }
 
     var body: some View {
         Group {
