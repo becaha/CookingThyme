@@ -80,7 +80,7 @@ struct Ingredient: Identifiable, Equatable, Hashable {
         self.setTempStrings()
     }
     
-    // Dans' called in recipe transcriber
+    // called in recipe transcriber
     init(ingredientString: String) {
         // temporary until id is created in db
         self.id = Ingredient.defaultId

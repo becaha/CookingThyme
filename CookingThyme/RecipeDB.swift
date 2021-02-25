@@ -108,10 +108,12 @@ class RecipeDB {
     func createIngredients(ingredients: [Ingredient], withRecipeId recipeId: String, onCompletion: @escaping ([Ingredient]) -> Void) {
         var createdIngredients = [Ingredient]()
         let ingredientGroup = DispatchGroup()
+        var count = -1
 
         for ingredient in ingredients {
             ingredientGroup.enter()
-            createIngredient(ingredient, order: createdIngredients.count, withRecipeId: recipeId) { createdIngredient in
+            count += 1
+            createIngredient(ingredient, order: count, withRecipeId: recipeId) { createdIngredient in
                 if let createdIngredient = createdIngredient {
                     createdIngredients.append(createdIngredient)
                     ingredientGroup.leave()
@@ -343,6 +345,7 @@ class RecipeDB {
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
+                    let data = document.data()
                     updatedRecipe.addIngredient(document: document)
                 }
                 onRetrieve(updatedRecipe)
@@ -632,16 +635,17 @@ class RecipeDB {
         }
     }
     
-    // TODO need to put id in a newly created item so it can be updated later
     func updateIngredients(withRecipeId recipeId: String, ingredients: [Ingredient], oldRecipe recipe: Recipe, onCompletion: @escaping ([Ingredient]) -> Void) {
         var updatedIngredients = [Ingredient]()
         let ingredientGroup = DispatchGroup()
+        var count = -1
         
         var ingredientsToDelete = recipe.ingredients
         for ingredient in ingredients {
             ingredientGroup.enter()
+            count += 1
             if ingredient.id == Ingredient.defaultId {
-                createIngredient(ingredient, order: updatedIngredients.count, withRecipeId: recipeId) { createdIngredient in
+                createIngredient(ingredient, order: count, withRecipeId: recipeId) { createdIngredient in
                     if let createdIngredient = createdIngredient {
                         updatedIngredients.append(createdIngredient)
                         ingredientGroup.leave()

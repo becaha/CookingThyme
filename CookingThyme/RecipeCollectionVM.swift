@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-// TODO: on collection, new recipe is moved up as if keyboard were there
+// TODO: on collection, new recipe is moved up as if keyboard were there, on reload app when user is logged in, recipe search dismiss keyboard
 
 // TODO: everything alphabetically sorted, including ingredients
 // TODO AttributeGraph: cycle detected through attribute 3286136, on sign in
