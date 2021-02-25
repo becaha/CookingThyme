@@ -29,8 +29,8 @@ struct ScrollableImagesView: View {
         self.width = width
         self.height = height
         self.isEditing = isEditing
-        self.pictureWidth = min(width/2 - widthOffset, height * (4.0/3.0))
-        self.pictureHeight = min(pictureWidth * (3.0/4.0), height)
+        self.pictureWidth = width / 2 - widthOffset //min(width/2 - widthOffset, height * (4.0/3.0))
+        self.pictureHeight = height //min(pictureWidth * (3.0/4.0), height)
     }
 
     var body: some View {
@@ -73,7 +73,7 @@ struct ScrollableImagesView: View {
                             }
 
                             Image(uiImage: uiImages[index]!)
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: height)))
+                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: pictureHeight)))
                                 .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                                 .clipped()
                                 .border(borderColor(), width: borderWidth)

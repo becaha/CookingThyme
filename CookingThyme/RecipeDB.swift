@@ -345,7 +345,6 @@ class RecipeDB {
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
-                    let data = document.data()
                     updatedRecipe.addIngredient(document: document)
                 }
                 onRetrieve(updatedRecipe)

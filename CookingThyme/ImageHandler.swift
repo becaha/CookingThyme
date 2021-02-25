@@ -212,7 +212,6 @@ class ImageHandler: ObservableObject {
         if let image = image, image.size.width > 0, image.size.height > 0 {
             let horizontalZoom = size.width / image.size.width
             let verticalZoom = size.height / image.size.height
-
             return max(horizontalZoom, verticalZoom)
         }
         return 1.0
