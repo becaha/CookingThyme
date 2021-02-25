@@ -43,6 +43,7 @@ struct HomeView: View {
                 else if user.collection != nil {
                     RecipeCollectionView()
                         .environmentObject(user.collection!)
+                        .environmentObject(recipeSearchHandler)
                 }
             }
             .navigationViewStyle(StackNavigationViewStyle())

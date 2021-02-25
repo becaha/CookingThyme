@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-// TODO: no nav bar
 struct RecipeSearch: View {
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
@@ -51,7 +50,8 @@ struct RecipeSearch: View {
                         VStack(spacing: 0) {
                             ForEach(recipeSearchHandler.recipeList, id: \.self) { recipe in
                                 NavigationLink(destination:
-                                    PublicRecipeView(recipe: recipe)
+                                    PublicRecipeContainer(recipe: recipe)
+                                                .environmentObject(recipeSearchHandler)
                                 ) {
                                     Text("\(recipe.name)")
                                         .customFont(style: .subheadline)

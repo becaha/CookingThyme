@@ -346,7 +346,7 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempImages, servings: servings, source: source) { createdRecipe in
+                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempImages, servings: servings, source: source, recipeSearchHandler: recipe.recipeSearchHandler) { createdRecipe in
                     if let createdRecipe = createdRecipe {
                         recipe.setTempRecipe(createdRecipe)
                         recipe.setRecipe(createdRecipe)

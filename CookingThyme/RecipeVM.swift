@@ -29,7 +29,7 @@ class RecipeVM: ObservableObject, Identifiable {
     @Published var isImportingFromURL = false
     @Published var invalidURL = false
     
-    @Published var recipesWebHandler = RecipeSearchHandler()
+    @Published var recipeSearchHandler: RecipeSearchHandler
     @Published var isPopullating = true
     @Published var recipeNotFound = false
     
@@ -52,10 +52,12 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Init
     
     // inits recipe in a category
-    init(recipe: Recipe, category: RecipeCategoryVM, collection: RecipeCollectionVM) {
+    init(recipe: Recipe, category: RecipeCategoryVM, collection: RecipeCollectionVM, recipeSearchHandler: RecipeSearchHandler) {
         self.isLoading = true
         self.collection = collection
+        
         self.category = category
+        self.recipeSearchHandler = recipeSearchHandler
 
         self.recipe = recipe
         self.tempRecipe = recipe
@@ -90,27 +92,30 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // inits a create new recipe in a category
-    init(category: RecipeCategoryVM, collection: RecipeCollectionVM) {
+    init(category: RecipeCategoryVM, collection: RecipeCollectionVM, recipeSearchHandler: RecipeSearchHandler) {
         self.isLoading = true
         self.recipe = Recipe()
         self.tempRecipe = Recipe()
 
         self.category = category
+        self.collection = collection
+        
+        self.recipeSearchHandler = recipeSearchHandler
         
         setCancellables()
         self.isLoading = false
     }
     
     // inits a public recipe from search
-    init(recipe: Recipe) {
+    init(recipe: Recipe, recipeSearchHandler: RecipeSearchHandler) {
         self.isLoading = true
         self.recipe = recipe
         self.tempRecipe = recipe
         
+        self.recipeSearchHandler = recipeSearchHandler
+        
         setCancellables()
-        self.popullateLocalRecipe() { success in
-            self.isLoading = false
-        }
+        self.popullateDetail()
     }
     
     func setCancellables() {
@@ -139,12 +144,12 @@ class RecipeVM: ObservableObject, Identifiable {
                 self.recipeText = recipeText
             }
         
-        self.webHandlerCancellable = self.recipesWebHandler.objectWillChange
+        self.webHandlerCancellable = self.recipeSearchHandler.objectWillChange
             .sink { _ in
                 self.objectWillChange.send()
             }
         
-        self.recipeDetailCancellable = self.recipesWebHandler.$recipeDetail.sink { (recipe) in
+        self.recipeDetailCancellable = self.recipeSearchHandler.$recipeDetail.sink { (recipe) in
             if let recipe = recipe {
                 self.recipe = recipe
                 self.tempRecipe = recipe
@@ -153,11 +158,12 @@ class RecipeVM: ObservableObject, Identifiable {
                         print("error popullating images")
                     }
                     self.isPopullating = false
+                    self.isLoading = false
                 }
             }
         }
         
-        self.recipeDetailErrorCancellable = self.recipesWebHandler.$recipeDetailError.sink { (isError) in
+        self.recipeDetailErrorCancellable = self.recipeSearchHandler.$recipeDetailError.sink { (isError) in
             self.recipeNotFound = isError
         }
     }
@@ -207,7 +213,7 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // calls api to get detail of a recipe (its parts)
     func popullateDetail() {
-        recipesWebHandler.listRecipeDetail(recipe)
+        recipeSearchHandler.listRecipeDetail(recipe)
     }
     
     // copies public recipe to category of user's collection, makes recipe permanent
@@ -277,10 +283,6 @@ class RecipeVM: ObservableObject, Identifiable {
     
     // MARK: - Setters/Popullaters
     
-    // TODO original ingredient according to servings
-    // haave ingredientsByServings shown in reaad recipe, this caan cahnge with the serevings
-    // have ingredients in edit recipe which actually change
-    // on oopen reaad, ingredientsByServings = ingredients
     func popullateRecipeTemps() {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
@@ -555,7 +557,7 @@ class RecipeVM: ObservableObject, Identifiable {
 extension String {
     func toInt() -> Int {
         let formatter = NumberFormatter()
-        return formatter.number(from: self)!.intValue
+        return formatter.number(from: self)?.intValue ?? 0
     }
 }
 

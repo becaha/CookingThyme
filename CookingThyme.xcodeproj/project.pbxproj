@@ -10,6 +10,7 @@
 		D8F3C6BBF2B91674BF4E021A /* Pods_CookingThyme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */; };
 		DB2ABC5C25E427D000FFF459 /* KeyboardDismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */; };
 		DB2ABC6025E46A5F00FFF459 /* CustomFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC5F25E46A5F00FFF459 /* CustomFont.swift */; };
+		DB2ABC6A25E7EDE200FFF459 /* PublicRecipeContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2ABC6925E7EDE200FFF459 /* PublicRecipeContainer.swift */; };
 		DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */; };
 		DB49B4AC2565E47400808CC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AB2565E47400808CC8 /* Assets.xcassets */; };
 		DB49B4AF2565E47400808CC8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB49B4AE2565E47400808CC8 /* Preview Assets.xcassets */; };
@@ -108,6 +109,7 @@
 		90B70D1A47A093B7B9549177 /* Pods_CookingThyme.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CookingThyme.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB2ABC5B25E427D000FFF459 /* KeyboardDismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismissal.swift; sourceTree = "<group>"; };
 		DB2ABC5F25E46A5F00FFF459 /* CustomFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFont.swift; sourceTree = "<group>"; };
+		DB2ABC6925E7EDE200FFF459 /* PublicRecipeContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicRecipeContainer.swift; sourceTree = "<group>"; };
 		DB49B4A42565E47300808CC8 /* CookingThyme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookingThyme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB49B4A72565E47300808CC8 /* CookingThymeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookingThymeApp.swift; sourceTree = "<group>"; };
 		DB49B4AB2565E47400808CC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -425,8 +427,8 @@
 			children = (
 				DB88CD3625BBA55A00A7F32C /* RecipeHelpers */,
 				DB88CD3D25BF992C00A7F32C /* CategoriesSheet.swift */,
-				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DBEF370F25D4DD5000ED83D4 /* CreateRecipeView.swift */,
+				DB49B4BD2565E49F00808CC8 /* RecipeView.swift */,
 				DB49B4F8256DED3700808CC8 /* ReadRecipeView.swift */,
 				DB49B4BF2565E49F00808CC8 /* EditRecipeView.swift */,
 				DB88CD2A25BB64A500A7F32C /* RecipeTextView.swift */,
@@ -459,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				DB49B5582581BB0D00808CC8 /* RecipeSearch.swift */,
+				DB2ABC6925E7EDE200FFF459 /* PublicRecipeContainer.swift */,
 				DB49B5622582746E00808CC8 /* PublicRecipeView.swift */,
 			);
 			name = RecipeSearch;
@@ -716,6 +719,7 @@
 				DB49B4D32565E49F00808CC8 /* RecipeCollectionVM.swift in Sources */,
 				DB49B5632582746E00808CC8 /* PublicRecipeView.swift in Sources */,
 				DB49B5172579EA1500808CC8 /* ImagesView.swift in Sources */,
+				DB2ABC6A25E7EDE200FFF459 /* PublicRecipeContainer.swift in Sources */,
 				DB49B4A82565E47300808CC8 /* CookingThymeApp.swift in Sources */,
 				DB6EFA8D25CC9B990060B2B4 /* RecipeSearchHandler.swift in Sources */,
 				DB6EFA9325CDB8E60060B2B4 /* NavigationBarColor.swift in Sources */,

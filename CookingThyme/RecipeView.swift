@@ -10,6 +10,7 @@ import SwiftUI
 struct RecipeView: View {
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
+    @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
     @State var recipeVM: RecipeVM?
     
     var recipe: Recipe
@@ -30,7 +31,8 @@ struct RecipeView: View {
             }
         }
         .onAppear {
-            recipeVM = RecipeVM(recipe: recipe, category: category, collection: collection)
+            recipeVM = RecipeVM(recipe: recipe, category: category, collection: collection, recipeSearchHandler: recipeSearchHandler)
         }
-        .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))    }
+        .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))
+    }
 }

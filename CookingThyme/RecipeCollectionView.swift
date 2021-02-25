@@ -21,6 +21,7 @@ struct RecipeCollectionView: View {
     }
     
     @EnvironmentObject var collection: RecipeCollectionVM
+    @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
     
     @State private var isEditing = false
     
@@ -176,6 +177,7 @@ struct RecipeCollectionView: View {
                                             RecipeView(recipe: recipe, isEditingRecipe: false)
                                     .environmentObject(collection.currentCategory!)
                                     .environmentObject(collection)
+                                    .environmentObject(recipeSearchHandler)
                             ) {
                                 Text("\(recipe.name)")
                                     .customFont(style: .subheadline)
@@ -217,6 +219,7 @@ struct RecipeCollectionView: View {
                 NavigationLink(destination:
                     CreateRecipeView(category: collection.currentCategory!)
                         .environmentObject(collection)
+                        .environmentObject(recipeSearchHandler)
                 ) {
                     UIControls.AddViewHorizontal(withLabel: "New Recipe")
                 }

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class RecipeTranscriber {
+class RecipeTranscriber: ObservableObject {
     @Published var recipe: Recipe?
     @Published var recipeText: String?
     private var imageTranscriber = ImageTranscriber()

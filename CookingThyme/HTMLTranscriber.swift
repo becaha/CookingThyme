@@ -40,7 +40,7 @@ class HTMLTranscriber: ObservableObject {
             
             if let recipeString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil).string {
 //                self.printHTML(recipeString)
-                let recipe = self.parseRecipe(recipeString, withName: name, recipeURL: urlString)
+                let recipe = HTMLTranscriber.parseRecipe(recipeString, withName: name, recipeURL: urlString)
 //                if !self.isValid(recipe) {
 //                    let cleanRecipeString = HTMLTranscriber.cleanHtmlTags(fromHtml: htmlString, returnTitle: false)
 //                    recipe = self.parseRecipe(cleanRecipeString, withName: name, recipeURL: urlString)
@@ -133,7 +133,7 @@ class HTMLTranscriber: ObservableObject {
     }
     
     // TODO: 1 1/2 cups (440 g), ignoring the stuff in parenthesis, just part of the name, no change with serving size
-    func parseRecipe(_ recipeString: String, withName name: String, recipeURL: String) -> Recipe {
+    static func parseRecipe(_ recipeString: String, withName name: String, recipeURL: String) -> Recipe {
         enum CurrentPart {
             case serving
             case ingredient
@@ -155,7 +155,7 @@ class HTMLTranscriber: ObservableObject {
             }
             for line in lines {
                 let cleanLine = HTMLTranscriber.removeFormat(line)
-                let cleanLineHeader = removeAll(line)
+                let cleanLineHeader = HTMLTranscriber.removeAll(line)
                 // look for new part of recipe
                 if currentPart != CurrentPart.ingredient && currentPart != CurrentPart.direction && servings == 0 && (cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield")) {
                     currentPart = CurrentPart.serving
@@ -223,7 +223,6 @@ class HTMLTranscriber: ObservableObject {
                         // found first direction
                         if step == 1 {
                             hasStepNumbers = true
-                            directionStrings = [String]()
                         }
                         
                         directionStrings.append(direction)
@@ -257,7 +256,7 @@ class HTMLTranscriber: ObservableObject {
     }
     
     // "\t", "\u{xxxx}"
-    func removeAll(_ line: String) -> String {
+    static func removeAll(_ line: String) -> String {
         var cleanLine = ""
         for char in line {
             if char.isLetter || char.isNumber {

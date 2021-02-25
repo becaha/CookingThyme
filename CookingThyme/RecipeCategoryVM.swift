@@ -260,12 +260,12 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // called by ui by saving in edit recipe (by actually creating new recipe)
     // creates recipe with given parts in category, updates category store
-    func createRecipe(name: String, tempIngredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, onCreation: @escaping (Recipe?) -> Void) {
+    func createRecipe(name: String, tempIngredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, recipeSearchHandler: RecipeSearchHandler, onCreation: @escaping (Recipe?) -> Void) {
         RecipeCategoryVM.createRecipe(forCategoryId: category.id, name: name, tempIngredients: tempIngredients, directions: directions, images: images, servings: servings, source: source) { recipe in
             // updates category store
             if let recipe = recipe {
                 // saves new recipe to recipe store
-                self.collection.recipesStore[recipe.id] = RecipeVM(recipe: recipe, category: self, collection: self.collection)
+                self.collection.recipesStore[recipe.id] = RecipeVM(recipe: recipe, category: self, collection: self.collection, recipeSearchHandler: recipeSearchHandler)
                 
                 // saves new recipe to category in category store
                 self.collection.addRecipeToStore(recipe, toCategoryId: self.category.id)

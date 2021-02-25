@@ -26,6 +26,7 @@ class RecipeCollectionVM: ObservableObject {
     @Published var search: String = ""
     
     @Published var shoppingListStore: [ShoppingItem] = []
+
     
     // stores recipes from db to local storage when recipe is retrieved from db or saved to db
     // recipeId to RecipeVM

@@ -21,7 +21,7 @@ struct CategoriesSheet: View {
     var body: some View {
         NavigationView {
             VStack {
-                if collection.categories.count == 1, collection.categories[0].name == "All" {
+                if collection.categories.count == 1, collection.categories[0].name == "All", actionWord != "Save" {
                     HStack {
                         Spacer()
                         
@@ -35,6 +35,7 @@ struct CategoriesSheet: View {
                 
                 List {
                     ForEach(collection.categories, id: \.self) { category in
+                        // actionWord == "Save" means that it is in public recipe
                         if category.name != "All" || actionWord == "Save" {
                             Button(action: {
                                 withAnimation {
@@ -94,9 +95,3 @@ struct CategoriesSheet: View {
         }
     }
 }
-
-//struct CategoriesSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CategoriesSheet()
-//    }
-//}

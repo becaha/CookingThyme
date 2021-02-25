@@ -133,19 +133,16 @@ class ImageTranscriber: ObservableObject {
         .resume()
     }
     
-    func analyzeTranscription(_ transcription: Transcription) -> Recipe {
+    func analyzeTranscription(_ transcription: Transcription) -> Recipe? {
         // first annotation is the whole recipe in text including new lines
-
+        if transcription.annotations.count == 0 {
+            return nil
+        }
+        
         //index the vertecies by their location
         let topLeft = 0
         let topRight = 1
-//        let bottomRight = 2
         let bottomLeft = 3
-        //variable init for max and min values of vertecies
-//        var minX = 0
-//        var minY = 0
-//        var maxX = 0
-//        var maxY = 0
         
         //bools
         var lookingForTitle = true
@@ -177,7 +174,6 @@ class ImageTranscriber: ObservableObject {
         //the last annotation
         var lastAnnotation:Annotation = transcription.annotations[0]
         
-        
         //loop through each annotation enumerating each index
         //this loop finds the title of the recipe by comparing its relative font size
         //theis loop also will separate lines into sections based on their location
@@ -191,17 +187,6 @@ class ImageTranscriber: ObservableObject {
                 x = vertex.x
                 y = vertex.y
             }
-          
-          //going into the first annotation only which should include the whole recipe
-          //in its description
-//            if index == 0 {
-//                //set min and max values where annotations will appear
-//                minX = boundingPoly[topLeft].x
-//                minY = boundingPoly[topLeft].y
-//                maxX = boundingPoly[topRight].x
-//                maxY = boundingPoly[bottomRight].y
-//                //print(annotation["description"])
-//            }
 
           //get the description which is the word or string value from the annotation
             let description = transcription.annotations[index].description
@@ -220,8 +205,11 @@ class ImageTranscriber: ObservableObject {
             }
 
           //check if current annotation is in the current line
-            if (isInLine(left: boundingPoly[topRight],right: lastAnn_boundingPoly[topLeft]) && !lookingForTitle){
-                currLine = currLine + description + " "
+            if (isInLine(left: boundingPoly[topRight], right: lastAnn_boundingPoly[topLeft]) && !lookingForTitle){
+                currLine = currLine + description
+                if description.count > 1 {
+                    currLine += " "
+                }
             }
             else{
                 if (currLine != ""){

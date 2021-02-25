@@ -12,11 +12,9 @@ struct PublicRecipeView: View {
 
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
-//    @ObservedObject var recipe: RecipeVM
-    @State var recipeVM: RecipeVM?
     
-    var recipe: Recipe
-    
+    @ObservedObject var recipe: RecipeVM
+        
     @State private var categoriesPresented = false
     
     @State private var signinAlert = false
@@ -25,63 +23,58 @@ struct PublicRecipeView: View {
     @State private var currentCategoryId: String?
 
     private var isLoading: Bool {
-        if recipeVM != nil {
-            return recipeVM!.isPopullating && !recipeVM!.recipeNotFound
-        }
-        return true
+        return recipe.isPopullating && !recipe.recipeNotFound
     }
     
     var body: some View {
         ScrollView(.vertical) {
             Group {
-                if recipeVM != nil {
-                    RecipeNameTitle(name: recipeVM!.tempRecipe.name)
-                    
-                    VStack {
-                        if isLoading {
-                            UIControls.Loading()
-                            
-                            Spacer()
-                        }
-                        else if recipeVM!.recipeNotFound {
-                            HStack {
-                                Spacer()
-                                
-                                Text("Error finding details for this recipe.")
-
-                                Spacer()
-                            }
-                            
-                            Spacer()
-                        }
-                        else {
-                            if recipeVM!.imageHandler.images.count > 0 {
-                                ImagesView(isEditing: false)
-                            }
-                            
-                            RecipeLists(
-                                addToShoppingList: { ingredient in
-                                    user.collection!.addIngredientShoppingItem(ingredient)
-                                },
-                                addAllToShoppingList: { ingredients in
-                                    addAllIngredients(ingredients)
-                                },
-                                onNotSignedIn: {
-                                    signinAlert = true
-                                    signinAlertMessage = "Sign in to add ingredients to shopping list."
-                                })
-                        }
+                RecipeNameTitle(name: recipe.tempRecipe.name)
+                
+                VStack {
+                    if isLoading {
+                        UIControls.Loading()
+                        
+                        Spacer()
                     }
-                    .environmentObject(recipeVM!)
+                    else if recipe.recipeNotFound {
+                        HStack {
+                            Spacer()
+                            
+                            Text("Error finding details for this recipe.")
+
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                    }
+                    else {
+                        if recipe.imageHandler.images.count > 0 {
+                            ImagesView(isEditing: false)
+                        }
+                        
+                        RecipeLists(
+                            addToShoppingList: { ingredient in
+                                user.collection!.addIngredientShoppingItem(ingredient)
+                            },
+                            addAllToShoppingList: { ingredients in
+                                addAllIngredients(ingredients)
+                            },
+                            onNotSignedIn: {
+                                signinAlert = true
+                                signinAlertMessage = "Sign in to add ingredients to shopping list."
+                            })
+                    }
                 }
+                .environmentObject(recipe)
             }
             .sheet(isPresented: $categoriesPresented, content: {
                 CategoriesSheet(currentCategoryId: currentCategoryId, actionWord: "Save", isPresented: $categoriesPresented, onAction: { categoryId in
                     if currentCategoryId == nil {
-                        recipeVM!.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
+                        recipe.copyRecipe(toCategoryId: categoryId, inCollection: user.collection!)
                     }
                     else {
-                        RecipeVM.moveRecipe(recipeVM!.recipe, toCategoryId: categoryId)
+                        RecipeVM.moveRecipe(recipe.recipe, toCategoryId: categoryId)
                     }
                     currentCategoryId = categoryId
 
@@ -91,12 +84,6 @@ struct PublicRecipeView: View {
         }
         .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
-        .onAppear {
-            recipeVM = RecipeVM(recipe: recipe)
-            withAnimation {
-                recipeVM!.popullateDetail()
-            }
-        }
         .alert(isPresented: $signinAlert, content: {
             Alert(title: Text("\(signinAlertMessage)"),
                   primaryButton: .default(Text("Sign in")) {
@@ -122,7 +109,7 @@ struct PublicRecipeView: View {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .padding(.trailing)
-                .disabled(isLoading || recipeVM?.recipeNotFound == true || currentCategoryId != nil)
+                .disabled(isLoading || recipe.recipeNotFound == true || currentCategoryId != nil)
         )
     }
     
