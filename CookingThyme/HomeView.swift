@@ -13,7 +13,6 @@ struct HomeView: View {
     @Environment(\.presentationMode) var presentation
     
     @EnvironmentObject var user: UserVM
-    @EnvironmentObject var timer: TimerHandler
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
 
@@ -72,13 +71,6 @@ struct HomeView: View {
                 Image(systemName: "cart.fill")
                 Text("Shopping List")
             }
-
-            TimerView()
-            .homeNavigationBar(settingsAction: settingsAction)
-            .tabItem {
-                Image(systemName: "timer")
-                Text("Timer")
-            }
             
         }
         .accentColor(mainColor())
@@ -87,21 +79,6 @@ struct HomeView: View {
                 .environmentObject(sheetNavigator)
                 .environmentObject(user)
         }
-        .alert(isPresented: $timer.timerAlert) {
-            Alert(title: Text("Timer"),
-                  primaryButton: .default(Text("Stop")) {
-                    withAnimation {
-                        timer.stop()
-                    }
-                  },
-                  secondaryButton: .default(Text("Repeat")) {
-                    withAnimation {
-                        timer.repeatTimer()
-                    }
-                  }
-            )
-        }
-        .environmentObject(timer)
         .environmentObject(user)
     }
     

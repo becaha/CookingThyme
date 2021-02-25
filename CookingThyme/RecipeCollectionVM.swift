@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-// TODO: sound on timer and timer notification, if timer == 0 -> issetting
 // TODO: on collection, new recipe is moved up as if keyboard were there
 
 // TODO: everything alphabetically sorted, including ingredients

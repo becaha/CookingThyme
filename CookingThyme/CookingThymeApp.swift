@@ -13,7 +13,6 @@ import Firebase
 @main
 struct CookingThymeApp: App {
     @ObservedObject var user = UserVM()
-    @ObservedObject var timer = TimerHandler()
     @ObservedObject var sheetNavigator = SheetNavigator()
     @ObservedObject var recipeSearchHandler = RecipeSearchHandler()
 
@@ -26,7 +25,6 @@ struct CookingThymeApp: App {
         if let currentUsername = UserDefaults.standard.string(forKey: User.userKey) {
             self.user = UserVM(email: currentUsername)
         }
-        setupNotifications()
     }
     
     var body: some Scene {
@@ -34,28 +32,8 @@ struct CookingThymeApp: App {
             HomeView()
                 .environmentObject(user)
                 .environmentObject(sheetNavigator)
-                .environmentObject(timer)
                 .environmentObject(recipeSearchHandler)
         }
-    }
-    
-    func setupNotifications(){
-        let stopAction = UNNotificationAction(identifier: SimpleTimer.stopAction,
-              title: "Stop",
-              options: UNNotificationActionOptions(rawValue: 0))
-        let repeatAction = UNNotificationAction(identifier:  SimpleTimer.stopAction,
-              title: "Repeat",
-              options: UNNotificationActionOptions(rawValue: 0))
-        // Define the notification type
-        let timerCategory =
-            UNNotificationCategory(identifier: SimpleTimer.timerAlertCategory,
-              actions: [stopAction, repeatAction],
-              intentIdentifiers: [],
-              hiddenPreviewsBodyPlaceholder: "",
-              options: .customDismissAction)
-        // Register the notification type.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.setNotificationCategories([timerCategory])
     }
 }
 
@@ -66,46 +44,6 @@ class Delegate: NSObject, UIApplicationDelegate {
             FirebaseApp.configure()
         }
         return true
-    }
-    
-    // background notifications
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-           didReceive response: UNNotificationResponse,
-           withCompletionHandler completionHandler:
-             @escaping () -> Void) {
-           
-       // Get the meeting ID from the original notification.
-//       let userInfo = response.notification.request.content.userInfo
-//       let meetingID = userInfo["MEETING_ID"] as! String
-//       let userID = userInfo["USER_ID"] as! String
-            
-       // Perform the task associated with the action.
-       switch response.actionIdentifier {
-       case SimpleTimer.stopAction:
-//            timer.stop()
-            break
-            
-       case SimpleTimer.repeatAction:
-//            timer.repeatTimer()
-            break
-     
-       default:
-          break
-       }
-        
-       // Always call the completion handler when done.
-       completionHandler()
-    }
-    
-    // foreground notifications
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-             willPresent notification: UNNotification,
-             withCompletionHandler completionHandler:
-                @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("")
-
-       // Don't alert the user for other types.
-       completionHandler(UNNotificationPresentationOptions(rawValue: 0))
     }
 }
 

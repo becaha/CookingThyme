@@ -186,70 +186,65 @@ struct EditRecipeView: View {
             ,
             trailing:
                 HStack {
-//                     TODO: animate, cannot animate items in nav bar
-                    if recipe.recipeText != nil {
-                        Button(action: {
-                            // save stuff
-                            unfocusEditable()
-                            // TODO name change switch to recipe text and back
-                            unfocusMultilineTexts()
-                            withAnimation {
-                                presentRecipeText.toggle()
-                            }
-                        })
-                        {
-                            if presentRecipeText {
-                                Image(systemName: "doc.plaintext.fill")
-                            }
-                            else {
-                                Image(systemName: "doc.plaintext")
-                                    .opacity(buttonFlashOpacity)
-                                    .scaleEffect(buttonScale)
-                            }
+                    Button(action: {
+                        // save stuff
+                        unfocusEditable()
+                        unfocusMultilineTexts()
+                        withAnimation {
+                            presentRecipeText.toggle()
                         }
-                        .padding(.horizontal)
-                        .frame(minWidth: 44, minHeight: 44)
+                    })
+                    {
+                        if presentRecipeText {
+                            Image(systemName: "doc.plaintext.fill")
+                        }
+                        else {
+                            Image(systemName: "doc.plaintext")
+                                .opacity(buttonFlashOpacity)
+                                .scaleEffect(buttonScale)
+                        }
                     }
+                    .frame(minWidth: 44, minHeight: 44)
+                    .disabled(recipe.recipeText == nil)
+                    .opacity(recipe.recipeText != nil ? 1 : 0)
                     
-                    if recipe.isCreatingRecipe() {
-                        Menu {
-                            Text("Import Recipe")
-                            
-                            Button(action: {
-                                cameraRollSheetPresented = true
-                            }) {
-                                Text("From camera roll")
-                            }
-                            
-                            Button(action: {
-                                withAnimation {
-                                    recipe.importFromURL = true
-                                }
-                            }) {
-                                Text("From URL")
-                            }
-                            
-                            Button(action: {}) {
-                                Text("Cancel")
-                            }
-                        } label: {
-                            Image(systemName: "square.and.arrow.down")
-                                .padding(.horizontal)
-                                .frame(minWidth: 44, minHeight: 44)
+                    Menu {
+                        Text("Import Recipe")
+                        
+                        Button(action: {
+                            cameraRollSheetPresented = true
+                        }) {
+                            Text("From camera roll")
                         }
-                        .disabled(recipe.isImportingFromURL)
-                        .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
-                            ZStack {
-                                NavigationView {
-                                }
-                                .background(Color.white.edgesIgnoringSafeArea(.all))
-                                
-                                ImagePicker(image: self.$selectedImage)
+                        
+                        Button(action: {
+                            withAnimation {
+                                recipe.importFromURL = true
                             }
+                        }) {
+                            Text("From URL")
+                        }
+                        
+                        Button(action: {}) {
+                            Text("Cancel")
+                        }
+                    } label: {
+                        Image(systemName: "square.and.arrow.down")
+                            .padding(.horizontal)
+                            .frame(minWidth: 44, minHeight: 44)
+                    }
+                    .disabled(recipe.isImportingFromURL || !recipe.isCreatingRecipe() )
+                    .opacity(recipe.isCreatingRecipe() ? 1 : 0)
+                    .sheet(isPresented: $cameraRollSheetPresented, onDismiss: transcribeImage) {
+                        ZStack {
+                            NavigationView {
+                            }
+                            .background(Color.white.edgesIgnoringSafeArea(.all))
+                            
+                            ImagePicker(image: self.$selectedImage)
                         }
                     }
             
-                    // TODO: done is way far from side
                     Button(action: {
                         saveRecipe()
                         unfocusEditable()
@@ -257,6 +252,7 @@ struct EditRecipeView: View {
                     })
                     {
                         Text("Done")
+                            .frame(minWidth: 44, minHeight: 44)
                     }
                     .alert(isPresented: $presentErrorAlert) {
                         Alert(title: Text("Save Failed"),
@@ -264,7 +260,7 @@ struct EditRecipeView: View {
                         )
                     }
                 }
-//                .padding(.trailing, 0)
+                .padding(.trailing, 0)
                 .foregroundColor(mainColor())
         )
     }

@@ -18,7 +18,10 @@ struct HomeNavigationBar: ViewModifier {
             .navigationBarItems(trailing:
                 Button(action: settingsAction) {
                     Image(systemName: "gear")
+                        .imageScale(.large)
+                        .frame(width: 44, height: 44, alignment: .trailing)
                         .foregroundColor(.black)
+//                        .padding(.leading)
                 }
             )
                 .navigationBarColor(mainUIColor(), text: "Cooking Thyme", style: nil, textColor: UIColor(Color.black))

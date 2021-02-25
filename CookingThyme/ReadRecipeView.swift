@@ -53,13 +53,16 @@ struct ReadRecipeView: View {
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(trailing:
                 HStack {
+                    Text("")
+                    .frame(minWidth: 44, minHeight: 44)
+                    .opacity(0)
+                    
                     Button(action: {
                         categoriesPresented = true
                     })
                     {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .padding(.trailing)
                     .frame(minWidth: 44, minHeight: 44)
                                     
                     Button(action: {
@@ -72,6 +75,7 @@ struct ReadRecipeView: View {
                     }
                     .frame(minWidth: 44, minHeight: 44)
                 }
+                .padding(.trailing, 0)
         )
     }
     
