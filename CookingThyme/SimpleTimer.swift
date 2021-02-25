@@ -6,8 +6,13 @@
 //
 
 import Foundation
+import UserNotifications
 
 struct SimpleTimer {
+    static let timerAlertCategory = "TIMER_ALERT"
+    static let stopAction = "STOP_ACTION"
+    static let repeatAction = "REPEAT_ACTION"
+    
     var timeRemainingString: String = ""
     var isPaused: Bool = true
     var isSetting: Bool = true
@@ -38,7 +43,12 @@ struct SimpleTimer {
         self.step = step
     }
     
-    private var startTime: Date?
+    private var startTime: Date? {
+        didSet {
+            lastStartTime = startTime
+        }
+    }
+    private var lastStartTime: Date?
     private var timeAmount: Int = 0
         
     // gets seconds from given hours, min, sec
@@ -50,6 +60,10 @@ struct SimpleTimer {
     
     mutating func pause() {
         isPaused.toggle()
+        // on resume
+        if !isPaused {
+            lastStartTime = Date()
+        }
         timerAlert = false
     }
     
@@ -70,6 +84,7 @@ struct SimpleTimer {
     }
     
     mutating func start() {
+        setNotification()
         startTime = Date()
         isSetting = false
         isPaused = false
@@ -94,6 +109,44 @@ struct SimpleTimer {
         self.timeRemaining -= secondsElapsed
     }
     
+    // called on pause or on become active again
+    mutating func updateTimeRemaining() {
+        // called when pausing, update and
+        if let lastStartTime = self.lastStartTime {
+            let lastDes = lastStartTime.description
+            let currentStartTime = Date()
+            let nowDes = currentStartTime.description
+            
+            let secondsElapsed = Date().timeIntervalSince(lastStartTime)
+            self.timeRemaining -= secondsElapsed
+        }
+    }
+    
+    func askPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                print("All set!")
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func setNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Timer"
+        content.sound = UNNotificationSound.default
+        content.categoryIdentifier = SimpleTimer.timerAlertCategory
+
+        // show this notification seconds from now
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(timeAmount), repeats: false)
+
+        // choose a random identifier
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        // add our notification request
+        UNUserNotificationCenter.current().add(request)
+    }
 }
 
 extension Int {

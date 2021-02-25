@@ -9,9 +9,6 @@ import Foundation
 import Combine
 
 // TODO: sound on timer and timer notification, if timer == 0 -> issetting
-// TODO: image dispatch group error
-// TODO: recipe search signin out (recipe loads forever)
-// TODO: get recipe photo loading forever
 // TODO: on collection, new recipe is moved up as if keyboard were there
 
 // TODO: everything alphabetically sorted, including ingredients

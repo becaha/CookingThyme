@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UserNotifications
 
 class TimerHandler: ObservableObject {
     @Published var simpleTimer: SimpleTimer
@@ -69,6 +70,15 @@ class TimerHandler: ObservableObject {
     
     // MARK: - Intents
     
+    func updateTimer() {
+        simpleTimer.updateTimeRemaining()
+    }
+    
+    func askPermission() {
+        simpleTimer.askPermission()
+    }
+    
+    // pause and resume
     func pause() {
         simpleTimer.updateTimeRemaining(withStepCount: self.stepCount)
         self.stepCount = 0

@@ -24,6 +24,8 @@ struct TimerView: View {
     @State private var minutes: Int = 0
     @State private var seconds: Int = 0
     
+    @State private var isActive = true
+    
     @State private var animatedTimeRemaining = 0.0
     
     @State var buttonFlashOpacity: Double = 0.6
@@ -55,6 +57,19 @@ struct TimerView: View {
                 Spacer()
                 
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+                self.isActive = false
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                self.isActive = true
+                timer.updateTimer()
+            }
+//            .isActive($isActive)
+//            .onChange(of: isActive, perform: { isActive in
+//                if isActive {
+//                    timer.updateTimer()
+//                }
+//            })
             .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         }
     }
