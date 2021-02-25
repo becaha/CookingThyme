@@ -30,7 +30,10 @@ struct PublicRecipeContainer: View {
             }
         }
         .onAppear {
-            recipeVM = RecipeVM(recipe: recipe, recipeSearchHandler: recipeSearchHandler)
+            // only if appearing for first time
+            if recipeVM == nil {
+                recipeVM = RecipeVM(recipe: recipe, recipeSearchHandler: recipeSearchHandler)
+            }
         }
     }
 }

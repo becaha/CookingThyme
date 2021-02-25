@@ -49,21 +49,23 @@ struct PublicRecipeView: View {
                         Spacer()
                     }
                     else {
-                        if recipe.imageHandler.images.count > 0 {
-                            ImagesView(isEditing: false)
+                        Group {
+                            if recipe.imageHandler.images.count > 0 {
+                                ImagesView(isEditing: false)
+                            }
+                            
+                            RecipeLists(
+                                addToShoppingList: { ingredient in
+                                    user.collection!.addIngredientShoppingItem(ingredient)
+                                },
+                                addAllToShoppingList: { ingredients in
+                                    addAllIngredients(ingredients)
+                                },
+                                onNotSignedIn: {
+                                    signinAlert = true
+                                    signinAlertMessage = "Sign in to add ingredients to shopping list."
+                                })
                         }
-                        
-                        RecipeLists(
-                            addToShoppingList: { ingredient in
-                                user.collection!.addIngredientShoppingItem(ingredient)
-                            },
-                            addAllToShoppingList: { ingredients in
-                                addAllIngredients(ingredients)
-                            },
-                            onNotSignedIn: {
-                                signinAlert = true
-                                signinAlertMessage = "Sign in to add ingredients to shopping list."
-                            })
                     }
                 }
                 .environmentObject(recipe)
