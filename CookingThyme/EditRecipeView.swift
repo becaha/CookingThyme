@@ -299,7 +299,6 @@ struct EditRecipeView: View {
             if name.isOnlyWhitespace() {
                 name = nameFieldPlaceholder
             }
-            // was original servings
             servings = recipe.tempRecipe.servings.toString()
             source = recipe.tempRecipe.source
         }

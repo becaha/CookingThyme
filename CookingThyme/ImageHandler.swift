@@ -22,7 +22,8 @@ class ImageHandler: ObservableObject {
     @Published var zoomScale: CGFloat = 1.0
     @Published var loadingImages: Bool = false
     
-    var imagesGroup: DispatchGroup?
+    // got rid of
+//    var imagesGroup: DispatchGroup?
 
     @Published var imagesCount: Int?
     
@@ -82,17 +83,18 @@ class ImageHandler: ObservableObject {
         }
         self.images = [Int: UIImage]()
         DispatchQueue.global(qos: .userInitiated).async {
-            self.imagesGroup = DispatchGroup()
+//            self.imagesGroup = DispatchGroup()
+            
             for index in 0..<images.count {
-                self.imagesGroup!.enter()
+//                self.imagesGroup?.enter()
                 self.setImage(images[index], at: index)
             }
             
-            self.imagesGroup!.notify(queue: .main) {
-                self.loadingImages = false
-                self.imagesGroup = nil
-                onCompletion(true)
-            }
+//            self.imagesGroup?.notify(queue: .main) {
+//                self.loadingImages = false
+//                self.imagesGroup = nil
+//                onCompletion(true)
+//            }
         }
     }
     
@@ -145,9 +147,9 @@ class ImageHandler: ObservableObject {
     private func addImage(uiImage: UIImage, at index: Int) {
         DispatchQueue.main.async {
             self.images[index] = uiImage
-            if self.imagesGroup != nil {
-                self.imagesGroup?.leave()
-            }
+//            if self.imagesGroup != nil {
+//                self.imagesGroup?.leave()
+//            }
         }
     }
     
@@ -170,7 +172,6 @@ class ImageHandler: ObservableObject {
         }
     }
     
-    // TODO: error here on .leaave()
     // sets image data for a imageURL
     private func setImageData(at index: Int) {
         if let imageUrl = imageURL {
@@ -185,16 +186,16 @@ class ImageHandler: ObservableObject {
                     case .failure(let error):
                         let message = error.localizedDescription
                         print("error: \(message)")
-                        if self.imagesGroup != nil {
-                            self.imagesGroup?.leave()
-                        }
+//                        if self.imagesGroup != nil {
+//                            self.imagesGroup?.leave()
+//                        }
                         return
                     }
                 }, receiveValue: { image in
                     self.images[index] = image
-                    if self.imagesGroup != nil {
-                        self.imagesGroup?.leave()
-                    }
+//                    if self.imagesGroup != nil {
+//                        self.imagesGroup?.leave()
+//                    }
                 })
             
             self.fetchImageCancellables.append(fetchImageCancellable)
