@@ -113,12 +113,20 @@ class RecipeVM: ObservableObject, Identifiable {
         self.tempRecipe = recipe
         
         self.recipeSearchHandler = recipeSearchHandler
-        
+    
         setCancellables()
-        self.popullateDetail()
+        // if is still loading == if not last recipe detail gotten
+        if self.isLoading == true {
+            self.popullateDetail(recipe)
+        }
     }
     
     func setCancellables() {
+        // resets published on recipe search handler but not if was last recipe detail
+        if recipe.detailId != self.recipeSearchHandler.recipeDetail?.detailId {
+            self.recipeSearchHandler.reset()
+        }
+
         self.imageHandlerCancellable = self.imageHandler.objectWillChange
             .sink { _ in
                 self.objectWillChange.send()
@@ -150,7 +158,8 @@ class RecipeVM: ObservableObject, Identifiable {
             }
         
         self.recipeDetailCancellable = self.recipeSearchHandler.$recipeDetail.sink { (recipe) in
-            if let recipe = recipe {
+            // isloading to make sure that we haven't already popullated the recipe detail
+            if let recipe = recipe, self.isLoading == true {
                 self.recipe = recipe
                 self.tempRecipe = recipe
                 self.popullateLocalRecipe() { success in
@@ -212,7 +221,7 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Public Recipe
     
     // calls api to get detail of a recipe (its parts)
-    func popullateDetail() {
+    func popullateDetail(_ recipe: Recipe) {
         recipeSearchHandler.listRecipeDetail(recipe)
     }
     

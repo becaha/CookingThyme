@@ -23,7 +23,7 @@ struct PublicRecipeView: View {
     @State private var currentCategoryId: String?
 
     private var isLoading: Bool {
-        return recipe.isPopullating && !recipe.recipeNotFound
+        return recipe.isLoading == true && !recipe.recipeNotFound
     }
     
     var body: some View {

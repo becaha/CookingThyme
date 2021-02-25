@@ -114,6 +114,11 @@ class RecipeSearchHandler: ObservableObject {
         listingRecipes = false
     }
     
+    func reset() {
+        self.recipeDetail = nil
+        self.recipeDetailError = false
+    }
+    
     // lists detail for a recipe (gets the parts of the recipe)
     // very deep api result caused a very deep function
     func listRecipeDetail(_ recipe: Recipe) {
@@ -123,7 +128,7 @@ class RecipeSearchHandler: ObservableObject {
             return
         }
         if self.recipesStore[recipe.detailId!] != nil {
-            self.recipeDetail = recipe
+            self.recipeDetail = self.recipesStore[recipe.detailId!] 
             return
         }
         let idString = recipe.detailId!.toString()
