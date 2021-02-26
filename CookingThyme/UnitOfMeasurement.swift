@@ -57,6 +57,7 @@ enum UnitOfMeasurement: CaseIterable, Hashable {
     }
     
     func getName(plural: Bool = false) -> String {
+        var addS = plural
         var singularName = ""
         switch self {
         case .cup: singularName = "cup"
@@ -74,12 +75,12 @@ enum UnitOfMeasurement: CaseIterable, Hashable {
         case .kilogram: singularName = "kilogram"
         case .milligram: singularName = "milligram"
         case .none: singularName = ""
-        case .unknown(let unitName): singularName = unitName
+        case .unknown(let unitName):
+            addS = false
+            singularName = unitName
         }
-        if plural {
-            if singularName != "" {
-                return singularName + "s"
-            }
+        if singularName != "" && addS {
+            return singularName + "s"
         }
         return singularName
     }
