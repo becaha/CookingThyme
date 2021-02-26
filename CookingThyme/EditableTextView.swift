@@ -55,37 +55,3 @@ struct EditableTextView: UIViewRepresentable {
         }
     }
 }
-
-struct TestView: View {
-    
-    @State private var selectableText = "textview"
-    var textStyle = UIFont.TextStyle.body
-    
-    @State var text = "text that is too large to fit on the screen because it is tooooooooooooooooooo large"
-    
-    var body: some View {
-        ScrollView(.vertical) {
-            VStack {
-                Text("Niice ")
-                    .formSectionItem()
-                
-                ForEach((1...11).reversed(), id: \.self) { _ in
-                    HStack {
-//                        EditableTextView(textBinding: $text)
-                    }
-    //                .formSectionItem()
-                }
-                
-            }
-            .formSection()
-            .background(formBackgroundColor())
-        }
-    }
-    
-}
-
-struct TestView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestView()
-    }
-}

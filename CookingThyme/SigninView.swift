@@ -133,7 +133,8 @@ struct SigninView: View {
             }
         } : nil)
         .accentColor(mainColor())
-        .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))    }
+        .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))
+    }
     
     func reset() {
         password = ""

@@ -132,18 +132,31 @@ class RecipeDB {
         }
     }
     
-    func createStorageImage(_ image: RecipeImage, withId id: String, onCompletion: @escaping (NSError?) -> Void) {
+    func createStorageImage(_ image: RecipeImage, withId id: String, onCompletion: @escaping (Bool) -> Void) {
         let ref = getStorageImageRef(withId: id)
 
+        if image.type == ImageType.url {
+            onCompletion(true)
+            return
+        }
         if let imageData = ImageHandler.decodeImageToData(image.data) {
             // Upload the file to the path
             let uploadTask = ref.putData(imageData, metadata: nil) { (metadata, error) in
+                if let error = error as NSError? {
+                  self.handleStorageError(error)
+                  let message = error.localizedDescription
+                  print("error: \(message)")
+                  onCompletion(false)
+                }
+                else {
+                    onCompletion(true)
+                }
             }
             
             uploadTask.observe(.success) { snapshot in
               // Upload completed successfully
                 print("image stored successfully")
-                onCompletion(nil)
+                onCompletion(true)
             }
 
             uploadTask.observe(.failure) { snapshot in
@@ -151,9 +164,12 @@ class RecipeDB {
                 self.handleStorageError(error)
                 let message = error.localizedDescription
                 print("error: \(message)")
-                onCompletion(error)
+                onCompletion(false)
               }
             }
+        }
+        else {
+            onCompletion(false)
         }
     }
     
@@ -174,8 +190,8 @@ class RecipeDB {
                 print("Error adding image: \(message)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withId: ref!.documentID) { error in
-                    if error != nil {
+                self.createStorageImage(image, withId: ref!.documentID) { success in
+                    if !success {
                         // if image was not stored, delete reference to image
                         self.deleteImage(withId: ref!.documentID)
                     }
@@ -201,8 +217,8 @@ class RecipeDB {
                 onCompletion(nil)
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withId: ref!.documentID) { error in
-                    if error != nil {
+                self.createStorageImage(image, withId: ref!.documentID) { success in
+                    if !success {
                         self.deleteImage(withId: ref!.documentID)
                         onCompletion(nil)
                     }
