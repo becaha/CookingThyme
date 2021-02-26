@@ -82,7 +82,7 @@ struct RecipeCollectionView: View {
                     unfocusEditable()
                 }
             )
-            .loadable(isLoading: $collection.isLoading)
+            .loadableOverlay(isLoading: $collection.isLoading)
         }
         .navigationBarColor(UIColor(navBarColor()), text: "Recipe Book", style: .headline, textColor: UIColor(formItemFont()))
         .navigationBarTitle(Text(""), displayMode: .inline)

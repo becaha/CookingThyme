@@ -74,7 +74,7 @@ struct ChangePassword: View {
             .formItem(backgroundColor: mainColor())
         }
         .formed()
-        .loadable(isLoading: $user.isLoading)
+        .loadableOverlay(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil

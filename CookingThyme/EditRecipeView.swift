@@ -139,7 +139,7 @@ struct EditRecipeView: View {
                         EditableRecipe()
                     }
                 }
-                .loadable(isLoading: $isSaving)
+                .loadableOverlay(isLoading: $isSaving)
                 .onReceive(recipe.$recipe, perform: { _ in
                     setRecipe()
                 })

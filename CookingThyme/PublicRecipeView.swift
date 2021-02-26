@@ -22,9 +22,9 @@ struct PublicRecipeView: View {
     
     @State private var currentCategoryId: String?
 
-    private var isLoading: Bool {
-        return recipe.isLoading == true && !recipe.recipeNotFound
-    }
+//    private var isLoading: Bool {
+//        return recipe.isLoading == true && !recipe.recipeNotFound
+//    }
     
     var body: some View {
         ScrollView(.vertical) {
@@ -32,12 +32,7 @@ struct PublicRecipeView: View {
                 RecipeNameTitle(name: recipe.tempRecipe.name)
                 
                 VStack {
-                    if isLoading {
-                        UIControls.Loading()
-                        
-                        Spacer()
-                    }
-                    else if recipe.recipeNotFound {
+                    if recipe.recipeNotFound {
                         HStack {
                             Spacer()
                             
@@ -50,7 +45,7 @@ struct PublicRecipeView: View {
                     }
                     else {
                         Group {
-                            if recipe.imageHandler.images.count > 0 {
+                            if recipe.images.count > 0 {
                                 ImagesView(isEditing: false)
                             }
                             
@@ -66,6 +61,7 @@ struct PublicRecipeView: View {
                                     signinAlertMessage = "Sign in to add ingredients to shopping list."
                                 })
                         }
+                        .loadable(isLoading: $recipe.isLoading)
                     }
                 }
                 .environmentObject(recipe)
@@ -111,7 +107,7 @@ struct PublicRecipeView: View {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .padding(.trailing)
-                .disabled(isLoading || recipe.recipeNotFound == true || currentCategoryId != nil)
+                .disabled(recipe.isLoading == true || recipe.recipeNotFound == true || currentCategoryId != nil)
         )
     }
     

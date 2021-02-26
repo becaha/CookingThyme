@@ -112,7 +112,7 @@ struct SigninView: View {
         }
         .padding()
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
-        .loadable(isLoading: $user.isLoading)
+        .loadableOverlay(isLoading: $user.isLoading)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil

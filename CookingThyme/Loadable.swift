@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct Loadable: ViewModifier {
+// loading over disabled content
+struct LoadableOpacity: ViewModifier {
     @Binding var isLoading: Bool?
     
     func body(content: Content) -> some View {
@@ -19,6 +20,30 @@ struct Loadable: ViewModifier {
             content
                 .opacity(isLoading != nil && isLoading! ? 0.5 : 1)
                 .disabled(isLoading != nil && isLoading!)
+        }
+    }
+}
+
+extension View {
+    func loadableOverlay(isLoading: Binding<Bool?>) -> some View {
+        modifier(LoadableOpacity(isLoading: isLoading))
+    }
+}
+
+// loading or content
+struct Loadable: ViewModifier {
+    @Binding var isLoading: Bool?
+
+    func body(content: Content) -> some View {
+        Group {
+            if isLoading == true {
+                UIControls.Loading()
+                
+                Spacer()
+            }
+            else {
+                content
+            }
         }
     }
 }

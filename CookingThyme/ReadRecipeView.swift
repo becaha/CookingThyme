@@ -29,20 +29,22 @@ struct ReadRecipeView: View {
         ScrollView(.vertical) {
             RecipeNameTitle(name: recipe.tempRecipe.name)
             
-            getImageView()
-            
-            RecipeLists(
-                        addToShoppingList: { ingredient in
-                            collection.addIngredientShoppingItem(ingredient)
-                        },
-                        addAllToShoppingList: { ingredients in
-                            addAllIngredients(ingredients)
-                        },
-                        onNotSignedIn: {}
-            )
-            .environmentObject(recipe)
+            Group {
+                getImageView()
+                
+                RecipeLists(
+                            addToShoppingList: { ingredient in
+                                collection.addIngredientShoppingItem(ingredient)
+                            },
+                            addAllToShoppingList: { ingredients in
+                                addAllIngredients(ingredients)
+                            },
+                            onNotSignedIn: {}
+                )
+                .environmentObject(recipe)
+            }
+            .loadable(isLoading: $recipe.isLoading)
         }
-        .loadable(isLoading: $recipe.isLoading)
         .background(formBackgroundColor().edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $categoriesPresented, content: {
             CategoriesSheet(currentCategoryId: recipe.categoryId, actionWord: "Move", isPresented: $categoriesPresented, onAction: { categoryId in

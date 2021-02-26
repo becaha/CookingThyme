@@ -142,7 +142,7 @@ struct Settings: View {
             .listStyle(InsetGroupedListStyle())
 
         }
-        .loadable(isLoading: $user.isLoading)
+        .loadableOverlay(isLoading: $user.isLoading)
         .onReceive(Publishers.keyboardHeight) { height in
             keyboardPresented = height == 0 ? false : true
         }
