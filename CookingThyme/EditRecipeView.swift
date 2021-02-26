@@ -537,16 +537,14 @@ struct EditRecipeView: View {
                                     HStack {
                                         EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
                                             .environmentObject(recipe)
+                                            // if click on editable, don't unclick
+                                            .simultaneousGesture(TapGesture(count: 1).onEnded {})
                                     }
                                     .background(
                                         GeometryReader { ingredientGeometry in
                                             Color("FormItem")
                                                 .simultaneousGesture(
                                                 TapGesture(count: 1).onEnded { _ in
-                                                    // is currently editing, now is unclicking to stop editing
-                                                    if editingIngredientIndex == index {
-                                                        print("")
-                                                    }
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
@@ -611,15 +609,20 @@ struct EditRecipeView: View {
                                                                 }
                                                             }
                                                         }
+                                                        // if click on editable, don't unclick
+                                                        .simultaneousGesture(TapGesture(count: 1).onEnded {})
 
                                                     Spacer()
                                                 }
                                                 .simultaneousGesture(
                                                     TapGesture(count: 1).onEnded { _ in
-                                                        unfocusEditable()
-                                                        unfocusMultilineTexts()
-                                                        editingPosition = ingredientGeometry.frame(in: .global).maxY
-                                                        editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                                        // if not editing/clicking on current editing ingredient, unfocus others
+                                                        if editingIngredientIndex != recipe.tempRecipe.ingredients.count {
+                                                            unfocusEditable()
+                                                            unfocusMultilineTexts()
+                                                            editingPosition = ingredientGeometry.frame(in: .global).maxY
+                                                            editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                                        }
                                                     }
                                                 )
                                                 .padding(.horizontal)
@@ -667,6 +670,8 @@ struct EditRecipeView: View {
                                         
                                         EditableDirection(index: index, editingIndex: $editingDirectionIndex)
                                             .environmentObject(recipe)
+                                            // if click on editable, don't unclick
+                                            .simultaneousGesture(TapGesture(count: 1).onEnded {})
                                     }
                                     .background(
                                         GeometryReader { directionGeometry in
@@ -739,34 +744,26 @@ struct EditRecipeView: View {
                                                                 }
                                                             }
                                                         }
+                                                        // if click on editable, don't unclick
+                                                        .simultaneousGesture(TapGesture(count: 1).onEnded {})
 
                                                     Spacer()
                                                 }
                                                 .simultaneousGesture(
                                                     TapGesture(count: 1).onEnded { _ in
-                                                        unfocusEditable()
-                                                        unfocusMultilineTexts()
-                                                        editingPosition = directionGeometry.frame(in: .global).maxY
-                                                        editingDirectionIndex = recipe.tempRecipe.directions.count
+                                                        // if not editing this currently, unfocus others
+                                                        if editingDirectionIndex != recipe.tempRecipe.directions.count {
+                                                            unfocusEditable()
+                                                            unfocusMultilineTexts()
+                                                            editingPosition = directionGeometry.frame(in: .global).maxY
+                                                            editingDirectionIndex = recipe.tempRecipe.directions.count
+                                                        }
                                                     }
                                                 )
                                                 .padding(.horizontal)
                                             }
                                         }
                                         .autocapitalization(.none)
-                                        .background(
-                                            GeometryReader { directionGeometry in
-                                                Color("FormItem")
-                                                    .simultaneousGesture(
-                                                    TapGesture(count: 1).onEnded { _ in
-                                                        unfocusEditable()
-                                                        unfocusMultilineTexts()
-                                                        editingPosition = directionGeometry.frame(in: .global).maxY
-                                                        editingDirectionIndex = recipe.tempRecipe.directions.count
-                                                    }
-                                                )
-                                            }
-                                        )
 
                                         UIControls.AddButton(action: {
                                             withAnimation {
@@ -831,11 +828,11 @@ struct EditRecipeView: View {
                     .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
                         unfocusMultilineTexts()
                     } : nil)
-                    .simultaneousGesture(
-                        TapGesture().onEnded { _ in
-                            unfocusEditable()
-                        }
-                    )
+//                    .simultaneousGesture(
+//                        TapGesture().onEnded { _ in
+//                            unfocusEditable()
+//                        }
+//                    )
                 }
                 .onAppear {
                     if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {

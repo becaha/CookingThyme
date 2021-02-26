@@ -141,7 +141,7 @@ class RecipeDB {
         }
         if let imageData = ImageHandler.decodeImageToData(image.data) {
             // Upload the file to the path
-            let uploadTask = ref.putData(imageData, metadata: nil) { (metadata, error) in
+            _ = ref.putData(imageData, metadata: nil) { (metadata, error) in
                 if let error = error as NSError? {
                   self.handleStorageError(error)
                   let message = error.localizedDescription

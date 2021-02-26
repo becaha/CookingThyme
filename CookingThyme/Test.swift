@@ -12,33 +12,21 @@ struct Test: View {
     @State var test = ""
     
     var body: some View {
-//        ScrollViewReader { proxy in
-            ScrollView(.vertical) {
-                VStack {
-//                    Button("Scroll to 50") {
-//                        withAnimation {
-//                            proxy.scrollTo(50, anchor: .center)
-//                        }
-//                    }
-
-                    VStack(spacing: 0) {
-                        ForEach(0..<50) { i in
-                            TextField("move me", text: $test)
-//                                .id(i)
-//                                .frame(height: 32)
-                        }
-                    }
-
-                    
-//                    Button("Top 20") {
-//                        withAnimation {
-//                            proxy.scrollTo(20, anchor: .center)
-//                        }
-//                    }
-                }
-                .background(Color.blue)
-            }
-//        }
+        VStack {
+            Text("\(test)")
+            
+            TextField("Hello, World!", text: $test)
+                .simultaneousGesture(TapGesture(count: 1).onEnded {
+//                    test += "child"
+//                    print("Text tapped")
+                })
+            
+            Spacer()
+        }
+        .gesture(TapGesture(count: 1).onEnded {
+            test += "parent"
+            print("VStack tapped")
+        })
     }
         
 }
