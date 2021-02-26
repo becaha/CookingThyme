@@ -537,8 +537,19 @@ struct EditRecipeView: View {
                                     HStack {
                                         EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
                                             .environmentObject(recipe)
-                                            // if click on editable, don't unclick
-                                            .simultaneousGesture(TapGesture(count: 1).onEnded {})
+                                            // if click on editable while editing, don't unclick
+                                            // if not editing, edit
+                                            .simultaneousGesture(TapGesture(count: 1).onEnded {
+                                                if editingIngredientIndex != index {
+                                                    unfocusEditable()
+                                                    unfocusMultilineTexts()
+                                                    if deletingIndex != index {
+//                                                        editingPosition = ingredientGeometry.frame(in: .global).maxY
+                                                        editingIngredientIndex = index
+                                                    }
+                                                    deletingIndex = nil
+                                                }
+                                            })
                                     }
                                     .background(
                                         GeometryReader { ingredientGeometry in
@@ -670,8 +681,19 @@ struct EditRecipeView: View {
                                         
                                         EditableDirection(index: index, editingIndex: $editingDirectionIndex)
                                             .environmentObject(recipe)
-                                            // if click on editable, don't unclick
-                                            .simultaneousGesture(TapGesture(count: 1).onEnded {})
+                                            // if click on editable while editing, don't unclick
+                                            // if not editing, edit
+                                            .simultaneousGesture(TapGesture(count: 1).onEnded {
+                                                if editingDirectionIndex != index {
+                                                    unfocusEditable()
+                                                    unfocusMultilineTexts()
+                                                    if deletingIndex != index {
+//                                                        editingPosition = directionGeometry.frame(in: .global).maxY
+                                                        editingDirectionIndex = index
+                                                    }
+                                                    deletingIndex = nil
+                                                }
+                                            })
                                     }
                                     .background(
                                         GeometryReader { directionGeometry in

@@ -32,21 +32,31 @@ class RecipeTranscriber: ObservableObject {
     }
     
     static func isIngredientsHeader(line: String) -> Bool {
-        let cleanLine = line.components(separatedBy: .whitespaces).filter { (word) -> Bool in
+        let cleanLines = line.components(separatedBy: .whitespaces).filter { (word) -> Bool in
             !word.isOnlyWhitespace()
         }
-        return cleanLine.count == 1 && cleanLine[0].lowercased() == "ingredients"
+        if cleanLines.count == 0 {
+            return false
+        }
+        let cleanLine = HTMLTranscriber.removeAll(cleanLines[0])
+        return cleanLines.count == 1 && cleanLine.lowercased() == "ingredients"
     }
     
     static func isDirectionsHeader(line: String) -> Bool {
-        let cleanLine = line.components(separatedBy: .whitespaces).filter { (word) -> Bool in
+        let cleanLines = line.components(separatedBy: .whitespaces).filter { (word) -> Bool in
             !word.isOnlyWhitespace()
         }
-        return cleanLine.count == 1 &&
-                (cleanLine[0].lowercased() == "directions" ||
-                cleanLine[0].lowercased() == "method" ||
-                cleanLine[0].lowercased() == "steps" ||
-                cleanLine[0].lowercased() == "instructions")
+        
+        if cleanLines.count == 0 {
+            return false
+        }
+        let cleanLine = HTMLTranscriber.removeAll(cleanLines[0])
+        
+        return cleanLines.count == 1 &&
+                (cleanLine.lowercased() == "directions" ||
+                cleanLine.lowercased() == "method" ||
+                cleanLine.lowercased() == "steps" ||
+                cleanLine.lowercased() == "instructions")
     }
     
     static func cleanDirection(_ direction: String) -> String {

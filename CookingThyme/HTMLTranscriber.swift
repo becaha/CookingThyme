@@ -155,18 +155,17 @@ class HTMLTranscriber: ObservableObject {
             }
             for line in lines {
                 let cleanLine = HTMLTranscriber.removeFormat(line)
-                let cleanLineHeader = HTMLTranscriber.removeAll(line)
                 // look for new part of recipe
                 if currentPart != CurrentPart.ingredient && currentPart != CurrentPart.direction && servings == 0 && (cleanLine.localizedCaseInsensitiveContains("serving") || cleanLine.localizedCaseInsensitiveContains("yield")) {
                     currentPart = CurrentPart.serving
                 }
-                if cleanLineHeader.lowercased() == "ingredients" {
+                if RecipeTranscriber.isIngredientsHeader(line: cleanLine) {
                     currentPart = CurrentPart.ingredient
                     // takes the last section
                     ingredientStrings = []
                     continue
                 }
-                if cleanLineHeader.lowercased() == "directions" || cleanLineHeader.lowercased() == "instructions" || cleanLineHeader.lowercased() == "method" || cleanLineHeader.lowercased() == "steps" {
+                if RecipeTranscriber.isDirectionsHeader(line: cleanLine) {
                     currentPart = CurrentPart.direction
                     // takes the last section
                     directionStrings = []
@@ -256,6 +255,7 @@ class HTMLTranscriber: ObservableObject {
     }
     
     // "\t", "\u{xxxx}"
+    // removes all chars except for letters and numbers
     static func removeAll(_ line: String) -> String {
         var cleanLine = ""
         for char in line {

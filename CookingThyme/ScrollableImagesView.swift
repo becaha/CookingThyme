@@ -78,7 +78,6 @@ struct ScrollableImagesView: View {
                                 .clipped()
                                 .border(borderColor(), width: borderWidth)
                                 .animation(.easeInOut(duration: 1.0))
-                                .transition(.slide)
                             
                         }
                     }
