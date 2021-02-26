@@ -9,15 +9,10 @@ import Foundation
 import Combine
 import SwiftUI
 
-// todo create, done, open, eeveerything is dooubled
-// TODO delete rcipe update
-// TODO: everything on background threed
 class RecipeVM: ObservableObject, Identifiable {
     var collection: RecipeCollectionVM?
     var category: RecipeCategoryVM?
     @Published var recipe: Recipe
-    @Published var tempDirections: [Direction] = []
-//    @Published var tempImages: [RecipeImage] = []
     @Published var recipeText: String?
         
     @Published var imageHandler = ImageHandler()
@@ -294,8 +289,6 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func popullateRecipeTemps() {
         self.originalServings = recipe.servings
-        self.tempDirections = recipe.directions
-//        self.tempImages = recipe.images
         
         self.tempRecipeOriginalServings = recipe.servings
         
@@ -490,12 +483,10 @@ class RecipeVM: ObservableObject, Identifiable {
     // MARK: - Temporary for Editing
     
     func addTempDirection(_ direction: String) {
-        tempDirections.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
-        tempRecipe.directions.append(Direction(step: tempDirections.count, recipeId: recipe.id, direction: direction))
+        tempRecipe.directions.append(Direction(step: tempRecipe.directions.count, recipeId: recipe.id, direction: direction))
     }
     
     func removeTempDirection(at index: Int) {
-        tempDirections.remove(at: index)
         tempRecipe.directions.remove(at: index)
     }
     
