@@ -53,3 +53,9 @@ struct FocusableTextField: UIViewRepresentable {
         }
     }
 }
+
+//extension  UITextField{
+//    @objc func doneButtonTapped(button: UIBarButtonItem) -> Void {
+//       self.resignFirstResponder()
+//    }
+//}

@@ -63,7 +63,7 @@ struct EditRecipeView: View {
     @State private var newDirectionPosition: CGFloat?
     @State private var globalHeight: CGFloat?
     @State private var keyboardHeight: CGFloat = 0
-//    @State private var ingredientHeights =
+    @State private var indexPositions = [Int: CGFloat]()
 
     @State private var editingName = false
     
@@ -544,7 +544,7 @@ struct EditRecipeView: View {
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
-//                                                        editingPosition = ingredientGeometry.frame(in: .global).maxY
+                                                        editingPosition = frameGeometry.frame(in: .global).maxY
                                                         editingIngredientIndex = index
                                                     }
                                                     deletingIndex = nil
@@ -554,6 +554,7 @@ struct EditRecipeView: View {
                                     .background(
                                         GeometryReader { ingredientGeometry in
                                             Color("FormItem")
+                                                .contentShape(Rectangle())
                                                 .simultaneousGesture(
                                                 TapGesture(count: 1).onEnded { _ in
                                                     unfocusEditable()
@@ -688,7 +689,7 @@ struct EditRecipeView: View {
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
-//                                                        editingPosition = directionGeometry.frame(in: .global).maxY
+                                                        editingPosition = frameGeometry.frame(in: .global).maxY
                                                         editingDirectionIndex = index
                                                     }
                                                     deletingIndex = nil
