@@ -38,12 +38,6 @@ struct EditableTextView: UIViewRepresentable {
         textView.textAlignment = textAlignment
         textView.delegate = context.coordinator
         textView.isEditable = isEditable
-        
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textView.frame.size.width, height: 44))
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(textView.doneButtonTapped(button:)))
-        toolBar.items = [doneButton]
-        toolBar.setItems([doneButton], animated: true)
-        textView.inputAccessoryView = toolBar
 
         return textView
     }
@@ -61,11 +55,3 @@ struct EditableTextView: UIViewRepresentable {
         }
     }
 }
-
-
-extension  UITextView{
-    @objc func doneButtonTapped(button: UIBarButtonItem) -> Void {
-       self.resignFirstResponder()
-    }
-}
-

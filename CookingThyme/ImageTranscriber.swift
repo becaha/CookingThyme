@@ -206,10 +206,12 @@ class ImageTranscriber: ObservableObject {
 
           //check if current annotation is in the current line
             if (isInLine(left: boundingPoly[topRight], right: lastAnn_boundingPoly[topLeft]) && !lookingForTitle){
-                currLine = currLine + description
-                if description.count > 1 {
-                    currLine += " "
+
+                // if not first and is not punctuation, add space before
+                if currLine == "" && !(description.count == 1 && description.charAt(index: 0).isPunctuation){
+                    currLine = currLine + " "
                 }
+                currLine = currLine + description
             }
             else{
                 if (currLine != ""){
@@ -224,7 +226,13 @@ class ImageTranscriber: ObservableObject {
                         }
                     }
                     
-                    currLine = description + " "
+                    // if not first and is not punctuation, add space before
+                    if currLine == "" && !(description.count == 1 && description.charAt(index: 0).isPunctuation){
+                        currLine = " " + description
+                    }
+                    else {
+                        currLine = description
+                    }
                     if (ingredientsLocationSet) {
                         if (directionsLocationSet &&
                             (x >= (directionLocationX - 20) || x <= (directionLocationX + 20)) &&

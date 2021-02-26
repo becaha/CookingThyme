@@ -8,10 +8,9 @@
 import Foundation
 import Combine
 
-// TODO: on collection, new recipe is moved up as if keyboard were there, on reload app when user is logged in, recipe search dismiss keyboard
+// TODO: scripture app recipe text
+// TODO: signout user if not authenticated
 
-// TODO AttributeGraph: cycle detected through attribute 3286136, on sign in
-// TODO photos reload too much
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]

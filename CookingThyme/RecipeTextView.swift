@@ -19,11 +19,13 @@ struct RecipeTextView: View {
     var body: some View {
         VStack {
             if recipe.recipeText != nil {
-                    Text("Recipe Text")
+                HStack {
+                    Text("Recipe Text by Google Cloud Vision")
                         .customFont(style: .subheadline)
+                }
                                         
-                    SelectableTextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
-                        .customFont(style: .subheadline)
+                SelectableTextView(text: $recipeText, isEditable: false, textStyle: UIFont.TextStyle.body)
+                    .customFont(style: .subheadline)
             }
         }
         .onAppear {

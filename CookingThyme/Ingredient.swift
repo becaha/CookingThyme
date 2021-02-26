@@ -158,7 +158,7 @@ struct Ingredient: Identifiable, Equatable, Hashable {
     
     // gets the string value of the ingredient amount
     func getAmountString() -> String {
-        if amount == 0 {
+        if amount == 0 || amount == Double.nan {
             return ""
         }
         return Fraction.toString(fromDouble: amount)
@@ -212,6 +212,7 @@ struct Ingredient: Identifiable, Equatable, Hashable {
                 // gets unit as a measurement (1.2 cups)
                 if let smallerUnit = unit.getUnit() as? UnitMass {
                     let conversionMeasurement = biggerMeasurement.converted(to: smallerUnit)
+                    
                     // gets closest fraction to take (1.2 cups -> 1 cup)
                     let fraction = Fraction.toFraction(fromDouble: conversionMeasurement.value)
                     // there is a big enough conversion
@@ -294,22 +295,6 @@ struct Ingredient: Identifiable, Equatable, Hashable {
     }
     
     // takes temporary ingredients (made in edit recipe) and turns into ingredients ready to be put in db
-    static func toIngredients(_ temps: [TempIngredient]) -> [Ingredient] {
-        var ingredients = [Ingredient]()
-        for temp in temps {
-            ingredients.append(Ingredient.toIngredient(temp))
-        }
-        return ingredients
-    }
-    
-    // to ingredient from temp ingredient, keeps id
-    static func toIngredient(_ temp: TempIngredient) -> Ingredient {
-        var setTemp = temp
-        setTemp.setIngredientParts()
-        return Ingredient(id: setTemp.id, name: setTemp.name, amount: Fraction.toDouble(fromString: setTemp.amount), unitName: makeUnit(fromUnit: setTemp.unitName), recipeId: temp.recipeId)
-    }
-    
-    // takes temporary ingredients (made in edit recipe) and turns into ingredients ready to be put in db
     static func toIngredients(_ temps: [Ingredient]) -> [Ingredient] {
         var ingredients = [Ingredient]()
         for temp in temps {
@@ -323,21 +308,6 @@ struct Ingredient: Identifiable, Equatable, Hashable {
         var setTemp = temp
         setTemp.setIngredientParts()
         return setTemp
-//        return Ingredient(id: setTemp.id, name: setTemp.name, amount: setTemp.amount, unitName: setTemp.unitName, recipeId: temp.recipeId)
-    }
-    
-    // takes ingredients and turns into temp ingredients for use in edit recipe
-    static func toTempIngredients(_ ingredients: [Ingredient]) -> [TempIngredient] {
-        var temps = [TempIngredient]()
-        for ingredient in ingredients {
-            temps.append(Ingredient.toTempIngredient(ingredient))
-        }
-        return temps
-    }
-    
-    // ingredient to temp ingredient, keeps id
-    static func toTempIngredient(_ ingredient: Ingredient) -> TempIngredient {
-        TempIngredient(name: ingredient.name, amount: ingredient.getAmountString(), unitName: ingredient.unitName.getName(), recipeId: ingredient.recipeId, id: ingredient.id)
     }
     
     // used in parse recipe, temp ingredients, no id
@@ -492,64 +462,3 @@ struct Ingredient: Identifiable, Equatable, Hashable {
         }
     }
 }
-
-// used as a temporary ingredient while editing recipe (amount and unit name are string for easy editing)
-struct TempIngredient {
-    
-    var name: String
-    var amount: String
-    var unitName: String
-    var recipeId: String
-    var id: String
-    
-    var ingredientString: String
-    var ingredientStringMeasurement: String
-    
-    init(name: String, amount: String, unitName: String, recipeId: String, id: String?) {
-        self.name = name
-        self.amount = amount
-        self.unitName = unitName
-        self.recipeId = recipeId
-        self.id = Ingredient.defaultId
-        if let id = id {
-            self.id = id
-        }
-        self.ingredientString = ""
-        self.ingredientStringMeasurement = ""
-        self.ingredientString = self.toString()
-        self.ingredientStringMeasurement = self.toStringMeasurement()
-    }
-    
-    init(ingredientString: String, recipeId: String, id: String?) {
-        self.ingredientString = ingredientString
-        self.recipeId = recipeId
-        self.id = Ingredient.defaultId
-        if let id = id {
-            self.id = id
-        }
-        self.name = ""
-        self.amount = ""
-        self.unitName = ""
-        self.ingredientStringMeasurement = ""
-        self.setIngredientParts()
-    }
-    
-    func toString() -> String {
-        Ingredient.toIngredient(self).toString()
-    }
-    
-    func toStringMeasurement() -> String {
-        Ingredient.toIngredient(self).toStringMeasurement()
-    }
-    
-    mutating func setIngredientParts() {
-        if ingredientString != "" {
-            let ingredient = Ingredient.toIngredient(fromString: self.ingredientString)
-            self.name = ingredient.name
-            self.amount = ingredient.getAmountString()
-            self.unitName = ingredient.unitName.getName(plural: ingredient.amount > 1)
-            self.ingredientStringMeasurement = ingredient.getMeasurementString()
-        }
-    }
-}
-

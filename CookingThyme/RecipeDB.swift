@@ -1087,8 +1087,3 @@ class RecipeDB {
         }
     }
 }
-
-//enum CreateUserError: Error {
-//    case usernameTaken
-//    case emailTaken
-//}

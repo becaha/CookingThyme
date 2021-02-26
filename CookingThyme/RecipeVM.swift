@@ -17,7 +17,6 @@ class RecipeVM: ObservableObject, Identifiable {
     var category: RecipeCategoryVM?
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
-    @Published var tempIngredients: [TempIngredient] = []
     @Published var tempImages: [RecipeImage] = []
     @Published var recipeText: String?
         
@@ -296,7 +295,6 @@ class RecipeVM: ObservableObject, Identifiable {
     func popullateRecipeTemps() {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
-        self.tempIngredients = Ingredient.toTempIngredients(recipe.ingredients)
         self.tempImages = recipe.images
         
         self.tempRecipeOriginalServings = recipe.servings
@@ -350,13 +348,6 @@ class RecipeVM: ObservableObject, Identifiable {
     func setTempRecipe(_ recipe: Recipe) {
         tempRecipe = recipe
         tempRecipeOriginalServings = recipe.servings
-    }
-    
-    // called on saving edit recipe to set saved temps
-    func setTempRecipe(name: String, tempIngredients: [TempIngredient], directions: [Direction], images: [RecipeImage], servings: String, source: String) {
-        let ingredients = Ingredient.toIngredients(tempIngredients)
-        tempRecipe = Recipe(id: recipe.id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings.toInt(), source: source, recipeCategoryId: recipe.recipeCategoryId)
-        tempRecipeOriginalServings = servings.toInt()
     }
     
     // MARK: - Recipe Modifiers
@@ -502,18 +493,14 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     func addTempIngredient(_ ingredientString: String) {
-        tempIngredients.append(TempIngredient(ingredientString: ingredientString, recipeId: recipe.id, id: nil))
         tempRecipe.ingredients.append(Ingredient(ingredientString: ingredientString, recipeId: recipe.id))
     }
     
     func addTempIngredient(name: String, amount: String, unit: String) {
-        tempIngredients.append(TempIngredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id, id: nil))
-        let ing = Ingredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id)
-        tempRecipe.ingredients.append(ing)
+        tempRecipe.ingredients.append(Ingredient(name: name, amount: amount, unitName: unit, recipeId: recipe.id))
     }
     
     func removeTempIngredient(at index: Int) {
-        tempIngredients.remove(at: index)
         tempRecipe.ingredients.remove(at: index)
     }
     

@@ -12,6 +12,11 @@ struct User {
     static let userKey = "CookingThymeCurrentUser"
 
     var email: String
+    var forceSignout = false {
+        didSet {
+            
+        }
+    }
     
     init() {
         self.email = ""
