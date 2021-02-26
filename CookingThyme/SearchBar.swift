@@ -18,7 +18,6 @@ struct SearchBar: View {
                     self.search
                 }, set: { updatedSearch in
                     self.search = updatedSearch
-                    // do whatever you want here
                     onCommit(updatedSearch)
                 })
         
@@ -30,6 +29,7 @@ struct SearchBar: View {
             .foregroundColor(formItemFont())
             
             Button(action: {
+                unfocusEditable()
                 onCommit(search)
             }) {
                 Image(systemName: "magnifyingglass")

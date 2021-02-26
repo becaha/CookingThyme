@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // TODO: focus new category
 struct RecipeCollectionView: View {
@@ -54,11 +55,10 @@ struct RecipeCollectionView: View {
     @State private var frameMaxY: CGFloat = 0
     
     @State private var searchMinY: CGFloat = 0
-    
-//    @State private var search: String = ""
+        
+    @State private var keyboardPresented = false
+    @State private var isActive = false
 
-    let categoryNameMaxCount = 15
-            
     var body: some View {
         VStack(spacing: 0) {
             GeometryReader { geometry in
@@ -83,6 +83,10 @@ struct RecipeCollectionView: View {
                 }
             )
             .loadableOverlay(isLoading: $collection.isLoading)
+        }
+        // to go back to normal on keyboard dismiss
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardPresented = height == 0 ? false : true
         }
         .navigationBarColor(UIColor(navBarColor()), text: "Recipe Book", style: .headline, textColor: UIColor(formItemFont()))
         .navigationBarTitle(Text(""), displayMode: .inline)
@@ -147,6 +151,7 @@ struct RecipeCollectionView: View {
                         AutoSearchBar(search: $collection.search) { result in
                             searchRecipes(result)
                         }
+                        .onTapGesture(count: 1, perform: {})
                         .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                     }
                     .formItem(isSearchBar: true)

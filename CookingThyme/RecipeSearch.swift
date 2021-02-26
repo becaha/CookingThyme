@@ -87,8 +87,8 @@ struct RecipeSearch: View {
                             .padding()
                     }
                     
+                    
                 }
-                Spacer()
             }
             .background(formBackgroundColor())
             .navigationBarTitle("", displayMode: .inline)
@@ -99,11 +99,12 @@ struct RecipeSearch: View {
             keyboardPresented = height == 0 ? false : true
         }
         .gesture(keyboardPresented ?
-                    TapGesture(count: 1).onEnded {
-            withAnimation {
-                unfocusEditable()
-            }
-        } : nil)
+            TapGesture(count: 1).onEnded {
+                withAnimation {
+                    unfocusEditable()
+                }
+            } : nil
+        )
     }
 }
 

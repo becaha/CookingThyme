@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-// TODO: image keep space
 // TODO: on collection, new recipe is moved up as if keyboard were there, on reload app when user is logged in, recipe search dismiss keyboard
 
 // TODO AttributeGraph: cycle detected through attribute 3286136, on sign in

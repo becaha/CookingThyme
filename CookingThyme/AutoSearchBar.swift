@@ -28,6 +28,7 @@ struct AutoSearchBar: View {
             .foregroundColor(formItemFont())
             
             Button(action: {
+                unfocusEditable()
                 onCommit(search)
             }) {
                 Image(systemName: "magnifyingglass")

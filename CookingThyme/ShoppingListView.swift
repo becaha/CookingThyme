@@ -37,6 +37,7 @@ struct ShoppingListView: View {
                     .foregroundColor(mainColor())
                     .onTapGesture(count: 1, perform: {})
                 }
+                .onTapGesture(count: 1, perform: {})
                 .formItem(isSearchBar: true)
 
                 if collection.notCompletedItems.count > 0 {

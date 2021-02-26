@@ -21,6 +21,7 @@ struct HomeView: View {
     
     var body: some View {
         TabView {
+            
             RecipeSearch()
                 .homeNavigationBar(settingsAction: settingsAction)
                 .environmentObject(sheetNavigator)

@@ -30,7 +30,14 @@ struct FocusableTextField: UIViewRepresentable {
     func makeUIView(context: UIViewRepresentableContext<FocusableTextField>) -> UITextField {
         let textField = UITextField(frame: .zero)
         textField.delegate = context.coordinator
-//        textField.layoutMargins.
+        
+        
+//        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textField.frame.size.width, height: 44))
+//        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(textField.doneButtonTapped(button:)))
+//        toolBar.items = [doneButton]
+//        toolBar.setItems([doneButton], animated: true)
+//        textField.inputAccessoryView = toolBar
+        
         return textField
     }
 
@@ -46,9 +53,3 @@ struct FocusableTextField: UIViewRepresentable {
         }
     }
 }
-
-//struct FocusableTextField_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FocusableTextField()
-//    }
-//}

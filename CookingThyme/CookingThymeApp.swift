@@ -15,7 +15,6 @@ struct CookingThymeApp: App {
     @ObservedObject var user = UserVM()
     @ObservedObject var sheetNavigator = SheetNavigator()
     @ObservedObject var recipeSearchHandler = RecipeSearchHandler()
-//    @ObservedObject var transcriber = RecipeTranscriber()
 
     @UIApplicationDelegateAdaptor(Delegate.self) var delegate
     
@@ -31,10 +30,10 @@ struct CookingThymeApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .background(formBackgroundColor())
                 .environmentObject(user)
                 .environmentObject(sheetNavigator)
                 .environmentObject(recipeSearchHandler)
-//                .environmentObject(transcriber)
         }
     }
 }
