@@ -3,4 +3,102 @@
    uuid = "0C8A8E2F-5442-4918-9740-8D653B1FCB02"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B0891648-C30E-413E-8DC0-6F429DF1A047"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/ReadRecipeViews.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BF3FC5A9-A9AB-45E7-811B-6FA26EB555B7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
+            landmarkName = "updateTempRecipe(withId:name:ingredients:directions:images:servings:source:categoryId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E4B4113-E73D-4A91-9A62-143333F5D35F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
+            landmarkName = "setTempRecipe(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "423B8C12-0A1B-4E91-897F-4B5EAD9C1E19"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CookingThyme/RecipeVM.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "386"
+            endingLineNumber = "386"
+            landmarkName = "updateRecipe(withId:name:ingredients:directions:images:servings:source:categoryId:onCompletion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "423B8C12-0A1B-4E91-897F-4B5EAD9C1E19 - 5774ecbb3bfb6829"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CookingThyme.RecipeVM.updateRecipe(withId: Swift.String, name: Swift.String, ingredients: Swift.Array&lt;CookingThyme.Ingredient&gt;, directions: Swift.Array&lt;CookingThyme.Direction&gt;, images: Swift.Array&lt;CookingThyme.RecipeImage&gt;, servings: Swift.String, source: Swift.String, categoryId: Swift.String, onCompletion: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "CookingThyme"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeVM.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "386"
+                  endingLineNumber = "386"
+                  offsetFromSymbolStart = "408">
+               </Location>
+               <Location
+                  uuid = "423B8C12-0A1B-4E91-897F-4B5EAD9C1E19 - 8c99ed0da4cd40d0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;CookingThyme.Recipe&gt;) -&gt; () in CookingThyme.RecipeVM.updateRecipe(withId: Swift.String, name: Swift.String, ingredients: Swift.Array&lt;CookingThyme.Ingredient&gt;, directions: Swift.Array&lt;CookingThyme.Direction&gt;, images: Swift.Array&lt;CookingThyme.RecipeImage&gt;, servings: Swift.String, source: Swift.String, categoryId: Swift.String, onCompletion: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "CookingThyme"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/RecipeVM.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "387"
+                  endingLineNumber = "387"
+                  offsetFromSymbolStart = "128">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

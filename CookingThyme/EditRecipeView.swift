@@ -365,11 +365,6 @@ struct EditRecipeView: View {
                 }
             }
             else {
-                recipe.updateTempRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId)
-//                isSaving = false
-//                withAnimation {
-//                    isEditingRecipe = false
-//                }
                 recipe.updateRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId) { success in
                     isSaving = false
                     withAnimation {

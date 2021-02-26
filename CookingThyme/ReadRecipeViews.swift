@@ -214,7 +214,7 @@ struct IngredientsView: View {
                 if recipe.tempRecipe.servings != 0 {
                     recipe.tempRecipe.ratioServings = recipe.tempRecipe.servings
                 }
-                if recipe.tempRecipe.ratioIngredients.count > 0 {
+                if recipe.tempRecipe.ingredients.count > 0 {
                     recipe.tempRecipe.ratioIngredients = recipe.tempRecipe.ingredients
                 }
             }

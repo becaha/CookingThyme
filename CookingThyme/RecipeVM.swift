@@ -381,6 +381,8 @@ class RecipeVM: ObservableObject, Identifiable {
     func updateRecipe(withId id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String, onCompletion: @escaping (Bool) -> Void) {
         let ingredients = Ingredient.toIngredients(ingredients)
         
+        updateTempRecipe(withId: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, categoryId: categoryId)
+        
         updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { updatedRecipe in
             if let updatedRecipe = updatedRecipe {
                 // save udpated recipe to recipe
