@@ -345,18 +345,23 @@ struct Ingredient: Identifiable, Equatable, Hashable {
                     continue
                 }
                 // double
-                else if Double(word) != nil {
+                else if Double(word) != nil && Double(word) != Double.nan && Double(word) != Double.infinity {
                     amount += word
                     continue
                 }
                 // fraction
-                else if Fraction.getFractionPieces(word).count != 0 {
+                else if Fraction.getFractionPieces(word).count == 2 {
                     let pieces = Fraction.getFractionPieces(word)
                     if amount != "" {
                         amount += " "
                     }
-                    amount += "\(pieces[0])/\(pieces[1])"
-                    continue
+                    if Int(pieces[0]) != nil && Int(pieces[1]) != nil {
+                        amount += "\(pieces[0])/\(pieces[1])"
+                        continue
+                    }
+                    else {
+                        currentPart = CurrentPart.unit
+                    }
                 }
                 // 1 and 1/2
                 else if word == "and" {

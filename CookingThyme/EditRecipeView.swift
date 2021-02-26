@@ -78,6 +78,9 @@ struct EditRecipeView: View {
     
     @State var isSaving: Bool?
     
+    @State var ingredientCount = 0
+    @State var directionCount = 0
+    
     var body: some View {
         VStack(spacing: 0) {
             if recipe.isImportingFromURL && !recipe.invalidURL {
@@ -175,6 +178,7 @@ struct EditRecipeView: View {
                             self.presentationMode.wrappedValue.dismiss()
                         }
                         else {
+                            recipe.resetTempRecipe()
                             isEditingRecipe = false
                         }
                     }
@@ -315,7 +319,6 @@ struct EditRecipeView: View {
         newIngredientFieldMissing = false
     }
     
-    // TODO: save should be not on main thread
     private func saveRecipe() {
         if isSaving == true {
             return
@@ -347,7 +350,7 @@ struct EditRecipeView: View {
         }
         if !fieldMissing {
             if recipe.isCreatingRecipe() {
-                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempImages, servings: servings, source: source, recipeSearchHandler: recipe.recipeSearchHandler) { createdRecipe in
+                category.createRecipe(name: name, tempIngredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, recipeSearchHandler: recipe.recipeSearchHandler) { createdRecipe in
                     if let createdRecipe = createdRecipe {
                         recipe.setTempRecipe(createdRecipe)
                         recipe.setRecipe(createdRecipe)
@@ -363,15 +366,15 @@ struct EditRecipeView: View {
             }
             else {
                 recipe.updateTempRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId)
-                isSaving = false
-                withAnimation {
-                    isEditingRecipe = false
-                }
+//                isSaving = false
+//                withAnimation {
+//                    isEditingRecipe = false
+//                }
                 recipe.updateRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId) { success in
-//                    isSaving = false
-//                    withAnimation {
-//                        isEditingRecipe = false
-//                    }
+                    isSaving = false
+                    withAnimation {
+                        isEditingRecipe = false
+                    }
                 }
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
@@ -535,7 +538,7 @@ struct EditRecipeView: View {
                             .formHeader()
                                     
                             VStack(spacing: 0) {
-                                ForEach(0..<recipe.tempRecipe.ingredients.count, id: \.self) { index in
+                                ForEach(0..<ingredientCount, id: \.self) { index in
                                     HStack {
                                         EditableIngredient(index: index, editingIndex: $editingIngredientIndex)
                                             .environmentObject(recipe)
@@ -662,7 +665,7 @@ struct EditRecipeView: View {
                             .formHeader()
                             
                             VStack(spacing: 0) {
-                                ForEach(0..<recipe.tempRecipe.directions.count, id: \.self) { index in
+                                ForEach(0..<directionCount, id: \.self) { index in
                                     HStack(alignment: .center, spacing: 20) {
                                         Text("\(index + 1)")
                                             .customFont(style: .subheadline)
@@ -796,6 +799,14 @@ struct EditRecipeView: View {
                             .formFooter()
                         }
                     }
+                    .onReceive(recipe.$tempRecipe, perform: { recipe in
+                        if ingredientCount != recipe.ingredients.count {
+                            ingredientCount = recipe.ingredients.count
+                        }
+                        if directionCount != recipe.directions.count {
+                            directionCount = recipe.directions.count
+                        }
+                    })
                     .onReceive(Publishers.keyboardHeight) { height in
                         if let index = editingIngredientIndex, height != 0 {
                             withAnimation {

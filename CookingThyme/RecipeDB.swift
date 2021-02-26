@@ -152,21 +152,6 @@ class RecipeDB {
                     onCompletion(true)
                 }
             }
-            
-            uploadTask.observe(.success) { snapshot in
-              // Upload completed successfully
-                print("image stored successfully")
-                onCompletion(true)
-            }
-
-            uploadTask.observe(.failure) { snapshot in
-              if let error = snapshot.error as NSError? {
-                self.handleStorageError(error)
-                let message = error.localizedDescription
-                print("error: \(message)")
-                onCompletion(false)
-              }
-            }
         }
         else {
             onCompletion(false)
@@ -217,14 +202,27 @@ class RecipeDB {
                 onCompletion(nil)
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withId: ref!.documentID) { success in
-                    if !success {
-                        self.deleteImage(withId: ref!.documentID)
-                        onCompletion(nil)
+                if image.type == ImageType.uiImage {
+                    self.createStorageImage(image, withId: ref!.documentID) { success in
+                        if !success {
+                            self.deleteImage(withId: ref!.documentID)
+                            onCompletion(nil)
+                        }
+                        else {
+                            self.getStorageImageURL(withName: ref!.documentID) { url in
+                                if let url = url {
+                                    onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: url.absoluteString, recipeId: recipeId))
+                                }
+                                else {
+                                    onCompletion(nil)
+                                }
+                            }
+                        }
                     }
-                    else {
-                        onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: imageData, recipeId: recipeId))
-                    }
+                }
+                // url
+                else {
+                    onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: imageData, recipeId: recipeId))
                 }
             }
         }

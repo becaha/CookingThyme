@@ -14,11 +14,7 @@ struct ImagesView: View {
     var widthOffset: CGFloat = 6
     @State var pictureWidth: CGFloat = 200
     @State var pictureHeight: CGFloat = 150
-    
-//    init(isEditing: Bool) {
-//        self.isEditing = isEditing
-//        print("")
-//    }
+    @State var imageCount = 0
     
     var body: some View {
         
@@ -26,7 +22,7 @@ struct ImagesView: View {
             VStack {
                 GeometryReader { geometry in
                     HStack {
-                        if recipe.images.count > 0 {
+                        if imageCount > 0 {
                             ScrollableImagesView(width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                         }
                         else if isEditing {
@@ -60,6 +56,11 @@ struct ImagesView: View {
                             .frame(width: geometry.size.width, height: 150)
                         }
                     }
+                    .onReceive(recipe.$tempRecipe, perform: { recipe in
+                        if imageCount != recipe.images.count {
+                            imageCount = recipe.images.count
+                        }
+                    })
                     .onAppear {
                         pictureWidth = min(geometry.size.width/2 - widthOffset, geometry.size.height * (4.0/3.0))
                         pictureHeight = min(pictureWidth * (3.0/4.0), geometry.size.height)
@@ -68,7 +69,7 @@ struct ImagesView: View {
                 .padding(.bottom)
                 .frame(height: 150)
 
-                if isEditing && recipe.images.count > 0 {
+                if isEditing && imageCount > 0 {
                     UIControls.AddButton(withLabel: "Add Photo") {}
                         .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                     .padding(.top, 0)

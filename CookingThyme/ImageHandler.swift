@@ -92,12 +92,17 @@ class ImageHandler: ObservableObject {
     
     // sets image for UI from images pulled from db
     func setImage(_ image: RecipeImage, at index: Int) {
+        // temp image
         if image.type == ImageType.uiImage && image.id == RecipeImage.defaultId {
             imageURL = nil
             if let decodedImage = ImageHandler.decodeImage(image.data) {
                 addImage(uiImage: decodedImage, at: index)
             }
         }
+        // bad image data, don't expect the photo to load
+//        else if image.data == "" {
+//            imagesCount? -= 1
+//        }
         else {
             addImage(url: URL(string: image.data), at: index)
         }

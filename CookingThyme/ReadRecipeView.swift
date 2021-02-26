@@ -22,7 +22,6 @@ struct ReadRecipeView: View {
     @State private var newName: String = ""
     @State private var newDirection: String = ""
     
-    
     @State private var isCreatingRecipe = false
     
     var body: some View {
@@ -30,7 +29,9 @@ struct ReadRecipeView: View {
             RecipeNameTitle(name: recipe.tempRecipe.name)
             
             Group {
-                getImageView()
+                if recipe.images.count > 0 {
+                    ImagesView(isEditing: false)
+                }
                 
                 RecipeLists(
                             addToShoppingList: { ingredient in
@@ -87,13 +88,6 @@ struct ReadRecipeView: View {
     func addAllIngredients(_ ingredients: [Ingredient]) -> Bool {
         collection.addIngredientShoppingItems(ingredients: ingredients)
         return true
-    }
-    
-    @ViewBuilder
-    func getImageView() -> some View {
-        if recipe.images.count > 0 {
-            ImagesView(isEditing: false)
-        }
     }
 }
 

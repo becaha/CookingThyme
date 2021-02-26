@@ -17,7 +17,7 @@ class RecipeVM: ObservableObject, Identifiable {
     var category: RecipeCategoryVM?
     @Published var recipe: Recipe
     @Published var tempDirections: [Direction] = []
-    @Published var tempImages: [RecipeImage] = []
+//    @Published var tempImages: [RecipeImage] = []
     @Published var recipeText: String?
         
     @Published var imageHandler = ImageHandler()
@@ -295,7 +295,7 @@ class RecipeVM: ObservableObject, Identifiable {
     func popullateRecipeTemps() {
         self.originalServings = recipe.servings
         self.tempDirections = recipe.directions
-        self.tempImages = recipe.images
+//        self.tempImages = recipe.images
         
         self.tempRecipeOriginalServings = recipe.servings
         
@@ -325,8 +325,8 @@ class RecipeVM: ObservableObject, Identifiable {
     // sends images to image handler to prep for ui
     func popullateImages(onCompletion: @escaping (Bool) -> Void) {
         // only update images if they have been (added to/deleted from) or image handler count is wrong
-        if imagesChanged || imageHandler.images.count != tempImages.count {
-            imageHandler.setImages(tempImages)
+        if imagesChanged || imageHandler.images.count != tempRecipe.images.count {
+            imageHandler.setImages(tempRecipe.images)
             imagesChanged = false
             onCompletion(true)
         }
@@ -337,9 +337,20 @@ class RecipeVM: ObservableObject, Identifiable {
     
     func setRecipe(_ recipe: Recipe) {
         self.recipe = recipe
-        popullateRecipe() { success in
+//        popullateRecipe() { success in
+//            if !success {
+//                print("error setting recipe")
+//            }
+//        }
+    }
+    
+    // called when cancel edit recipe
+    func resetTempRecipe() {
+        tempRecipe = recipe
+        tempRecipeOriginalServings = recipe.servings
+        popullateImages() { success in
             if !success {
-                print("error setting recipe")
+                print("error popullating old images on cancel")
             }
         }
     }
@@ -372,6 +383,9 @@ class RecipeVM: ObservableObject, Identifiable {
         
         updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { updatedRecipe in
             if let updatedRecipe = updatedRecipe {
+                // save udpated recipe to recipe
+                self.recipe = updatedRecipe
+
                 let updatedRecipeVM = self
                 updatedRecipeVM.recipe = updatedRecipe
                 // updates recipe store
@@ -387,7 +401,6 @@ class RecipeVM: ObservableObject, Identifiable {
         }
     }
     
-    // TODO image loading, image remove
     // called by updateRecipe above, updates recipe given ingredients
     func updateRecipe(forCategoryId categoryId: String, id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, oldRecipe recipe: Recipe, onCompletion: @escaping (Recipe?) -> Void) {
         var updateSuccess = true
@@ -460,14 +473,6 @@ class RecipeVM: ObservableObject, Identifiable {
             // update categories and recipes store, moves recipe to new category
             self.collection?.moveRecipeInStore(self.recipe, toCategoryId: categoryId)
         }
-        // TODO remove
-//        if let category = category?.collection.getCategory(withId: categoryId) {
-//            category.popullateRecipes() { success in
-//                if !success {
-//                    print("error popullating recipes")
-//                }
-//            }
-//        }
     }
     
     // called by member moveRecipe and moving recipe from public recipe view to permanent recipes
@@ -511,7 +516,6 @@ class RecipeVM: ObservableObject, Identifiable {
     func addTempImage(url: URL?) {
         if let url = url {
             let image = RecipeVM.toRecipeImage(fromURL: url, withRecipeId: recipe.id)
-            tempImages.append(image)
             tempRecipe.images.append(image)
             imageHandler.addImage(url: url)
         }
@@ -528,7 +532,6 @@ class RecipeVM: ObservableObject, Identifiable {
         // resize image
         if let resizedImage = uiImage.resized(toWidth: ImageHandler.pictureWidth, toHeight: ImageHandler.pictureHeight) {
             if let image = RecipeVM.toRecipeImage(fromUIImage: resizedImage, withRecipeId: recipe.id) {
-                tempImages.append(image)
                 tempRecipe.images.append(image)
                 imageHandler.addImage(uiImage: uiImage)
                 imagesChanged = true
@@ -537,7 +540,6 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     func removeTempImage(at index: Int) {
-        tempImages.remove(at: index)
         tempRecipe.images.remove(at: index)
         imageHandler.removeImage(at: index)
         imagesChanged = true

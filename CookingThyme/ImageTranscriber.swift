@@ -204,16 +204,17 @@ class ImageTranscriber: ObservableObject {
                 directionsLocationSet = true
             }
 
-          //check if current annotation is in the current line
+            // check if current annotation is in the current line, append to currLine
             if (isInLine(left: boundingPoly[topRight], right: lastAnn_boundingPoly[topLeft]) && !lookingForTitle){
 
-                // if not first and is not punctuation, add space before
-                if currLine == "" && !(description.count == 1 && description.charAt(index: 0).isPunctuation){
-                    currLine = currLine + " "
+                // if is not punctuation, add space before
+                if !description.isPunctuation() {
+                    currLine += " "
                 }
-                currLine = currLine + description
+                currLine += description
             }
-            else{
+            // start of new line
+            else {
                 if (currLine != ""){
                     if isIngredient {
                         if !RecipeTranscriber.isIngredientsHeader(line: currLine) {
@@ -226,13 +227,8 @@ class ImageTranscriber: ObservableObject {
                         }
                     }
                     
-                    // if not first and is not punctuation, add space before
-                    if currLine == "" && !(description.count == 1 && description.charAt(index: 0).isPunctuation){
-                        currLine = " " + description
-                    }
-                    else {
-                        currLine = description
-                    }
+                    currLine = description
+                    
                     if (ingredientsLocationSet) {
                         if (directionsLocationSet &&
                             (x >= (directionLocationX - 20) || x <= (directionLocationX + 20)) &&
@@ -317,5 +313,15 @@ class ImageTranscriber: ObservableObject {
         //if there are no matches return a new font size
         fonts.append(rawFontSize)
         return rawFontSize
+    }
+}
+
+
+extension String {
+    func isPunctuation() -> Bool {
+        if self.count != 1 {
+            return false
+        }
+        return self.charAt(index: 0).isPunctuation || self.charAt(index: 0).isSymbol
     }
 }
