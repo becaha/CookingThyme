@@ -31,7 +31,8 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     @Published var imageHandler = ImageHandler()
     private var imageHandlerCancellable: AnyCancellable?
-    
+    private var imageHandlerLoadingCancellable: AnyCancellable?
+
     private var categoryGroup: DispatchGroup?
 
     init(category: RecipeCategory, collection: RecipeCollectionVM, onCompletion: @escaping (Bool) -> Void) {
@@ -43,6 +44,12 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             .sink { _ in
                 self.objectWillChange.send()
             }
+        
+        self.imageHandlerLoadingCancellable = self.imageHandler.$loadingImages.sink(receiveValue: { (loadingImages) in
+            if !loadingImages {
+                self.updateCategoriesStore()
+            }
+        })
         
         // initialized when collection.popullateCategories
 //        if let foundCategoryVM = self.collection.categoriesStore[category.id] {
@@ -104,16 +111,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             }
         }
         
-//        categoryGroup!.enter()
-        popullateImage() { success in
-            if !success {
-                print("error popullating image")
-                popullateSuccess = false
-            }
-//            if self.categoryGroup != nil {
-//                self.categoryGroup!.leave()
-//            }
-        }
+        popullateImage()
         
         categoryGroup?.notify(queue: .main) {
             onCompletion(popullateSuccess)
@@ -148,18 +146,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
         }
     }
     
-    func popullateImage(onCompletion: @escaping (Bool) -> Void) {
+    func popullateImage() {
         RecipeDB.shared.getImage(withCategoryId: id) { image in
             if let image = image {
-                self.imageHandler.setImages([image]) { success in
-                    if !success {
-                        print("error popullating image")
-                    }
-                    onCompletion(success)
-                    return
-                }
+                self.imageHandler.setImages([image])
             }
-            onCompletion(true)
         }
     }
     
@@ -228,13 +219,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // creates image in db and sets images in ui by image handler, updates category store
     private func createImage(_ image: RecipeImage) {
         RecipeDB.shared.createImage(image, withCategoryId: id)
-        self.imageHandler.setImages([image]) { success in
-            if !success {
-                print("error creating image")
-            }
-            // update category store
-            self.updateCategoriesStore()
-        }
+        self.imageHandler.setImages([image])
     }
     
     // called by ui to remove category image, removes in db and ui by image handler

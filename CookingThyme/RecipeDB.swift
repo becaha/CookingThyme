@@ -37,8 +37,9 @@ class RecipeDB {
             Recipe.Table.source: source,
             Recipe.Table.recipeCategoryId: recipeCategoryId
         ]) { err in
-            if let err = err {
-                print("Error adding recipe: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding recipe: \(error)")
                 onCompletion(nil)
             } else {
                 print("Recipe added with ID: \(ref!.documentID)")
@@ -54,8 +55,9 @@ class RecipeDB {
             Direction.Table.direction: direction.direction,
             Direction.Table.recipeId: recipeId
         ]) { err in
-            if let err = err {
-                print("Error adding direction: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding direction: \(error)")
                 onCompletion(nil)
             } else {
                 print("Direction added with ID: \(ref!.documentID)")
@@ -95,8 +97,9 @@ class RecipeDB {
             Ingredient.Table.order: order,
             Ingredient.Table.recipeId: recipeId
         ]) { err in
-            if let err = err {
-                print("Error adding ingredient: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding ingredient: \(error)")
                 onCompletion(nil)
             } else {
                 print("Ingredient added with ID: \(ref!.documentID)")
@@ -129,7 +132,7 @@ class RecipeDB {
         }
     }
     
-    func createStorageImage(_ image: RecipeImage, withId id: String) {
+    func createStorageImage(_ image: RecipeImage, withId id: String, onCompletion: @escaping (NSError?) -> Void) {
         let ref = getStorageImageRef(withId: id)
 
         if let imageData = ImageHandler.decodeImageToData(image.data) {
@@ -140,12 +143,15 @@ class RecipeDB {
             uploadTask.observe(.success) { snapshot in
               // Upload completed successfully
                 print("image stored successfully")
+                onCompletion(nil)
             }
 
             uploadTask.observe(.failure) { snapshot in
               if let error = snapshot.error as NSError? {
+                self.handleStorageError(error)
                 let message = error.localizedDescription
                 print("error: \(message)")
+                onCompletion(error)
               }
             }
         }
@@ -162,12 +168,18 @@ class RecipeDB {
             RecipeImage.Table.data: imageData,
             RecipeImage.Table.categoryId: categoryId
         ]) { err in
-            if let err = err {
-                let message = err.localizedDescription
+            if let error = err as NSError? {
+                self.handleError(error)
+                let message = error.localizedDescription
                 print("Error adding image: \(message)")
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withId: ref!.documentID)
+                self.createStorageImage(image, withId: ref!.documentID) { error in
+                    if error != nil {
+                        // if image was not stored, delete reference to image
+                        self.deleteImage(withId: ref!.documentID)
+                    }
+                }
             }
         }
     }
@@ -183,13 +195,21 @@ class RecipeDB {
             RecipeImage.Table.data: imageData,
             RecipeImage.Table.recipeId: recipeId
         ]) { err in
-            if let err = err {
-                print("Error adding image: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding image: \(error)")
                 onCompletion(nil)
             } else {
                 print("Image added with ID: \(ref!.documentID)")
-                self.createStorageImage(image, withId: ref!.documentID)
-                onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: imageData, recipeId: recipeId))
+                self.createStorageImage(image, withId: ref!.documentID) { error in
+                    if error != nil {
+                        self.deleteImage(withId: ref!.documentID)
+                        onCompletion(nil)
+                    }
+                    else {
+                        onCompletion(RecipeImage(id: ref!.documentID, type: image.type, data: imageData, recipeId: recipeId))
+                    }
+                }
             }
         }
     }
@@ -222,8 +242,9 @@ class RecipeDB {
             RecipeCategory.Table.name: name,
             RecipeCategory.Table.recipeCollectionId: collectionId
         ]) { err in
-            if let err = err {
-                print("Error adding category: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding category: \(error)")
                 onCompletion(nil)
             } else {
                 print("Category added with ID: \(ref!.documentID)")
@@ -238,8 +259,9 @@ class RecipeDB {
         ref = db.collection(RecipeCollection.Table.databaseTableName).addDocument(data: [
             RecipeCollection.Table.name: username
         ]) { err in
-            if let err = err {
-                print("Error adding collection: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding collection: \(error)")
                 onCompletion(nil)
             } else {
                 print("Collection added with ID: \(ref!.documentID)")
@@ -257,8 +279,9 @@ class RecipeDB {
             ShoppingItem.Table.completed: item.completed.toInt(),
             ShoppingItem.Table.collectionId: collectionId
         ]) { err in
-            if let err = err {
-                print("Error adding shopping item: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error adding shopping item: \(error)")
                 onCompletion(nil)
             } else {
                 print("Shopping item added with ID: \(ref!.documentID)")
@@ -274,8 +297,9 @@ class RecipeDB {
     
     func getRecipe(byId id: String, onRetrieve: @escaping (Recipe?) -> Void) {
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting recipe: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting recipe: \(error)")
                 onRetrieve(nil)
             } else {
                 if querySnapshot!.documents.count == 0 {
@@ -292,8 +316,9 @@ class RecipeDB {
     
     func getAllRecipes(withCollectionId collectionId: String, onRetrieve: @escaping ([Recipe]) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).getDocuments() { querySnapshot, err in
-            if let err = err {
-                print("Error getting recipes: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting recipes: \(error)")
             }
             else {
                 var recipes = [Recipe]()
@@ -305,8 +330,9 @@ class RecipeDB {
                     recipesGroup.enter()
                     let category = document
                     self.db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: category.documentID).getDocuments() { querySnapshot, err in
-                        if let err = err {
-                            print("Error getting recipes: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error getting recipes: \(error)")
                             if inRecipesGroup {
                                 recipesGroup.leave()
                             }
@@ -339,8 +365,9 @@ class RecipeDB {
     func getIngredients(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
         db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).order(by: Ingredient.Table.order).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting ingredients: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting ingredients: \(error)")
                 onRetrieve(nil)
             } else {
                 for document in querySnapshot!.documents {
@@ -355,8 +382,9 @@ class RecipeDB {
     func getDirections(forRecipe recipe: Recipe, withId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
         db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).order(by: Direction.Table.step).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting directions: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting directions: \(error)")
                 onRetrieve(nil)
             } else {
                 for document in querySnapshot!.documents {
@@ -371,8 +399,9 @@ class RecipeDB {
     func getImages(forRecipe recipe: Recipe, withRecipeId recipeId: String, onRetrieve: @escaping (Recipe?) -> Void) {
         var updatedRecipe = recipe
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting images: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting images: \(error)")
                 onRetrieve(nil)
             } else {
                 let imageGroup = DispatchGroup()
@@ -383,8 +412,10 @@ class RecipeDB {
                     var recipeImage = RecipeImage(document: document)
                     if recipeImage.type == .uiImage {
                         self.getStorageImageURL(withName: document.documentID) { url in
-                            recipeImage.data = url?.absoluteString ?? ""
-                            updatedRecipe.addImage(recipeImage)
+                            if let url = url {
+                                recipeImage.data = url.absoluteString
+                                updatedRecipe.addImage(recipeImage)
+                            }
                             imageGroup.leave()
                         }
                     }
@@ -409,11 +440,12 @@ class RecipeDB {
             let localURL = documentDir.appendingPathComponent("\(name).jpg")
 
             // Download to the local filesystem
-//            let downloadTask =
-            ref.write(toFile: localURL) { url, error in
-                if let error = error {
+            ref.write(toFile: localURL) { url, err in
+                if let error = err as NSError? {
+                    self.handleStorageError(error)
                     let message = error.localizedDescription
                     print("error: \(message)")
+                    
                     onRetrieve(nil)
                 }
                 else {
@@ -425,8 +457,9 @@ class RecipeDB {
     
     func getImage(withCategoryId categoryId: String, onRetrieve: @escaping (RecipeImage?) -> Void) {
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting image: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting image: \(error)")
                 onRetrieve(nil)
                 return
             } else {
@@ -439,8 +472,13 @@ class RecipeDB {
                     var recipeImage = RecipeImage(document: document)
                     if recipeImage.type == .uiImage {
                         self.getStorageImageURL(withName: document.documentID) { url in
-                            recipeImage.data = url?.absoluteString ?? ""
-                            onRetrieve(recipeImage)
+                            if let url = url {
+                                recipeImage.data = url.absoluteString
+                                onRetrieve(recipeImage)
+                            }
+                            else {
+                                onRetrieve(nil)
+                            }
                             return
                         }
                     }
@@ -457,8 +495,9 @@ class RecipeDB {
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId).order(by: Recipe.Table.name)
             .getDocuments() { (querySnapshot, err) in
                 var recipes = [Recipe]()
-                if let err = err {
-                    print("Error getting recipes: \(err)")
+                if let error = err as NSError? {
+                    self.handleError(error)
+                    print("Error getting recipes: \(error)")
                     onRetrieve([])
                 } else {
                     for document in querySnapshot!.documents {
@@ -472,8 +511,9 @@ class RecipeDB {
     
     func getCategory(withId id: String, onRetrieve: @escaping (RecipeCategory?) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.id, isEqualTo: id).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting category: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting category: \(error)")
                 onRetrieve(nil)
             } else {
                 if querySnapshot!.documents.count == 0 {
@@ -490,8 +530,9 @@ class RecipeDB {
     
     func getCollection(withUsername username: String, onRetrieve: @escaping (RecipeCollection?) -> Void) {
         db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting collection: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting collection: \(error)")
                 onRetrieve(nil)
             } else {
                 if querySnapshot!.documents.count == 0 {
@@ -509,8 +550,9 @@ class RecipeDB {
     func getCategories(byCollectionId collectionId: String, onRetrieve: @escaping (Bool, [RecipeCategory]) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).whereField(RecipeCategory.Table.recipeCollectionId, isEqualTo: collectionId).order(by: RecipeCategory.Table.name).getDocuments() { (querySnapshot, err) in
             var categories = [RecipeCategory]()
-            if let err = err {
-                print("Error getting categories: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting categories: \(error)")
                 onRetrieve(false, [])
             } else {
                 for document in querySnapshot!.documents {
@@ -525,8 +567,9 @@ class RecipeDB {
     func getShoppingItems(byCollectionId collectionId: String, onRetrieve: @escaping ([ShoppingItem]) -> Void) {
         db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).order(by: ShoppingItem.Table.name).getDocuments() { (querySnapshot, err) in
             var items = [ShoppingItem]()
-            if let err = err {
-                print("Error getting shopping items: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting shopping items: \(error)")
                 onRetrieve([])
             } else {
                 for document in querySnapshot!.documents {
@@ -549,8 +592,9 @@ class RecipeDB {
             Recipe.Table.source: source,
             Recipe.Table.recipeCategoryId: recipeCategoryId
         ]) { err in
-            if let err = err {
-                print("Error updating recipe: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating recipe: \(error)")
                 onCompletion(false)
             } else {
                 print("Recipe successfully updated")
@@ -567,8 +611,9 @@ class RecipeDB {
             Direction.Table.step: direction.step,
             Direction.Table.direction: direction.direction
         ]) { err in
-            if let err = err {
-                print("Error updating direction: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating direction: \(error)")
                 onCompletion(false)
             } else {
                 print("Direction successfully updated")
@@ -624,8 +669,9 @@ class RecipeDB {
             Ingredient.Table.unitName: ingredient.unitName.getName(),
             Ingredient.Table.order: order
         ]) { err in
-            if let err = err {
-                print("Error updating ingredient: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating ingredient: \(error)")
                 onCompletion(false)
             } else {
                 print("Ingredient successfully updated")
@@ -672,21 +718,6 @@ class RecipeDB {
         }
     }
     
-//    func updateImage(_ image: RecipeImage) {
-//        let ref = db.collection(RecipeImage.Table.databaseTableName).document(image.id)
-//
-//        ref.updateData([
-//            RecipeImage.Table.type: image.type.rawValue,
-//            RecipeImage.Table.data: image.data
-//        ]) { err in
-//            if let err = err {
-//                print("Error updating image: \(err)")
-//            } else {
-//                print("Image successfully updated")
-//            }
-//        }
-//    }
-    
     func updateImages(withRecipeId recipeId: String, images: [RecipeImage], oldRecipe recipe: Recipe, onCompletion: @escaping ([RecipeImage]) -> Void) {
         var updatedImages = [RecipeImage]()
         let imageGroup = DispatchGroup()
@@ -727,13 +758,11 @@ class RecipeDB {
 
         ref.updateData([
             // currently completed is only piece editable
-//            ShoppingItem.Table.name: item.name,
-//            ShoppingItem.Table.amount: item.amount,
-//            ShoppingItem.Table.unitName: item.unitName.getName(),
             ShoppingItem.Table.completed: item.completed.toInt()
         ]) { err in
-            if let err = err {
-                print("Error updating shopping item: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating shopping item: \(error)")
             } else {
                 print("Shopping item successfully updated")
             }
@@ -747,8 +776,9 @@ class RecipeDB {
             RecipeCategory.Table.name: name,
             RecipeCategory.Table.recipeCollectionId: recipeCollectionId
         ]) { err in
-            if let err = err {
-                print("Error updating category: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating category: \(error)")
                 onCompletion(false)
             } else {
                 print("Category successfully updated")
@@ -763,8 +793,9 @@ class RecipeDB {
         ref.updateData([
             RecipeCollection.Table.name: name
         ]) { err in
-            if let err = err {
-                print("Error updating collection: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error updating collection: \(error)")
                 onCompletion(false)
             } else {
                 print("Collection successfully updated")
@@ -777,8 +808,9 @@ class RecipeDB {
     
     func deleteRecipe(withId id: String) {
         db.collection(Recipe.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing recipe: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing recipe: \(error)")
             } else {
                 print("Recipe successfully removed!")
             }
@@ -787,8 +819,9 @@ class RecipeDB {
     
     func deleteDirection(withId id: String) {
         db.collection(Direction.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing direction: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing direction: \(error)")
             } else {
                 print("Direction successfully removed!")
             }
@@ -797,14 +830,16 @@ class RecipeDB {
     
     func deleteDirections(withRecipeId recipeId: String) {
         db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting directions: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting directions: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
-                        if let err = err {
-                            print("Error removing direction: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error removing direction: \(error)")
                         } else {
                             print("Direction successfully removed!")
                         }
@@ -816,8 +851,9 @@ class RecipeDB {
     
     func deleteIngredient(withId id: String) {
         db.collection(Ingredient.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing ingredient: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing ingredient: \(error)")
             } else {
                 print("Ingredient successfully removed!")
             }
@@ -826,14 +862,16 @@ class RecipeDB {
     
     func deleteIngredients(withRecipeId recipeId: String) {
         db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting ingredients: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting ingredients: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
-                        if let err = err {
-                            print("Error removing ingredient: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error removing ingredient: \(error)")
                         } else {
                             print("Ingredient successfully removed!")
                         }
@@ -845,14 +883,16 @@ class RecipeDB {
     
     func deleteImages(withRecipeId recipeId: String) {
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting images: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting images: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
-                        if let err = err {
-                            print("Error removing image: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error removing image: \(error)")
                         } else {
                             print("Image successfully removed!")
                         }
@@ -870,8 +910,9 @@ class RecipeDB {
     func deleteStorageImage(withId id: String) {
         let ref = getStorageImageRef(withId: id)
 
-        ref.delete { error in
-            if let error = error {
+        ref.delete { err in
+            if let error = err as NSError? {
+                self.handleStorageError(error)
                 let message = error.localizedDescription
                 print("error: \(message)")
             }
@@ -883,8 +924,9 @@ class RecipeDB {
     
     func deleteImage(withId id: String) {
         db.collection(RecipeImage.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing image: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing image: \(error)")
             } else {
                 print("Image successfully removed!")
             }
@@ -894,14 +936,16 @@ class RecipeDB {
     
     func deleteImage(withCategoryId categoryId: String) {
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting image: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting image: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
-                            if let err = err {
-                                print("Error removing image: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                                print("Error removing image: \(error)")
                             } else {
                                 print("Image successfully removed!")
                             }
@@ -914,8 +958,9 @@ class RecipeDB {
     
     func deleteCategory(withId id: String) {
         db.collection(RecipeCategory.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing category: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing category: \(error)")
             } else {
                 print("Category successfully removed!")
             }
@@ -924,8 +969,9 @@ class RecipeDB {
     
     func deleteCollection(withId id: String) {
         db.collection(RecipeCollection.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing collection: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing collection: \(error)")
             } else {
                 print("Collection successfully removed!")
             }
@@ -935,14 +981,16 @@ class RecipeDB {
     func deleteRecipes(withCategoryId categoryId: String) {
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId)
             .getDocuments() { (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting recipes: \(err)")
+                if let error = err as NSError? {
+                    self.handleError(error)
+                    print("Error getting recipes: \(error)")
                 } else {
                     for document in querySnapshot!.documents {
                         print("\(document.documentID) => \(document.data())")
                         document.reference.delete() { err in
-                            if let err = err {
-                                print("Error removing category: \(err)")
+                            if let error = err as NSError? {
+                                self.handleError(error)
+                                print("Error removing category: \(error)")
                             } else {
                                 print("Category successfully removed!")
                             }
@@ -954,8 +1002,9 @@ class RecipeDB {
     
     func deleteShoppingItem(withId id: String) {
         db.collection(ShoppingItem.Table.databaseTableName).document(id).delete() { err in
-            if let err = err {
-                print("Error removing shopping item: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error removing shopping item: \(error)")
             } else {
                 print("Shopping item successfully removed!")
             }
@@ -964,20 +1013,61 @@ class RecipeDB {
     
     func deleteShoppingItems(withCollectionId collectionId: String) {
         db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).getDocuments() { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting shopping items: \(err)")
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting shopping items: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
-                        if let err = err {
-                            print("Error removing shopping item: \(err)")
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error removing shopping item: \(error)")
                         } else {
                             print("Shopping item successfully removed!")
                         }
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: - Handle Errors
+    func handleStorageError(_ error: NSError) {
+        switch StorageErrorCode(rawValue: error.code) {
+        case .unauthorized:
+            // FIRStorageErrorCodeUnauthenticated
+            let message = error.localizedDescription
+            print("Error: \(message)")
+            
+        case .downloadSizeExceeded:
+            // FIRStorageErrorCodeDownloadSizeExceeded
+            let message = error.localizedDescription
+            print("Error: \(message)")
+            
+        default:
+            let errorType = AuthErrorCode(rawValue: error.code)
+            let message = error.localizedDescription
+            print("\(String(describing: errorType)): \(message)")
+        }
+    }
+    
+    
+    func handleError(_ error: NSError) {
+        switch FirestoreErrorCode(rawValue: error.code) {
+        case .permissionDenied:
+            let message = error.localizedDescription
+            print("Error: \(message)")
+            
+
+        case .unauthenticated:
+            let message = error.localizedDescription
+            print("Error: \(message)")
+            
+        default:
+            let errorType = AuthErrorCode(rawValue: error.code)
+            let errorMessage = error.localizedDescription
+            print("\(String(describing: errorType)): \(errorMessage)")
         }
     }
 }

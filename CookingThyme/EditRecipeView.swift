@@ -76,7 +76,7 @@ struct EditRecipeView: View {
     @State var startPos : CGPoint = .zero
     @State var isSwipping = true
     
-    @State var isSaving = false
+    @State var isSaving: Bool?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -139,6 +139,7 @@ struct EditRecipeView: View {
                         EditableRecipe()
                     }
                 }
+                .loadable(isLoading: $isSaving)
                 .onReceive(recipe.$recipe, perform: { _ in
                     setRecipe()
                 })
@@ -316,7 +317,7 @@ struct EditRecipeView: View {
     
     // TODO: save should be not on main thread
     private func saveRecipe() {
-        if isSaving {
+        if isSaving == true {
             return
         }
         isSaving = true
@@ -361,18 +362,20 @@ struct EditRecipeView: View {
                 }
             }
             else {
+                recipe.updateTempRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId)
+                isSaving = false
+                withAnimation {
+                    isEditingRecipe = false
+                }
                 recipe.updateRecipe(withId: recipe.id, name: name, ingredients: recipe.tempRecipe.ingredients, directions: recipe.tempRecipe.directions, images: recipe.tempRecipe.images, servings: servings, source: source, categoryId: recipe.categoryId) { success in
-                    isSaving = false
-                    withAnimation {
-                        isEditingRecipe = false
-                    }
+//                    isSaving = false
+//                    withAnimation {
+//                        isEditingRecipe = false
+//                    }
                 }
             }
             // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
             // flying into place
-//            withAnimation {
-//                isEditingRecipe = false
-//            }
         }
         else {
             presentErrorAlert = true

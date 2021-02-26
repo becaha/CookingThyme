@@ -111,7 +111,7 @@ struct PublicRecipeView: View {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .padding(.trailing)
-                .disabled(isLoading || recipe.recipeNotFound == true || currentCategoryId != nil)
+//                .disabled(isLoading || recipe.recipeNotFound == true || currentCategoryId != nil)
         )
     }
     

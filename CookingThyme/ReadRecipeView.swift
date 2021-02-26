@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ReadRecipeView: View {
+    @Environment(\.presentationMode) var presentation
+
     @EnvironmentObject var collection: RecipeCollectionVM
     @EnvironmentObject var category: RecipeCategoryVM
     @Binding var isEditingRecipe: Bool
@@ -87,7 +89,7 @@ struct ReadRecipeView: View {
     
     @ViewBuilder
     func getImageView() -> some View {
-        if recipe.imageHandler.images.count > 0 {
+        if recipe.images.count > 0 {
             ImagesView(isEditing: false)
         }
     }

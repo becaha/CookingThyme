@@ -15,20 +15,19 @@ struct ImagesView: View {
     @State var pictureWidth: CGFloat = 200
     @State var pictureHeight: CGFloat = 150
     
+//    init(isEditing: Bool) {
+//        self.isEditing = isEditing
+//        print("")
+//    }
+    
     var body: some View {
         
         VStack(alignment: .center) {
             VStack {
                 GeometryReader { geometry in
                     HStack {
-                        if recipe.imageHandler.loadingImages {
-                            VStack {
-                                UIControls.Loading()
-                            }
-                            .frame(height: geometry.size.height)
-                        }
-                        else if recipe.imageHandler.images.count > 0 {
-                            ScrollableImagesView(uiImages: recipe.imageHandler.images, width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
+                        if recipe.images.count > 0 {
+                            ScrollableImagesView(width: geometry.size.width, height: geometry.size.height, isEditing: isEditing)
                         }
                         else if isEditing {
                             VStack(alignment: .center) {
@@ -65,14 +64,11 @@ struct ImagesView: View {
                         pictureWidth = min(geometry.size.width/2 - widthOffset, geometry.size.height * (4.0/3.0))
                         pictureHeight = min(pictureWidth * (3.0/4.0), geometry.size.height)
                     }
-                    .onReceive(recipe.imageHandler.$images) { images in
-                        print("")
-                    }
                 }
                 .padding(.bottom)
                 .frame(height: 150)
 
-                if isEditing && recipe.imageHandler.images.count > 0 {
+                if isEditing && recipe.images.count > 0 {
                     UIControls.AddButton(withLabel: "Add Photo") {}
                         .editPhotoMenu(onPaste: paste, loadImage: loadImage)
                     .padding(.top, 0)

@@ -87,6 +87,7 @@ class RecipeVM: ObservableObject, Identifiable {
             }
             else {
                 print("error popullating initialized recipe")
+                self.isLoading = false
             }
         }
     }
@@ -327,10 +328,9 @@ class RecipeVM: ObservableObject, Identifiable {
     func popullateImages(onCompletion: @escaping (Bool) -> Void) {
         // only update images if they have been (added to/deleted from) or image handler count is wrong
         if imagesChanged || imageHandler.images.count != tempImages.count {
-            imageHandler.setImages(tempImages) { success in
-                onCompletion(success)
-            }
+            imageHandler.setImages(tempImages)
             imagesChanged = false
+            onCompletion(true)
         }
         else {
             onCompletion(true)
@@ -360,6 +360,19 @@ class RecipeVM: ObservableObject, Identifiable {
     }
     
     // MARK: - Recipe Modifiers
+    
+    // updates temp recipe so ui can update without a wait for update recipe call to db
+    func updateTempRecipe(withId id: String, name: String, ingredients: [Ingredient], directions: [Direction], images: [RecipeImage], servings: String, source: String, categoryId: String) {
+        var updatedRecipe = recipe
+        updatedRecipe.name = name
+        updatedRecipe.ingredients = ingredients
+        updatedRecipe.directions = directions
+        updatedRecipe.images = images
+        updatedRecipe.servings = servings.toInt()
+        updatedRecipe.source = source
+        updatedRecipe.recipeCategoryId = categoryId
+        self.setTempRecipe(updatedRecipe)
+    }
         
     // called by saving an edit recipe, updates recipe in db and in local store
     // updates recipe given temp ingredients
@@ -368,8 +381,6 @@ class RecipeVM: ObservableObject, Identifiable {
         
         updateRecipe(forCategoryId: categoryId, id: id, name: name, ingredients: ingredients, directions: directions, images: images, servings: servings, source: source, oldRecipe: self.recipe) { updatedRecipe in
             if let updatedRecipe = updatedRecipe {
-                self.setTempRecipe(updatedRecipe)
-                
                 let updatedRecipeVM = self
                 updatedRecipeVM.recipe = updatedRecipe
                 // updates recipe store

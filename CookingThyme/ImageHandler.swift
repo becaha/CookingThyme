@@ -76,25 +76,17 @@ class ImageHandler: ObservableObject {
     }
     
     // sets images for UI from images pulled from db
-    func setImages(_ images: [RecipeImage], onCompletion: @escaping (Bool) -> Void) {
+    func setImages(_ images: [RecipeImage]) {
         if images.count > 0 {
             self.loadingImages = true
             imagesCount = images.count
         }
         self.images = [Int: UIImage]()
+        
         DispatchQueue.global(qos: .userInitiated).async {
-//            self.imagesGroup = DispatchGroup()
-            
             for index in 0..<images.count {
-//                self.imagesGroup?.enter()
                 self.setImage(images[index], at: index)
             }
-            
-//            self.imagesGroup?.notify(queue: .main) {
-//                self.loadingImages = false
-//                self.imagesGroup = nil
-//                onCompletion(true)
-//            }
         }
     }
     
@@ -158,7 +150,6 @@ class ImageHandler: ObservableObject {
             self.imagesCount = imagesCount - 1
         }
         updateMapIndices(forRemovedIndex: index)
-        self.images[index] = nil
     }
     
     func updateMapIndices(forRemovedIndex removedIndex: Int) {

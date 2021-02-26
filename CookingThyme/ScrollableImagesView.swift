@@ -14,7 +14,6 @@ import SwiftUI
 struct ScrollableImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     
-    var uiImages: [Int: UIImage]
     var width: CGFloat
     var height: CGFloat
     var isEditing: Bool
@@ -22,10 +21,11 @@ struct ScrollableImagesView: View {
     var widthOffset: CGFloat = 6
     var pictureWidth: CGFloat
     var pictureHeight: CGFloat
+    
+    @State var imagesCount = 0
 
     
-    init(uiImages: [Int: UIImage], width: CGFloat, height: CGFloat, isEditing: Bool) {
-        self.uiImages = uiImages
+    init(width: CGFloat, height: CGFloat, isEditing: Bool) {
         self.width = width
         self.height = height
         self.isEditing = isEditing
@@ -36,9 +36,8 @@ struct ScrollableImagesView: View {
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
-                // uiImages.count
-                ForEach(0..<(recipe.imageHandler.imagesCount ?? 0), id: \.self) { index in
-                    if uiImages[index] == nil {
+                ForEach(0..<imagesCount, id: \.self) { index in
+                    if recipe.imageHandler.images[index] == nil {
                         VStack {
                             Spacer()
 
@@ -47,8 +46,9 @@ struct ScrollableImagesView: View {
                             Spacer()
                         }
                         .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
+                        .border(borderColor(), width: borderWidth)
                     }
-                    else if index < uiImages.count, uiImages[index] != nil {
+                    else if index < recipe.imageHandler.images.count, recipe.imageHandler.images[index] != nil {
                         ZStack {
                             if isEditing {
                                 Button(action: {
@@ -72,8 +72,8 @@ struct ScrollableImagesView: View {
                                 .zIndex(1)
                             }
 
-                            Image(uiImage: uiImages[index]!)
-                                .scaleEffect(ImageHandler.getZoomScale(uiImages[index]!, in: CGSize(width: pictureWidth, height: pictureHeight)))
+                            Image(uiImage: recipe.imageHandler.images[index]!)
+                                .scaleEffect(ImageHandler.getZoomScale(recipe.imageHandler.images[index]!, in: CGSize(width: pictureWidth, height: pictureHeight)))
                                 .frame(width: pictureWidth, height: pictureHeight, alignment: .center)
                                 .clipped()
                                 .border(borderColor(), width: borderWidth)
@@ -86,6 +86,13 @@ struct ScrollableImagesView: View {
             }
             .frame(minWidth: width)
         }
+        .onAppear {
+            imagesCount = recipe.images.count
+        }
+        .onChange(of: recipe.imageHandler.images, perform: {
+            images in
+            imagesCount = images.count
+        })
         .frame(height: height)
     }
     

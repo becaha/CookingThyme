@@ -255,30 +255,6 @@ class UserVM: ObservableObject {
         firebaseDelete(password: password)
     }
     
-    func isValidUser(email: String, password: String) -> Bool {
-//        self.signupErrors = []
-////        if RecipeDB.shared.getUser(withUsername: username) != nil {
-////            self.signupErrors.append(InvalidSignup.usernameTaken)
-////        }
-//
-//        // TODO 3: confirm email
-//        if email == "" || !email.contains("@") || !email.contains(".") {
-//            self.signupErrors.append(InvalidSignup.email)
-//        }
-//        if !isValidPassword(password) {
-//            self.signupErrors.append(InvalidSignup.password)
-//        }
-//        if self.signupErrors.count > 0 {
-//            return false
-//        }
-//        return true
-        return true
-    }
-    
-    func isValidPassword(_ password: String) -> Bool {
-        return password != ""
-    }
-    
     func resetPassword(email: String) {
         clearErrors()
 
@@ -330,6 +306,10 @@ class UserVM: ObservableObject {
         self.firebaseReauthenticate(email: email, password: password) {
             self.isLoading = false
         }
+    }
+    
+    static func signout() {
+        
     }
     
     func setErrorMessage(fromInternalError error: NSError) {
