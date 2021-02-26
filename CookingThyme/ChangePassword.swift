@@ -22,8 +22,6 @@ struct ChangePassword: View {
     
     @State var success = false
     
-    @State var keyboardPresented = false
-    
     var body: some View {
         VStack {
             SecureField("Current Password", text: $oldPassword)
@@ -31,21 +29,18 @@ struct ChangePassword: View {
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
-                .onTapGesture(count: 1, perform: {})
             
             SecureField("New Password", text: $newPassword)
                 .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
-                .onTapGesture(count: 1, perform: {})
             
             SecureField("Confirm Password", text: $confirmPassword)
                 .customFont(style: .subheadline)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .formItem()
-                .onTapGesture(count: 1, perform: {})
             
             UserErrorsView(userErrors: user.userErrors)
 
@@ -65,13 +60,12 @@ struct ChangePassword: View {
                                 .bold()
                         }
                     }
-                    .foregroundColor(.black)
+                    .foregroundColor(mainColor())
                     
                     Spacer()
                 }
             }
-            .onTapGesture(count: 1, perform: {})
-            .formItem(backgroundColor: mainColor())
+            .formItem()
         }
         .formed()
         .loadableOverlay(isLoading: $user.isLoading)
@@ -93,15 +87,6 @@ struct ChangePassword: View {
                 }
             }
         })
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
-        }
-        .gesture(keyboardPresented ?
-                    TapGesture(count: 1).onEnded {
-            withAnimation {
-                unfocusEditable()
-            }
-        } : nil)
         .navigationBarTitle("Change Password")
     }
     

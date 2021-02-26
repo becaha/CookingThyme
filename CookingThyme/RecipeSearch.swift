@@ -14,7 +14,6 @@ struct RecipeSearch: View {
     @EnvironmentObject var recipeSearchHandler: RecipeSearchHandler
     
     @State var hasSearched = false
-    @State var keyboardPresented = false
 
     @State var receivedRecipes = false
 
@@ -78,7 +77,6 @@ struct RecipeSearch: View {
                                 .formItem(backgroundColor: mainColor())
                             }
                             .padding(.vertical)
-                            .onTapGesture(count: 1, perform: {})
                         }
                     }
 
@@ -95,16 +93,6 @@ struct RecipeSearch: View {
             .navigationBarColor(UIColor(navBarColor()), text: "Spoonacular Recipe Search", style: .headline, textColor: UIColor(formItemFont()))
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
-        }
-        .gesture(keyboardPresented ?
-            TapGesture(count: 1).onEnded {
-                withAnimation {
-                    unfocusEditable()
-                }
-            } : nil
-        )
     }
 }
 

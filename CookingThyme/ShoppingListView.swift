@@ -13,10 +13,7 @@ struct ShoppingListView: View {
 
     @State var completeAll = false
     @State var newName = ""
-    
-    @State var keyboardPresented = false
 
-    
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
@@ -35,9 +32,7 @@ struct ShoppingListView: View {
                         }
                     })
                     .foregroundColor(mainColor())
-                    .onTapGesture(count: 1, perform: {})
                 }
-                .onTapGesture(count: 1, perform: {})
                 .formItem(isSearchBar: true)
 
                 if collection.notCompletedItems.count > 0 {
@@ -109,15 +104,6 @@ struct ShoppingListView: View {
             .formed()
         }
         .background(formBackgroundColor())
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
-        }
-        .gesture(keyboardPresented ?
-                    TapGesture(count: 1).onEnded {
-            withAnimation {
-                unfocusEditable()
-            }
-        } : nil)
     }
     
     @ViewBuilder

@@ -55,9 +55,6 @@ struct RecipeCollectionView: View {
     @State private var frameMaxY: CGFloat = 0
     
     @State private var searchMinY: CGFloat = 0
-        
-    @State private var keyboardPresented = false
-    @State private var isActive = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -77,16 +74,7 @@ struct RecipeCollectionView: View {
                     addCategoryExpanded = false
                 }
             } : nil)
-            .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                    unfocusEditable()
-                }
-            )
             .loadableOverlay(isLoading: $collection.isLoading)
-        }
-        // to go back to normal on keyboard dismiss
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
         }
         .navigationBarColor(UIColor(navBarColor()), text: "Recipe Book", style: .headline, textColor: UIColor(formItemFont()))
         .navigationBarTitle(Text(""), displayMode: .inline)
@@ -151,7 +139,6 @@ struct RecipeCollectionView: View {
                         AutoSearchBar(search: $collection.search) { result in
                             searchRecipes(result)
                         }
-                        .onTapGesture(count: 1, perform: {})
                         .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                     }
                     .formItem(isSearchBar: true)
@@ -440,7 +427,6 @@ struct RecipeCollectionView: View {
             }) {
                 UIControls.AddButtonView()
             }
-            .onTapGesture(count: 1, perform: {})
         }
         else {
             ZStack {
@@ -461,7 +447,6 @@ struct RecipeCollectionView: View {
                 }
                 .padding()
             }
-            .onTapGesture(count: 1, perform: {})
             .padding(.leading)
             .frame(width: 200, height: 30)
         }

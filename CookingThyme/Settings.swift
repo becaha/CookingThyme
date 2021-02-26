@@ -13,7 +13,6 @@ struct Settings: View {
     @EnvironmentObject var user: UserVM
     
     @State var presentDeleteAlert = false
-    @State var keyboardPresented = false
 
     @State var isEditing = false
     
@@ -79,7 +78,6 @@ struct Settings: View {
                                 .disableAutocorrection(true)
                                 .formItem(padding: false)
                         }
-                        .onTapGesture(count: 1, perform: {})
                     }
                     
                     HStack {
@@ -92,7 +90,6 @@ struct Settings: View {
                                     .foregroundColor(mainColor())
                                     .bold()
                             }
-                            .onTapGesture(count: 1, perform: {})
                             .buttonStyle(PlainButtonStyle())
                             
                             Spacer()
@@ -143,15 +140,6 @@ struct Settings: View {
 
         }
         .loadableOverlay(isLoading: $user.isLoading)
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
-        }
-        .gesture(keyboardPresented ?
-                    TapGesture(count: 1).onEnded {
-            withAnimation {
-                unfocusEditable()
-            }
-        } : nil)
         .onAppear {
             user.clearErrors()
             user.isLoading = nil

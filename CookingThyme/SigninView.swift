@@ -15,8 +15,6 @@ struct SigninView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var isSignIn: Bool = true
-    
-    @State var keyboardPresented = false
         
     var body: some View {
         VStack(spacing: 0) {
@@ -45,7 +43,6 @@ struct SigninView: View {
                         Spacer()
                     }
                 }
-                .onTapGesture(count: 1, perform: {})
             }
             else {
                 Group {
@@ -55,7 +52,6 @@ struct SigninView: View {
                         .disableAutocorrection(true)
                         .keyboardType(.emailAddress)
                         .formItem()
-                        .onTapGesture(count: 1, perform: {})
 
                     SecureField("Password", text: $password) {
                         withAnimation {
@@ -66,7 +62,6 @@ struct SigninView: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .formItem()
-                    .onTapGesture(count: 1, perform: {})
                 }
 
                 UserErrorsView(userErrors: user.userErrors)
@@ -87,7 +82,6 @@ struct SigninView: View {
                     }
                 }
                 .formItem(centered: true, backgroundColor: mainColor())
-                .onTapGesture(count: 1, perform: {})
 
                 Button(action: {
                     withAnimation {
@@ -104,7 +98,6 @@ struct SigninView: View {
                         Spacer()
                     }
                 }
-                .onTapGesture(count: 1, perform: {})
             }
             
             Spacer()
@@ -123,15 +116,6 @@ struct SigninView: View {
                 onLoadingComplete()
             }
         })
-        .onReceive(Publishers.keyboardHeight) { height in
-            keyboardPresented = height == 0 ? false : true
-        }
-        .gesture(keyboardPresented ?
-                    TapGesture(count: 1).onEnded {
-            withAnimation {
-                unfocusEditable()
-            }
-        } : nil)
         .accentColor(mainColor())
         .navigationBarColor(UIColor(navBarColor()), text: "", style: .headline, textColor: UIColor(formItemFont()))
     }
