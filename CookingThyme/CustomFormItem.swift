@@ -75,14 +75,13 @@ struct CustomFormItem: ViewModifier {
                         .foregroundColor(mainColor())
                 }
             }
-            .padding()
+            .padding(isSearchBar ? [.leading] : .all)
             .frame(height: height)
 
         }
         .frame(height: height)
         .padding(padding ? .horizontal : [])
         .padding(.vertical, 2)
-        .padding(isSearchBar ? .bottom : [])
     }
 }
 

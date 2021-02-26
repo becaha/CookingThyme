@@ -9,24 +9,17 @@ import SwiftUI
 import Combine
 
 struct Test: View {
-    @State var test = ""
     
     var body: some View {
         VStack {
-            Text("\(test)")
-            
-            TextField("Hello, World!", text: $test)
-                .simultaneousGesture(TapGesture(count: 1).onEnded {
-//                    test += "child"
-//                    print("Text tapped")
-                })
+            HStack {
+                Text("testie")
+                
+                Spacer()
+            }
             
             Spacer()
         }
-        .gesture(TapGesture(count: 1).onEnded {
-            test += "parent"
-            print("VStack tapped")
-        })
     }
         
 }

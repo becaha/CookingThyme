@@ -34,6 +34,7 @@ struct ShoppingListView: View {
                     .foregroundColor(mainColor())
                 }
                 .formItem(isSearchBar: true)
+                .padding(.bottom)
 
                 if collection.notCompletedItems.count > 0 {
                     VStack(spacing: 0) {

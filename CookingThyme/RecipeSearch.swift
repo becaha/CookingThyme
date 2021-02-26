@@ -25,14 +25,11 @@ struct RecipeSearch: View {
         NavigationView {
             ScrollView(.vertical) {
                 VStack(spacing: 0) {
-                    HStack {
-                        SearchBar(isAutoSearch: false)  { result in
-                            hasSearched = true
-                            recipeSearchHandler.listRecipes(withQuery: result)
-                        }
+                    SearchBar()  { result in
+                        hasSearched = true
+                        recipeSearchHandler.listRecipes(withQuery: result)
                     }
-                    .formItem(isSearchBar: true)
-                    .padding(.top)
+                    .padding([.top, .bottom])
 
                     if recipeSearchHandler.recipeList.count == 0 && !isLoading && hasSearched {
                         HStack {

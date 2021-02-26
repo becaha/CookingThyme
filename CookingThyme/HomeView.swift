@@ -73,7 +73,6 @@ struct HomeView: View {
                 Image(systemName: "cart.fill")
                 Text("Shopping List")
             }
-            
         }
         .accentColor(mainColor())
         .sheet(isPresented: self.$sheetNavigator.showSheet) {

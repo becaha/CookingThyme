@@ -11,6 +11,8 @@ struct AutoSearchBar: View {
     @Binding var search: String
     var onCommit: (String) -> Void
     
+    @State var isFocused = false
+    
     var body: some View {
         let searchBinding = Binding<String>(get: {
                     self.search
@@ -20,24 +22,38 @@ struct AutoSearchBar: View {
                     onCommit(updatedSearch)
                 })
         
-        return HStack {
-            TextField("Search", text: searchBinding, onCommit: {
-                onCommit(search)
-            })
-            .customFont(style: .subheadline)
-            .foregroundColor(formItemFont())
-            
-            Button(action: {
-                unfocusEditable()
-                onCommit(search)
-            }) {
+        return
+            HStack {
                 Image(systemName: "magnifyingglass")
                     .font(Font.body.weight(.regular))
                     .foregroundColor(searchFontColor())
+                
+                TextField("Search...", text: searchBinding, onCommit: {
+                    onCommit(search)
+                    withAnimation {
+                        isFocused = false
+                    }
+                })
+                .customFont(style: .subheadline)
+                .foregroundColor(formItemFont())
+                .onTapGesture {
+                    withAnimation {
+                        isFocused = true
+                    }
+                }
+                
+                if isFocused {
+                    Button(action: {
+                        search = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(Font.body.weight(.regular))
+                            .foregroundColor(searchFontColor())
+                    }
+                }
             }
-            .buttonStyle(PlainButtonStyle())
+            .formItem(isSearchBar: true)
         }
-    }
 }
 
 //struct AutoSearchBar_Previews: PreviewProvider {

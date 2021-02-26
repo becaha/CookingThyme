@@ -135,13 +135,10 @@ struct RecipeCollectionView: View {
         GeometryReader { frameGeometry in
             VStack(spacing: 0) {
                 GeometryReader { geometry in
-                    HStack {
-                        AutoSearchBar(search: $collection.search) { result in
-                            searchRecipes(result)
-                        }
-                        .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
+                    AutoSearchBar(search: $collection.search) { result in
+                        searchRecipes(result)
                     }
-                    .formItem(isSearchBar: true)
+                    .opacity(getOpacity(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                     .scaleEffect(y: getScale(frameMinY: frameGeometry.frame(in: .global).minY, searchMinY: geometry.frame(in: .global).minY))
                 }
                 .frame(height: 35)

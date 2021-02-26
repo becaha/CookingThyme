@@ -8,36 +8,43 @@
 import SwiftUI
 
 struct SearchBar: View {
-    var isAutoSearch: Bool
     var onCommit: (String) -> Void
     
     @State var search: String = ""
+    @State var isFocused = false
     
     var body: some View {
-        let searchBinding = Binding<String>(get: {
-                    self.search
-                }, set: { updatedSearch in
-                    self.search = updatedSearch
-                    onCommit(updatedSearch)
-                })
         
-        return HStack {
-            TextField("Search", text: isAutoSearch ? searchBinding: $search, onCommit: {
-                onCommit(search)
-            })
-            .customFont(style: .subheadline)
-            .foregroundColor(formItemFont())
-            
-            Button(action: {
-                unfocusEditable()
-                onCommit(search)
-            }) {
+        return
+            HStack {
                 Image(systemName: "magnifyingglass")
                     .font(Font.body.weight(.regular))
                     .foregroundColor(searchFontColor())
+                
+                TextField("Search...", text: $search, onCommit: {
+                    onCommit(search)
+                    withAnimation {
+                        isFocused = false
+                    }
+                })
+                .customFont(style: .subheadline)
+                .foregroundColor(formItemFont())
+                .onTapGesture {
+                    withAnimation {
+                        isFocused = true
+                    }
+                }
+                
+                if isFocused {
+                    Button(action: {
+                        search = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(Font.body.weight(.regular))
+                            .foregroundColor(searchFontColor())
+                    }
+                }
             }
-            .buttonStyle(PlainButtonStyle())
-            
-        }
+            .formItem(isSearchBar: true)
     }
 }
