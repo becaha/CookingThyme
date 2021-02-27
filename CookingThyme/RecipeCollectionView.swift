@@ -370,7 +370,11 @@ struct RecipeCollectionView: View {
                       message: Text("Deleting this category will delete all of its recipes. Are you sure you want to delete it?"),
                       primaryButton: .default(Text("Ok")) {
                         if let deleteCategoryId = self.deleteCategoryId {
-                            collection.deleteCategory(withId: deleteCategoryId)
+                            collection.deleteCategory(withId: deleteCategoryId) { success in
+                                if !success {
+                                    print("error")
+                                }
+                            }
                         }
                       },
                       secondaryButton: .cancel())
@@ -442,6 +446,7 @@ struct RecipeCollectionView: View {
 
                     UIControls.AddButton(action: addCategory, isPlain: false)
                 }
+                .onTapGesture {}
                 .padding()
             }
             .padding(.leading)

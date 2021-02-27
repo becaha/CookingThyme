@@ -266,12 +266,30 @@ class RecipeCollectionVM: ObservableObject {
     
     // called by user delete
     // deletes all collection, categories, shopping items
-    func delete() {
-        RecipeDB.shared.deleteCollection(withId: self.id)
-        RecipeDB.shared.deleteShoppingItems(withCollectionId: self.id)
-        for category in self.categories {
-            self.deleteCategory(withId: category.id)
+    func delete(onCompletion: @escaping (Bool) -> Void) {
+        let deleteGroup = DispatchGroup()
+        
+        deleteGroup.enter()
+        RecipeDB.shared.deleteCollection(withId: self.id) { success in
+            deleteGroup.leave()
         }
+        
+        deleteGroup.enter()
+        RecipeDB.shared.deleteShoppingItems(withCollectionId: self.id) { success in
+            deleteGroup.leave()
+        }
+        
+        for category in self.categories {
+            deleteGroup.enter()
+            self.deleteCategory(withId: category.id) { success in
+                deleteGroup.leave()
+            }
+        }
+        
+        deleteGroup.notify(queue: .main) {
+            onCompletion(true)
+        }
+        
         // resets store
         self.categoriesStore = [String: RecipeCategoryVM]()
         self.recipesStore = [String: RecipeVM]()
@@ -281,11 +299,28 @@ class RecipeCollectionVM: ObservableObject {
     
     // called by delete above and ui delete category
     // deletes category and its recipes, udpates category store
-    func deleteCategory(withId id: String) {
-        RecipeDB.shared.deleteCategory(withId: id)
+    func deleteCategory(withId id: String, onCompletion: @escaping (Bool) -> Void) {
+        let categoryGroup = DispatchGroup()
+        
+        categoryGroup.enter()
+        RecipeDB.shared.deleteCategory(withId: id) { success in
+            categoryGroup.leave()
+        }
+        
+        categoryGroup.enter()
+        RecipeDB.shared.deleteImages(withCategoryId: id) { success in
+            categoryGroup.leave()
+        }
     
         for categoryRecipe in getCategory(withId: id)?.recipes ?? [] {
-            self.deleteRecipe(withId: categoryRecipe.id)
+            categoryGroup.enter()
+            self.deleteRecipe(withId: categoryRecipe.id) { success in
+                categoryGroup.leave()
+            }
+        }
+        
+        categoryGroup.notify(queue: .main) {
+            onCompletion(true)
         }
         
         // updates category store
@@ -384,7 +419,6 @@ class RecipeCollectionVM: ObservableObject {
             // only remove from category if the category is not all
             if categoryId != allCategoryId {
                 // updates category store
-//                removeRecipeFromStoreCategory(recipe)
                 moveRecipeInStore(recipe, toCategoryId: allCategoryId)
 
                 RecipeDB.shared.updateRecipe(withId: recipe.id, name: recipe.name, servings: recipe.servings, source: recipe.source, recipeCategoryId: allCategoryId) { success in
@@ -394,14 +428,32 @@ class RecipeCollectionVM: ObservableObject {
                 }
             }
         }
-        // TODO remove
-//        self.refreshView = true
-//        self.popullateCategories()
     }
     
-    // called by ui in collection edit and delete Category, deletes recipe and associated parts
+    // called by ui in collection edit, deletes recipe and associated parts
     func deleteRecipe(withId id: String) {
-        self.deleteRecipeAndParts(withId: id)
+        self.deleteRecipeAndParts(withId: id) { success in
+            if !success {
+                print("error")
+            }
+        }
+        
+        // update recipes store
+        self.recipesStore[id] = nil
+        // update categories store
+        removeRecipeFromStoreCategory(withId: id)
+        updateAllRecipes()
+        
+        // need this for recipe on delete to disappear
+        refreshCurrentCategory()
+    }
+    
+    // called by delete Category, deletes recipe and associated parts
+    func deleteRecipe(withId id: String, onCompletion: @escaping (Bool) -> Void) {
+        self.deleteRecipeAndParts(withId: id) { success in
+            onCompletion(success)
+        }
+        
         // update recipes store
         self.recipesStore[id] = nil
         // update categories store
@@ -413,11 +465,32 @@ class RecipeCollectionVM: ObservableObject {
     }
     
     // called by deleteRecipe above
-    private func deleteRecipeAndParts(withId id: String) {
-        RecipeDB.shared.deleteRecipe(withId: id)
-        RecipeDB.shared.deleteDirections(withRecipeId: id)
-        RecipeDB.shared.deleteIngredients(withRecipeId: id)
-        RecipeDB.shared.deleteImages(withRecipeId: id)
+    private func deleteRecipeAndParts(withId id: String, onCompletion: @escaping (Bool) -> Void) {
+        let recipeGroup = DispatchGroup()
+        
+        recipeGroup.enter()
+        RecipeDB.shared.deleteRecipe(withId: id) { success in
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.deleteDirections(withRecipeId: id) { success in
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.deleteIngredients(withRecipeId: id) { success in
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.enter()
+        RecipeDB.shared.deleteImages(withRecipeId: id) { success in
+            recipeGroup.leave()
+        }
+        
+        recipeGroup.notify(queue: .main) {
+            onCompletion(true)
+        }
     }
     
     // MARK: Stores
@@ -556,7 +629,11 @@ class RecipeCollectionVM: ObservableObject {
     private func removeTempShoppingItem(at index: Int) {
         let itemId = shoppingListStore[index].id
         shoppingListStore.remove(at: index)
-        RecipeDB.shared.deleteShoppingItem(withId: itemId)
+        RecipeDB.shared.deleteShoppingItem(withId: itemId) { success in
+            if !success {
+                print("error")
+            }
+        }
     }
     
     

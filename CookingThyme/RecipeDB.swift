@@ -178,7 +178,11 @@ class RecipeDB {
                 self.createStorageImage(image, withId: ref!.documentID) { success in
                     if !success {
                         // if image was not stored, delete reference to image
-                        self.deleteImage(withId: ref!.documentID)
+                        self.deleteImage(withId: ref!.documentID) { success in
+                            if !success {
+                                print("error")
+                            }
+                        }
                     }
                 }
             }
@@ -205,8 +209,12 @@ class RecipeDB {
                 if image.type == ImageType.uiImage {
                     self.createStorageImage(image, withId: ref!.documentID) { success in
                         if !success {
-                            self.deleteImage(withId: ref!.documentID)
-                            onCompletion(nil)
+                            self.deleteImage(withId: ref!.documentID) { success in
+                                if !success {
+                                    print("error")
+                                }
+                                onCompletion(nil)
+                            }
                         }
                         else {
                             self.getStorageImageURL(withName: ref!.documentID) { url in
@@ -337,7 +345,7 @@ class RecipeDB {
             else {
                 var recipes = [Recipe]()
                 let recipesGroup = DispatchGroup()
-                // only uses dispatch group if get all recipes is called, not the add snapshot listener
+                // only uses dispatch dispatchGroup if get all recipes is called, not the add snapshot listener
                 var inRecipesGroup = true
                 
                 for document in querySnapshot!.documents {
@@ -671,7 +679,9 @@ class RecipeDB {
         
         // delete directions
         for direction in directionsToDelete {
-            deleteDirection(withId: direction.id)
+            deleteDirection(withId: direction.id) { success in
+
+            }
         }
         
         directionGroup.notify(queue: .main) {
@@ -729,7 +739,11 @@ class RecipeDB {
         }
         // delete ingredients
         for ingredient in ingredientsToDelete {
-            deleteIngredient(withId: ingredient.id)
+            deleteIngredient(withId: ingredient.id) { success in
+                if !success {
+                    print("error")
+                }
+            }
         }
         
         ingredientGroup.notify(queue: .main) {
@@ -764,7 +778,11 @@ class RecipeDB {
         }
         // delete images
         for image in imagesToDelete {
-            deleteImage(withId: image.id)
+            deleteImage(withId: image.id) { success in
+                if !success {
+                    print("error")
+                }
+            }
         }
         
         imageGroup.notify(queue: .main) {
@@ -825,108 +843,185 @@ class RecipeDB {
     
     // MARK: - Delete
     
-    func deleteRecipe(withId id: String) {
+    func deleteRecipe(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Recipe.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing recipe: \(error)")
+                onCompletion(false)
             } else {
                 print("Recipe successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteDirection(withId id: String) {
+    func deleteDirection(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Direction.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing direction: \(error)")
+                onCompletion(false)
             } else {
                 print("Direction successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteDirections(withRecipeId recipeId: String) {
+    func deleteDirections(withRecipeId recipeId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Direction.Table.databaseTableName).whereField(Direction.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting directions: \(error)")
+                onCompletion(false)
             } else {
+                let dispatchGroup = DispatchGroup()
+                
                 for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
                         if let error = err as NSError? {
                             self.handleError(error)
                             print("Error removing direction: \(error)")
+                            dispatchGroup.leave()
                         } else {
                             print("Direction successfully removed!")
+                            dispatchGroup.leave()
                         }
                     }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
                 }
             }
         }
     }
     
-    func deleteIngredient(withId id: String) {
+    func deleteIngredient(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Ingredient.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing ingredient: \(error)")
+                onCompletion(false)
             } else {
                 print("Ingredient successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteIngredients(withRecipeId recipeId: String) {
+    func deleteIngredients(withRecipeId recipeId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Ingredient.Table.databaseTableName).whereField(Ingredient.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting ingredients: \(error)")
+                onCompletion(false)
             } else {
+                let dispatchGroup = DispatchGroup()
+                
                 for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
                         if let error = err as NSError? {
                             self.handleError(error)
                             print("Error removing ingredient: \(error)")
+                            dispatchGroup.leave()
                         } else {
                             print("Ingredient successfully removed!")
+                            dispatchGroup.leave()
                         }
                     }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
                 }
             }
         }
     }
     
-    func deleteImages(withRecipeId recipeId: String) {
+    func deleteImages(withRecipeId recipeId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.recipeId, isEqualTo: recipeId).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting images: \(error)")
+                onCompletion(false)
             } else {
+                let dispatchGroup = DispatchGroup()
+                
                 for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
                         if let error = err as NSError? {
                             self.handleError(error)
                             print("Error removing image: \(error)")
+                            dispatchGroup.leave()
                         } else {
                             print("Image successfully removed!")
+                            dispatchGroup.leave()
                         }
                     }
-                    self.deleteStorageImage(withId: document.documentID)
+                    
+                    dispatchGroup.enter()
+                    self.deleteStorageImage(withId: document.documentID) { success in
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
                 }
             }
         }
     }
     
+    func deleteImages(withCategoryId categoryId: String, onCompletion: @escaping (Bool) -> Void) {
+        db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
+            if let error = err as NSError? {
+                self.handleError(error)
+                print("Error getting images: \(error)")
+                onCompletion(false)
+            } else {
+                let dispatchGroup = DispatchGroup()
+                
+                for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
+                    print("\(document.documentID) => \(document.data())")
+                    document.reference.delete() { err in
+                        if let error = err as NSError? {
+                            self.handleError(error)
+                            print("Error removing image: \(error)")
+                            dispatchGroup.leave()
+                        } else {
+                            print("Image successfully removed!")
+                            dispatchGroup.leave()
+                        }
+                    }
+                    
+                    dispatchGroup.enter()
+                    self.deleteStorageImage(withId: document.documentID) { success in
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
+                }
+            }
+        }
+    }
+    
+    
     func getStorageImageRef(withId id: String) -> StorageReference {
         return storage.child("images/\(id).jpg")
     }
     
-    func deleteStorageImage(withId id: String) {
+    func deleteStorageImage(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         let ref = getStorageImageRef(withId: id)
 
         ref.delete { err in
@@ -934,118 +1029,173 @@ class RecipeDB {
                 self.handleStorageError(error)
                 let message = error.localizedDescription
                 print("error: \(message)")
+                onCompletion(false)
             }
             else {
                 // File deleted successfully
+                onCompletion(true)
             }
         }
     }
     
-    func deleteImage(withId id: String) {
+    func deleteImage(withId id: String, onCompletion: @escaping (Bool) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
         db.collection(RecipeImage.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing image: \(error)")
+                dispatchGroup.leave()
             } else {
                 print("Image successfully removed!")
+                dispatchGroup.leave()
             }
         }
-        deleteStorageImage(withId: id)
+        
+        dispatchGroup.enter()
+        deleteStorageImage(withId: id) { success in
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            onCompletion(true)
+        }
     }
     
-    func deleteImage(withCategoryId categoryId: String) {
+    func deleteImage(withCategoryId categoryId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(RecipeImage.Table.databaseTableName).whereField(RecipeImage.Table.categoryId, isEqualTo: categoryId).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting image: \(error)")
+                onCompletion(false)
             } else {
+                let dispatchGroup = DispatchGroup()
+                
                 for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
                         if let error = err as NSError? {
                             self.handleError(error)
-                                print("Error removing image: \(error)")
-                            } else {
-                                print("Image successfully removed!")
-                            }
+                            print("Error removing image: \(error)")
+                            dispatchGroup.leave()
+                        } else {
+                            print("Image successfully removed!")
+                            dispatchGroup.leave()
+                        }
                     }
-                    self.deleteStorageImage(withId: document.documentID)
+                    
+                    dispatchGroup.enter()
+                    self.deleteStorageImage(withId: document.documentID) { success in
+                        dispatchGroup.leave()
+                    }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
                 }
             }
         }
     }
     
-    func deleteCategory(withId id: String) {
+    func deleteCategory(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(RecipeCategory.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing category: \(error)")
+                onCompletion(false)
             } else {
                 print("Category successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteCollection(withId id: String) {
+    func deleteCollection(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(RecipeCollection.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing collection: \(error)")
+                onCompletion(false)
             } else {
                 print("Collection successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteRecipes(withCategoryId categoryId: String) {
+    func deleteRecipes(withCategoryId categoryId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(Recipe.Table.databaseTableName).whereField(Recipe.Table.recipeCategoryId, isEqualTo: categoryId)
             .getDocuments() { (querySnapshot, err) in
                 if let error = err as NSError? {
                     self.handleError(error)
                     print("Error getting recipes: \(error)")
+                    onCompletion(false)
                 } else {
+                    let dispatchGroup = DispatchGroup()
+                    
                     for document in querySnapshot!.documents {
                         print("\(document.documentID) => \(document.data())")
+                        dispatchGroup.enter()
                         document.reference.delete() { err in
                             if let error = err as NSError? {
                                 self.handleError(error)
                                 print("Error removing category: \(error)")
+                                dispatchGroup.leave()
                             } else {
                                 print("Category successfully removed!")
+                                dispatchGroup.leave()
                             }
                         }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        onCompletion(true)
                     }
                 }
         }
     }
     
-    func deleteShoppingItem(withId id: String) {
+    func deleteShoppingItem(withId id: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(ShoppingItem.Table.databaseTableName).document(id).delete() { err in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error removing shopping item: \(error)")
+                onCompletion(false)
             } else {
                 print("Shopping item successfully removed!")
+                onCompletion(true)
             }
         }
     }
     
-    func deleteShoppingItems(withCollectionId collectionId: String) {
+    func deleteShoppingItems(withCollectionId collectionId: String, onCompletion: @escaping (Bool) -> Void) {
         db.collection(ShoppingItem.Table.databaseTableName).whereField(ShoppingItem.Table.collectionId, isEqualTo: collectionId).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting shopping items: \(error)")
+                onCompletion(false)
             } else {
+                let dispatchGroup = DispatchGroup()
+                
                 for document in querySnapshot!.documents {
+                    dispatchGroup.enter()
                     print("\(document.documentID) => \(document.data())")
                     document.reference.delete() { err in
                         if let error = err as NSError? {
                             self.handleError(error)
                             print("Error removing shopping item: \(error)")
+                            dispatchGroup.leave()
                         } else {
                             print("Shopping item successfully removed!")
+                            dispatchGroup.leave()
                         }
                     }
+                }
+                
+                dispatchGroup.notify(queue: .main) {
+                    onCompletion(true)
                 }
             }
         }

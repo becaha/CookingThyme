@@ -211,7 +211,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
             createImage(image)
         }
         else if replace == true {
-            RecipeDB.shared.deleteImage(withCategoryId: id)
+            RecipeDB.shared.deleteImage(withCategoryId: id)  { success in
+                if !success {
+                    print("error")
+                }
+            }
             createImage(image)
         }
     }
@@ -224,7 +228,11 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // called by ui to remove category image, removes in db and ui by image handler
     func removeImage() {
-        RecipeDB.shared.deleteImage(withCategoryId: id)
+        RecipeDB.shared.deleteImage(withCategoryId: id) { success in
+            if !success {
+                print("error")
+            }
+        }
         imageHandler.removeImage(at: 0)
         // update category store
         self.updateCategoriesStore()

@@ -245,7 +245,7 @@ class UserVM: ObservableObject {
                 else {
                     // Account deleted, sign out.
                     self.user.setSignedOut()
-                    self.collection?.delete()
+//                    self.collection?.delete()
                     self.status = false
                     
                     self.isLoading = false
@@ -258,10 +258,13 @@ class UserVM: ObservableObject {
         if let loading = self.isLoading, loading == true {
             return
         }
+        
         clearErrors()
         self.isLoading = true
         
-        firebaseDelete(password: password)
+        self.collection?.delete() { success in
+            self.firebaseDelete(password: password)
+        }
     }
     
     func resetPassword(email: String) {
