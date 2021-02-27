@@ -62,8 +62,6 @@ struct EditRecipeView: View {
     @State private var newIngredientPosition: CGFloat?
     @State private var newDirectionPosition: CGFloat?
     @State private var globalHeight: CGFloat?
-    @State private var keyboardHeight: CGFloat = 0
-    @State private var indexPositions = [Int: CGFloat]()
 
     @State private var editingName = false
     
@@ -544,7 +542,7 @@ struct EditRecipeView: View {
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
-                                                        editingPosition = frameGeometry.frame(in: .global).maxY
+                                                        editingPosition = frameGeometry.frame(in: .local).maxY
                                                         editingIngredientIndex = index
                                                     }
                                                     deletingIndex = nil
@@ -629,11 +627,11 @@ struct EditRecipeView: View {
                                                 .simultaneousGesture(
                                                     TapGesture(count: 1).onEnded { _ in
                                                         // if not editing/clicking on current editing ingredient, unfocus others
-                                                        if editingIngredientIndex != recipe.tempRecipe.ingredients.count {
+                                                        if editingIngredientIndex != ingredientCount {
                                                             unfocusEditable()
                                                             unfocusMultilineTexts()
                                                             editingPosition = ingredientGeometry.frame(in: .global).maxY
-                                                            editingIngredientIndex = recipe.tempRecipe.ingredients.count
+                                                            editingIngredientIndex = ingredientCount
                                                         }
                                                     }
                                                 )
@@ -650,7 +648,7 @@ struct EditRecipeView: View {
                                             }
                                         })
                                     }
-                                    .id(recipe.tempRecipe.ingredients.count)
+                                    .id(ingredientCount)
                                     .formSectionItem(padding: .horizontal)
                                 }
                             }
@@ -689,7 +687,7 @@ struct EditRecipeView: View {
                                                     unfocusEditable()
                                                     unfocusMultilineTexts()
                                                     if deletingIndex != index {
-                                                        editingPosition = frameGeometry.frame(in: .global).maxY
+                                                        editingPosition = frameGeometry.frame(in: .local).maxY
                                                         editingDirectionIndex = index
                                                     }
                                                     deletingIndex = nil
@@ -712,7 +710,7 @@ struct EditRecipeView: View {
                                             )
                                         }
                                     )
-                                    .id(recipe.tempRecipe.ingredients.count + 1 + index)
+                                    .id(ingredientCount + 1 + index)
                                     .deletable(isDeleting: true, onDelete: {
                                         withAnimation {
                                             recipe.removeTempDirection(at: index)
@@ -729,7 +727,7 @@ struct EditRecipeView: View {
                                                     
                                 VStack(alignment: .leading) {
                                     HStack(alignment: .center, spacing: 20) {
-                                        Text("\(recipe.tempRecipe.directions.count + 1)")
+                                        Text("\(directionCount + 1)")
                                             .customFont(style: .subheadline)
                                         
                                         ZStack {
@@ -775,11 +773,11 @@ struct EditRecipeView: View {
                                                 .simultaneousGesture(
                                                     TapGesture(count: 1).onEnded { _ in
                                                         // if not editing this currently, unfocus others
-                                                        if editingDirectionIndex != recipe.tempRecipe.directions.count {
+                                                        if editingDirectionIndex != directionCount {
                                                             unfocusEditable()
                                                             unfocusMultilineTexts()
                                                             editingPosition = directionGeometry.frame(in: .global).maxY
-                                                            editingDirectionIndex = recipe.tempRecipe.directions.count
+                                                            editingDirectionIndex = directionCount
                                                         }
                                                     }
                                                 )
@@ -797,7 +795,7 @@ struct EditRecipeView: View {
                                             }
                                         })
                                     }
-                                    .id(recipe.tempRecipe.ingredients.count + recipe.tempRecipe.directions.count + 1)
+                                    .id(ingredientCount + directionCount + 1)
                                     .formSectionItem(padding: .horizontal)
                                 }
                             }
@@ -842,7 +840,7 @@ struct EditRecipeView: View {
                                 // only scrolls up if item is covered by keyboard
                                 if let editingPosition = self.editingPosition,
                                    editingPosition > globalHeight + tabBarHeight - height {
-                                    proxy.scrollTo(recipe.tempRecipe.ingredients.count + 1 + index, anchor: .bottomTrailing)
+                                    proxy.scrollTo(ingredientCount + 1 + index, anchor: .bottomTrailing)
                                 }
                                 self.editingPosition = nil
                             }
@@ -851,11 +849,11 @@ struct EditRecipeView: View {
                     .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
                         unfocusMultilineTexts()
                     } : nil)
-//                    .simultaneousGesture(
-//                        TapGesture().onEnded { _ in
-//                            unfocusEditable()
-//                        }
-//                    )
+                    .simultaneousGesture(
+                        TapGesture().onEnded { _ in
+                            unfocusEditable()
+                        }
+                    )
                 }
                 .onAppear {
                     if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {
