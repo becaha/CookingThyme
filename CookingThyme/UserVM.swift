@@ -25,6 +25,8 @@ class UserVM: ObservableObject {
     // errors
     @Published var userErrors = [String]()
     
+    @Published var forcedSignout = false
+    
     private var collectionCancellable: AnyCancellable?
     private var userCancellable: AnyCancellable?
     
@@ -71,11 +73,18 @@ class UserVM: ObservableObject {
     // MARK: - Intents
     
     func setUserCollection() {
-        RecipeDB.shared.getCollection(withUsername: email) { collection in
+        RecipeDB.shared.getCollection(withUsername: email) { collection, isUnauthorized in
+            if isUnauthorized {
+                self.forcedSignout = true
+            }
             if let collection = collection {
                 self.collection = RecipeCollectionVM(collection: collection)
             }
         }
+    }
+    
+    func forceSignout() {
+        self.user.setSignedOut()
     }
     
     private func setSignedIn() {

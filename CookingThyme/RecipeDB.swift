@@ -542,20 +542,25 @@ class RecipeDB {
         }
     }
     
-    func getCollection(withUsername username: String, onRetrieve: @escaping (RecipeCollection?) -> Void) {
+    func getCollection(withUsername username: String, onRetrieve: @escaping (RecipeCollection?, Bool) -> Void) {
         db.collection(RecipeCollection.Table.databaseTableName).whereField(RecipeCollection.Table.name, isEqualTo: username).getDocuments() { (querySnapshot, err) in
             if let error = err as NSError? {
                 self.handleError(error)
                 print("Error getting collection: \(error)")
-                onRetrieve(nil)
+                if self.isUnauthorized(error) {
+                    onRetrieve(nil, true)
+                }
+                else {
+                    onRetrieve(nil, false)
+                }
             } else {
                 if querySnapshot!.documents.count == 0 {
-                    onRetrieve(nil)
+                    onRetrieve(nil, false)
                     return
                 }
                 for document in querySnapshot!.documents {
                     print("\(document.documentID) => \(document.data())")
-                    onRetrieve(RecipeCollection(document: document))
+                    onRetrieve(RecipeCollection(document: document), false)
                 }
             }
         }
@@ -1047,18 +1052,23 @@ class RecipeDB {
     }
     
     // MARK: - Handle Errors
+    func isUnauthorized(_ error: NSError) -> Bool {
+        switch FirestoreErrorCode(rawValue: error.code) {
+        case .unauthenticated:
+            return true
+            
+        default:
+            return false
+        }
+    }
+    
     func handleStorageError(_ error: NSError) {
         switch StorageErrorCode(rawValue: error.code) {
         case .unauthorized:
             // FIRStorageErrorCodeUnauthenticated
             let message = error.localizedDescription
             print("Error: \(message)")
-            
-        case .downloadSizeExceeded:
-            // FIRStorageErrorCodeDownloadSizeExceeded
-            let message = error.localizedDescription
-            print("Error: \(message)")
-            
+
         default:
             let errorType = AuthErrorCode(rawValue: error.code)
             let message = error.localizedDescription
@@ -1069,11 +1079,6 @@ class RecipeDB {
     
     func handleError(_ error: NSError) {
         switch FirestoreErrorCode(rawValue: error.code) {
-        case .permissionDenied:
-            let message = error.localizedDescription
-            print("Error: \(message)")
-            
-
         case .unauthenticated:
             let message = error.localizedDescription
             print("Error: \(message)")
@@ -1084,4 +1089,8 @@ class RecipeDB {
             print("\(String(describing: errorType)): \(errorMessage)")
         }
     }
+}
+
+enum RecipeDBError: Error {
+    case unauthorized
 }

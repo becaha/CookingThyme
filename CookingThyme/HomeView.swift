@@ -80,6 +80,20 @@ struct HomeView: View {
                 .environmentObject(sheetNavigator)
                 .environmentObject(user)
         }
+        .alert(isPresented: $user.forcedSignout, content: {
+            Alert(title: Text("Unauthorized Error"),
+                  message: Text("Please sign in to reauthenticate."),
+                  primaryButton: .default(Text("Sign In")) {
+                    user.forceSignout()
+                    withAnimation {
+                        sheetNavigator.showSheet = true
+                        sheetNavigator.sheetDestination = .signin
+                    }
+                  },
+                  secondaryButton: .cancel() {
+                    user.forceSignout()
+                  })
+        })
         .environmentObject(user)
     }
     
