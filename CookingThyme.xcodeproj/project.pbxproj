@@ -451,8 +451,8 @@
 			isa = PBXGroup;
 			children = (
 				DB49B4FA256E015000808CC8 /* EditableText.swift */,
-				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
 				DB49B5072576DC7700808CC8 /* EditableIngredient.swift */,
+				DB49B5032576A70C00808CC8 /* EditableDirection.swift */,
 			);
 			name = Editable;
 			sourceTree = "<group>";

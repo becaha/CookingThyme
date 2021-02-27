@@ -410,8 +410,8 @@ struct EditRecipeView: View {
     @ViewBuilder
     func EditableRecipe() -> some View {
         GeometryReader { frameGeometry in
-            ScrollViewReader { proxy in
-                ScrollView(.vertical) {
+            ScrollView(.vertical) {
+                ScrollViewReader { proxy in
                     VStack(spacing: 0) {
                         if partialRecipeAlert {
                             HStack {
@@ -849,11 +849,6 @@ struct EditRecipeView: View {
                     .gesture(editingIngredientIndex != nil || editingDirectionIndex != nil || editingName ? TapGesture(count: 1).onEnded {
                         unfocusMultilineTexts()
                     } : nil)
-                    .simultaneousGesture(
-                        TapGesture().onEnded { _ in
-                            unfocusEditable()
-                        }
-                    )
                 }
                 .onAppear {
                     if !alertShown && recipe.recipeText != nil && (recipe.name == "" || recipe.ingredients.count == 0 || recipe.directions.count == 0) {

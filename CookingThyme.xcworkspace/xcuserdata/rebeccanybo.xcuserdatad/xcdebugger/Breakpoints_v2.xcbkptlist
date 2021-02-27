@@ -104,7 +104,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "6AD2E7BE-33DB-47D2-BA5C-6C202B60A0EB"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -112,22 +112,6 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "850"
             endingLineNumber = "850"
-            landmarkName = "EditableRecipe()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "38846103-7919-416A-B5FD-B8C599D8067E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CookingThyme/EditRecipeView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "854"
-            endingLineNumber = "854"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -210,38 +194,6 @@
             endingLineNumber = "558"
             landmarkName = "EditableRecipe()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "E555D794-94DF-458E-AE1E-CD47A192010F - 817ac6e004b5b452"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.simultaneousGesture&lt;A where A1: SwiftUI.Gesture&gt;(_: A1, including: SwiftUI.GestureMask) -&gt; some&gt;&gt;.0 in closure #1 (Swift.Int) -&gt; &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSectionItem(padding: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0 in closure #2 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.DynamicViewContent.onDelete(perform: Swift.Optional&lt;(Foundation.IndexSet) -&gt; ()&gt;) -&gt; some&gt;&gt;.0, SwiftUI.VStack&lt;&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSectionItem(padding: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0&gt;)&gt; in closure #3 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Swift.Optional&lt;&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0&gt;, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, CookingThyme.ImagesView, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt;&gt;, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt;&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.gesture&lt;A where A1: SwiftUI.Gesture&gt;(_: A1, including: SwiftUI.GestureMask) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.ScrollViewProxy) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.ScrollViewReader&lt;&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0&gt; in CookingThyme.EditRecipeView.EditableRecipe() -&gt; some"
-                  moduleName = "CookingThyme"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/EditRecipeView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "569"
-                  endingLineNumber = "569"
-                  offsetFromSymbolStart = "956">
-               </Location>
-               <Location
-                  uuid = "E555D794-94DF-458E-AE1E-CD47A192010F - b9c2463609fc008d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (()) -&gt; () in closure #2 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.simultaneousGesture&lt;A where A1: SwiftUI.Gesture&gt;(_: A1, including: SwiftUI.GestureMask) -&gt; some&gt;&gt;.0 in closure #1 (Swift.Int) -&gt; &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSectionItem(padding: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0 in closure #2 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.DynamicViewContent.onDelete(perform: Swift.Optional&lt;(Foundation.IndexSet) -&gt; ()&gt;) -&gt; some&gt;&gt;.0, SwiftUI.VStack&lt;&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSectionItem(padding: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0&gt;)&gt; in closure #3 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(Swift.Optional&lt;&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0&gt;, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, CookingThyme.ImagesView, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt;&gt;, SwiftUI.VStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formHeader() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formSection() -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in CookingThyme):SwiftUI.View.formFooter() -&gt; some&gt;&gt;.0)&gt;&gt;)&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.gesture&lt;A where A1: SwiftUI.Gesture&gt;(_: A1, including: SwiftUI.GestureMask) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.ScrollViewProxy) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0 in closure #1 (SwiftUI.GeometryProxy) -&gt; SwiftUI.ScrollViewReader&lt;&lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.onAppear(perform: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; some&gt;&gt;.0&gt; in CookingThyme.EditRecipeView.EditableRecipe() -&gt; some"
-                  moduleName = "CookingThyme"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rebeccanybo/Desktop/CookingThyme/CookingThyme/EditRecipeView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "570"
-                  endingLineNumber = "570"
-                  offsetFromSymbolStart = "236">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -328,7 +280,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "1D172473-3E9B-4423-A2C8-AE427B941FBB"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -424,7 +376,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "C87F222E-C59F-44F0-8715-F881BDF659F6"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -440,7 +392,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "78E4CB25-BA49-4873-A8A0-FB09A7A7D5A2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -504,7 +456,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "B4D74560-6971-40B5-AC51-5048E0E72FCD"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"
@@ -520,7 +472,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "ADA60F3A-7CE3-4198-B7E0-1EB07877258A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CookingThyme/EditRecipeView.swift"

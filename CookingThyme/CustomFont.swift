@@ -16,10 +16,16 @@ struct CustomFont: ViewModifier {
     var weight: Font.Weight = .regular
 
     func body(content: Content) -> some View {
-        return content.font(Font.custom(
+        return content.font(CustomFont.getFont(style: style, name: name, weight: weight))
+    }
+    
+    static func getFont(style: UIFont.TextStyle,
+                       name: String = mainFont(),
+                       weight: Font.Weight = .regular) -> Font {
+        Font.custom(
             name,
             size: UIFont.preferredFont(forTextStyle: style).pointSize)
-            .weight(weight))
+            .weight(weight)
     }
 }
 
@@ -32,3 +38,4 @@ extension View {
         return self.modifier(CustomFont(style: style, name: name, weight: weight))
     }
 }
+

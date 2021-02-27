@@ -16,7 +16,7 @@ struct SelectableTextView: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
  
-        textView.font = UIFont.preferredFont(forTextStyle: textStyle)
+        textView.font = UIFont(name: mainFont(), size: UIFont.preferredFont(forTextStyle: textStyle).pointSize)
         textView.autocapitalizationType = .sentences
         textView.isSelectable = true
         textView.isUserInteractionEnabled = true

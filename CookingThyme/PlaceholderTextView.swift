@@ -45,10 +45,11 @@ struct PlaceholderTextView: UIViewRepresentable {
     var placeholderText: String
     @Binding var textBinding: String
     var isFirstResponder: Bool = false
+    var textStyle: UIFont.TextStyle = UIFont.TextStyle.subheadline
     
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView(frame: .zero)
-        textView.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        textView.font = UIFont(name: mainFont(), size: UIFont.preferredFont(forTextStyle: textStyle).pointSize)
         textView.delegate = context.coordinator
         textView.isEditable = true
         textView.backgroundColor = UIColor.clear

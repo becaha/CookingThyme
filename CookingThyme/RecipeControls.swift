@@ -19,7 +19,7 @@ struct RecipeControls {
                     .customFont(style: .subheadline)
 
                 Text("\(direction)")
-                    .customFont(style: .body)
+                    .customFont(style: .subheadline)
             }
         }
         .foregroundColor(formItemFont())
@@ -28,7 +28,7 @@ struct RecipeControls {
     @ViewBuilder
     static func ReadDirection(direction: String) -> some View {
         Text("\(direction)")
-            .customFont(style: .body)
+            .customFont(style: .subheadline)
     }
     
     // on click to edit an ingredient, this will be added to that ingredient, off click will save that to
@@ -41,7 +41,7 @@ struct RecipeControls {
     @ViewBuilder
     static func ReadIngredientText(_ ingredientString: String) -> some View {
         Text("\(ingredientString)")
-            .customFont(style: .body)
+            .customFont(style: .subheadline)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

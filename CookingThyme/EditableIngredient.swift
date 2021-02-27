@@ -27,7 +27,6 @@ struct EditableIngredient: View {
                     Spacer()
                     
                     EditableTextView(textBinding: getIngredientBinding(), isFirstResponder: true)
-                        .customFont(style: .subheadline)
                         .onChange(of: getIngredientString()) { value in
                             if value.hasSuffix("\n") {
                                 commitIngredient()
