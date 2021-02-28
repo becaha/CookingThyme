@@ -8,9 +8,6 @@
 import Foundation
 import Combine
 
-// TODO: scripture app recipe text
-// TODO: signout user if not authenticated
-
 class RecipeCollectionVM: ObservableObject {
     @Published var collection: RecipeCollection
     @Published var categories: [RecipeCategoryVM]
@@ -53,11 +50,9 @@ class RecipeCollectionVM: ObservableObject {
                 self.isLoading = false
             }
             else {
-                // TODO change to error
                 self.isLoading = false
             }
         }
-//        self.resetCurrentCategory()
     }
     
     // MARK: Access
@@ -79,7 +74,6 @@ class RecipeCollectionVM: ObservableObject {
         return nil
     }
     
-    // TODO all recipes
     var allRecipes: [Recipe] {
         var allRecipes = Array(categoriesStore.values).reduce([]) { (recipes, recipeCategoryVM) -> [Recipe] in
             var currentRecipes = recipes
@@ -122,7 +116,6 @@ class RecipeCollectionVM: ObservableObject {
     // MARK: - DB Loaders
     
     // gets categories from db
-    // TODO is it just bad connection that makes a second call to get categories with error?
     func popullateCategories(onCompletion: @escaping (Bool) -> Void) {
         if self.categoriesStore.count > 0 {
             self.categories = Array(self.categoriesStore.values)
@@ -208,7 +201,6 @@ class RecipeCollectionVM: ObservableObject {
     
     // MARK: - Sorters
     
-    // TODO sort with auto all in first place
     func sortCategories() {
         var currentCategories = self.categories
         currentCategories.sort(by: { (a:RecipeCategoryVM, b:RecipeCategoryVM) -> Bool in
@@ -357,7 +349,6 @@ class RecipeCollectionVM: ObservableObject {
         }
     }
 
-    // TODO only refresh image if it has changed
     // updates name of category, updates category store
     func updateCategory(forCategoryId categoryId: String, toName categoryName: String) {
         // updates category store

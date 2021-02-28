@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-// TODO: focus new category
 struct RecipeCollectionView: View {
     // the view knows when sheet is dismissed
     @Environment(\.presentationMode) var presentation
@@ -251,19 +250,13 @@ struct RecipeCollectionView: View {
         }
     }
     
-    // TODO: categories with long name, character limit or 2 lines?
     @ViewBuilder
     func CategoryView(_ category: RecipeCategoryVM) -> some View {
         VStack {
             CategoryCircleView(category)
 
             EditableText("\(category.name)", isEditing: category.name == "All" ? false : isEditing, isSelected: category.id == collection.currentCategory?.id ? true : false, onChanged: { name in
-//                if name.count < categoryNameMaxCount {
                     collection.updateCategory(forCategoryId: category.id, toName: name)
-//                }
-//                else {
-//
-//                }
             })
             .lineLimit(2)
             .multilineTextAlignment(.center)
@@ -457,7 +450,6 @@ struct RecipeCollectionView: View {
     @ViewBuilder
     func CategoryEditMenu(_ category: RecipeCategoryVM) -> some View {
         if isEditing {
-            // TODO: edit menu color and font of text
             Menu {
                 Menu {
                     Button(action: {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: delish.com recipes are in divs not lists so they don't get found
 class HTMLTranscriber: ObservableObject {
     var recipesStore = [String: (recipe: Recipe, recipeText: String)]()
     
@@ -69,7 +68,6 @@ class HTMLTranscriber: ObservableObject {
     
     // <ul><li>thing</li><li>thing2</li>
     // <title>the title</title>
-    // TODO: symbols in html like &numbers &#039
     static func cleanHtmlTags(fromHtml html: String, returnTitle: Bool) -> String {
         var cleanString = ""
         var inTag = false
@@ -132,7 +130,6 @@ class HTMLTranscriber: ObservableObject {
         return ""
     }
     
-    // TODO: 1 1/2 cups (440 g), ignoring the stuff in parenthesis, just part of the name, no change with serving size
     static func parseRecipe(_ recipeString: String, withName name: String, recipeURL: String) -> Recipe {
         enum CurrentPart {
             case serving

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: why does this appear so many times
-// TODO: transition which animation?
 struct CircleImage: View {
     @EnvironmentObject var category: RecipeCategoryVM
     var width: CGFloat = 60

@@ -177,7 +177,7 @@ class RecipeSearchHandler: ObservableObject {
                         recipe.images = images
                     }
                     
-                    // instructions, TODO they do have analyzed instructions for future improvement
+                    // instructions
                     if let instructions = jsonObject["instructions"] as? String {
                         let cleanedInstructions = HTMLTranscriber.cleanHtmlTags(fromHtml: instructions, returnTitle: false)
                         let recipeInstructions = cleanedInstructions.components(separatedBy: "\n")

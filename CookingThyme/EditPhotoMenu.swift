@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: menu text styling
 struct EditPhotoMenu: ViewModifier {
     var onPaste: () -> Void
     var loadImage: (UIImage) -> Void

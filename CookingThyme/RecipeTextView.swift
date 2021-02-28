@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// TODO: keep plaace as switch from rercipe text to recipe
-// TODO: scripture app like
-// TODO: make recipe text look cute, rounded corners
 struct RecipeTextView: View {
     @EnvironmentObject var recipe: RecipeVM
     

@@ -331,7 +331,6 @@ struct EditRecipeView: View {
         }
         resetErrors()
 
-        // TODO: what if they want to name their recipee Recipe Name (name == placeholder && nameFieldMissing)?
         // name cannot the placeholder, or just whitespace
         if name == nameFieldPlaceholder || name.isOnlyWhitespace() {
             nameFieldMissing = true
@@ -370,8 +369,6 @@ struct EditRecipeView: View {
                     }
                 }
             }
-            // TODO: have page shrink up into square and be brought to the recipe collection view showing the new recipe
-            // flying into place
         }
         else {
             presentErrorAlert = true

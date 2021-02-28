@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-// TODO: image loading, viewe doesnt update to loading only to new image
-
-// TODO: in edit mode allow drag ordering of the images
-// TODO: make images scrollable by left/right arrows
 struct ScrollableImagesView: View {
     @EnvironmentObject var recipe: RecipeVM
     

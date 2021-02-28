@@ -449,7 +449,6 @@ class RecipeVM: ObservableObject, Identifiable {
                 onCompletion(updatedRecipe)
             }
             else {
-                // TODO error
                 onCompletion(updatedRecipe)
             }
         }

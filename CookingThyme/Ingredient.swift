@@ -185,7 +185,6 @@ struct Ingredient: Identifiable, Equatable, Hashable {
         }
     }
     
-    // TODO if 2/3 tbsp but can be 1 tsp make it 1 tsp
     func getMassString() -> String {
         var massString = ""
         var index = 0

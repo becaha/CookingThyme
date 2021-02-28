@@ -8,7 +8,6 @@
 import Foundation
 import Firebase
 
-//TODO history of shopping items
 struct ShoppingItem: Identifiable {
     struct Table {
         static let databaseTableName = "ShoppingItem"
@@ -36,7 +35,7 @@ struct ShoppingItem: Identifiable {
         self.name = name
         self.amount = amount
         self.unitName = unitName
-        // temp, TODO no dupllicates addable
+        // temp
         self.id = name
         self.collectionId = collectionId
         self.completed = completed
