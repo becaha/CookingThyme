@@ -86,7 +86,6 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     func popullateCategory(onCompletion: @escaping (Bool) -> Void) {
-        let store = self.collection.categoriesStore[category.id]
         // check for category in category store
         if let foundCategoryVM = self.collection.categoriesStore[category.id] {
             self.recipes = foundCategoryVM.recipes.sorted(by: { (recipeA, recipeB) -> Bool in
@@ -169,7 +168,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // MARK: - Intents
     
     private func updateCategoriesStore() {
-        if let category = self.collection.categoriesStore[self.id] {
+        if self.collection.categoriesStore[self.id] != nil {
             self.collection.categoriesStore[self.id] = self
         }
     }
@@ -210,7 +209,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     
     // replaces category image if exists and sends image to be created by createImage
     private func setImage(_ image: RecipeImage, replace: Bool) {
-        if imageHandler.image == nil {
+        if imageHandler.images.count == 0 {
             createImage(image)
         }
         else if replace == true {
@@ -218,8 +217,8 @@ class RecipeCategoryVM: ObservableObject, Hashable {
                 if !success {
                     print("error")
                 }
+                self.createImage(image)
             }
-            createImage(image)
         }
     }
     

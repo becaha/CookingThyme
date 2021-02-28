@@ -1207,6 +1207,9 @@ class RecipeDB {
         case .unauthenticated:
             return true
             
+        case .permissionDenied:
+            return true
+            
         default:
             return false
         }

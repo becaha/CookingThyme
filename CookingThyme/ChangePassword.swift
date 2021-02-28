@@ -13,8 +13,6 @@ struct ChangePassword: View {
 
     @EnvironmentObject var sheetNavigator: SheetNavigator
     @EnvironmentObject var user: UserVM
-
-    var onSaveChanges: (String, String, String) -> Void
     
     @State var oldPassword: String = ""
     @State var newPassword: String = ""
@@ -45,7 +43,7 @@ struct ChangePassword: View {
             UserErrorsView(userErrors: user.userErrors)
 
             Button(action: {
-                onSaveChanges(oldPassword, newPassword, confirmPassword)
+                user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
             }) {
                 HStack {
                     Spacer()
@@ -72,6 +70,12 @@ struct ChangePassword: View {
         .onAppear {
             user.clearErrors()
             user.isLoading = nil
+        }
+        .onDisappear {
+            withAnimation {
+                user.clearErrors()
+                user.isLoading = nil
+            }
         }
         .onChange(of: user.isLoading, perform: { isLoading in
             if let isLoading = isLoading, !isLoading {

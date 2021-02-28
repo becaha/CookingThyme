@@ -41,10 +41,7 @@ struct Settings: View {
                     }
                     
                     NavigationLink(destination:
-                            ChangePassword(
-                                  onSaveChanges: { oldPassword, newPassword, confirmPassword in
-                                    user.changePassword(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
-                              })
+                            ChangePassword()
                     ) {
                         Text("Change Password")
                             .bold()

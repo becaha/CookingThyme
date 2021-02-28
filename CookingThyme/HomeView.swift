@@ -62,7 +62,6 @@ struct HomeView: View {
                 else if user.isSignedIn && user.collection == nil {
                     UIControls.Loading()
                 }
-
                 else if user.collection != nil {
                     ShoppingListView()
                         .environmentObject(user.collection!)
