@@ -47,6 +47,7 @@ class RecipeCollectionVM: ObservableObject {
         }
         
 //        self.sortShoppingList()
+        
         self.popullateCategories() { success in
             if success {
                 self.isLoading = false

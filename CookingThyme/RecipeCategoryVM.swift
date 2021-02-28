@@ -86,6 +86,7 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     }
     
     func popullateCategory(onCompletion: @escaping (Bool) -> Void) {
+        let store = self.collection.categoriesStore[category.id]
         // check for category in category store
         if let foundCategoryVM = self.collection.categoriesStore[category.id] {
             self.recipes = foundCategoryVM.recipes.sorted(by: { (recipeA, recipeB) -> Bool in
@@ -168,7 +169,9 @@ class RecipeCategoryVM: ObservableObject, Hashable {
     // MARK: - Intents
     
     private func updateCategoriesStore() {
-        self.collection.categoriesStore[self.id] = self
+        if let category = self.collection.categoriesStore[self.id] {
+            self.collection.categoriesStore[self.id] = self
+        }
     }
     
     // updates category name
