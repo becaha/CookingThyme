@@ -189,7 +189,7 @@ class ImageTranscriber: ObservableObject {
             }
 
           //get the description which is the word or string value from the annotation
-            let description = transcription.annotations[index].description
+            let description = HTMLTranscriber.removeFormat(transcription.annotations[index].description)
 
           //set the locations of keywords like ingredients or directions
             if (!ingredientsLocationSet && index > 1 && (description.localizedCaseInsensitiveContains("ingredient"))){
@@ -217,12 +217,12 @@ class ImageTranscriber: ObservableObject {
             else {
                 if (currLine != ""){
                     if isIngredient {
-                        if !RecipeTranscriber.isIngredientsHeader(line: currLine) {
+                        if !RecipeTranscriber.isIngredientsHeader(line: currLine) && !currLine.isOnlyWhitespace() {
                             sections["ingredients"]?.append(currLine)
                         }
                     }
                     else if isDirection {
-                        if !RecipeTranscriber.isDirectionsHeader(line: currLine) {
+                        if !RecipeTranscriber.isDirectionsHeader(line: currLine) && !currLine.isOnlyWhitespace() {
                             sections["directions"]?.append(RecipeTranscriber.cleanDirection(currLine))
                         }
                     }

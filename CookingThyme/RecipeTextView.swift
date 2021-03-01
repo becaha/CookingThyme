@@ -9,15 +9,15 @@ import SwiftUI
 
 struct RecipeTextView: View {
     @EnvironmentObject var recipe: RecipeVM
+    var fromURL: Bool
     
-    @State var recipeText: String = "ok this iis a test"
-    @State var test = "test"
+    @State var recipeText: String = ""
 
     var body: some View {
         VStack {
             if recipe.recipeText != nil {
                 HStack {
-                    Text("Recipe Text by Google Cloud Vision")
+                    (Text("Recipe Text") + (!fromURL ? Text(" by Google Vision"): Text("")))
                         .customFont(style: .subheadline)
                 }
                                         
@@ -34,9 +34,3 @@ struct RecipeTextView: View {
         .padding()
     }
 }
-
-//struct RecipeTextView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RecipeTextView()
-//    }
-//}

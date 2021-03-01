@@ -134,7 +134,7 @@ struct EditRecipeView: View {
             else {
                 Group {
                     if presentRecipeText {
-                        RecipeTextView()
+                        RecipeTextView(fromURL: urlString != "")
                     }
                     else {
                         EditableRecipe()
@@ -281,6 +281,7 @@ struct EditRecipeView: View {
     }
     
     private func transcribeImage() {
+        urlString = ""
         guard let inputImage = selectedImage else { return }
         resetErrors()
         resetRecipe()
