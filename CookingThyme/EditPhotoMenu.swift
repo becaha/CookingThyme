@@ -72,6 +72,7 @@ struct EditPhotoMenu: ViewModifier {
     
     func setImage() {
         guard let inputImage = selectedImage else { return }
+        selectedImage = nil
         loadImage(inputImage)
     }
 

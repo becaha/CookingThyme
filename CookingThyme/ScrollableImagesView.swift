@@ -25,7 +25,7 @@ struct ScrollableImagesView: View {
         self.width = width
         self.height = height
         self.isEditing = isEditing
-        self.pictureWidth = width / 2 - widthOffset //min(width/2 - widthOffset, height * (4.0/3.0))
+        self.pictureWidth = min(width/2 - widthOffset, height * (4.0/3.0)) // width / 2 - widthOffset
         self.pictureHeight = height //min(pictureWidth * (3.0/4.0), height)
     }
 

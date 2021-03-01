@@ -41,7 +41,7 @@ class UserVM: ObservableObject {
         
         setUpCancellables()
         
-        setUserCollection()
+        setUserCollection(onInit: true)
     }
     
     func setUpCancellables() {
@@ -69,10 +69,16 @@ class UserVM: ObservableObject {
     
     // MARK: - Intents
     
-    func setUserCollection() {
+    func setUserCollection(onInit: Bool = false) {
         RecipeDB.shared.getCollection(withUsername: email) { collection, isUnauthorized in
             if isUnauthorized {
-                self.forcedSignout = true
+                // on init, just be signed out
+                if onInit {
+                    self.user.setSignedOut()
+                }
+                else {
+                    self.forcedSignout = true
+                }
             }
             if let collection = collection {
                 self.collection = RecipeCollectionVM(collection: collection)
